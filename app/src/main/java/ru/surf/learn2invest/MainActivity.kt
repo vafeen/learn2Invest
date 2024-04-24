@@ -1,4 +1,4 @@
-package ru.surf.surf
+package ru.surf.learn2invest
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
