@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_background">#FFCFCBFF</color>
+    <color name="label">#FF42C13F</color>
+    <color name="recession">#FFE34446</color>
+    <color name="increase">#FF32B153</color>
+    <color name="sibn">#FF9194A6</color>
+    <color name="tab_inactive">#FF83848B</color>
+    <color name="view_background">#FFF6F4F4</color>
+    <color name="btn_clear">#FFA40808</color>
+    <color name="error">#FFE06060</color>
+
 </resources>
