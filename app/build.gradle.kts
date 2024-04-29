@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.surf.surf"
+    namespace = "ru.surf.learn2invest"
     compileSdk = 34
 
     defaultConfig {

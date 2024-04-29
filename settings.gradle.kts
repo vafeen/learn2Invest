@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "surf"
+rootProject.name = "Learn2Invest"
 include(":app")
