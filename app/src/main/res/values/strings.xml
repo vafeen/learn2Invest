@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+
     <string name="refill_str">ПОПОЛНИТЬ</string>
     <string name="buy_str">КУПИТЬ</string>
     <string name="sell_str">ПРОДАТЬ</string>
     <string name="add_price_alert_str">ДОБАВИТЬ</string>
+    <string name="exit_str">ВЫЙТИ</string>
+    <string name="close_str">ЗАКРЫТЬ</string>
 
 
     <string name="example_balance">$50,540.00</string>
@@ -13,12 +16,13 @@
     <string name="number_str">Количество</string>
     <string name="number_lots_str">0 лотов</string>
     <string name="changing_price">Изменение цены в %</string>
+    <string name="no_asset_for_sale">Нет актива для продажи</string>
 
 
     <string name="account_str">Счет</string>
     <string name="enter_sum_str">Введите сумму</string>
     <string name="refill_account_str">Пополнение счета</string>
-    <string name="exit_str">ВЫЙТИ</string>
+
 
 
     <string name="sell_security_paper_str">Продажа</string>
