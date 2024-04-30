@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="@string/no_asset_for_sale"
-        android:textAppearance="@style/Text.Medium.16"
+        android:textAppearance="@style/Text.Medium.14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
