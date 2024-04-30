@@ -7,6 +7,8 @@
     <string name="add_price_alert_str">ДОБАВИТЬ</string>
     <string name="exit_str">ВЫЙТИ</string>
     <string name="close_str">ЗАКРЫТЬ</string>
+    <string name="no">НЕТ</string>
+    <string name="yes_exactly">ДА, ТОЧНО</string>
 
 
     <string name="example_balance">$50,540.00</string>
@@ -18,12 +20,12 @@
     <string name="changing_price">Изменение цены в %</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
     <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
+    <string name="asking_to_delete_profile">Вы точно хотите удалить\nпрофиль?</string>
 
 
     <string name="account_str">Счет</string>
     <string name="enter_sum_str">Введите сумму</string>
     <string name="refill_account_str">Пополнение счета</string>
-
 
 
     <string name="sell_security_paper_str">Продажа</string>
