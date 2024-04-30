@@ -12,6 +12,7 @@
     android:text="Обзор рынка"
     android:textAppearance="@style/Text.Bold.20"/>
     <EditText
+        android:id="@+id/search_edit_text"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="25dp"
@@ -31,6 +32,7 @@
         android:layout_marginTop="24dp">
 
         <Button
+            android:id="@+id/filter_by_marketcap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
@@ -41,6 +43,7 @@
             tools:backgroundTint="@color/main_background" />
 
         <Button
+            android:id="@+id/filter_by_change_percent_24Hr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="11dp"
@@ -52,6 +55,7 @@
             tools:backgroundTint="@color/view_background" />
 
         <Button
+            android:id="@+id/filter_by_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/arrow_top_green"
@@ -63,6 +67,7 @@
             tools:backgroundTint="@color/view_background" />
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/market_review_recyclerview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
