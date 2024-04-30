@@ -113,7 +113,7 @@
     <View
         android:id="@+id/icon_of_balance_view"
         android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_height="25dp"
         android:layout_margin="@dimen/margin_dialogs_card_content"
         android:background="@drawable/briefcase"
         app:layout_constraintBottom_toBottomOf="@+id/balance_card"
