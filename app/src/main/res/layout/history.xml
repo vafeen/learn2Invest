@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:gravity="center"
+        android:text="@string/history_text"
+        android:textAppearance="@style/Text.Bold.20"
+        android:background="@drawable/corner_style"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/history_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="19dp"
+        android:layout_marginTop="23dp"
+        tools:listitem="@layout/coin_item"/>
+</LinearLayout>
