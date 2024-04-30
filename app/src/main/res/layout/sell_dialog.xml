@@ -9,13 +9,14 @@
         android:id="@+id/balance_card"
         android:layout_width="238dp"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/tabs_in_dialogs_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_od_dialog"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/price_card"
@@ -25,7 +26,7 @@
         android:background="@drawable/tabs_in_dialogs_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/balance_card"
         app:layout_constraintVertical_bias="0.0" />
@@ -74,7 +75,7 @@
         android:background="@drawable/tabs_in_dialogs_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/price_card"
         app:layout_constraintVertical_bias="0.0" />
