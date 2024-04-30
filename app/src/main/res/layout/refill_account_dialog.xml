@@ -69,7 +69,7 @@
 
     <EditText
         android:id="@+id/entering_sum_of_balance_refill_account_dialog"
-        android:layout_width="226dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_dialogs_card_content"
         android:layout_marginHorizontal="6dp"
