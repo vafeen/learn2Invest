@@ -37,7 +37,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="end"
-        android:layout_marginVertical="13dp">
+        android:layout_marginVertical="13dp"
+        android:layout_marginEnd="20dp">
         <TextView
             android:id="@+id/coin_top_numeric_info"
             android:layout_width="wrap_content"
