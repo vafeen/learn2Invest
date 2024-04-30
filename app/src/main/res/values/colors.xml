@@ -11,5 +11,6 @@
     <color name="view_background">#FFF6F4F4</color>
     <color name="btn_clear">#FFA40808</color>
     <color name="error">#FFE06060</color>
+    <color name="hint">#FFC5C5C5</color>
 
 </resources>
