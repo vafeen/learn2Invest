@@ -17,6 +17,7 @@
     <string name="number_lots_str">0 лотов</string>
     <string name="changing_price">Изменение цены в %</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
+    <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
 
 
     <string name="account_str">Счет</string>
