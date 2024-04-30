@@ -15,7 +15,10 @@
     <string name="enter_sum_str">Введите сумму</string>
     <string name="refill_account_str">Пополнение счета</string>
     <string name="exit_str">ВЫЙТИ</string>
+
+
     <string name="sell_security_paper_str">Продажа</string>
     <string name="buy_security_paper_str">Покупка</string>
+    <string name="price_alert_on_security_paper_str">Price alert</string>
 
 </resources>
