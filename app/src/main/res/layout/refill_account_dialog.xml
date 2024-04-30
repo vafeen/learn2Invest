@@ -21,14 +21,21 @@
         android:id="@+id/button_exit_refill_account_dialog"
         android:layout_width="119dp"
         android:layout_height="42dp"
+        android:layout_marginEnd="1dp"
         android:backgroundTint="@color/white"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         android:text="@string/exit_str"
         android:textAppearance="@style/Text.SemiBold.14"
         android:textColor="@color/black"
         app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/button_add_money_refill_account_dialog"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.239"
+        app:layout_constraintEnd_toStartOf="@+id/button_add_money_refill_account_dialog"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_add_money_refill_account_dialog"
         app:layout_constraintVertical_bias="0.0" />
@@ -141,9 +148,9 @@
         app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintHorizontal_bias="0.623"
         app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
         app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card"
-        app:layout_constraintVertical_bias="0.026" />
+        app:layout_constraintVertical_bias="0.034" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
