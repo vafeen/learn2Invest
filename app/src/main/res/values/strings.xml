@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+    <string name="price">Цена</string>
+    <string name="top_day_percent">24 ч %</string>
+    <string name="top_market_cap">Топ по $</string>
+    <string name="market_review">Обзор рынка</string>
+    <string name="search">Поиск</string>
+    <string name="clear"><u>Очистить</u></string>
+    <string name="network_error">Проверьте подключение \n к интернету</string>
+    <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
     <string name="no_actions">Вы не производили \n никаких действий</string>
-    <string name="network_error">Проверьте подключение \n к интернету</string>
 </resources>
