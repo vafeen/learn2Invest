@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+    <string name="create_account">Создание аккаунта</string>
+    <string name="signup_btn_text">ВОЙТИ</string>
+    <string name="signup_lastname_hint">Введите фамилию</string>
+    <string name="input_is_empty_error">Поле не может быть пустым</string>
+    <string name="signup_name_hint">Введите имя</string>
     <string name="price">Цена</string>
     <string name="top_day_percent">24 ч %</string>
     <string name="top_market_cap">Топ по $</string>
