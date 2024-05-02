@@ -8,4 +8,6 @@
     <string name="clear"><u>Очистить</u></string>
     <string name="network_error">Проверьте подключение \n к интернету</string>
     <string name="you_search">Вы искали</string>
+    <string name="history_text">История</string>
+    <string name="no_actions">Вы не производили \n никаких действий</string>
 </resources>
