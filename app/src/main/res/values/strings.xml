@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+    <string name="history_text">История</string>
+    <string name="no_actions">Вы не производили \n никаких действий</string>
+    <string name="network_error">Проверьте подключение \n к интернету</string>
 </resources>
