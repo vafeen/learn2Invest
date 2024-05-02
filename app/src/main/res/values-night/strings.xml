@@ -6,4 +6,9 @@
     <string name="top_up">Пополнить</string>
     <string name="assets_are_empty">Ваш портфель пуст</string>
     <string name="network_error">Проверьте подключение\nк интернету</string>
+    <string name="create_account">Создание аккаунта</string>
+    <string name="signup_btn_text">ВОЙТИ</string>
+    <string name="signup_lastname_hint">Введите фамилию</string>
+    <string name="input_is_empty_error">Поле не может быть пустым</string>
+    <string name="signup_name_hint">Введите имя</string>
 </resources>
