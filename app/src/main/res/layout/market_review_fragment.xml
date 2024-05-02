@@ -120,7 +120,7 @@
         android:layout_marginTop="23dp"
         android:text="@string/you_search"
         android:textAppearance="@style/Text.SemiBold.16"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
@@ -133,7 +133,7 @@
         android:text="@string/clear"
         android:textAppearance="@style/Text.Bold.16"
         android:textColor="@color/btn_clear"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
@@ -145,7 +145,7 @@
         android:text="@string/network_error"
         android:textAlignment="center"
         android:textAppearance="@style/Text.SemiBold.17"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_by_change_percent_24Hr" />
@@ -155,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/network_error_tv"
@@ -168,7 +168,7 @@
         android:layout_marginTop="80dp"
         android:indeterminateDrawable="@drawable/spiner_loader"
         android:indeterminateTint="@color/loader"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_by_change_percent_24Hr" />
