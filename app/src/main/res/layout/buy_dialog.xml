@@ -33,9 +33,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_exit_refill_account_dialog"
-        android:layout_width="119dp"
+        android:layout_width="105dp"
         android:layout_height="42dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/cancel"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -48,8 +48,8 @@
         app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/button_add_money_refill_account_dialog"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.284"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
         app:layout_constraintTop_toTopOf="@+id/button_add_money_refill_account_dialog"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -211,7 +211,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_add_money_refill_account_dialog"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="42dp"
         android:layout_marginTop="60dp"
         android:backgroundTint="@color/view_background"
