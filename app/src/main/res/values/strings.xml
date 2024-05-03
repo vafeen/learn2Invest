@@ -15,4 +15,6 @@
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
     <string name="no_actions">Вы не производили \n никаких действий</string>
+    <string name="enter_pin_str">Введите PIN-код</string>
+
 </resources>
