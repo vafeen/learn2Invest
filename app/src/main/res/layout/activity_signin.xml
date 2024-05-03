@@ -211,8 +211,8 @@
 <!--    to replace this on ImageView with image delete-->
     <ImageView
         android:id="@+id/pass_button_backspace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:foreground="@drawable/backspace"
