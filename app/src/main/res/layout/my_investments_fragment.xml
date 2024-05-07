@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="6dp"
-        android:text="$50,540.00"
+        tools:text="$50,540.00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/balance" />
 
@@ -55,7 +55,7 @@
         android:background="@drawable/percent_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="4dp"
-        android:text="+5.21%"
+        tools:text="+5.21%"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/my_investments_text"
         app:layout_constraintTop_toBottomOf="@id/balance" />
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="6dp"
-        android:text="0$"
+        tools:text="0$"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_funds_text" />
 
