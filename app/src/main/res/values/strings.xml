@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+    <string name="my_investments">Мои инвестиции</string>
+    <string name="balance">Баланс</string>
+    <string name="account_funds">Средства на счете</string>
+    <string name="top_up">Пополнить</string>
+    <string name="assets_are_empty">Ваш портфель пуст</string>
     <string name="create_account">Создание аккаунта</string>
     <string name="signup_btn_text">ВОЙТИ</string>
     <string name="signup_lastname_hint">Введите фамилию</string>
