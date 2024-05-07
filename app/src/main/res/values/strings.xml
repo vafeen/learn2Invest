@@ -15,4 +15,13 @@
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
     <string name="no_actions">Вы не производили \n никаких действий</string>
+    <string name="profile">Профиль</string>
+    <string name="delete_profile"><u>Удалить \n профиль</u></string>
+    <string name="drop_statistics">Сброс статистики</string>
+    <string name="settings">Настройки</string>
+    <string name="notification">Уведомления</string>
+    <string name="biometry">Биометрия</string>
+    <string name="confirm_deal">Подтверждение сделок</string>
+    <string name="change_PIN">Смена PIN-кода</string>
+    <string name="change_fingerprint">Смена отпечатка пальца</string>
 </resources>
