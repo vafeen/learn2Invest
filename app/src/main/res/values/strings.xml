@@ -24,6 +24,11 @@
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
     <string name="price_alert_on_security_paper">Price alert</string>
+    <string name="my_investments">Мои инвестиции</string>
+    <string name="balance">Баланс</string>
+    <string name="account_funds">Средства на счете</string>
+    <string name="top_up">Пополнить</string>
+    <string name="assets_are_empty">Ваш портфель пуст</string>
     <string name="create_account">Создание аккаунта</string>
     <string name="signup_btn_text">Войти</string>
     <string name="signup_lastname_hint">Введите фамилию</string>
@@ -39,4 +44,6 @@
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
     <string name="no_actions">Вы не производили \n никаких действий</string>
+    <string name="enter_pin_str">Введите PIN-код</string>
+
 </resources>

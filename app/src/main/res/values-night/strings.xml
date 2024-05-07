@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="create_account">Создание аккаунта</string>
-    <string name="signup_btn_text">ВОЙТИ</string>
-    <string name="signup_lastname_hint">Введите фамилию</string>
-    <string name="input_is_empty_error">Поле не может быть пустым</string>
-    <string name="signup_name_hint">Введите имя</string>
-</resources>
