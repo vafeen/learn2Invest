@@ -15,5 +15,6 @@
     <color name="loader">#FFB38DE8</color>
     <color name="active_switch">#FF9A91FF</color>
     <color name="inactive_switch">#FFEEEEEE</color>
-
+    <color name="cancel">#54E06060</color>
+    <color name="transparent">#00000000</color>
 </resources>
