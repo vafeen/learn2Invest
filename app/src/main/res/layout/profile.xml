@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/profile_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="@string/profile"
+        android:textAppearance="@style/Text.Bold.20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/firstName_lastName_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="25dp"
+        tools:text="Надежда \n Черевкова"
+        android:textAppearance="@style/Text.SemiBold.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_TV" />
+
+
+    <TextView
+        android:id="@+id/delete_profile_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="27dp"
+        android:text="@string/delete_profile"
+        android:textAppearance="@style/Text.SemiBold.16"
+        android:textColor="@color/btn_clear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_TV" />
+
+    <TextView
+        android:id="@+id/drop_statistics_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/drop_statistics"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstName_lastName_TV" />
+
+    <ImageButton
+        android:id="@+id/drop_statistics_IBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="26dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstName_lastName_TV"
+        app:srcCompat="@drawable/arrow_right_gray" />
+
+    <TextView
+        android:id="@+id/settings_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/settings"
+        android:textAppearance="@style/Text.SemiBold.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drop_statistics_TV" />
+
+    <ImageButton
+        android:id="@+id/settings_IBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drop_statistics_IBtn"
+        app:srcCompat="@drawable/gear" />
+
+    <TextView
+        android:id="@+id/notification_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="41dp"
+        android:text="@string/notification"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_TV" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/notification_Sw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="24dp"
+        android:theme="@style/switch_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_IBtn" />
+
+    <TextView
+        android:id="@+id/biometry_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/biometry"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_TV" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/biometry_Sw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="22dp"
+        android:theme="@style/switch_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_Sw" />
+
+    <TextView
+        android:id="@+id/confirm_deal_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/confirm_deal"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/biometry_TV" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/confirm_deal_Sw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="22dp"
+        android:theme="@style/switch_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/biometry_Sw" />
+
+
+    <TextView
+        android:id="@+id/change_PIN_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/change_PIN"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_TV" />
+
+    <ImageButton
+        android:id="@+id/change_PIN_IBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="21dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Sw"
+        app:srcCompat="@drawable/arrow_right_gray" />
+
+    <TextView
+        android:id="@+id/change_fingerprint_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/change_fingerprint"
+        android:textAppearance="@style/Text.Medium.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_PIN_TV" />
+
+    <ImageButton
+        android:id="@+id/change_fingerprint_IBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="21dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_PIN_IBtn"
+        app:srcCompat="@drawable/arrow_right_gray" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
