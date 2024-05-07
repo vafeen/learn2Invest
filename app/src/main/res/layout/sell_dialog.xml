@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <View
+        android:id="@+id/balance_card"
+        android:layout_width="238dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tabs_in_dialogs_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_od_dialog"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/price_card"
+        android:layout_width="238dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tabs_in_dialogs_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balance_card"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_exit_sell_dialog"
+        android:layout_width="119dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="2dp"
+        android:backgroundTint="@color/cancel"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/exit"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Text.SemiBold.14"
+        android:textColor="@color/black"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_add_money_refill_account_dialog"
+        app:layout_constraintEnd_toStartOf="@+id/button_add_money_refill_account_dialog"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_add_money_refill_account_dialog"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/name_od_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sell_security_paper"
+        android:textAppearance="@style/Text.Regular.16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+
+    <View
+        android:id="@+id/entering_sum_of_balance_card"
+        android:layout_width="238dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tabs_in_dialogs_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_card"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/number_textview_sell_dialog"
+        android:layout_width="131dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="@dimen/margin_dialogs_card_content"
+        android:text="@string/number"
+        android:textAppearance="@style/Text.Medium.14"
+        app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/entering_number_of_lots_sell_dialog"
+        android:layout_width="144dp"
+        android:layout_height="20dp"
+        android:layout_marginHorizontal="@dimen/margin_dialogs_card_content"
+        android:layout_marginStart="@dimen/margin_dialogs_card_content"
+        android:background="@drawable/tabs_in_dialogs_shape"
+        android:hint="@string/number_lots"
+        android:inputType="number"
+        android:textAppearance="@style/Text.Regular.12"
+        app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <View
+        android:id="@+id/icon_of_balance_view"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
+        android:layout_margin="@dimen/margin_dialogs_card_content"
+        android:background="@drawable/briefcase"
+        app:layout_constraintBottom_toBottomOf="@+id/balance_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/balance_card"
+        app:layout_constraintTop_toTopOf="@+id/balance_card"
+        app:layout_constraintVertical_bias="0.466" />
+
+
+    <TextView
+        android:id="@+id/price_textview_sell_dialog"
+        android:layout_width="131dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="@dimen/margin_dialogs_card_content"
+        android:text="@string/price_name"
+        android:textAppearance="@style/Text.Medium.14"
+        app:layout_constraintBottom_toBottomOf="@+id/price_card"
+        app:layout_constraintEnd_toEndOf="@+id/price_card"
+        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="@+id/price_card"
+        app:layout_constraintTop_toTopOf="@+id/price_card"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/view_background"
+        android:src="@drawable/circle_minus"
+
+        app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintHeight="28dp"
+        app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots_sell_dialog"
+        app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintWidth="28dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/view_background"
+        android:src="@drawable/circle_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+
+        app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintHeight="28dp"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toTopOf="@+id/imageButton"
+        app:layout_constraintWidth="28dp" />
+
+    <TextView
+        android:id="@+id/balance_textview_sell_dialog"
+        android:layout_width="131dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="@dimen/margin_dialogs_card_content"
+        android:text="@string/example_price"
+        android:textAppearance="@style/Text.Medium.14"
+        app:layout_constraintBottom_toBottomOf="@+id/price_card"
+        app:layout_constraintEnd_toEndOf="@+id/price_card"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/price_card"
+        app:layout_constraintTop_toTopOf="@+id/price_card"
+        app:layout_constraintVertical_bias="0.923" />
+
+    <TextView
+        android:id="@+id/account_textview_refill_account_dialog"
+        android:layout_width="131dp"
+        android:layout_height="24dp"
+        android:text="@string/balance"
+        android:textAppearance="@style/Text.Medium.14"
+        app:layout_constraintBottom_toBottomOf="@+id/balance_card"
+        app:layout_constraintEnd_toEndOf="@+id/balance_card"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
+        app:layout_constraintTop_toTopOf="@+id/balance_card"
+        app:layout_constraintVertical_bias="0.076" />
+
+
+    <TextView
+        android:id="@+id/balance_textview_refill_account_dialog"
+        android:layout_width="131dp"
+        android:layout_height="24dp"
+        android:text="@string/example_balance"
+        android:textAppearance="@style/Text.Medium.14"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/balance_card"
+        app:layout_constraintEnd_toEndOf="@+id/balance_card"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/account_textview_refill_account_dialog"
+        app:layout_constraintTop_toBottomOf="@+id/account_textview_refill_account_dialog"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_add_money_refill_account_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/view_background"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/sell"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Text.SemiBold.14"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.726"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card"
+        app:layout_constraintVertical_bias="0.026" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
