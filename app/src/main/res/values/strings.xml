@@ -10,7 +10,6 @@
     <string name="yes_exactly">Да, точно</string>
     <string name="example_balance">$50,540.00</string>
     <string name="example_price">$10,000</string>
-    <string name="balance">Баланс</string>
     <string name="price_name">Цена</string>
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
