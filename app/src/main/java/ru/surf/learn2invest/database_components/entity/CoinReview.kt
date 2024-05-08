@@ -3,8 +3,6 @@ package ru.surf.learn2invest.database_components.entity
 import androidx.room.Entity
 
 
-
-
 // экран обзор рынка
 @Entity
 class CoinReview(

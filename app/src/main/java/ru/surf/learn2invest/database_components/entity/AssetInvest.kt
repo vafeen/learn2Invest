@@ -1,27 +1,20 @@
 package ru.surf.learn2invest.database_components.entity
 
 import androidx.room.Entity
-
+import androidx.room.PrimaryKey
 
 
 @Entity
 class AssetInvest(
     // экран мои инвестиции
-    name: String,
-    symbol: String,
-    iconURL: String,
-    coinPrice: Int,
-    dealPrice: Int,
-    amount: Int,
-) : TransactionCoinSpecific(
-    name = name,
-    symbol = symbol,
-    iconURL = iconURL,
-    coinPrice = coinPrice,
-    dealPrice = dealPrice,
-    amount = amount
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val name: String,
+    val symbol: String,
+    val iconURL: String,
+    val coinPrice: Int,
+    val dealPrice: Int,
+    val amount: Int,
 ) {
-
 }
 
 

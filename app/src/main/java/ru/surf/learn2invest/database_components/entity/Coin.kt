@@ -4,18 +4,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-
-
 // объект крипты
 @Entity
 open class Coin(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val name: String,
     val symbol: String,
     val iconURL: String,
     val coinPrice: Int
 ) {
-
 }
 
 
