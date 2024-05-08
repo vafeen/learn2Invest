@@ -1,12 +1,16 @@
 package ru.surf.learn2invest.database_components.dao
 
+import androidx.room.Dao
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.surf.learn2invest.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.database_components.entity.Profile
 
+
+@Dao
 interface ProfileDao : DataAccessObject<Profile> {
 
     @Query("select * from profile")
-    override suspend fun getAll(): List<Profile>
+    fun getAll(): Flow<List<Profile>>
 
 }
