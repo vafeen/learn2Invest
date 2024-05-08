@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.surf.surf"
+        applicationId = "ru.surf.learn2invest"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
