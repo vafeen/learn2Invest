@@ -10,6 +10,10 @@ import ru.surf.learn2invest.database_components.entity.CoinReview
 @Dao
 interface CoinReviewDao : DataAccessObject<CoinReview> {
 
+
+    /**
+     * Получение списка всех имеющихся объектов этого типа из базы данных
+     */
     @Query("select * from coinreview")
     fun getAll(): Flow<List<CoinReview>>
 

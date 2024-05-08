@@ -6,7 +6,9 @@ import androidx.room.Entity
 
 
 
-// экран мои инвестиции
+/**
+ * Объект транзакции в истории свех транзакций
+ */
 @Entity
 open class TransactionCoinSpecific(
     name: String,

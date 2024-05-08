@@ -3,7 +3,9 @@ package ru.surf.learn2invest.database_components.entity
 import androidx.room.Entity
 
 
-// экран обзор рынка
+/**
+ * Объект криптовалюты на экране "Обзор рынка"
+ */
 @Entity
 class CoinReview(
     name: String,
@@ -16,6 +18,4 @@ class CoinReview(
     symbol = symbol,
     iconURL = iconURL,
     coinPrice = coinPrice
-) {
-
-}
+)

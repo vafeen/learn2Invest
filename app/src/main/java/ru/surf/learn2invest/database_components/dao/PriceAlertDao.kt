@@ -11,7 +11,10 @@ import ru.surf.learn2invest.database_components.entity.PriceAlert
 interface PriceAlertDao : DataAccessObject<PriceAlert> {
 
 
+    /**
+     * Получение списка всех имеющихся объектов этого типа из базы данных
+     */
     @Query("select * from pricealert")
-   fun getAll(): Flow<List<PriceAlert>>
+    fun getAll(): Flow<List<PriceAlert>>
 
 }

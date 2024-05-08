@@ -4,9 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
+/**
+ * Объект криптовалюты портфеля?
+ */
 @Entity
 class AssetInvest(
-    // экран мои инвестиции
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val symbol: String,
@@ -14,7 +16,6 @@ class AssetInvest(
     val coinPrice: Int,
     val dealPrice: Int,
     val amount: Int,
-) {
-}
+)
 
 

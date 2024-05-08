@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 
 
 
-
-// профиль пользователя со всеми настройками
+/**
+ * Профиль пользователя со всеми настройками
+ */
 @Entity
 class Profile(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
@@ -19,5 +20,4 @@ class Profile(
     val confirmDeal: Boolean,
     val fiatBalance: Int,
     val assetBalance: Int
-) {
-}
+)

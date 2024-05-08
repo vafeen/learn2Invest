@@ -5,7 +5,9 @@ import androidx.room.Entity
 
 
 
-// экран истории
+/**
+ * Объект транзакции актива на экране истории транзакций одного актива
+ */
 @Entity
 open class Transaction(
     name: String,
@@ -18,6 +20,4 @@ open class Transaction(
     symbol = symbol,
     iconURL = iconURL,
     coinPrice = coinPrice,
-) {
-
-}
+)

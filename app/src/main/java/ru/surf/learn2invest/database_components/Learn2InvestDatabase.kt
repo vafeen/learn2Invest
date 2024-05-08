@@ -54,11 +54,19 @@ import ru.surf.learn2invest.database_components.entity.TransactionCoinSpecific
  * Learn2InvestApp.mainDB.someDao().getAll().collect { someList = it }
  * }
  * ```
+ *
+ * и дальше можно просто делать свои манипуляции с объектами базы данных:
+ * - [insertAll](AssetInvestDao.insertAll)
+ * - [delete](AssetInvestDao.delete)
  */
 abstract class Learn2InvestDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "learn2investDatabase.db"
 
+
+        /**
+         * создание объекта базы данных
+         */
         fun buildDatabase(context: Context): Learn2InvestDatabase {
             return Room
                 .databaseBuilder(

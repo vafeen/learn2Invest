@@ -12,6 +12,10 @@ import ru.surf.learn2invest.database_components.entity.TransactionCoinSpecific
 interface TransactionCoinSpecificDao : DataAccessObject<TransactionCoinSpecific> {
 
 
+
+    /**
+     * Получение списка всех имеющихся объектов этого типа из базы данных
+     */
     @Query("select * from transactioncoinspecific")
     fun getAll(): Flow<List<TransactionCoinSpecific>>
 }

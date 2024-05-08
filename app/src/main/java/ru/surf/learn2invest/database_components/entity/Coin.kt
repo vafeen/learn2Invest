@@ -4,7 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-// объект крипты
+/**
+ * Объект криптовалюты
+ */
 @Entity
 open class Coin(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
@@ -12,9 +14,7 @@ open class Coin(
     val symbol: String,
     val iconURL: String,
     val coinPrice: Int
-) {
-}
-
+)
 
 
 
