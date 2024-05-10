@@ -1,23 +1,19 @@
 package ru.surf.learn2invest.database_components.entity
 
 import androidx.room.Entity
-
-
+import androidx.room.PrimaryKey
 
 
 /**
- * Объект транзакции актива на экране истории транзакций одного актива
+ * Объект транзакции в истории свех транзакций
  */
 @Entity
 open class Transaction(
-    name: String,
-    symbol: String,
-    iconURL: String,
-    coinPrice: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    val name: String,
+    val symbol: String,
+    val iconURL: String,
+    val coinPrice: Int,
     val dealPrice: Int,
-) : Coin(
-    name = name,
-    symbol = symbol,
-    iconURL = iconURL,
-    coinPrice = coinPrice,
+    val amount: Int,
 )

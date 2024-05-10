@@ -14,7 +14,7 @@ class AssetInvest(
     val symbol: String,
     val iconURL: String,
     val coinPrice: Int,
-    val dealPrice: Int,
+    val changePercent24Hr: Float,
     val amount: Int,
 )
 
