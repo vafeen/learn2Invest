@@ -40,4 +40,33 @@
         app:layout_constraintStart_toEndOf="@id/capitalisation_text"
         app:layout_constraintTop_toBottomOf="@id/chart"
         tools:text="40 млрд. $" />
+
+    <LinearLayout
+        android:id="@+id/network_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/network_error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/network_error"
+            android:textAlignment="center"
+            android:textAppearance="@style/Text.SemiBold.17" />
+
+        <ImageView
+            android:id="@+id/network_error_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/network_error_tv"
+            app:srcCompat="@drawable/world_wide_web" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
