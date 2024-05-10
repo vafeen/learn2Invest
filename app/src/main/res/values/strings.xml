@@ -46,4 +46,5 @@
     <string name="enter_pin_str">Введите PIN-код</string>
     <string name="capitalisation">Капитализация:</string>
     <string name="review_text">Обзор</string>
+    <string name="no_interest_error">Вы не интересовались\nданным активом</string>
 </resources>
