@@ -1,14 +1,16 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
 }
+
 
 android {
     namespace = "ru.surf.learn2invest"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.surf.surf"
+        applicationId = "ru.surf.learn2invest"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -24,16 +26,28 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildFeatures {
+        viewBinding = true
+
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
+
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
