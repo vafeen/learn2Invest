@@ -1,7 +1,36 @@
 <resources>
     <string name="app_name">Learn2Invest</string>
+    <string name="refill">Пополнить</string>
+    <string name="buy">Купить</string>
+    <string name="sell">Продать</string>
+    <string name="add_price_alert">Добавить</string>
+    <string name="exit">Выйти</string>
+    <string name="close">Закрыть</string>
+    <string name="no">Нет</string>
+    <string name="yes_exactly">Да, точно</string>
+    <string name="example_balance">$50,540.00</string>
+    <string name="example_price">$10,000</string>
+    <string name="balance">Баланс</string>
+    <string name="price_name">Цена</string>
+    <string name="number">Количество</string>
+    <string name="number_lots">0 лотов</string>
+    <string name="changing_price">Изменение цены в %</string>
+    <string name="no_asset_for_sale">Нет актива для продажи</string>
+    <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
+    <string name="asking_to_delete_profile">Вы точно хотите удалить\nпрофиль?</string>
+    <string name="account">Счет</string>
+    <string name="enter_sum">Введите сумму</string>
+    <string name="refill_account">Пополнение счета</string>
+    <string name="sell_security_paper">Продажа</string>
+    <string name="buy_security_paper">Покупка</string>
+    <string name="price_alert_on_security_paper">Price alert</string>
+    <string name="my_investments">Мои инвестиции</string>
+    <string name="balance">Баланс</string>
+    <string name="account_funds">Средства на счете</string>
+    <string name="top_up">Пополнить</string>
+    <string name="assets_are_empty">Ваш портфель пуст</string>
     <string name="create_account">Создание аккаунта</string>
-    <string name="signup_btn_text">ВОЙТИ</string>
+    <string name="signup_btn_text">Войти</string>
     <string name="signup_lastname_hint">Введите фамилию</string>
     <string name="input_is_empty_error">Поле не может быть пустым</string>
     <string name="signup_name_hint">Введите имя</string>
@@ -24,4 +53,5 @@
     <string name="confirm_deal">Подтверждение сделок</string>
     <string name="change_PIN">Смена PIN-кода</string>
     <string name="change_fingerprint">Смена отпечатка пальца</string>
+    <string name="enter_pin_str">Введите PIN-код</string>
 </resources>
