@@ -58,7 +58,7 @@
         android:id="@+id/name_od_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/price_alert_on_security_paper"
+        android:text="@string/price_alert_text"
         android:textAppearance="@style/Text.Regular.16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
