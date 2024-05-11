@@ -18,8 +18,8 @@ fun Context.registerNotificationChannel(channel: NotificationChannels) {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notificationChannel = NotificationChannel(
-            channel.NOTIFICATION_CHANNEL_ID,
-            channel.NOTIFICATION_CHANNEL_NAME,
+            channel.ID,
+            channel.NAME,
             channel.IMPORTANCE
         )
 
