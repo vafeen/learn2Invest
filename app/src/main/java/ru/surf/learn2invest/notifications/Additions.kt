@@ -11,19 +11,22 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 
-fun Context.registerNotificationChannel(channel: NotificationChannels) {
+fun Context.registerNotificationChannels(channels: List<NotificationChannels>) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notificationChannel = NotificationChannel(
-            channel.ID,
-            channel.NAME,
-            channel.IMPORTANCE
-        )
+        for (channel in channels) {
 
-        notificationManager.createNotificationChannel(notificationChannel)
+            val notificationChannel = NotificationChannel(
+                channel.ID,
+                channel.NAME,
+                channel.IMPORTANCE
+            )
+
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
 
 }
