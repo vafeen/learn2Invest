@@ -33,16 +33,20 @@ fun Context.registerNotificationChannel(channel: NotificationChannels) {
  * Её необходимо добавить в активити "Мои инвестиции"
  */
 fun requestPermissionForNotifications(context: Context) {
-    val permissionState =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val permissionState =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
 
-    // If the permission is not granted, request it.
-    if (permissionState == PackageManager.PERMISSION_DENIED) {
-        ActivityCompat.requestPermissions(
-            context as Activity,
-            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-            1
-        )
+        // If the permission is not granted, request it.
+        if (permissionState == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                1
+            )
+        }
     }
+
+
 }
 
