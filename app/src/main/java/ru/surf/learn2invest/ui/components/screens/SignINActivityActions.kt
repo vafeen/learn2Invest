@@ -3,6 +3,5 @@ package ru.surf.learn2invest.ui.components.screens
 enum class SignINActivityActions(val action: String) {
     SignIN("SignIN"),
     SignUP("SignUP"),
-    ChangingPIN("ChangingPIN"),
-    ChangingFINGERPRINT("ChangingFINGERPRINT");
+    ChangingPIN("ChangingPIN");
 }
