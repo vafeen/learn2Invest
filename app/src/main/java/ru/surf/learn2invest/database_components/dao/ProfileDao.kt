@@ -13,7 +13,7 @@ interface ProfileDao : DataAccessObject<Profile> {
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */
-    @Query("select * from profile where id=0")
+    @Query("select * from profile")
     fun getProfile(): List<Profile>
 
 }
