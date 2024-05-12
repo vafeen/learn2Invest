@@ -4,13 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-
-
 /**
  * Профиль пользователя со всеми настройками
  */
 @Entity
-class Profile(
+data class Profile(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val firstName: String,
     val lastName: String,
@@ -19,5 +17,6 @@ class Profile(
     val biometry: Boolean,
     val confirmDeal: Boolean,
     val fiatBalance: Int,
-    val assetBalance: Int
+    val assetBalance: Int,
+    val hash: String? = null,
 )
