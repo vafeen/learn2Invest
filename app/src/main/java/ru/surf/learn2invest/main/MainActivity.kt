@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.database_components.entity.Profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.ui.components.screens.SignInActivity
 
@@ -33,21 +33,45 @@ class MainActivity : AppCompatActivity() {
         }
 
         skipSplash()
+
+        // data for testing (need to remove)
+        lifecycleScope.launch(Dispatchers.IO) {
+            Learn2InvestApp.mainDB.profileDao().insertAll(
+                Profile(
+                    id = 0,
+                    firstName = "A",
+                    lastName = "Vafeen",
+                    pin = 0,
+                    notification = true,
+                    biometry = true,
+                    confirmDeal = true,
+                    fiatBalance = 0,
+                    assetBalance = 0,
+                )
+            )
+        }
+
+
     }
 
+    // Функция проверки, есть ли у нас зарегистрированный пользователь
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val deferred =
                 async(Dispatchers.IO) { Learn2InvestApp.mainDB.profileDao().getProfile() }
 
-            delay(800)
+            delay(1000)
 
-            val intent = Intent(this@MainActivity, SignInActivity::class.java)
+            val nextActivity = if (deferred.await().isNotEmpty()) {
+                SignInActivity::class.java
+            } else {
+                SignInActivity::class.java
 
-            if (deferred.await().isEmpty()) {
-                startActivity(intent)
+//                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
+
+            startActivity(Intent(this@MainActivity, nextActivity))
 
             this@MainActivity.finish()
 
