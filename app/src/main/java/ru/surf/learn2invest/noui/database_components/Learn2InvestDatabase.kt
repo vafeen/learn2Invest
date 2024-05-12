@@ -1,17 +1,17 @@
-package ru.surf.learn2invest.database_components
+package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.surf.learn2invest.database_components.dao.AssetInvestDao
-import ru.surf.learn2invest.database_components.dao.PriceAlertDao
-import ru.surf.learn2invest.database_components.dao.ProfileDao
-import ru.surf.learn2invest.database_components.dao.TransactionDao
-import ru.surf.learn2invest.database_components.entity.AssetInvest
-import ru.surf.learn2invest.database_components.entity.PriceAlert
-import ru.surf.learn2invest.database_components.entity.Profile
-import ru.surf.learn2invest.database_components.entity.Transaction
+import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
+import ru.surf.learn2invest.noui.database_components.dao.PriceAlertDao
+import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
+import ru.surf.learn2invest.noui.database_components.dao.TransactionDao
+import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
+import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.entity.Transaction
 
 @Database(
     entities = [

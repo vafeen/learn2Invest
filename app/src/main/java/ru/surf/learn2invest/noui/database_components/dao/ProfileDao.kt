@@ -1,9 +1,9 @@
-package ru.surf.learn2invest.database_components.dao
+package ru.surf.learn2invest.noui.database_components.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import ru.surf.learn2invest.database_components.dao.parent.DataAccessObject
-import ru.surf.learn2invest.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 
 
 @Dao

@@ -12,7 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.ui.components.screens.SignInActivity
 

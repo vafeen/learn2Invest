@@ -1,6 +1,6 @@
 package ru.surf.learn2invest.noui.cryptography
 
-import ru.surf.learn2invest.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 import java.security.MessageDigest
 
 
