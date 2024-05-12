@@ -14,6 +14,10 @@ constraintlayout = "2.1.4"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 org-jetbrains-kotlin-android = "1.9.23"
+retrofit = "2.11.0"
+converterGson = "2.11.0"
+gson = "2.10.1"
+loggingInterceptor = "5.0.0-alpha.14"
 
 
 [libraries]
@@ -31,6 +35,10 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCommon" }
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
