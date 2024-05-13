@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             val intent = if (deferred.await().isNotEmpty()) {
 
                 Intent(this@MainActivity, SignInActivity::class.java).let {
-                    it.action = SignINActivityActions.SignUP.action
+                    it.action = SignINActivityActions.SignIN.action
 
                     it
                 }
