@@ -28,8 +28,10 @@ class PasswordHasher(
         return "${user.firstName}\\\\$this////${user.lastName}"
     }
 
-
-    private fun passwordToHash(password: String): String {
+    /**
+     * Функция получения hash'а пароля
+     */
+    fun passwordToHash(password: String): String {
         return password.addSaltToMessage().getSHA256Hash()
     }
 
