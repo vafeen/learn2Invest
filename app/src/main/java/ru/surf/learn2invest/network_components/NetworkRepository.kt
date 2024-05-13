@@ -8,23 +8,27 @@ import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.network_components.util.Const
 
 /**
- * Пример использования:
- * this.lifecycleScope.launch {
- *   lateinit var result1: ResponseWrapper<MarketReviewResponse>
- *   lateinit var result2: ResponseWrapper<CoinHistoryResponse>
- *   withContext(Dispatchers.IO) {
- *       result1 = coinClient.getMarketReview()
- *       result2 = coinClient.getCoinHistory("monero")
+ * Пример использования (Вариант для запуска из Activity):
+ * val coinClient = NetworkRepository()
+ * override fun onResume() {
+ *   super.onResume()
+ *   this.lifecycleScope.launch {
+ *      lateinit var result1: ResponseWrapper<MarketReviewResponse>
+ *      lateinit var result2: ResponseWrapper<CoinHistoryResponse>
+ *      withContext(Dispatchers.IO) {
+ *          result1 = coinClient.getMarketReview()
+ *          result2 = coinClient.getCoinHistory("monero")
+ *      }
+ *      when (result1) {
+ *           is ResponseWrapper.Success -> Log.d("SUCCESS", (result1 as ResponseWrapper.Success<MarketReviewResponse>).value.data.toString())
+ *           is ResponseWrapper.NetworkError -> Log.d("FAIL", "network error")
+ *      }
+ *      when (result2) {
+ *          is ResponseWrapper.Success -> Log.d("SUCCESS", (result2 as ResponseWrapper.Success<CoinHistoryResponse>).value.data.toString())
+ *          is ResponseWrapper.NetworkError -> Log.d("FAIL", "network error")
+ *      }
  *   }
- *   when (result1) {
- *       is ResponseWrapper.Success -> Log.d("SUCCESS", (result1 as ResponseWrapper.Success<MarketReviewResponse>).value.data.toString())
- *       is ResponseWrapper.NetworkError -> Log.d("FAIL", "network error")
- *   }
- *   when (result2) {
- *       is ResponseWrapper.Success -> Log.d("SUCCESS", (result2 as ResponseWrapper.Success<CoinHistoryResponse>).value.data.toString())
- *       is ResponseWrapper.NetworkError -> Log.d("FAIL", "network error")
- *   }
-* }
+ * }
 **/
 class NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(
