@@ -2,7 +2,6 @@ package ru.surf.learn2invest.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,9 +12,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.SignInActivity
 

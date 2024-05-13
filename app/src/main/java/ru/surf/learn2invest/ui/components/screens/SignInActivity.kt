@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -19,13 +18,20 @@ import ru.surf.learn2invest.noui.database_components.entity.Profile
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import ru.surf.learn2invest.R
+import ru.surf.learn2invest.noui.logs.Loher
 import java.util.concurrent.Executor
 
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding
 
+
     private var pinCode: String = ""
+    private var firstPin: String = "" // Apps для сравнения во время регистрации
+    private var isVerified = false
+
+    private var userDataIsChanged = false
 
     private lateinit var user: Profile
 
@@ -36,13 +42,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private fun onAuthenticationSucceeded() {
-        //    TODO() Здесь нужно указать переход к следующему активити в случае успешной аутенчего-то-там
-
-//            this@SignInActivity.finish()
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,99 +51,186 @@ class SignInActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        initHash()
-
         initListeners()
 
-        initAuth()
+        when (intent.action) {
+
+            SignINActivityActions.SignIN.action -> {
+                initProfile()
+
+                initFingerPrintAuth()
+
+//                пин: ввели, полсекунды, вход
+//                отпечаток: 4 штуки закрасили, полсекунды, вход
+
+            }
+
+            SignINActivityActions.SignUP.action -> {
+                initProfile()
+
+                initFingerPrintAuth()
+
+                binding.enterPinSignin.text = "Придумайте PIN-код"
+
+                binding.passButtonFingerprint.isVisible = false
+                //                ввели пин,
+//                открыли отпечаток
+//                        прикоснулись
+//                вход
+            }
+
+            SignINActivityActions.ChangingPIN.action -> {
+//                ввели новый пин,
+//                стерли
+//                повторили пин
+//                        если ок, вошли
+
+                initProfile()
+
+
+            }
+
+        }
+
+    }
+
+    private fun startActivityWithMainLogic() {
+        //    TODO() Надя,Здесь нужно указать переход к активити "Мои инвестиции" в случае успешной аутен-чего-то-там и входа
+
     }
 
 
-    private fun checkAuthenticationFINGERPRINT() {
+    private fun onAuthenticationSucceeded() {
+        when (intent.action) {
+
+            SignINActivityActions.SignIN.action -> {
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if (pinCode.length < 4) {
+                        paintDots(count = 4)
+                    }
+
+                    delay(500)
+
+                    startActivityWithMainLogic()
+
+                    this@SignInActivity.finish()
+                }
+
+
+            }
+
+            SignINActivityActions.SignUP.action -> {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    paintDots(count = 4)
+
+                    delay(500)
+
+                    startActivityWithMainLogic()
+
+                    updateProfileData()
+
+                    Loher.d("Activity stop")
+                    this@SignInActivity.finish()
+
+
+                }
+            }
+
+            SignINActivityActions.ChangingPIN.action -> {
+
+                updateProfileData()
+
+                this@SignInActivity.finish()
+
+            }
+        }
+
+
+    }
+
+    private fun updateProfileData() {
+        if (userDataIsChanged) {
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                Learn2InvestApp.mainDB.profileDao().insertAll(user)
+            }
+
+        }
+    }
+
+    private fun checkAuthenticationFingerprint() {
         biometricPrompt.authenticate(promptInfo)
     }
 
-    private fun initAuth() {
+    private fun initFingerPrintAuth() {
         executor = ContextCompat.getMainExecutor(this)
 
-        biometricPrompt = BiometricPrompt(this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
+        biometricPrompt =
+            BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
 
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult
                 ) {
                     super.onAuthenticationSucceeded(result)
 
-                    Toast.makeText(this@SignInActivity, "Успешно", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(this@SignInActivity, "Успешно", Toast.LENGTH_LONG).show()
 
-                    Log.e("Apps", "Success")
+                    Loher.e("Success")
 
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        paintDots(count = 4)
+                    if (intent.action == SignINActivityActions.SignUP.action) {
+                        user = user.copy(biometry = true)
 
-                        delay(800)
-
-                        onAuthenticationSucceeded()
+                        userDataIsChanged = true
                     }
 
+                    onAuthenticationSucceeded()
 
                 }
 
                 override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
+                    errorCode: Int, errString: CharSequence
                 ) {
                     super.onAuthenticationError(errorCode, errString)
 
-                    binding.passButtonFingerprint.isVisible = false
+                    Toast.makeText(this@SignInActivity, "Отмена авторизации", Toast.LENGTH_LONG)
+                        .show()
+
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
 
-                    Log.e("Apps", "Failed")
-
-                    Toast.makeText(this@SignInActivity, "Отмена авторизации", Toast.LENGTH_LONG)
-                        .show()
-
-
+                    Loher.e("Authentication failed")
                 }
             })
 
-        promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Вход в Learn2Invest")
-            .setNegativeButtonText("ОТМЕНА")
-            .build()
+        promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle("Вход в Learn2Invest")
+            .setNegativeButtonText("ОТМЕНА").build()
     }
 
 
-    private fun initHash() {
+    private fun initProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
-            user = Learn2InvestApp.mainDB.profileDao().getProfile()[0]
+            val list = Learn2InvestApp.mainDB.profileDao().getProfile()
+            if (list.isNotEmpty()) {
+                user = list[0]
+                Loher.d("user = $user")
+            } else {
+                Loher.e("user not found")
+            }
         }
     }
 
-    private fun checkAuthenticationPIN() {
+    private fun checkAuthenticationPin(): Boolean {
         if (PasswordHasher(user = user).verify(pinCode)) {
-            Toast.makeText(context, "PIN true", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "true", Toast.LENGTH_SHORT).show()
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                delay(1000)
-
-                onAuthenticationSucceeded()
-            }
+            return true
         } else {
-            Toast.makeText(context, "PIN false", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "false", Toast.LENGTH_SHORT).show()
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                delay(500)
-
-                pinCode = ""
-
-                //рекурсия тут ок, т.к. второй раз сюда просто так не попасть
-                paintDots()
-            }
+            return false
         }
     }
 
@@ -213,9 +299,138 @@ class SignInActivity : AppCompatActivity() {
         paintDots()
 
         if (pinCode.length == 4) {
-            checkAuthenticationPIN()
+            when (intent.action) {
 
-            paintDots()
+                SignINActivityActions.SignIN.action -> {
+                    if (checkAuthenticationPin()) {
+
+                        onAuthenticationSucceeded()
+
+                    } else {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            delay(500)
+
+                            pinCode = ""
+
+                            paintDots()
+                        }
+
+                    }
+                }
+
+                SignINActivityActions.SignUP.action -> {
+                    when {
+                        firstPin == "" -> {
+                            firstPin = pinCode
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                delay(500)
+                                Loher.d("pin = $pinCode")
+                                Loher.d("fpin = $firstPin")
+
+                                pinCode = ""
+
+                                paintDots()
+
+                                binding.enterPinSignin.text = getString(R.string.repeat_pin)
+                            }
+                        }
+
+                        firstPin == pinCode -> {
+                            Loher.d("$pinCode == $firstPin")
+                            Loher.d("user = $user")
+
+                            user = user.let {
+                                it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))
+                            }
+
+                            checkAuthenticationFingerprint()
+
+                            onAuthenticationSucceeded()
+                        }
+
+                        firstPin != pinCode -> {
+
+                            pinCode = ""
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                Toast.makeText(context, "не совпадает", Toast.LENGTH_LONG).show()
+
+                                delay(500)
+
+                                paintDots()
+
+                            }
+
+                        }
+                    }
+
+
+                }
+
+                SignINActivityActions.ChangingPIN.action -> {
+                    when {
+                        // вводит старый пароль
+                        firstPin == "" && !isVerified -> {
+                            //если ввел верно
+                            if (PasswordHasher(user = user).verify(pinCode)) {
+                                binding.enterPinSignin.text = "Введите новый пинкод"
+
+                                isVerified = true
+                            } else {
+                                Toast.makeText(context, "Пароль не верен", Toast.LENGTH_LONG).show()
+                            }
+
+                            pinCode = ""
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+
+                                delay(500)
+
+                                paintDots()
+                            }
+                        }
+
+                        //вводит новый
+                        firstPin == "" && isVerified -> {
+
+                            firstPin = pinCode
+
+                            pinCode = ""
+
+                            binding.enterPinSignin.text = "Повторите пинкод"
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                delay(500)
+
+                                paintDots()
+                            }
+
+                        }
+
+                        // повторяет
+                        firstPin != "" && isVerified -> {
+                            if (pinCode == firstPin) {
+                                user = user.let {
+                                    it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))
+                                }
+
+                                userDataIsChanged = true
+
+                                onAuthenticationSucceeded()
+                            } else {
+                                pinCode = ""
+
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    delay(500)
+
+                                    paintDots()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -229,46 +444,23 @@ class SignInActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.apply {
+            val numberButtons = listOf(
+                passButton0,
+                passButton1,
+                passButton2,
+                passButton3,
+                passButton4,
+                passButton5,
+                passButton6,
+                passButton7,
+                passButton8,
+                passButton9,
+            )
 
-
-            passButton0.setOnClickListener {
-                updatePin("0")
-            }
-
-            passButton1.setOnClickListener {
-                updatePin("1")
-            }
-
-            passButton2.setOnClickListener {
-                updatePin("2")
-            }
-
-            passButton3.setOnClickListener {
-                updatePin("3")
-            }
-
-            passButton4.setOnClickListener {
-                updatePin("4")
-            }
-
-            passButton5.setOnClickListener {
-                updatePin("5")
-            }
-
-            passButton6.setOnClickListener {
-                updatePin("6")
-            }
-
-            passButton7.setOnClickListener {
-                updatePin("7")
-            }
-
-            passButton8.setOnClickListener {
-                updatePin("8")
-            }
-
-            passButton9.setOnClickListener {
-                updatePin("9")
+            for (index in 0..numberButtons.lastIndex) {
+                numberButtons[index].setOnClickListener {
+                    updatePin("$index")
+                }
             }
 
             passButtonBackspace.setOnClickListener {
@@ -276,7 +468,7 @@ class SignInActivity : AppCompatActivity() {
             }
 
             passButtonFingerprint.setOnClickListener {
-                checkAuthenticationFINGERPRINT()
+                checkAuthenticationFingerprint()
             }
         }
     }
