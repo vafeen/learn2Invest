@@ -2,6 +2,7 @@ package ru.surf.learn2invest.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,6 +15,8 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
+import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.SignInActivity
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         skipSplash()
 
-        // data for testing (need to remove)
+//         data for testing (need to remove)
         lifecycleScope.launch(Dispatchers.IO) {
             Learn2InvestApp.mainDB.profileDao().insertAll(
                 Profile(
@@ -47,7 +50,9 @@ class MainActivity : AppCompatActivity() {
                     confirmDeal = true,
                     fiatBalance = 0,
                     assetBalance = 0,
-                )
+                ).let {
+                    it.copy(hash = PasswordHasher(user = it).passwordToHash("0000"))
+                }
             )
         }
 
@@ -63,15 +68,20 @@ class MainActivity : AppCompatActivity() {
 
             delay(1000)
 
-            val nextActivity = if (deferred.await().isNotEmpty()) {
-                SignInActivity::class.java
-            } else {
-                SignInActivity::class.java
+            val intent = if (deferred.await().isNotEmpty()) {
 
+                Intent(this@MainActivity, SignInActivity::class.java).let {
+                    it.action = SignINActivityActions.SignUP.action
+
+                    it
+                }
+
+            } else {
+                Intent(this@MainActivity, SignInActivity::class.java)
 //                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
-            startActivity(Intent(this@MainActivity, nextActivity))
+            startActivity(intent)
 
             this@MainActivity.finish()
 
