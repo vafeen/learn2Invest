@@ -226,9 +226,9 @@ class SignInActivity : AppCompatActivity() {
 
         delay(300)
 
-        paintDots(count = 100)
+//        paintDots(count = 100)
 
-        delay(300)
+//        delay(300)
     }
 
 
@@ -287,15 +287,15 @@ class SignInActivity : AppCompatActivity() {
             }
 
             //true
-            100 -> {
-                binding.dot1.drawable.setTint(Color.GREEN)
-
-                binding.dot2.drawable.setTint(Color.GREEN)
-
-                binding.dot3.drawable.setTint(Color.GREEN)
-
-                binding.dot4.drawable.setTint(Color.GREEN)
-            }
+//            100 -> {
+//                binding.dot1.drawable.setTint(Color.GREEN)
+//
+//                binding.dot2.drawable.setTint(Color.GREEN)
+//
+//                binding.dot3.drawable.setTint(Color.GREEN)
+//
+//                binding.dot4.drawable.setTint(Color.GREEN)
+//            }
 
             else -> {
                 binding.dot1.drawable.setTint(Color.WHITE)
