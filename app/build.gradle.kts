@@ -21,8 +21,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -43,7 +42,14 @@ android {
 }
 
 dependencies {
+    // for firngerprint callback
+    implementation(libs.androidx.activity.v160alpha05)
+
+
     implementation(libs.androidx.room.runtime)
+
+    // got using fingerprint
+    implementation(libs.androidx.biometric)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)

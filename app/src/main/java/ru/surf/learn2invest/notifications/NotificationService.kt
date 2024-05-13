@@ -38,6 +38,7 @@ class NotificationService(context: Context) {
     }
 
     fun showNotification(notification: Notification) {
+        // add indexes to notificaions
         notificationManager.notify(0, notification)
     }
 }
