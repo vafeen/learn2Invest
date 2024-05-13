@@ -1,5 +1,6 @@
 [versions]
 activityVersion = "1.9.0"
+accompanistPermissions = "0.31.1-alpha"
 agp = "8.4.0"
 biometric = "1.1.0"
 kotlin = "1.9.23"
@@ -20,6 +21,7 @@ org-jetbrains-kotlin-android = "1.9.23"
 
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-activity-v160alpha05 = { module = "androidx.activity:activity", version.ref = "activityVersion" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
