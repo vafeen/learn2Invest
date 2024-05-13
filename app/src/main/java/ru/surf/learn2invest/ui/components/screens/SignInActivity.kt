@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +69,10 @@ class SignInActivity : AppCompatActivity() {
 
                 initFingerPrintAuth()
 
-                binding.enterPinSignin.text = "Придумайте PIN-код"
+                binding.enterPinSignin.text = buildString {
+                    append("Придумайте PIN-код") // Просто, чтобы не захламлять strings.xml :)
+                }
+
 
                 binding.passButtonFingerprint.isVisible = false
                 //                ввели пин,
@@ -84,6 +86,9 @@ class SignInActivity : AppCompatActivity() {
 //                стерли
 //                повторили пин
 //                        если ок, вошли
+                binding.enterPinSignin.text = buildString {
+                    append("Введите старый PIN-код") // Просто, чтобы не захламлять strings.xml :)
+                }
 
                 initProfile()
 
@@ -104,45 +109,31 @@ class SignInActivity : AppCompatActivity() {
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
-
-                lifecycleScope.launch(Dispatchers.Main) {
-                    if (pinCode.length < 4) {
-                        paintDots(count = 4)
-                    }
-
-                    delay(500)
-
-                    startActivityWithMainLogic()
-
-                    this@SignInActivity.finish()
+                if (pinCode.length < 4) {
+                    paintDots(count = 4)
                 }
 
+                startActivityWithMainLogic()
 
+                this@SignInActivity.finish()
             }
 
             SignINActivityActions.SignUP.action -> {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    paintDots(count = 4)
+                startActivityWithMainLogic()
 
-                    delay(500)
-
-                    startActivityWithMainLogic()
-
+                lifecycleScope.launch(Dispatchers.IO) {
                     updateProfileData()
-
-                    Loher.d("Activity stop")
-                    this@SignInActivity.finish()
-
-
                 }
+
+                Loher.d("Activity stop")
+
+                this@SignInActivity.finish()
             }
 
             SignINActivityActions.ChangingPIN.action -> {
-
                 updateProfileData()
 
                 this@SignInActivity.finish()
-
             }
         }
 
@@ -174,9 +165,7 @@ class SignInActivity : AppCompatActivity() {
                 ) {
                     super.onAuthenticationSucceeded(result)
 
-                    Toast.makeText(this@SignInActivity, "Успешно", Toast.LENGTH_LONG).show()
-
-                    Loher.e("Success")
+                    Loher.d("Success")
 
                     if (intent.action == SignINActivityActions.SignUP.action) {
                         user = user.copy(biometry = true)
@@ -192,10 +181,6 @@ class SignInActivity : AppCompatActivity() {
                     errorCode: Int, errString: CharSequence
                 ) {
                     super.onAuthenticationError(errorCode, errString)
-
-                    Toast.makeText(this@SignInActivity, "Отмена авторизации", Toast.LENGTH_LONG)
-                        .show()
-
                 }
 
                 override fun onAuthenticationFailed() {
@@ -213,8 +198,10 @@ class SignInActivity : AppCompatActivity() {
     private fun initProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
             val list = Learn2InvestApp.mainDB.profileDao().getProfile()
+
             if (list.isNotEmpty()) {
                 user = list[0]
+
                 Loher.d("user = $user")
             } else {
                 Loher.e("user not found")
@@ -222,17 +209,28 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkAuthenticationPin(): Boolean {
-        if (PasswordHasher(user = user).verify(pinCode)) {
-            Toast.makeText(context, "true", Toast.LENGTH_SHORT).show()
+    private fun checkAuthenticationPin(): Boolean = PasswordHasher(user = user).verify(pinCode)
 
-            return true
-        } else {
-            Toast.makeText(context, "false", Toast.LENGTH_SHORT).show()
+    private suspend fun showErrorPINCode() {
 
-            return false
-        }
+        delay(300)
+
+        paintDots(count = -1)
+
+        delay(300)
+
+        paintDots()
     }
+
+    private suspend fun showTruePINCode() {
+
+        delay(300)
+
+        paintDots(count = 100)
+
+        delay(300)
+    }
+
 
     private fun paintDots(count: Int = pinCode.length) {
         when (count) {
@@ -277,6 +275,28 @@ class SignInActivity : AppCompatActivity() {
 
             }
 
+            // error
+            -1 -> {
+                binding.dot1.drawable.setTint(Color.RED)
+
+                binding.dot2.drawable.setTint(Color.RED)
+
+                binding.dot3.drawable.setTint(Color.RED)
+
+                binding.dot4.drawable.setTint(Color.RED)
+            }
+
+            //true
+            100 -> {
+                binding.dot1.drawable.setTint(Color.GREEN)
+
+                binding.dot2.drawable.setTint(Color.GREEN)
+
+                binding.dot3.drawable.setTint(Color.GREEN)
+
+                binding.dot4.drawable.setTint(Color.GREEN)
+            }
+
             else -> {
                 binding.dot1.drawable.setTint(Color.WHITE)
 
@@ -304,15 +324,16 @@ class SignInActivity : AppCompatActivity() {
                 SignINActivityActions.SignIN.action -> {
                     if (checkAuthenticationPin()) {
 
-                        onAuthenticationSucceeded()
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            showTruePINCode()
+                        }.invokeOnCompletion {
+                            onAuthenticationSucceeded()
+                        }
 
                     } else {
+                        pinCode = ""
                         lifecycleScope.launch(Dispatchers.Main) {
-                            delay(500)
-
-                            pinCode = ""
-
-                            paintDots()
+                            showErrorPINCode()
                         }
 
                     }
@@ -325,6 +346,7 @@ class SignInActivity : AppCompatActivity() {
 
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
+
                                 Loher.d("pin = $pinCode")
                                 Loher.d("fpin = $firstPin")
 
@@ -344,9 +366,14 @@ class SignInActivity : AppCompatActivity() {
                                 it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))
                             }
 
-                            checkAuthenticationFingerprint()
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                showTruePINCode()
 
-                            onAuthenticationSucceeded()
+                                checkAuthenticationFingerprint()
+
+                                onAuthenticationSucceeded()
+                            }
+
                         }
 
                         firstPin != pinCode -> {
@@ -354,14 +381,8 @@ class SignInActivity : AppCompatActivity() {
                             pinCode = ""
 
                             lifecycleScope.launch(Dispatchers.Main) {
-                                Toast.makeText(context, "не совпадает", Toast.LENGTH_LONG).show()
-
-                                delay(500)
-
-                                paintDots()
-
+                                showErrorPINCode()
                             }
-
                         }
                     }
 
@@ -373,21 +394,25 @@ class SignInActivity : AppCompatActivity() {
                         // вводит старый пароль
                         firstPin == "" && !isVerified -> {
                             //если ввел верно
-                            if (PasswordHasher(user = user).verify(pinCode)) {
-                                binding.enterPinSignin.text = "Введите новый пинкод"
-
+                            if (checkAuthenticationPin()) {
                                 isVerified = true
+
+                                pinCode = ""
+
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    showTruePINCode()
+                                }.invokeOnCompletion {
+                                    paintDots()
+
+                                    binding.enterPinSignin.text = "Введите новый пинкод"
+                                }
+
                             } else {
-                                Toast.makeText(context, "Пароль не верен", Toast.LENGTH_LONG).show()
-                            }
+                                pinCode = ""
 
-                            pinCode = ""
-
-                            lifecycleScope.launch(Dispatchers.Main) {
-
-                                delay(500)
-
-                                paintDots()
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    showErrorPINCode()
+                                }
                             }
                         }
 
@@ -398,12 +423,12 @@ class SignInActivity : AppCompatActivity() {
 
                             pinCode = ""
 
-                            binding.enterPinSignin.text = "Повторите пинкод"
-
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
 
                                 paintDots()
+                            }.invokeOnCompletion {
+                                binding.enterPinSignin.text = "Повторите пинкод"
                             }
 
                         }
@@ -417,14 +442,19 @@ class SignInActivity : AppCompatActivity() {
 
                                 userDataIsChanged = true
 
-                                onAuthenticationSucceeded()
+                                pinCode = ""
+
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    showTruePINCode()
+                                }.invokeOnCompletion {
+                                    onAuthenticationSucceeded()
+                                }
+
                             } else {
                                 pinCode = ""
 
                                 lifecycleScope.launch(Dispatchers.Main) {
-                                    delay(500)
-
-                                    paintDots()
+                                    showErrorPINCode()
                                 }
                             }
                         }
