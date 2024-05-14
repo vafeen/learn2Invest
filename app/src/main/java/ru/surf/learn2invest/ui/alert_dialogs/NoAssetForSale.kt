@@ -19,7 +19,7 @@ class NoAssetForSale(
     }
 
     override fun initListeners() {
-        binding.buttonExitRefillAccountDialog.setOnClickListener {
+        binding.buttonExit.setOnClickListener {
             cancel()
         }
     }
