@@ -9,6 +9,7 @@ import ru.surf.learn2invest.network_components.util.Const
 
 /**
  * Пример использования (Вариант для запуска из Activity):
+ * ```
  * val coinClient = NetworkRepository()
  * override fun onResume() {
  *   super.onResume()
@@ -29,6 +30,7 @@ import ru.surf.learn2invest.network_components.util.Const
  *      }
  *   }
  * }
+ * ```
 **/
 class NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(
