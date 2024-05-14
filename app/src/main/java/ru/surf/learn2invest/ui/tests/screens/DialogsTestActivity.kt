@@ -13,6 +13,7 @@ import ru.surf.learn2invest.ui.alert_dialogs.NotEnoughMoneyForBuy
 import ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
 import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.alert_dialogs.Sell
+import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class DialogsTestActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class DialogsTestActivity : AppCompatActivity() {
 
         initListeners()
 
+        insertProfileInCoroutineScope(lifecycleScope)
     }
 
     private fun initListeners() {
@@ -37,7 +39,8 @@ class DialogsTestActivity : AppCompatActivity() {
 
                 AskToDeleteProfile(
                     context = this@DialogsTestActivity,
-                    layoutInflater = layoutInflater
+                    layoutInflater = layoutInflater,
+                    lifecycleScope = lifecycleScope
                 ).initDialog()
                     .show()
 
@@ -45,7 +48,10 @@ class DialogsTestActivity : AppCompatActivity() {
 
             buyShowForTesting.setOnClickListener {
 
-                Buy(context = context, layoutInflater = layoutInflater).initDialog().show()
+                Buy(
+                    context = context, layoutInflater = layoutInflater,
+                    lifecycleScope = lifecycleScope
+                ).initDialog().show()
 
             }
 

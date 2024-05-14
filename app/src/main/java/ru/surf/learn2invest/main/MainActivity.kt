@@ -13,12 +13,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
-import ru.surf.learn2invest.ui.components.screens.SignInActivity
+import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
+import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,23 +36,7 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        lifecycleScope.launch(Dispatchers.IO) {
-            Learn2InvestApp.mainDB.profileDao().insertAll(
-                Profile(
-                    id = 0,
-                    firstName = "A",
-                    lastName = "Vafeen",
-                    pin = 0,
-                    notification = true,
-                    biometry = true,
-                    confirmDeal = true,
-                    fiatBalance = 0,
-                    assetBalance = 0,
-                ).let {
-                    it.copy(hash = PasswordHasher(user = it).passwordToHash("0000"))
-                }
-            )
-        }
+        insertProfileInCoroutineScope(lifecycleScope)
 
 
     }
@@ -67,20 +50,22 @@ class MainActivity : AppCompatActivity() {
 
             delay(1000)
 
-            val intent = if (deferred.await().isNotEmpty()) {
+//            val intent = if (deferred.await().isNotEmpty()) {
+//
+//                Intent(this@MainActivity, SignInActivity::class.java).let {
+//                    it.action = SignINActivityActions.SignIN.action
+//
+//                    it
+//                }
+//
+//            } else {
+//                Intent(this@MainActivity, SignInActivity::class.java)
+////                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
+//            }
 
-                Intent(this@MainActivity, SignInActivity::class.java).let {
-                    it.action = SignINActivityActions.SignIN.action
+//            startActivity(intent)
 
-                    it
-                }
-
-            } else {
-                Intent(this@MainActivity, SignInActivity::class.java)
-//                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
-            }
-
-            startActivity(intent)
+            startActivity(Intent(this@MainActivity, DialogsTestActivity::class.java))
 
             this@MainActivity.finish()
 
