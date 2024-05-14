@@ -45,7 +45,7 @@ class RefillAccount(
 
         binding.enteringSumOfBalanceRefillAccountDialog.setText("0")
 
-        binding.buttonAddMoneyRefillAccountDialog.setOnClickListener {
+        binding.buttonRefill.setOnClickListener {
 
             val enteredBalance =
                 binding.enteringSumOfBalanceRefillAccountDialog.text.toString().toFloat()
@@ -74,7 +74,10 @@ class RefillAccount(
 //        TODO(Помогите, я не пойму, как ту взаимодействовать с иконкой(((( ) Сюда нужно добавить очистку поля по клику на эту иконку
 
         binding.balanceTextviewRefillAccountDialog.text =
-            "${profile?.fiatBalance ?: "balance error"}"
+            "${
+                profile?.fiatBalance // TODO(Какой тут баланс из профиля?)
+                    ?: "balance error"
+            }"
 
     }
 

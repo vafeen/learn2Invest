@@ -23,10 +23,9 @@
             android:background="@drawable/tabs_in_dialogs_shape"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_od_dialog"
-            app:layout_constraintVertical_bias="0.034" />
+            app:layout_constraintVertical_bias="0.108" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_exit"
@@ -35,18 +34,18 @@
             android:backgroundTint="@color/cancel"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:layout_marginHorizontal="10dp"
             android:text="@string/exit"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.SemiBold.14"
             android:textColor="@color/black"
             app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_add_money_refill_account_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/button_add_money_refill_account_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@+id/button_refill"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_add_money_refill_account_dialog"
+            app:layout_constraintTop_toTopOf="@+id/button_refill"
             app:layout_constraintVertical_bias="0.0" />
+
 
         <TextView
             android:id="@+id/name_od_dialog"
@@ -56,11 +55,10 @@
             android:textAppearance="@style/Text.Regular.14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.465"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.022" />
-
+            app:layout_constraintVertical_bias="0.106" />
 
         <View
             android:id="@+id/entering_sum_of_balance_card"
@@ -70,10 +68,9 @@
             android:background="@drawable/tabs_in_dialogs_shape"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/balance_card"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.107" />
 
         <EditText
             android:id="@+id/entering_sum_of_balance_refill_account_dialog"
@@ -138,14 +135,13 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_add_money_refill_account_dialog"
+            android:id="@+id/button_refill"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="25dp"
             android:backgroundTint="@color/view_background"
             android:gravity="center"
             android:minWidth="0dp"
-            android:layout_marginHorizontal="10dp"
             android:minHeight="0dp"
             android:text="@string/refill"
             android:textAllCaps="true"
@@ -154,7 +150,7 @@
             app:cornerRadius="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintVertical_bias="0.0" />
