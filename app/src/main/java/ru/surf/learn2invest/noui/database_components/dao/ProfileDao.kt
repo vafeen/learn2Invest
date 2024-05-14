@@ -18,7 +18,7 @@ interface ProfileDao : DataAccessObject<Profile> {
     suspend fun getProfile(): List<Profile>
 
     @Query("select * from profile")
-    suspend fun getProfileAsFlow(): Flow<List<Profile>>
+    fun getProfileAsFlow(): Flow<List<Profile>>
 
 }
 
