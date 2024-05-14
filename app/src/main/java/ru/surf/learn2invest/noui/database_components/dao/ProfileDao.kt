@@ -15,10 +15,10 @@ interface ProfileDao : DataAccessObject<Profile> {
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */
     @Query("select * from profile")
-    fun getProfile(): List<Profile>
+    suspend fun getProfile(): List<Profile>
 
     @Query("select * from profile")
-    fun getProfileAsFlow(): Flow<List<Profile>>
+    suspend fun getProfileAsFlow(): Flow<List<Profile>>
 
 }
 
