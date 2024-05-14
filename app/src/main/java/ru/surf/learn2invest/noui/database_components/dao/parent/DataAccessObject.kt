@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.database_components.dao.parent
+package ru.surf.learn2invest.noui.database_components.dao.parent
 
 import androidx.room.Dao
 import androidx.room.Delete

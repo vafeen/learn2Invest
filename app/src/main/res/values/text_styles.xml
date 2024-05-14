@@ -13,6 +13,9 @@
     <style name="Text.Regular">
         <item name="fontFamily">@font/montserrat_regular</item>
     </style>
+    <style name="Text.Bold.30">
+        <item name="android:textSize">30sp</item>
+    </style>
     <style name="Text.Bold.20">
         <item name="android:textSize">20sp</item>
     </style>

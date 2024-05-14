@@ -1,5 +1,8 @@
 [versions]
+activityVersion = "1.9.0"
+accompanistPermissions = "0.31.1-alpha"
 agp = "8.4.0"
+biometric = "1.1.0"
 kotlin = "1.9.23"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -20,7 +23,11 @@ gson = "2.10.1"
 loggingInterceptor = "5.0.0-alpha.14"
 
 
+
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+androidx-activity-v160alpha05 = { module = "androidx.activity:activity", version.ref = "activityVersion" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
