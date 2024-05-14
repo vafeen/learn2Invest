@@ -19,7 +19,7 @@ class NotEnoughMoneyForBuy(
     }
 
     override fun initListeners() {
-        binding.buttonExitWithoutMoney.setOnClickListener {
+        binding.buttonExit.setOnClickListener {
             cancel()
         }
     }
