@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.view.Window
 
@@ -58,6 +59,7 @@ abstract class CustomAlertDialog(context: Context) {
 
     private var dialog: Dialog = Dialog(context)
 
+    private var initialized: Boolean = false
 
     /**
      * Отменяется ли диалог при нажатии на свободную часть экрана
@@ -78,6 +80,8 @@ abstract class CustomAlertDialog(context: Context) {
      * Функция инициализации всего функционала
      */
     fun initDialog(): CustomAlertDialog {
+        initialized = true
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         dialog.window?.setBackgroundDrawable(getBackground())
@@ -99,7 +103,11 @@ abstract class CustomAlertDialog(context: Context) {
     }
 
     fun show() {
-        dialog.show()
+        if (initialized) {
+            dialog.show()
+        } else {
+            Log.e("CustomAlertDialog", "Dialog is not initialized. Please call fun initDialog before calling fun show()")
+        }
     }
 
     fun cancel() {

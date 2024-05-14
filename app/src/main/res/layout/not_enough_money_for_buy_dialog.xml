@@ -16,7 +16,7 @@
         app:layout_constraintVertical_bias="0.00">
 
         <TextView
-            android:id="@+id/sellText"
+            android:id="@+id/buyText_not_enough_money_for_buy_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -30,7 +30,7 @@
             app:layout_constraintVertical_bias="0.005" />
 
         <TextView
-            android:id="@+id/no_asset_for_sale"
+            android:id="@+id/_not_enough_money_for_buy_not_enough_money_for_buy_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -44,7 +44,7 @@
             app:layout_constraintVertical_bias="0.41" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_exit"
+            android:id="@+id/button_exit_not_enough_money_for_buy_dialog"
             android:layout_width="125dp"
             android:layout_height="42dp"
             android:layout_margin="10dp"

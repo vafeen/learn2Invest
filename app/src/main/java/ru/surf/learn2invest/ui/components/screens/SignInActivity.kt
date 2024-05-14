@@ -1,24 +1,28 @@
 package ru.surf.learn2invest.ui.components.screens
 
+
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.main.Learn2InvestApp
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-
-
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import ru.surf.learn2invest.R
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
+import ru.surf.learn2invest.ui.alert_dialogs.NoAssetForSale
+import ru.surf.learn2invest.ui.alert_dialogs.NotEnoughMoneyForBuy
+import ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
+import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import java.util.concurrent.Executor
 
 
@@ -41,10 +45,24 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    override fun onResume() {
+        super.onResume()
+
+        val dialog =
+            PriceAlert(
+                context = this, layoutInflater = layoutInflater,
+                lifecycleScope = lifecycleScope
+            ).initDialog()
+
+        dialog.show()
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySigninBinding.inflate(layoutInflater)
+
 
         context = this
 

@@ -1,16 +1,22 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.AskToDeleteProfileDialogBinding
+import ru.surf.learn2invest.main.Learn2InvestApp
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 
 class AskToDeleteProfile(
-    context: Context,
-    layoutInflater: LayoutInflater
+    val context: Context,
+    layoutInflater: LayoutInflater,
+    private val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
@@ -21,15 +27,29 @@ class AskToDeleteProfile(
     }
 
     override fun initListeners() {
-        binding.okDelete.setOnClickListener {
+        binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
 
-            TODO() // сюда нужно кинуть удаление профиля из базы данных
-            // и выход к экрану  Регистрации
+            lifecycleScope.launch(Dispatchers.IO) {
+                val dao = Learn2InvestApp.mainDB.profileDao()
+
+                val profileList = dao.getProfile()
+
+                if (profileList.isNotEmpty()) {
+                    dao.delete(
+                        profileList[0]
+                    )
+                }
+            }
+
+            (context as Activity).finish()
 
             cancel()
+
+            // TODO() // сюда нужно кинуть выход к экрану  Регистрации
+
         }
 
-        binding.noDelete.setOnClickListener {
+        binding.noDeleteAskToDeleteProfileDialog.setOnClickListener {
             cancel()
         }
     }

@@ -39,16 +39,16 @@ class RefillAccount(
             }
         }
 
-        binding.buttonExit.setOnClickListener {
+        binding.buttonExitRefillAccountDialog.setOnClickListener {
             cancel()
         }
 
-        binding.enteringSumOfBalanceRefillAccountDialog.setText("0")
+        binding.EditTextEnteringSumOfBalanceRefillAccountDialog.setText("0")
 
-        binding.buttonRefill.setOnClickListener {
+        binding.buttonRefillRefillAccountDialog.setOnClickListener {
 
             val enteredBalance =
-                binding.enteringSumOfBalanceRefillAccountDialog.text.toString().toFloat()
+                binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloat()
 
             if (enteredBalance != 0f) {
 

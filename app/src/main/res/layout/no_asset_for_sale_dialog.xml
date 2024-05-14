@@ -16,7 +16,7 @@
         app:layout_constraintVertical_bias="0.00">
 
         <TextView
-            android:id="@+id/sellText"
+            android:id="@+id/sellText_no_asset_for_sale_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -31,7 +31,7 @@
 
 
         <TextView
-            android:id="@+id/no_asset_for_sale"
+            android:id="@+id/no_asset_for_sale_text_no_asset_for_sale_dialog"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             app:layout_constraintVertical_bias="0.349" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_exit"
+            android:id="@+id/button_exit_no_asset_for_sale_dialog"
             android:layout_width="125dp"
             android:layout_height="42dp"
             android:layout_margin="10dp"
