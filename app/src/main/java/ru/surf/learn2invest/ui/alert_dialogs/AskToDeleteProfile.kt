@@ -15,12 +15,11 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class AskToDeleteProfile(
     val context: Context,
-    layoutInflater: LayoutInflater,
     private val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        AskToDeleteProfileDialogBinding.inflate(layoutInflater)
+        AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true

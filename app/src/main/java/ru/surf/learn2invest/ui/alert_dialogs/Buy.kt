@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
 import android.content.Context
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -12,12 +13,11 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
     context: Context,
-    layoutInflater: LayoutInflater,
     val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        BuyDialogBinding.inflate(layoutInflater)
+        BuyDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true
@@ -42,7 +42,15 @@ class Buy(
             buttonBuyBuyDialog.setOnClickListener {
                 cancel()
             }
-
+//            editText1.addTextChangedListener(object : TextWatcher {
+//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                    editText2.setText(s) // Устанавливаем текст из первого поля во второе
+//                }
+//
+//                override fun afterTextChanged(s: Editable?) {}
+//            })
 
         }
     }

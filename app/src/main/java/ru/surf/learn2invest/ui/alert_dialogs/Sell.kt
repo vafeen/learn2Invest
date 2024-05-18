@@ -8,11 +8,10 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
     context: Context,
-    layoutInflater: LayoutInflater
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        SellDialogBinding.inflate(layoutInflater)
+        SellDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true

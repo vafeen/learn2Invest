@@ -7,12 +7,11 @@ import ru.surf.learn2invest.databinding.NotEnoughMoneyForBuyDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class NotEnoughMoneyForBuy(
-    context: Context,
-    layoutInflater: LayoutInflater
+    context: Context
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        NotEnoughMoneyForBuyDialogBinding.inflate(layoutInflater)
+        NotEnoughMoneyForBuyDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true

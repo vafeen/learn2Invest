@@ -39,7 +39,6 @@ class DialogsTestActivity : AppCompatActivity() {
 
                 AskToDeleteProfile(
                     context = this@DialogsTestActivity,
-                    layoutInflater = layoutInflater,
                     lifecycleScope = lifecycleScope
                 ).initDialog()
                     .show()
@@ -48,26 +47,19 @@ class DialogsTestActivity : AppCompatActivity() {
 
             buyShowForTesting.setOnClickListener {
 
-                Buy(
-                    context = context, layoutInflater = layoutInflater,
-                    lifecycleScope = lifecycleScope
-                ).initDialog().show()
+                Buy(context = context, lifecycleScope = lifecycleScope).initDialog().show()
 
             }
 
             noAssetForSaleShowForTesting.setOnClickListener {
 
-                NoAssetForSale(context = context, layoutInflater = layoutInflater).initDialog()
-                    .show()
+                NoAssetForSale(context = context).initDialog().show()
 
             }
 
             notEnoughMoneyForBuyShowForTesting.setOnClickListener {
 
-                NotEnoughMoneyForBuy(
-                    context = context,
-                    layoutInflater = layoutInflater
-                ).initDialog().show()
+                NotEnoughMoneyForBuy(context = context).initDialog().show()
 
             }
 
@@ -75,27 +67,20 @@ class DialogsTestActivity : AppCompatActivity() {
 
                 PriceAlert(
                     context = context,
-                    layoutInflater = layoutInflater,
-                    lifecycleScope = lifecycleScope
+                    currentPrice = 100f
                 ).initDialog().show()
 
             }
 
             refillAccountShowForTesting.setOnClickListener {
 
-                RefillAccount(
-                    context = context,
-                    layoutInflater = layoutInflater,
-                    lifecycleScope = lifecycleScope
-                ).initDialog().show()
+                RefillAccount(context = context, lifecycleScope = lifecycleScope).initDialog()
+                    .show()
 
             }
 
             sellShowForTesting.setOnClickListener {
-                Sell(
-                    context = context,
-                    layoutInflater = layoutInflater
-                ).initDialog().show()
+                Sell(context = context).initDialog().show()
             }
         }
 

@@ -13,12 +13,11 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
     val context: Context,
-    layoutInflater: LayoutInflater,
     private val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        RefillAccountDialogBinding.inflate(layoutInflater)
+        RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true

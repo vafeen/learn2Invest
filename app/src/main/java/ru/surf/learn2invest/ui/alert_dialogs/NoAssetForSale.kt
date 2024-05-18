@@ -7,12 +7,11 @@ import ru.surf.learn2invest.databinding.NoAssetForSaleDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class NoAssetForSale(
-    context: Context,
-    layoutInflater: LayoutInflater
+    context: Context
 ) : CustomAlertDialog(context = context) {
 
     private var binding =
-        NoAssetForSaleDialogBinding.inflate(layoutInflater)
+        NoAssetForSaleDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true

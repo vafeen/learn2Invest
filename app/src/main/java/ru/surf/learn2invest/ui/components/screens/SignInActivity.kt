@@ -47,15 +47,6 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        val dialog =
-            PriceAlert(
-                context = this, layoutInflater = layoutInflater,
-                lifecycleScope = lifecycleScope
-            ).initDialog()
-
-        dialog.show()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
