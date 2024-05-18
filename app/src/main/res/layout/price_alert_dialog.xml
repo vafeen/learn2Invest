@@ -32,9 +32,11 @@
             app:layout_constraintVertical_bias="0.087" />
 
         <EditText
+            android:id="@+id/price__price_alert_dialog"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
+            android:autofillHints="@string/price_name"
             android:background="@drawable/tabs_in_dialogs_shape"
             android:drawableEnd="@drawable/circle_close"
             android:hint="@string/price_name"
@@ -76,10 +78,11 @@
 
 
         <EditText
-            android:id="@+id/changing_price_in_percent_entering_sum_of_balance_card"
+            android:id="@+id/price_in_percent_price_alert_dialog"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
+            android:autofillHints="@string/changing_price"
             android:background="@drawable/tabs_in_dialogs_shape"
             android:drawableEnd="@drawable/circle_close"
             android:hint="@string/changing_price"
