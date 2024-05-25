@@ -79,7 +79,7 @@ abstract class CustomAlertDialog(context: Context) {
     /**
      * Функция инициализации всего функционала
      */
-    fun initDialog(): CustomAlertDialog {
+    open fun initDialog(): CustomAlertDialog {
         initialized = true
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -96,7 +96,7 @@ abstract class CustomAlertDialog(context: Context) {
     }
 
     /**
-     * Смена backgroun'a. По умолчанию - TRANSPARENT
+     * Смена background'a. По умолчанию - TRANSPARENT
      */
     open fun getBackground(): Drawable {
         return ColorDrawable(Color.TRANSPARENT)
@@ -106,7 +106,10 @@ abstract class CustomAlertDialog(context: Context) {
         if (initialized) {
             dialog.show()
         } else {
-            Log.e("CustomAlertDialog", "Dialog is not initialized. Please call fun initDialog before calling fun show()")
+            Log.e(
+                "CustomAlertDialog",
+                "Dialog is not initialized. Please call fun initDialog before calling fun show()"
+            )
         }
     }
 
