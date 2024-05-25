@@ -33,6 +33,15 @@ class DialogsTestActivity : AppCompatActivity() {
         insertProfileInCoroutineScope(lifecycleScope)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        RefillAccount(
+            context = context,
+            lifecycleScope = lifecycleScope
+        ).initDialog()
+    }
+
     private fun initListeners() {
         binding.apply {
             askToDeleteProfileShowForTesting.setOnClickListener {
@@ -67,7 +76,8 @@ class DialogsTestActivity : AppCompatActivity() {
 
                 PriceAlert(
                     context = context,
-                    currentPrice = 100f
+                    currentPrice = 100f,
+                    lifecycleScope = lifecycleScope
                 ).initDialog().show()
 
             }

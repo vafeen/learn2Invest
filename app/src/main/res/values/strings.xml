@@ -14,6 +14,7 @@
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
     <string name="changing_price">Изменение цены в %</string>
+    <string name="comment">Комментарий</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
     <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
     <string name="asking_to_delete_profile">Вы точно хотите удалить\nпрофиль?</string>
