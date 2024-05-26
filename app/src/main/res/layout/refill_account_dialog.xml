@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="291dp"
     android:background="@color/white">
@@ -31,6 +32,7 @@
             android:id="@+id/button_exit_refill_account_dialog"
             android:layout_width="119dp"
             android:layout_height="42dp"
+            android:layout_marginTop="25dp"
             android:layout_marginHorizontal="3dp"
             android:backgroundTint="@color/cancel"
             android:minWidth="0dp"
@@ -40,11 +42,13 @@
             android:textAppearance="@style/Text.SemiBold.14"
             android:textColor="@color/black"
             app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button_refill_refill_account_dialog"
+
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_refill_refill_account_dialog"
+            app:layout_constraintTop_toBottomOf="@+id/entering_balance_card_refill_account_dialog"
             app:layout_constraintVertical_bias="0.0" />
 
 
@@ -77,10 +81,10 @@
             android:id="@+id/EditText_entering_sum_of_balance_refill_account_dialog"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
+            android:layout_marginStart="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_odinokogo"
+            android:layout_marginEnd="@dimen/margin_dialogs_card_content_end_for_icon"
             android:background="@drawable/tabs_in_dialogs_shape"
-            android:drawableEnd="@drawable/circle_close"
             android:hint="@string/enter_sum"
             android:inputType="numberDecimal"
             android:textAppearance="@style/Text.Regular.14"
@@ -156,6 +160,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entering_balance_card_refill_account_dialog"
             app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/balance_clear_refill_account_dialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/circle_close"
+
+            app:layout_constraintBottom_toBottomOf="@+id/EditText_entering_sum_of_balance_refill_account_dialog"
+            app:layout_constraintStart_toEndOf="@+id/EditText_entering_sum_of_balance_refill_account_dialog"
+            app:layout_constraintTop_toTopOf="@+id/EditText_entering_sum_of_balance_refill_account_dialog" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

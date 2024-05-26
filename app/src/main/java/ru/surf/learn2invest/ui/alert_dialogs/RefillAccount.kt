@@ -1,14 +1,17 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.main.Learn2InvestApp
-import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
@@ -23,61 +26,90 @@ class RefillAccount(
         return true
     }
 
+    private fun changeVisibilityElements(
+        priceForRefill: Boolean = binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
+    ) {
+        binding.apply {
+            balanceClearRefillAccountDialog.isVisible = priceForRefill
+
+            buttonRefillRefillAccountDialog.isVisible = priceForRefill
+        }
+
+    }
+
     override fun initListeners() {
-        val profileDao = Learn2InvestApp.mainDB.profileDao()
 
-        var profile: Profile? = null
+        binding.apply {
 
-        lifecycleScope.launch(Dispatchers.IO) {
+            changeVisibilityElements()
 
-            profileDao.getProfile().let {
-
-                if (it.isNotEmpty()) {
-                    profile = it[0]
-                }
+            buttonExitRefillAccountDialog.setOnClickListener {
+                cancel()
             }
-        }
 
-        binding.buttonExitRefillAccountDialog.setOnClickListener {
-            cancel()
-        }
+            balanceClearRefillAccountDialog.setOnClickListener {
+                EditTextEnteringSumOfBalanceRefillAccountDialog.setText("")
+            }
 
-        binding.EditTextEnteringSumOfBalanceRefillAccountDialog.setText("0")
+            EditTextEnteringSumOfBalanceRefillAccountDialog.addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
 
-        binding.buttonRefillRefillAccountDialog.setOnClickListener {
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
 
-            val enteredBalance =
-                binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloat()
+                }
 
-            if (enteredBalance != 0f) {
+                override fun afterTextChanged(s: Editable?) {
+                    if (EditTextEnteringSumOfBalanceRefillAccountDialog.hasFocus()) {
+                        Loher.d("entering sum")
 
-                lifecycleScope.launch(Dispatchers.IO) {
+                        changeVisibilityElements()
+                    }
+                }
+            })
 
-                    profile?.also {
-                        profileDao.insertAll(
-                            it.copy(
-                                //                                assetBalance = profile.assetBalance + enteredBalance,
-                                //                                fiatBalance = profile.assetBalance + enteredBalance
-                                // TODO(Володь, какой тут баланс профиля пополнять, и почему все балансы блин интовые, если должны быть вещественными?????????????????)
+            buttonRefillRefillAccountDialog.setOnClickListener {
+
+                val enteredBalance =
+                    binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
+                        .toFloat()
+
+                if (enteredBalance != 0f) {
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+
+                        Learn2InvestApp.profile?.also {
+                            Learn2InvestApp.mainDB.profileDao().insertAll(
+                                it.copy(
+                                    //                                assetBalance = profile.какой-то баланс + enteredBalance,
+                                    //                                fiatBalance = profile.какой-то баланс + enteredBalance
+                                    // TODO(Володь, какой тут баланс профиля пополнять, и почему все балансы блин интовые, если должны быть вещественными?????????????????)
+                                )
                             )
-                        )
+                        }
+
                     }
 
                 }
 
+                cancel()
             }
 
-            cancel()
+            balanceTextviewRefillAccountDialog.text =
+                "${
+                    Learn2InvestApp.profile?.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
+                        ?: "balance error"
+                }"
+
         }
-
-//        TODO(Помогите, я не пойму, как ту взаимодействовать с иконкой(((( ) Сюда нужно добавить очистку поля по клику на эту иконку
-
-        binding.balanceTextviewRefillAccountDialog.text =
-            "${
-                profile?.fiatBalance // TODO(Какой тут баланс из профиля?)
-                    ?: "balance error"
-            }"
-
     }
 
     override fun getDialogView(): View {
