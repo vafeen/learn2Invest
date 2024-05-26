@@ -30,13 +30,14 @@ class Buy(
 
 
         binding.apply {
-          balanceNumBuyDialog.text =
+            balanceNumBuyDialog.text =
                 Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно 
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberBuyDialog.setText("777777") // TODO Сюда нужно будет кидать цену,
+                    val str = "777777"
+                    priceNumberBuyDialog.text = str  // TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
@@ -121,7 +122,7 @@ class Buy(
         binding.itogoBuyDialog.text = "Итого: $ ${itog(onFuture = false)}"
     }
 
-   
+
     private fun itog(
         onFuture: Boolean
     ): Float {

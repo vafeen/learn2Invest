@@ -35,7 +35,8 @@ class Sell(
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberSellDialog.text = "777777" // TODO Сюда нужно будет кидать цену,
+                    val str = "777777"
+                    priceNumberSellDialog.text = str// TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
