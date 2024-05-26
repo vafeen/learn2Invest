@@ -13,6 +13,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityMainBinding
+import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
+import ru.surf.learn2invest.ui.components.screens.SignInActivity
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
@@ -49,22 +52,26 @@ class MainActivity : AppCompatActivity() {
                 async(Dispatchers.IO) { Learn2InvestApp.mainDB.profileDao().getProfile() }
 
             delay(1000)
+            val intent = if (deferred.await().isNotEmpty()) {
 
-//            val intent = if (deferred.await().isNotEmpty()) {
-//
-//                Intent(this@MainActivity, SignInActivity::class.java).let {
-//                    it.action = SignINActivityActions.SignIN.action
-//
-//                    it
-//                }
-//
-//            } else {
-//                Intent(this@MainActivity, SignInActivity::class.java)
-////                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
-//            }
+                Learn2InvestApp.profile = deferred.await()[Learn2InvestApp.idOfProfile]
+
+                Loher.d("profile = ${Learn2InvestApp.profile}")
+                Intent(this@MainActivity, SignInActivity::class.java).let {
+                    it.action = SignINActivityActions.SignIN.action
+
+                    it
+                }
+
+            } else {
+                Intent(this@MainActivity, SignInActivity::class.java)
+//                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
+            }
 
 //            startActivity(intent)
 
+
+            // for tests
             startActivity(Intent(this@MainActivity, DialogsTestActivity::class.java))
 
             this@MainActivity.finish()
