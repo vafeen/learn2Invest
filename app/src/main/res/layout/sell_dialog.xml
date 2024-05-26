@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="291dp"
+    android:layout_height="350dp"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
-        android:layout_height="291dp"
+        android:layout_height="350dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,12 +137,12 @@
 
 
         <TextView
-            android:id="@+id/price_name_sell_dialog"
+            android:id="@+id/price_number_sell_dialog"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
-            android:text="@string/price_name"
+            android:text="@string/example_price"
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintBottom_toBottomOf="@+id/price_card_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/price_card_sell_dialog"
@@ -185,7 +186,7 @@
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/example_price"
+            android:text="@string/price_name"
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintBottom_toBottomOf="@+id/price_card_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/price_card_sell_dialog"
@@ -195,12 +196,12 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/account_textview_sell_dialog"
+            android:id="@+id/balance_num_sell_dialog"
             android:layout_width="131dp"
             android:layout_height="24dp"
-
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
-            android:text="@string/balance"
+            android:text="@string/example_balance"
+
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
@@ -215,13 +216,13 @@
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/example_balance"
+            android:text="@string/balance"
             android:textAppearance="@style/Text.Medium.14"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/account_textview_sell_dialog"
+            app:layout_constraintStart_toStartOf="@+id/balance_num_sell_dialog"
             app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -230,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/view_background"
             android:gravity="center"
             android:minWidth="0dp"
@@ -245,7 +246,21 @@
             app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <!--       TODO: Надь, поправь тут пожалуйста шрифт, как выберешь нужный) -->
+        <TextView
+            android:id="@+id/itogo_sell_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Итого: $ 0"
+            app:layout_constraintBottom_toTopOf="@+id/button_exit_sell_dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintVertical_bias="0.75" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
