@@ -2,7 +2,6 @@ package ru.surf.learn2invest.ui.tests.screens
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import ru.surf.learn2invest.databinding.ActivityDialogsTestBinding
@@ -35,11 +34,6 @@ class DialogsTestActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        RefillAccount(
-            context = context,
-            lifecycleScope = lifecycleScope
-        ).initDialog()
     }
 
     private fun initListeners() {
@@ -90,7 +84,10 @@ class DialogsTestActivity : AppCompatActivity() {
             }
 
             sellShowForTesting.setOnClickListener {
-                Sell(context = context).initDialog().show()
+                Sell(
+                    context = context,
+                    lifecycleScope = lifecycleScope
+                ).initDialog().show()
             }
         }
 
