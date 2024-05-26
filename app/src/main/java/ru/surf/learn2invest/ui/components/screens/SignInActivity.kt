@@ -18,11 +18,6 @@ import ru.surf.learn2invest.main.Learn2InvestApp
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.logs.Loher
-import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
-import ru.surf.learn2invest.ui.alert_dialogs.NoAssetForSale
-import ru.surf.learn2invest.ui.alert_dialogs.NotEnoughMoneyForBuy
-import ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
-import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import java.util.concurrent.Executor
 
 
