@@ -1,4 +1,6 @@
 package ru.surf.learn2invest.ui.history.fragment
 
-class HistoryFragment {
+import androidx.fragment.app.Fragment
+
+class HistoryFragment : Fragment() {
 }
