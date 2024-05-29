@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.main
+package ru.surf.learn2invest.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile

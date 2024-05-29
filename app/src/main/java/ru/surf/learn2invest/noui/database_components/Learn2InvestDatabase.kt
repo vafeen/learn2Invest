@@ -24,7 +24,7 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
 /**
  * Доступ к данным осуществляется в coroutineScope{} с помощью
  *
- *  [mainDB](ru.surf.learn2invest.main.App.mainDB)
+ *  [mainDB](ru.surf.learn2invest.ui.main.App.mainDB)
  *
  * Посредством обращения через нее к определенным объектам DAO,
  *
