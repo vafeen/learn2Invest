@@ -31,6 +31,7 @@
         android:id="@+id/bottomNavigationView"
         style="@style/bottom_navigation"
         android:layout_width="0dp"
+        app:labelVisibilityMode="unlabeled"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
