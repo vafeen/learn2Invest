@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     // got using fingerprint
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.navigation.fragment)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
