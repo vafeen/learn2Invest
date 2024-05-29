@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/portfolioFragment"
         android:icon="@drawable/home_bottom_icon"
         android:title="@string/my_investments"/>
 
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/marketReviewFragment"
         android:icon="@drawable/search_bottom_icon"
         android:title="@string/search"/>
 
