@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 
 class MarketReviewFragment : Fragment() {
-    private var _binding: FragmentMarketReviewBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentMarketReviewBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarketReviewBinding.inflate(inflater, container, false)
+        binding = FragmentMarketReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }

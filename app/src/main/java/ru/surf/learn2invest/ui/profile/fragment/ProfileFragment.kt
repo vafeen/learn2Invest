@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentProfileBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         return binding.root
     }

@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import ru.surf.learn2invest.databinding.FragmentAssetReviewBinding
 
 class AssetReviewFragment : Fragment() {
-    private var _binding: FragmentAssetReviewBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentAssetReviewBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAssetReviewBinding.inflate(inflater, container, false)
+        binding = FragmentAssetReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }
