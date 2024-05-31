@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -17,19 +18,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.responses.MarketReviewResponse
+import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
+import ru.surf.learn2invest.noui.logs.Loher
 
 
 class MarketReviewFragment : Fragment() {
     private var _binding: FragmentMarketReviewBinding? = null
     private val binding get() = _binding!!
+    private var recyclerData = mutableListOf<CoinReviewResponse>()
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
-    private val adapter = MarketReviewAdapter(data)
+    private val adapter = MarketReviewAdapter(recyclerData)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,45 +54,91 @@ class MarketReviewFragment : Fragment() {
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                data.sortByDescending { it.marketCapUsd }
+                recyclerData.sortByDescending { it.marketCapUsd }
                 adapter.notifyDataSetChanged()
             }
             filterByChangePercent24Hr.setOnClickListener {
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                data.sortByDescending { it.changePercent24Hr }
+                recyclerData.sortByDescending { it.changePercent24Hr }
                 adapter.notifyDataSetChanged()
             }
             filterByPrice.setOnClickListener {
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                data.sortByDescending { it.priceUsd }
+                recyclerData.sortByDescending { it.priceUsd }
                 adapter.notifyDataSetChanged()
             }
             textInputLayout.setEndIconOnClickListener {
-
+                textView2.visibility = GONE
+                clearTv.visibility = GONE
+                filterByPrice.visibility = VISIBLE
+                filterByMarketcap.visibility = VISIBLE
+                filterByChangePercent24Hr.visibility = VISIBLE
+                searchEditText.text.clear()
+                recyclerData.clear()
+                recyclerData.addAll(data)
+                adapter.notifyDataSetChanged()
             }
-            searchEditText.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+            searchEditText.setOnFocusChangeListener { v, hasFocus ->
+                textView2.visibility = VISIBLE
+                clearTv.visibility = VISIBLE
+                filterByPrice.visibility = INVISIBLE
+                filterByMarketcap.visibility = INVISIBLE
+                filterByChangePercent24Hr.visibility = INVISIBLE
+            }
 
+            clearTv.setOnClickListener {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    Learn2InvestApp.mainDB.searchedCoinDao().deleteAll()
+                    withContext(Dispatchers.Main) {
+                        recyclerData.clear()
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
+            searchEditText.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    var searchedList = mutableListOf<String>()
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        Learn2InvestApp.mainDB
+                            .searchedCoinDao()
+                            .insertAll(
+                                SearchedCoin(coinID = searchEditText.text.toString())
+                            )
+                        Learn2InvestApp.mainDB
+                            .searchedCoinDao()
+                            .getAllAsList().map { searchedList.add(it.coinID) }
+                        withContext(Dispatchers.Main){
+                            recyclerData.clear()
+                            recyclerData.addAll(data.filter { searchedList.contains(it.name) })
+                            recyclerData.reverse()
+                            adapter.notifyDataSetChanged()
+                            Loher.d(searchedList.toString())
+                        }
+                    }
                     true
                 } else false
             }
         }
         setLoading()
-        lateinit var result: ResponseWrapper<MarketReviewResponse>
+
         this.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                result = coinClient.getMarketReview()
-            }
-            when (result) {
-                is ResponseWrapper.Success -> {
-                    data.addAll((result as ResponseWrapper.Success<MarketReviewResponse>).value.data)
-                    setRecycler()
+                var result: ResponseWrapper<MarketReviewResponse> = coinClient.getMarketReview()
+                withContext(Dispatchers.Main){
+                    when (result) {
+                        is ResponseWrapper.Success -> {
+                            recyclerData.addAll((result as ResponseWrapper.Success<MarketReviewResponse>).value.data)
+                            data.addAll((result as ResponseWrapper.Success<MarketReviewResponse>).value.data)
+                            setRecycler()
+                        }
+                        is ResponseWrapper.NetworkError -> setError()
+                    }
                 }
-                is ResponseWrapper.NetworkError -> setError()
             }
         }
     }
@@ -110,7 +161,7 @@ class MarketReviewFragment : Fragment() {
         Log.d("SUCCES", "Грузим данные")
         binding.searchEditText.setAdapter(ArrayAdapter(this.requireContext(),
             android.R.layout.simple_expandable_list_item_1,
-            data.map { it.name }))
+            recyclerData.map { it.name }))
         binding.marketReviewRecyclerview.visibility = VISIBLE
         binding.progressBar.visibility = GONE
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
