@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.main
+package ru.surf.learn2invest.app
 
 import android.app.Application
 import ru.surf.learn2invest.notifications.NotificationChannels
