@@ -45,9 +45,13 @@ class PortfolioFragment : Fragment() {
             lineWidth = 2f
             isHighlightEnabled = true
             valueTextSize = 15f
-            setCircleColor(resources.getColor(R.color.black))
-            setDrawHighlightIndicators(false)
+            setDrawValues(false)
+            setDrawCircles(false)
+            setDrawHighlightIndicators(true)
             mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            setDrawFilled(true)
+            fillDrawable = resources.getDrawable(R.drawable.line_chart_style)
         }
 
         binding.chart.apply {
