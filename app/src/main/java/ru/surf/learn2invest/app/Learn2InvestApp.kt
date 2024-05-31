@@ -20,4 +20,5 @@ class Learn2InvestApp : Application() {
         this.registerNotificationChannels(NotificationChannels.allChannels)
 
     }
+
 }

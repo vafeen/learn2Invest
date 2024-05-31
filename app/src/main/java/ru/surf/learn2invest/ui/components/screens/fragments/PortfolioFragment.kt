@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.chart.CustomMarkerView
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 
 class PortfolioFragment : Fragment() {
@@ -39,6 +41,8 @@ class PortfolioFragment : Fragment() {
 
         val lineDataSet = LineDataSet(list, "List")
 
+        val customMarkerView = CustomMarkerView(requireContext(), R.layout.chart_marker)
+
         lineDataSet.apply {
             color = resources.getColor(R.color.hint)
             valueTextColor = Color.BLACK
@@ -47,7 +51,7 @@ class PortfolioFragment : Fragment() {
             valueTextSize = 15f
             setDrawValues(false)
             setDrawCircles(false)
-            setDrawHighlightIndicators(true)
+            setDrawHighlightIndicators(false)
             mode = LineDataSet.Mode.CUBIC_BEZIER
 
             setDrawFilled(true)
@@ -58,7 +62,7 @@ class PortfolioFragment : Fragment() {
             axisRight.isEnabled = false
 
             axisLeft.apply {
-                isEnabled = true
+                isEnabled = false
                 axisMinimum = 0f
                 textSize = 12f
                 setDrawGridLines(false)
@@ -75,6 +79,8 @@ class PortfolioFragment : Fragment() {
             isDragEnabled = true
             setScaleEnabled(false)
             setPinchZoom(false)
+            setDrawMarkers(true)
+            marker = customMarkerView
             description = null
             legend.isEnabled = false
         }
