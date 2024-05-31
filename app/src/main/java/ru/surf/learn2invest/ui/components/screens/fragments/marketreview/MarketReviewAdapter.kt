@@ -6,11 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
 import coil.ImageLoader
 import coil.decode.SvgDecoder
-import coil.imageLoader
-import coil.load
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
@@ -36,11 +33,12 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
         holder.apply {
             coinTopTextInfo.text = data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = data[position].priceUsd.toString()
-            coinBottomNumericInfo.text = data[position].changePercent24Hr.toString()
-//            coinIcon.load("https://cryptofonts.com/img/icons/${data[position].symbol.lowercase()}.svg") {
-//                decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
-//            }
+            coinTopNumericInfo.text = "\$${String.format("%.2f",data[position].priceUsd)}"
+            if (data[position].changePercent24Hr >= 0) {
+                coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
+            } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
+            coinBottomNumericInfo.text = "${String.format("%.2f",data[position].changePercent24Hr)}%"//data[position].changePercent24Hr.toString()
+
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {
                     add(SvgDecoder.Factory())
