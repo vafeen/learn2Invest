@@ -8,6 +8,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.responses.MarketReviewResponse
+
 
 class MarketReviewFragment : Fragment() {
     private var _binding: FragmentMarketReviewBinding? = null
@@ -63,6 +66,15 @@ class MarketReviewFragment : Fragment() {
                 data.sortByDescending { it.priceUsd }
                 adapter.notifyDataSetChanged()
             }
+            textInputLayout.setEndIconOnClickListener {
+
+            }
+            searchEditText.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    true
+                } else false
+            }
         }
         setLoading()
         lateinit var result: ResponseWrapper<MarketReviewResponse>
@@ -96,9 +108,12 @@ class MarketReviewFragment : Fragment() {
     }
     private fun setRecycler () {
         Log.d("SUCCES", "Грузим данные")
+        binding.searchEditText.setAdapter(ArrayAdapter(this.requireContext(),
+            android.R.layout.simple_expandable_list_item_1,
+            data.map { it.name }))
         binding.marketReviewRecyclerview.visibility = VISIBLE
         binding.progressBar.visibility = GONE
-        binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.context)
+        binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
     }
 }
