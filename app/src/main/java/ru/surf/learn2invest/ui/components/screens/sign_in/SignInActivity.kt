@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.components.screens
+package ru.surf.learn2invest.ui.components.screens.sign_in
 
 import android.content.Context
 import android.content.Intent
@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.noui.logs.Loher
-import ru.surf.learn2invest.ui.host.activity.HostActivity
+import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import java.util.concurrent.Executor
 
 

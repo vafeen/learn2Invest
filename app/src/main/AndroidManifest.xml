@@ -30,10 +30,10 @@
         </activity>
 
         <activity
-            android:name=".ui.host.activity.HostActivity"
+            android:name="ru.surf.learn2invest.ui.components.screens.host.HostActivity"
             android:exported="true" />
 
-        <activity android:name=".ui.components.screens.SignInActivity" />
+        <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
     </application>
 

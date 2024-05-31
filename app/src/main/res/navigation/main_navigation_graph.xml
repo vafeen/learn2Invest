@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/portfolioFragment"
-        android:name="ru.surf.learn2invest.ui.portfolio.fragment.PortfolioFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.PortfolioFragment"
         android:label="fragment_portfolio"
         tools:layout="@layout/fragment_portfolio">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/marketReviewFragment"
-        android:name="ru.surf.learn2invest.ui.market_review.fragment.MarketReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.MarketReviewFragment"
         android:label="fragment_market_review"
         tools:layout="@layout/fragment_market_review">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="ru.surf.learn2invest.ui.history.fragment.HistoryFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history">
         <action
@@ -37,13 +37,13 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.surf.learn2invest.ui.profile.fragment.ProfileFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/assetReviewFragment"
-        android:name="ru.surf.learn2invest.ui.asset_review.fragment.AssetReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.AssetReviewFragment"
         android:label="fragment_new_playlist"
         tools:layout="@layout/fragment_asset_review" />
 </navigation>

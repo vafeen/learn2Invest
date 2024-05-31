@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.host.activity
+package ru.surf.learn2invest.ui.components.screens.host
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

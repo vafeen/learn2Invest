@@ -1,20 +1,20 @@
-package ru.surf.learn2invest.ui.profile.fragment
+package ru.surf.learn2invest.ui.components.screens.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.surf.learn2invest.databinding.FragmentProfileBinding
+import ru.surf.learn2invest.databinding.FragmentAssetReviewBinding
 
-class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
+class AssetReviewFragment : Fragment() {
+    private lateinit var binding: FragmentAssetReviewBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentAssetReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }

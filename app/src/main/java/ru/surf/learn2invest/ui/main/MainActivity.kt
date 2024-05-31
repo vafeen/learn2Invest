@@ -16,8 +16,8 @@ import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
-import ru.surf.learn2invest.ui.components.screens.SignInActivity
+import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
+import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
