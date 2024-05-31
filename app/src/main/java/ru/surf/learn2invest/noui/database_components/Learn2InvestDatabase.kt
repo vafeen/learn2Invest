@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.PriceAlertDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
+import ru.surf.learn2invest.noui.database_components.dao.SearchedCoinDao
 import ru.surf.learn2invest.noui.database_components.dao.TransactionDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
@@ -81,5 +82,5 @@ abstract class Learn2InvestDatabase : RoomDatabase() {
 
     abstract fun transactionDao(): TransactionDao
 
-
+    abstract fun searchedCoinDao(): SearchedCoinDao
 }
