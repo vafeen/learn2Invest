@@ -22,7 +22,9 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
         getAll().collect { coinsInDB ->
             val resultSize = coinsInDB.size + entities.size
             if (resultSize > limit) {
-                for (index in coinsInDB.lastIndex - resultSize + limit..coinsInDB.lastIndex) {
+                val countToDel = coinsInDB.size + entities.size - limit
+
+                for (index in coinsInDB.size - countToDel..<coinsInDB.size) {
                     delete(coinsInDB[index])
                 }
             }
