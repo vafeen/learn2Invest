@@ -12,6 +12,7 @@ import ru.surf.learn2invest.noui.database_components.dao.TransactionDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.Transaction
 
 @Database(
@@ -20,6 +21,7 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
         PriceAlert::class,
         Profile::class,
         Transaction::class,
+        SearchedCoin::class,
     ], version = 1
 )
 /**
