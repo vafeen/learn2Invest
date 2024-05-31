@@ -13,4 +13,20 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
     @Query("select * from searchedcoin")
     fun getAll(): Flow<List<SearchedCoin>>
 
+
+    /**
+     *  @param limit максимальное количество записей в БД.
+     *  При потенциальном количестве записей больше этого значения, часть записей будет удалена
+     */
+    suspend fun insertByLimit(limit: Int, vararg entities: SearchedCoin) {
+        getAll().collect { coinsInDB ->
+            val resultSize = coinsInDB.size + entities.size
+            if (resultSize > limit) {
+                for (index in coinsInDB.size - resultSize + limit..<coinsInDB.size) {
+                    delete(coinsInDB[index])
+                }
+            }
+            insertAll(*entities)
+        }
+    }
 }
