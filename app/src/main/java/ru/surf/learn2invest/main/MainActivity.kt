@@ -16,6 +16,7 @@ import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.SignInActivity
+import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
@@ -39,7 +40,10 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        insertProfileInCoroutineScope(lifecycleScope)
+        lifecycleScope.apply {
+            insertProfileInCoroutineScope(this)
+            insertAlertInCoroutineScope(this)
+        }
 
 
     }
