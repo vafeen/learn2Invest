@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/marketReviewFragment"
-        android:name="ru.surf.learn2invest.ui.components.screens.fragments.MarketReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment"
         android:label="fragment_market_review"
         tools:layout="@layout/fragment_market_review">
         <action
