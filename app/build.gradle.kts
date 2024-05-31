@@ -62,4 +62,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    // for graphics
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
