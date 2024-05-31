@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -24,6 +26,7 @@ class MarketReviewFragment : Fragment() {
     private val binding get() = _binding!!
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
+    private val adapter = MarketReviewAdapter(data)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +38,32 @@ class MarketReviewFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        binding.apply {
+            filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+            filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+            filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+            filterByMarketcap.setOnClickListener {
+                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                data.sortByDescending { it.marketCapUsd }
+                adapter.notifyDataSetChanged()
+            }
+            filterByChangePercent24Hr.setOnClickListener {
+                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                data.sortByDescending { it.changePercent24Hr }
+                adapter.notifyDataSetChanged()
+            }
+            filterByPrice.setOnClickListener {
+                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                data.sortByDescending { it.priceUsd }
+                adapter.notifyDataSetChanged()
+            }
+        }
         setLoading()
         lateinit var result: ResponseWrapper<MarketReviewResponse>
         this.lifecycleScope.launch {
@@ -70,6 +99,6 @@ class MarketReviewFragment : Fragment() {
         binding.marketReviewRecyclerview.visibility = VISIBLE
         binding.progressBar.visibility = GONE
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.context)
-        binding.marketReviewRecyclerview.adapter = MarketReviewAdapter(data)
+        binding.marketReviewRecyclerview.adapter = adapter
     }
 }
