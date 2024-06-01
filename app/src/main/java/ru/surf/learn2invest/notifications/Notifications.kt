@@ -52,7 +52,7 @@ class Notifications {
                 context,
                 NotificationChannels.PriceAlert.ID
             )
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title)
                 .setContentText(contentText)
                 .setPriority(priority)

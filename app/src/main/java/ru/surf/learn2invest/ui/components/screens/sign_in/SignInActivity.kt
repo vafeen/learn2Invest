@@ -1,7 +1,8 @@
-package ru.surf.learn2invest.ui.components.screens
+package ru.surf.learn2invest.ui.components.screens.sign_in
 
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,16 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
-import ru.surf.learn2invest.main.Learn2InvestApp
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.logs.Loher
-import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
-import ru.surf.learn2invest.ui.alert_dialogs.NoAssetForSale
-import ru.surf.learn2invest.ui.alert_dialogs.NotEnoughMoneyForBuy
-import ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
-import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
+import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import java.util.concurrent.Executor
 
 
@@ -109,8 +106,9 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun startActivityWithMainLogic() {
-        //    TODO() Надя,Здесь нужно указать переход к активити "Мои инвестиции" в случае успешной аутен-чего-то-там и входа
-
+        val intent = Intent(this@SignInActivity, HostActivity::class.java)
+        startActivity(intent)
+        this@SignInActivity.finish()
     }
 
 

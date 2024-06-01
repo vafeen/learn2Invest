@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.main.Learn2InvestApp
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(

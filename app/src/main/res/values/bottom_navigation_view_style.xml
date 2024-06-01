@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="bottom_navigation" parent="Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
+        <item name="android:background">@drawable/bottom_navigation_background</item>
+        <item name="android:topRightRadius">20dp</item>
+        <item name="elevation">0dp</item>
+        <item name="itemIconTint">@color/bottom_navigation_icons_color</item>
+    </style>
+</resources>

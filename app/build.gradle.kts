@@ -44,16 +44,18 @@ android {
 dependencies {
     // for firngerprint callback
     implementation(libs.androidx.activity.v160alpha05)
-
-
     implementation(libs.androidx.room.runtime)
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.logging.interceptor)
     // got using fingerprint
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
-
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

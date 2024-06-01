@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/portfolioFragment">
+
+    <fragment
+        android:id="@+id/portfolioFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.PortfolioFragment"
+        android:label="fragment_portfolio"
+        tools:layout="@layout/fragment_portfolio">
+        <action
+            android:id="@+id/action_portfolioFragment_to_assetReviewFragment"
+            app:destination="@id/assetReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/marketReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.MarketReviewFragment"
+        android:label="fragment_market_review"
+        tools:layout="@layout/fragment_market_review">
+        <action
+            android:id="@+id/action_marketReviewFragment_to_assetReviewFragment"
+            app:destination="@id/assetReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_historyFragment_to_assetReviewFragment"
+            app:destination="@id/assetReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/assetReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.AssetReviewFragment"
+        android:label="fragment_new_playlist"
+        tools:layout="@layout/fragment_asset_review" />
+</navigation>

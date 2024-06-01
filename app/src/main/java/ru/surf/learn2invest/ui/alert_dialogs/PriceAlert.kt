@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
-import ru.surf.learn2invest.main.Learn2InvestApp
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert

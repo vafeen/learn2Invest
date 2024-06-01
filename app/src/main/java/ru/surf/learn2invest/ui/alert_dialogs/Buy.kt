@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,8 +10,9 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.BuyDialogBinding
-import ru.surf.learn2invest.main.Learn2InvestApp
+
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
@@ -26,12 +28,13 @@ class Buy(
         return true
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun initListeners() {
 
 
         binding.apply {
           balanceNumBuyDialog.text =
-                Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно 
+                Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
