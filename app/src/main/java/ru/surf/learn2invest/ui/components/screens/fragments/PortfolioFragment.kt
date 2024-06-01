@@ -1,32 +1,26 @@
 package ru.surf.learn2invest.ui.components.screens.fragments
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import ru.surf.learn2invest.R
-import ru.surf.learn2invest.chart.CustomMarkerView
+import ru.surf.learn2invest.chart.LineChartStyle
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
+    private lateinit var chartStyle: LineChartStyle
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
+        chartStyle = LineChartStyle(requireContext())
 
         val list: ArrayList<Entry> = ArrayList()
 
@@ -49,69 +43,11 @@ class PortfolioFragment : Fragment() {
 
         val lineDataSet = LineDataSet(list, "List")
 
-        val customMarkerView = CustomMarkerView(requireContext(), R.layout.chart_marker)
-
-        lineDataSet.apply {
-            color = resources.getColor(R.color.hint)
-            valueTextColor = Color.BLACK
-            lineWidth = 2f
-            isHighlightEnabled = true
-            valueTextSize = 15f
-            setDrawValues(false)
-            setDrawCircles(false)
-            setDrawHighlightIndicators(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-
-            setDrawFilled(true)
-            fillDrawable = resources.getDrawable(R.drawable.line_chart_style)
-        }
-
-        binding.chart.apply {
-            axisRight.isEnabled = false
-
-            axisLeft.apply {
-                isEnabled = false
-                axisMinimum = 0f
-                textSize = 12f
-                setDrawGridLines(false)
-            }
-
-            xAxis.apply {
-                axisMinimum = 0f
-                axisMaximum = 23f
-                isGranularityEnabled = true
-                granularity = 4f
-                textSize = 12f
-                setDrawGridLines(false)
-                position = XAxis.XAxisPosition.BOTTOM
-                valueFormatter = TimeValueFormatter()
-            }
-            setTouchEnabled(true)
-            isDragEnabled = true
-            setScaleEnabled(false)
-            setPinchZoom(false)
-            setDrawMarkers(true)
-            marker = customMarkerView
-            description = null
-            legend.isEnabled = false
-        }
-
+        chartStyle.styleChart(binding.chart)
+        chartStyle.styleLineDataSet(lineDataSet)
         val lineData = LineData(lineDataSet)
         binding.chart.data = lineData
 
         return binding.root
-    }
-
-    companion object {
-        @RequiresApi(Build.VERSION_CODES.O)
-        private val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
-    }
-
-    private class TimeValueFormatter : ValueFormatter() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun getFormattedValue(value: Float): String {
-            val localTime = LocalTime.of(value.toInt(),0)
-            return timeFormatter.format(localTime)
-        }
     }
 }
