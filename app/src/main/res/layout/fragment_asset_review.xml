@@ -92,6 +92,7 @@
         app:layout_constraintTop_toBottomOf="@+id/coin_icon" />
 
     <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
