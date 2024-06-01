@@ -1,21 +1,23 @@
 package ru.surf.learn2invest.ui.components.screens.fragments
 
-import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.ValueFormatter
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.CustomMarkerView
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
@@ -38,6 +40,12 @@ class PortfolioFragment : Fragment() {
         list.add(Entry(7f, 6f))
         list.add(Entry(8f, 5f))
         list.add(Entry(9f, 8f))
+        list.add(Entry(10f, 10f))
+        list.add(Entry(11f, 1f))
+        list.add(Entry(12f, 3f))
+        list.add(Entry(13f, 5f))
+        list.add(Entry(14f, 2f))
+        list.add(Entry(15f, 8f))
 
         val lineDataSet = LineDataSet(list, "List")
 
@@ -69,11 +77,14 @@ class PortfolioFragment : Fragment() {
             }
 
             xAxis.apply {
+                axisMinimum = 0f
+                axisMaximum = 23f
                 isGranularityEnabled = true
                 granularity = 4f
                 textSize = 12f
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
+                valueFormatter = TimeValueFormatter()
             }
             setTouchEnabled(true)
             isDragEnabled = true
@@ -89,5 +100,18 @@ class PortfolioFragment : Fragment() {
         binding.chart.data = lineData
 
         return binding.root
+    }
+
+    companion object {
+        @RequiresApi(Build.VERSION_CODES.O)
+        private val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
+    }
+
+    private class TimeValueFormatter : ValueFormatter() {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun getFormattedValue(value: Float): String {
+            val localTime = LocalTime.of(value.toInt(),0)
+            return timeFormatter.format(localTime)
+        }
     }
 }
