@@ -3,6 +3,8 @@ package ru.surf.learn2invest.chart
 import android.content.Context
 import android.graphics.Color
 import android.icu.util.Calendar
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -37,10 +39,11 @@ class LineChartHelper(private val context: Context) {
                 axisMaximum = 23f
                 isGranularityEnabled = true
                 granularity = 4f
-                textSize = 12f
+                textSize = 10f
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 valueFormatter = TimeValueFormatter()
+                typeface = ResourcesCompat.getFont(context,R.font.montserrat_medium)
             }
             setTouchEnabled(true)
             isDragEnabled = true
@@ -62,7 +65,7 @@ class LineChartHelper(private val context: Context) {
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = context.resources.getColor(R.color.hint)
+        color = ContextCompat.getColor(context,R.color.graphic)
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true
@@ -73,7 +76,7 @@ class LineChartHelper(private val context: Context) {
         mode = LineDataSet.Mode.CUBIC_BEZIER
 
         setDrawFilled(true)
-        fillDrawable = context.resources.getDrawable(R.drawable.line_chart_style)
+        fillDrawable = ContextCompat.getDrawable(context,R.drawable.line_chart_style)
     }
 
     private class TimeValueFormatter : ValueFormatter() {

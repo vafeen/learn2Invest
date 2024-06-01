@@ -27,7 +27,15 @@ class PortfolioViewModel : ViewModel() {
             Entry(12f, 3f),
             Entry(13f, 5f),
             Entry(14f, 2f),
-            Entry(15f, 8f)
+            Entry(15f, 8f),
+            Entry(16f, 0f),
+            Entry(17f, 2f),
+            Entry(18f, 5f),
+            Entry(19f, 10f),
+            Entry(20f, 9f),
+            Entry(21f, 10f),
+            Entry(22f, 4f),
+            Entry(23f, 2f),
         )
         _chartData.value = data
     }
