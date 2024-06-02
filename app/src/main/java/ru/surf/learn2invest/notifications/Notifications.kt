@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.ui.main.MainActivity
+import ru.surf.learn2invest.main.MainActivity
 
 
 /**

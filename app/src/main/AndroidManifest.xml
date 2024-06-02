@@ -20,7 +20,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name="ru.surf.learn2invest.ui.main.MainActivity"
+            android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +35,7 @@
 
         <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
+        <activity android:name=".ui.tests.screens.DialogsTestActivity"/>
     </application>
 
 </manifest>
