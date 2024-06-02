@@ -133,7 +133,7 @@ class SignInActivity : AppCompatActivity() {
                     updateProfileData()
                 }
 
-                Loher.d("Activity stop")
+                //Loher.d("Activity stop")
 
                 this@SignInActivity.finish()
             }
@@ -194,7 +194,7 @@ class SignInActivity : AppCompatActivity() {
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
 
-                    Loher.e("Authentication failed")
+                    //Loher.e("Authentication failed")
                 }
             })
 
@@ -355,8 +355,8 @@ class SignInActivity : AppCompatActivity() {
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
 
-                                Loher.d("pin = $pinCode")
-                                Loher.d("fpin = $firstPin")
+                                //Loher.d("pin = $pinCode")
+                                //Loher.d("fpin = $firstPin")
 
                                 pinCode = ""
 
@@ -367,8 +367,8 @@ class SignInActivity : AppCompatActivity() {
                         }
 
                         firstPin == pinCode -> {
-                            Loher.d("$pinCode == $firstPin")
-                            Loher.d("user = $user")
+                            //Loher.d("$pinCode == $firstPin")
+                            //Loher.d("user = $user")
 
                             user = user.let {
                                 it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))

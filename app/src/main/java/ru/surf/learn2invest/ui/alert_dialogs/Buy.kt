@@ -12,17 +12,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
-
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
-    context: Context,
-    val lifecycleScope: LifecycleCoroutineScope
+    context: Context, val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
-    private var binding =
-        BuyDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true
@@ -33,13 +29,14 @@ class Buy(
 
 
         binding.apply {
-          balanceNumBuyDialog.text =
+         balanceNumBuyDialog.text =
                 App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberBuyDialog.text = "777777" // TODO Сюда нужно будет кидать цену,
+                    val str = "777777"
+                    priceNumberBuyDialog.text = str  // TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
@@ -65,7 +62,7 @@ class Buy(
                             val balance = App.profile?.fiatBalance
                                 ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
                             val itog = itog(onFuture = true)
-                            Loher.d("itog = $itog")
+                            //Loher.d("itog = $itog")
                             if (itog(onFuture = true) <= balance) {
                                 it + 1
                             } else {
@@ -124,7 +121,7 @@ class Buy(
         binding.itogoBuyDialog.text = "Итого: $ ${itog(onFuture = false)}"
     }
 
-   
+
     private fun itog(
         onFuture: Boolean
     ): Float {

@@ -157,6 +157,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.096" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/priceAlertListRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/button_create_price_alert_price_alert_dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/price_card_price_alert_dialog3"
+            app:spanCount="2" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_exit_price_alert_dialog"
@@ -166,6 +178,7 @@
             android:backgroundTint="@color/cancel"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            
             android:text="@string/exit"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.SemiBold.14"
@@ -186,6 +199,7 @@
             android:backgroundTint="@color/view_background"
             android:gravity="center"
             android:minWidth="0dp"
+            
             android:minHeight="0dp"
             android:text="@string/add_price_alert"
             android:textAllCaps="true"

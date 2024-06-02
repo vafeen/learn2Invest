@@ -4,24 +4,26 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
 }
 
-
 android {
-    namespace = "ru.surf.learn2invest"
+    namespace = "ru.surf.tests"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.surf.learn2invest"
+        applicationId = "ru.surf.tests"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }

@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
@@ -69,7 +68,7 @@ class RefillAccount(
 
                 override fun afterTextChanged(s: Editable?) {
                     if (EditTextEnteringSumOfBalanceRefillAccountDialog.hasFocus()) {
-                        Loher.d("entering sum")
+                        //Loher.d("entering sum")
 
                         changeVisibilityElements()
                     }

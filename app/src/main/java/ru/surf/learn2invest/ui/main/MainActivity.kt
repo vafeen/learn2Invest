@@ -1,5 +1,6 @@
-package ru.surf.learn2invest.main
+package ru.surf.learn2invest.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -18,11 +19,13 @@ import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        context = this
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -40,7 +45,10 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        insertProfileInCoroutineScope(lifecycleScope)
+        lifecycleScope.apply {
+            insertProfileInCoroutineScope(this)
+            insertAlertInCoroutineScope(this)
+        }
 
 
     }
@@ -58,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
                 App.profile = deferred.await()[App.idOfProfile]
 
+                //Loher.d("profile = ${Learn2InvestApp.profile}")
                 Loher.d("profile = ${App.profile}")
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
@@ -71,7 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             startActivity(intent)
-
             this@MainActivity.finish()
 
         }
