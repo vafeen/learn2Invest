@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 
 import ru.surf.learn2invest.noui.logs.Loher
@@ -34,12 +34,12 @@ class Buy(
 
         binding.apply {
           balanceNumBuyDialog.text =
-                Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberBuyDialog.setText("777777") // TODO Сюда нужно будет кидать цену,
+                    priceNumberBuyDialog.text = "777777" // TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
@@ -62,7 +62,7 @@ class Buy(
 
                     val newNumberOfLots = if (text.isNotEmpty()) {
                         text.toString().toIntOrNull()?.let {
-                            val balance = Learn2InvestApp.profile?.fiatBalance
+                            val balance = App.profile?.fiatBalance
                                 ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
                             val itog = itog(onFuture = true)
                             Loher.d("itog = $itog")

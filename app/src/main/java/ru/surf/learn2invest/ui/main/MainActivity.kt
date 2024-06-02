@@ -10,17 +10,15 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
-import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,15 +50,15 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val deferred =
-                async(Dispatchers.IO) { Learn2InvestApp.mainDB.profileDao().getProfile() }
+                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
 
             delay(1000)
 
             val intent = if (deferred.await().isNotEmpty()) {
 
-                Learn2InvestApp.profile = deferred.await()[Learn2InvestApp.idOfProfile]
+                App.profile = deferred.await()[App.idOfProfile]
 
-                Loher.d("profile = ${Learn2InvestApp.profile}")
+                Loher.d("profile = ${App.profile}")
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 

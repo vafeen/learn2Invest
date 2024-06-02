@@ -5,22 +5,18 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
-import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 
 class PriceAlert(
     val context: Context,
@@ -50,7 +46,7 @@ class PriceAlert(
 
     private fun initData() {
         lifecycleScope.launch(Dispatchers.Main) {
-            alerts = Learn2InvestApp.mainDB.priceAlertDao().getAll()
+            alerts = App.mainDB.priceAlertDao().getAllAsFlow()
         }
     }
 

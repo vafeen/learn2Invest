@@ -4,20 +4,26 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.PriceAlertDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
+import ru.surf.learn2invest.noui.database_components.dao.SearchedCoinDao
 import ru.surf.learn2invest.noui.database_components.dao.TransactionDao
+import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.Transaction
 
 @Database(
     entities = [
+        AssetBalanceHistory::class,
         AssetInvest::class,
         PriceAlert::class,
         Profile::class,
+        SearchedCoin::class,
         Transaction::class,
     ], version = 1
 )
@@ -32,9 +38,9 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
  * [assetInvestDao](Learn2InvestDatabase.assetInvestDao),
  *
  * а далее к одному из методов:
- * - [getAll](AssetInvestDao.getAll)
- * - [insertAll](AssetInvestDao.insertAll)
- * - [delete](AssetInvestDao.delete)
+ * - [getAllAsFlow](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.getAllAsFlow)
+ * - [insertAll](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.insertAll)
+ * - [delete](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.delete)
  *
  * Полный пример:
  *```
@@ -42,7 +48,9 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
  *
  * lifecycleScope.launch(Dispatchers.Main) {
  *
- * Learn2InvestApp.mainDB.someDao().getAll().collect { someList = it }
+ * Learn2InvestApp.mainDB.someDao().getAllAsFlow().collect { someList = it } // подписка на изменения
+ *
+ * someList = Learn2InvestApp.mainDB.someDao().getAllAsFlow().first() // разовая акция
  * }
  * ```
  *
@@ -50,7 +58,7 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
  * - [insertAll](AssetInvestDao.insertAll)
  * - [delete](AssetInvestDao.delete)
  */
-abstract class Learn2InvestDatabase : RoomDatabase() {
+abstract class L2IDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "learn2investDatabase.db"
 
@@ -58,26 +66,23 @@ abstract class Learn2InvestDatabase : RoomDatabase() {
         /**
          * создание объекта базы данных
          */
-        fun buildDatabase(context: Context): Learn2InvestDatabase {
-            return Room
-                .databaseBuilder(
-                    context = context,
-                    klass = Learn2InvestDatabase::class.java,
-                    name = NAME
-                )
-                .build()
+        fun buildDatabase(context: Context): L2IDatabase {
+            return Room.databaseBuilder(
+                    context = context, klass = L2IDatabase::class.java, name = NAME
+                ).build()
         }
     }
 
 
-    abstract fun assetInvestDao(): AssetInvestDao
+    abstract fun assetBalanceHistoryDao(): AssetBalanceHistoryDao
 
+    abstract fun assetInvestDao(): AssetInvestDao
 
     abstract fun priceAlertDao(): PriceAlertDao
 
-
     abstract fun profileDao(): ProfileDao
 
+    abstract fun searchedCoinDao(): SearchedCoinDao
 
     abstract fun transactionDao(): TransactionDao
 
