@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class AssetBalanceHistory( // баланс портфеля
 
-    @PrimaryKey(autoGenerate = true) val id: Int = 0, val assetBalance: Float // стоимость портфеля
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val assetBalance: Float // стоимость портфеля
 )

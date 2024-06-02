@@ -18,4 +18,12 @@ interface TransactionDao : DataAccessObject<Transaction>,
 
     @Query("select * from `transaction`")
     override fun getAllAsFlow(): Flow<List<Transaction>>
+
+
+    /**
+     * Получение списка всех имеющихся объектов этого типа из базы данных
+     * поле `symbol` в которых равно `filterSymbol`
+     */
+    @Query("SELECT * FROM `transaction` WHERE symbol = :filterSymbol")
+    fun getFilteredBySymbol(filterSymbol: String): Flow<List<Transaction>>
 }

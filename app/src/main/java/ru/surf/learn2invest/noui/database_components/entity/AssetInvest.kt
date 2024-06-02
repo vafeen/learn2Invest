@@ -7,15 +7,18 @@ import androidx.room.PrimaryKey
 /**
  * Объект криптовалюты портфеля?
  */
+
 @Entity
 class AssetInvest(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String,
-    val symbol: String,
-    val iconURL: String,
-    val coinPrice: Int,
-    val changePercent24Hr: Float,
-    val amount: Int,
+    val name: String, //Имя коина (Bitcoin)
+    val symbol: String, //Абревиатура (BTC)
+    val iconURL: String, //URL для закачки иконки
+    val coinPrice: Int, //Цена
+    val changePercent24Hr: Float, //удалить
+    val amount: Int, //Колличество
 )
+
+
 
 
