@@ -25,20 +25,20 @@ val testProfile = Profile(
 val testAlerts = listOf(
     PriceAlert(
         symbol = "symbol1",
-        coinPrice = 0,
-        changePercent24Hr = -5,
+        coinPrice = 100,
+        changePercent24Hr = -1,
         comment = "comment1"
     ),
     PriceAlert(
         symbol = "symbol2",
-        coinPrice = 0,
-        changePercent24Hr = -5,
+        coinPrice = 200,
+        changePercent24Hr = -2,
         comment = "comment2"
     ),
     PriceAlert(
         symbol = "symbol3",
-        coinPrice = 0,
-        changePercent24Hr = -5,
+        coinPrice = 300,
+        changePercent24Hr = -3,
         comment = "comment3"
     )
 )
@@ -53,7 +53,6 @@ fun insertAlertInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
 
         Learn2InvestApp.mainDB.priceAlertDao().insertAll(
-            *testAlerts.toTypedArray(),
             *testAlerts.toTypedArray()
         )
 

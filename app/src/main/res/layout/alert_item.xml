@@ -9,14 +9,13 @@
         android:id="@+id/full_alert_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/sibn"
+        android:background="@color/view_background"
         app:cardCornerRadius="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
             android:orientation="horizontal">
 
             <TextView

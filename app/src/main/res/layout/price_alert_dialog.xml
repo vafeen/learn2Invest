@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="491dp"
     android:background="@color/white">
@@ -157,6 +158,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.096" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/priceAlertListRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/button_create_price_alert_price_alert_dialog"
+            app:layout_constraintEnd_toEndOf="@+id/price_card_price_alert_dialog3"
+            app:layout_constraintStart_toStartOf="@+id/price_card_price_alert_dialog3"
+
+            app:layout_constraintTop_toBottomOf="@+id/price_card_price_alert_dialog3"
+            app:spanCount="2" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_exit_price_alert_dialog"
@@ -166,6 +179,7 @@
             android:backgroundTint="@color/cancel"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            
             android:text="@string/exit"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.SemiBold.14"
@@ -186,6 +200,7 @@
             android:backgroundTint="@color/view_background"
             android:gravity="center"
             android:minWidth="0dp"
+            
             android:minHeight="0dp"
             android:text="@string/add_price_alert"
             android:textAllCaps="true"
