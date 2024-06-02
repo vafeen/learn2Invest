@@ -7,9 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import ru.surf.learn2invest.databinding.ActivityDialogsTestBinding
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.Buy
-import ru.surf.learn2invest.ui.alert_dialogs.NoAssetForSale
-import ru.surf.learn2invest.ui.alert_dialogs.NotEnoughMoneyForBuy
-import ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
+import ru.surf.learn2invest.ui.alert_dialogs.price_alert.PriceAlertDialog
 import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.alert_dialogs.Sell
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
@@ -54,21 +52,9 @@ class DialogsTestActivity : AppCompatActivity() {
 
             }
 
-            noAssetForSaleShowForTesting.setOnClickListener {
-
-                NoAssetForSale(context = context).initDialog().show()
-
-            }
-
-            notEnoughMoneyForBuyShowForTesting.setOnClickListener {
-
-                NotEnoughMoneyForBuy(context = context).initDialog().show()
-
-            }
-
             priceAlertShowForTesting.setOnClickListener {
 
-                PriceAlert(
+                PriceAlertDialog(
                     context = context,
                     currentPrice = 100f,
                     lifecycleScope = lifecycleScope

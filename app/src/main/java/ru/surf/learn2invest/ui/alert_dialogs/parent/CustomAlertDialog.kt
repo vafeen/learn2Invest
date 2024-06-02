@@ -113,7 +113,7 @@ abstract class CustomAlertDialog(context: Context) {
         }
     }
 
-    fun cancel() {
+    open fun cancel() {
         dialog.cancel()
     }
 }

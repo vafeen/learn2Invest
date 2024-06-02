@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 class PriceAlert(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val symbol: String,
-    val coinPrice: Int,
-    val changePercent24Hr: Int,
+    val coinPrice: Float,
+    val changePercent24Hr: Float,
     val comment: String?
 )

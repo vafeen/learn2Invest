@@ -1,36 +1,43 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.alert_dialogs.price_alert
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
 import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
+import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
-import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 
-class PriceAlert(
-    val context: Context,
-    val currentPrice: Float,
-    val lifecycleScope: LifecycleCoroutineScope
+
+class PriceAlertDialog(
+    val context: Context, val currentPrice: Float, val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
     private var binding = PriceAlertDialogBinding.inflate(LayoutInflater.from(context))
 
-    private var alerts: Flow<List<PriceAlert>> = flowOf(listOf())
+    var alerts: List<PriceAlert> = listOf()
+
+    var alertAdapter = PriceAlertAdapter(
+        context = context, data = alerts, lifecycleScope = lifecycleScope, mainBinding = binding
+    ) {
+        notifyChangingData()
+    }
+
+    private fun notifyChangingData() {
+        alertAdapter.notifyDataSetChanged()
+    }
+
+    companion object {
+        var currentAlert: Int? = null
+    }
 
     override fun setCancelable(): Boolean {
         return true
@@ -48,19 +55,22 @@ class PriceAlert(
         }")
     }
 
-    private fun initData() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            alerts = Learn2InvestApp.mainDB.priceAlertDao().getAll()
-        }
-    }
 
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun initDialog(): CustomAlertDialog {
-        val dialog = super.initDialog() as ru.surf.learn2invest.ui.alert_dialogs.PriceAlert
+        val dialog = super.initDialog() as PriceAlertDialog
 
-        dialog.initData()
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        return this
+            Learn2InvestApp.mainDB.priceAlertDao().getAll().collect {
+
+                alertAdapter.alerts = it
+
+                alertAdapter.notifyDataSetChanged()
+            }
+        }
+        return dialog
+
     }
 
     private fun changeVisibilityIcons(
@@ -77,6 +87,12 @@ class PriceAlert(
         }
     }
 
+    private fun String.roundTo(numberOfDots: Int = 2): Float {
+        val res = String.format("%.2f", this.toFloat()).toFloat()
+        Loher.d("res = $res")
+        return res
+    }
+
     private fun changePercentByPrice(newPrice: Editable?) {
         binding.priceInPercentPriceAlertDialog.setText(
             "${"$newPrice".toDoubleOrNull() ?: ""}"
@@ -90,11 +106,23 @@ class PriceAlert(
         changeVisibilityIcons()
 
         binding.apply {
+
+            binding.priceAlertListRecyclerView.adapter = alertAdapter
+
             buttonCreatePriceAlertPriceAlertDialog.setOnClickListener {
 
-                // TODO логика создания диалога
+                lifecycleScope.launch(Dispatchers.IO) {
+                    Learn2InvestApp.mainDB.priceAlertDao().insertAll(
+                        PriceAlert(
+                            symbol = "",
+                            coinPrice = pricePriceAlertDialog.text.toString().roundTo(),
+                            changePercent24Hr = priceInPercentPriceAlertDialog.text.toString()
+                                .roundTo(),
+                            comment = commentAlertDialog.text.toString()
+                        )
+                    )
+                }
 
-                cancel()
             }
 
             buttonExitPriceAlertDialog.setOnClickListener {
@@ -108,17 +136,14 @@ class PriceAlert(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
                     changeVisibilityIcons()
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     if (pricePriceAlertDialog.hasFocus()) {
-                        Loher.d("price")
+                        //Loher.d("price")
 
                         changePercentByPrice(newPrice = s)
 
@@ -133,17 +158,14 @@ class PriceAlert(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
                     changeVisibilityIcons()
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     if (priceInPercentPriceAlertDialog.hasFocus()) {
-                        Loher.d("percent")
+                        //Loher.d("percent")
 
                         changePriceByPercent(onChangedPercent = s)
                     }
@@ -158,17 +180,14 @@ class PriceAlert(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
                     changeVisibilityIcons()
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     if (priceInPercentPriceAlertDialog.hasFocus()) {
-                        Loher.d("comment")
+                        //Loher.d("comment")
                     }
 
                 }
@@ -183,14 +202,21 @@ class PriceAlert(
                 priceInPercentPriceAlertDialog.setText("")
             }
 
+
             commentClearAlertDialog.setOnClickListener {
                 commentAlertDialog.setText("")
             }
+
         }
     }
 
     override fun getDialogView(): View {
         return binding.root
+    }
+
+    override fun cancel() {
+        currentAlert = null
+        super.cancel()
     }
 
 }

@@ -18,7 +18,6 @@ import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import java.util.concurrent.Executor
 
@@ -132,7 +131,7 @@ class SignInActivity : AppCompatActivity() {
                     updateProfileData()
                 }
 
-                Loher.d("Activity stop")
+                //Loher.d("Activity stop")
 
                 this@SignInActivity.finish()
             }
@@ -172,7 +171,7 @@ class SignInActivity : AppCompatActivity() {
                 ) {
                     super.onAuthenticationSucceeded(result)
 
-                    Loher.d("Success")
+                    //Loher.d("Success")
 
                     if (intent.action == SignINActivityActions.SignUP.action) {
                         user = user.copy(biometry = true)
@@ -193,7 +192,7 @@ class SignInActivity : AppCompatActivity() {
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
 
-                    Loher.e("Authentication failed")
+                    //Loher.e("Authentication failed")
                 }
             })
 
@@ -209,9 +208,9 @@ class SignInActivity : AppCompatActivity() {
             if (list.isNotEmpty()) {
                 user = list[0]
 
-                Loher.d("user = $user")
+                //Loher.d("user = $user")
             } else {
-                Loher.e("user not found")
+                //Loher.e("user not found")
             }
         }
     }
@@ -354,8 +353,8 @@ class SignInActivity : AppCompatActivity() {
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
 
-                                Loher.d("pin = $pinCode")
-                                Loher.d("fpin = $firstPin")
+                                //Loher.d("pin = $pinCode")
+                                //Loher.d("fpin = $firstPin")
 
                                 pinCode = ""
 
@@ -366,8 +365,8 @@ class SignInActivity : AppCompatActivity() {
                         }
 
                         firstPin == pinCode -> {
-                            Loher.d("$pinCode == $firstPin")
-                            Loher.d("user = $user")
+                            //Loher.d("$pinCode == $firstPin")
+                            //Loher.d("user = $user")
 
                             user = user.let {
                                 it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))

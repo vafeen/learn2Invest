@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,34 +11,30 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.BuyDialogBinding
-
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
-    context: Context,
-    val lifecycleScope: LifecycleCoroutineScope
+    context: Context, val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
-    private var binding =
-        BuyDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true
     }
 
-    @SuppressLint("SuspiciousIndentation")
     override fun initListeners() {
 
 
         binding.apply {
-          balanceNumBuyDialog.text =
+            balanceNumBuyDialog.text =
                 Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberBuyDialog.setText("777777") // TODO Сюда нужно будет кидать цену,
+                    val str = "777777"
+                    priceNumberBuyDialog.text = str  // TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
@@ -65,7 +60,7 @@ class Buy(
                             val balance = Learn2InvestApp.profile?.fiatBalance
                                 ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
                             val itog = itog(onFuture = true)
-                            Loher.d("itog = $itog")
+                            //Loher.d("itog = $itog")
                             if (itog(onFuture = true) <= balance) {
                                 it + 1
                             } else {
@@ -96,10 +91,7 @@ class Buy(
 
             enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                    s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
 
                 }
@@ -124,18 +116,16 @@ class Buy(
         binding.itogoBuyDialog.text = "Итого: $ ${itog(onFuture = false)}"
     }
 
-   
+
     private fun itog(
         onFuture: Boolean
     ): Float {
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
 
-            val price = priceText.substring(1, priceText.length)
-                .toFloatOrNull() ?: 0f
+            val price = priceText.substring(1, priceText.length).toFloatOrNull() ?: 0f
 
-            val number = enteringNumberOfLotsBuyDialog.text.toString()
-                .toIntOrNull() ?: 0
+            val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
             return price * (number + if (onFuture) {
                 1

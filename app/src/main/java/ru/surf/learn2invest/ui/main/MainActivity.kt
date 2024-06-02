@@ -1,5 +1,6 @@
-package ru.surf.learn2invest.main
+package ru.surf.learn2invest.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -14,22 +15,23 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        context = this
 
         setContentView(binding.root)
 
@@ -42,7 +44,10 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        insertProfileInCoroutineScope(lifecycleScope)
+        lifecycleScope.apply {
+            insertProfileInCoroutineScope(this)
+            insertAlertInCoroutineScope(this)
+        }
 
 
     }
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
                 Learn2InvestApp.profile = deferred.await()[Learn2InvestApp.idOfProfile]
 
-                Loher.d("profile = ${Learn2InvestApp.profile}")
+                //Loher.d("profile = ${Learn2InvestApp.profile}")
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
@@ -72,8 +77,8 @@ class MainActivity : AppCompatActivity() {
 //                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
-            startActivity(intent)
-
+//            startActivity(intent)
+            startActivity(Intent(context, DialogsTestActivity::class.java))
             this@MainActivity.finish()
 
         }

@@ -9,8 +9,8 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
@@ -35,7 +35,8 @@ class Sell(
 
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
-                    priceNumberSellDialog.text = "777777" // TODO Сюда нужно будет кидать цену,
+                    val str = "777777"
+                    priceNumberSellDialog.text = str// TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
 
                     updateFields()
