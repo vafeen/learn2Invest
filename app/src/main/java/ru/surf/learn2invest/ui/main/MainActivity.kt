@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        lifecycleScope.apply {
-            insertProfileInCoroutineScope(this)
-            insertAlertInCoroutineScope(this)
-        }
+
+//            insertProfileInCoroutineScope(this)
+//            insertAlertInCoroutineScope(this)
+
 
 
     }
@@ -58,13 +58,11 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val deferred =
-                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
+                async(Dispatchers.IO) { App.profile.first() }
 
             delay(1000)
 
             val intent = if (deferred.await().isNotEmpty()) {
-
-                App.profile = deferred.await()[App.idOfProfile]
 
                 //Loher.d("profile = ${Learn2InvestApp.profile}")
                 Loher.d("profile = ${App.profile}")
