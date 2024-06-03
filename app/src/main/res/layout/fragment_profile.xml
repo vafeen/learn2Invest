@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_TV" />
 
     <LinearLayout
-        android:id="@+id/drop_statistics_Btn"
+        android:id="@+id/reset_stats_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
@@ -67,6 +67,7 @@
             android:textAppearance="@style/Text.Medium.16" />
 
         <ImageButton
+            android:id="@+id/reset_stats_Btn_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -94,7 +95,7 @@
         android:layout_marginEnd="22dp"
         android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drop_statistics_Btn"
+        app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
         app:srcCompat="@drawable/gear" />
 
     <LinearLayout

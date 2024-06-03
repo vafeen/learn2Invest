@@ -58,4 +58,5 @@
     <string name="review_text">Обзор</string>
     <string name="no_interest_error">Вы не интересовались\nданным активом</string>
     <string name="repeat_pin">Повторите PIN-код</string>
+    <string name="reset_stats">    Вы точно хотите\nсбросить статистику?</string>
 </resources>

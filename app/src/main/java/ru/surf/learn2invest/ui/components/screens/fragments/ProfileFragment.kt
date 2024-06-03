@@ -14,6 +14,7 @@ import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
+import ru.surf.learn2invest.ui.alert_dialogs.ResetStats
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
@@ -72,7 +73,19 @@ class ProfileFragment : Fragment() {
 
                         }
 
+                        val resetStats = {
 
+                            ResetStats(
+                                context = context, lifecycleScope = lifecycleScope
+                            ).initDialog().show()
+
+                        }
+                        fr.resetStatsBtn.setOnClickListener {
+                            resetStats()
+                        }
+                        fr.resetStatsBtnArrow.setOnClickListener {
+                            resetStats()
+                        }
 
                         fr.notificationBtn.setOnClickListener {
 
@@ -151,7 +164,6 @@ class ProfileFragment : Fragment() {
                         fr.confirmDealBtnSwitcher.setOnClickListener {
                             updateProfile(profile.copy(confirmDeal = fr.confirmDealBtnSwitcher.isChecked))
                         }
-
 
 
                         val changePin = {
