@@ -81,6 +81,9 @@ class MarketReviewFragment : Fragment() {
                 recyclerData.clear()
                 recyclerData.addAll(data)
                 adapter.notifyDataSetChanged()
+                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
             }
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
                 textView2.visibility = VISIBLE
@@ -88,6 +91,7 @@ class MarketReviewFragment : Fragment() {
                 filterByPrice.visibility = INVISIBLE
                 filterByMarketcap.visibility = INVISIBLE
                 filterByChangePercent24Hr.visibility = INVISIBLE
+                searchEditText.hint = ""
             }
 
             clearTv.setOnClickListener {
