@@ -1,6 +1,8 @@
 package ru.surf.learn2invest.noui.cryptography
 
 import android.app.Activity
+import android.util.Log
+import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -110,11 +112,15 @@ class FingerprintAuthenticator(private val context: Activity) {
                         errorCode: Int, errString: CharSequence
                     ) {
                         super.onAuthenticationError(errorCode, errString)
+                        Log.d("finger", "error")
+                        Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-
+                        Log.d("finger", "failed")
+                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show()
                         failedCallBack()
                     }
                 })
