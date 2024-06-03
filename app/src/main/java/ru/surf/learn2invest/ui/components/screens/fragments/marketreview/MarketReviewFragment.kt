@@ -92,7 +92,7 @@ class MarketReviewFragment : Fragment() {
                 filterByChangePercent24Hr.isVisible = true
                 searchEditText.text.clear()
                 recyclerData.clear()
-                recyclerData.addAll(data)
+                recyclerData.addAll(data.sortedByDescending{it.marketCapUsd})
                 adapter.notifyDataSetChanged()
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
@@ -117,52 +117,44 @@ class MarketReviewFragment : Fragment() {
                 }
             }
 
-            searchEditText.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    var searchedList = mutableListOf<String>()
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        Learn2InvestApp.mainDB
-                            .searchedCoinDao()
-                            .insertAll(
-                                SearchedCoin(coinID = searchEditText.text.toString())
-                            )
-                        Learn2InvestApp.mainDB
-                            .searchedCoinDao()
-                            .getAllAsList().map { searchedList.add(it.coinID) }
-                        withContext(Dispatchers.Main){
-                            recyclerData.clear()
-                            recyclerData.addAll(data.filter { searchedList.contains(it.name) })
-                            recyclerData.reverse()
-                            adapter.notifyDataSetChanged()
-                            Loher.d(searchedList.toString())
-                        }
+            searchEditText.setOnItemClickListener { parent, view, position, id ->
+                var searchedList = mutableListOf<String>()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    Learn2InvestApp.mainDB
+                        .searchedCoinDao()
+                        .insertAll(
+                            SearchedCoin(coinID = searchEditText.text.toString())
+                        )
+                    Learn2InvestApp.mainDB
+                        .searchedCoinDao()
+                        .getAllAsList().map { searchedList.add(it.coinID) }
+                    withContext(Dispatchers.Main){
+                        recyclerData.clear()
+                        recyclerData.addAll(data.filter { searchedList.contains(it.name) })
+                        recyclerData.reverse()
+                        adapter.notifyDataSetChanged()
+                        Loher.d(searchedList.toString())
                     }
-                    true
-                } else false
+                }
             }
         }
         setLoading()
 
-        this.lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
+        this.lifecycleScope.launch(Dispatchers.IO) {
                 var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> = coinClient.getMarketReview()
                 withContext(Dispatchers.Main){
                     when (result) {
                         is ResponseWrapper.Success -> {
-                            recyclerData.addAll(result.value.data)
                             data.addAll(result.value.data)
+                            data.removeIf { it.marketCapUsd == 0.0 }
+                            recyclerData.addAll(data)
+                            Loher.d(data.find { it.priceUsd == 0.0}.toString())
                             setRecycler()
                         }
                         is ResponseWrapper.NetworkError -> setError()
                     }
                 }
-            }
         }
-    }
-    override fun onResume() {
-        super.onResume()
-        //setLoading()
-        //setError()
     }
     private fun setLoading () {
         binding.marketReviewRecyclerview.isVisible = false

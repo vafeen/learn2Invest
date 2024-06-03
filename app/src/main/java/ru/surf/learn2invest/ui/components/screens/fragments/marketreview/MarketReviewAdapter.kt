@@ -11,6 +11,8 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
+import ru.surf.learn2invest.network_components.util.Const.API_ICON
+import ru.surf.learn2invest.noui.logs.Loher
 
 class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,13 +33,17 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            coinTopTextInfo.text = data[position].name
+            coinTopTextInfo.text =
+                if (data[position].name.length > 12)
+                    "${data[position].name.substring(0..12)}..."
+                else
+                    data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = "\$${String.format("%.2f",data[position].priceUsd)}"
+            coinTopNumericInfo.text = "\$${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].priceUsd.toBigDecimal().toPlainString())?.value}"
             if (data[position].changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
-            coinBottomNumericInfo.text = "${String.format("%.2f",data[position].changePercent24Hr)}%"//data[position].changePercent24Hr.toString()
+            coinBottomNumericInfo.text = "${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].changePercent24Hr.toBigDecimal().toPlainString())?.value ?: 0}%"
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {
@@ -57,6 +63,9 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                     })
                 .build()
             imageLoader.enqueue(request)
+            itemView.setOnClickListener {
+                Loher.d(data[position].priceUsd.toBigDecimal().toPlainString())
+            }
         }
     }
 }
