@@ -12,9 +12,12 @@
         android:layout_marginTop="23dp"
         android:text="@string/profile"
         android:textAppearance="@style/Text.Bold.20"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
 
     <TextView
         android:id="@+id/firstName_lastName_TV"
@@ -22,11 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="34dp"
         android:layout_marginTop="25dp"
-        tools:text="Надежда \nЧеревкова"
         android:textAppearance="@style/Text.SemiBold.18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_TV" />
-
+        app:layout_constraintTop_toBottomOf="@+id/profile_TV"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Надежда \nЧеревкова" />
 
     <TextView
         android:id="@+id/delete_profile_TV"
@@ -44,13 +50,13 @@
         android:id="@+id/drop_statistics_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3"
         android:layout_marginStart="37dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="21dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstName_lastName_TV">
 
         <TextView
@@ -58,7 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/drop_statistics"
-            android:textAppearance="@style/Text.Medium.16"/>
+            android:textAppearance="@style/Text.Medium.16" />
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,11 +80,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
-        android:layout_marginTop="34dp"
         android:text="@string/settings"
         android:textAppearance="@style/Text.SemiBold.18"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_IBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drop_statistics_Btn" />
+        app:layout_constraintTop_toTopOf="@+id/settings_IBtn" />
 
     <ImageButton
         android:id="@+id/settings_IBtn"
@@ -98,20 +105,23 @@
         android:layout_marginTop="41dp"
         android:layout_marginEnd="24dp"
         android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_TV"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/settings_TV">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/notification"
-            android:textAppearance="@style/Text.Medium.16"/>
+            android:textAppearance="@style/Text.Medium.16" />
+
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/notification_Btn_switcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:theme="@style/switch_style"/>
+            android:theme="@style/switch_style" />
     </LinearLayout>
 
 
@@ -123,44 +133,50 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="22dp"
         android:weightSum="3"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_Btn" >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_Btn">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/biometry"
-            android:textAppearance="@style/Text.Medium.16"/>
+            android:textAppearance="@style/Text.Medium.16" />
+
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/biometry_Btn_switcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:theme="@style/switch_style"/>
+            android:theme="@style/switch_style" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/confirm_deal_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
         android:layout_marginStart="37dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="22dp"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/biometry_Btn"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/biometry_Btn">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/confirm_deal"
-            android:textAppearance="@style/Text.Medium.16"/>
+            android:textAppearance="@style/Text.Medium.16" />
+
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/confirm_deal_Btn_switcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:theme="@style/switch_style"/>
+            android:theme="@style/switch_style" />
     </LinearLayout>
 
 
@@ -168,45 +184,23 @@
         android:id="@+id/change_PIN_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
+        android:layout_marginStart="37dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="21dp"
-        android:layout_marginStart="37dp"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/change_PIN"
-            android:textAppearance="@style/Text.Medium.16"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            app:srcCompat="@drawable/arrow_right_gray" />
-    </LinearLayout>
+            android:textAppearance="@style/Text.Medium.16" />
 
-    <LinearLayout
-        android:id="@+id/change_fingerprint_Btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="21dp"
-        android:weightSum="3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_PIN_Btn">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/change_fingerprint"
-            android:textAppearance="@style/Text.Medium.16"/>
         <ImageButton
+            android:id="@+id/change_PIN_Btn_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
