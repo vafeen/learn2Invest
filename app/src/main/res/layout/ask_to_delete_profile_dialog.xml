@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.00">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/no_delete_ask_to_delete_profile_dialog"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
@@ -36,13 +36,13 @@
             app:layout_constraintTop_toTopOf="@+id/ok_delete_ask_to_delete_profile_dialog"
             app:layout_constraintVertical_bias="1.0" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/ok_delete_ask_to_delete_profile_dialog"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
+            android:layout_marginTop="96dp"
             android:backgroundTint="@color/white"
             android:minWidth="0dp"
-            android:layout_marginTop="96dp"
             android:minHeight="0dp"
             android:text="@string/yes_exactly"
             android:textAllCaps="true"

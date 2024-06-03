@@ -11,15 +11,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
-    val context: Context,
-    private val lifecycleScope: LifecycleCoroutineScope
+    val context: Context, private val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
-    private var binding =
-        RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
+
+    private lateinit var profile: Profile
 
     override fun setCancelable(): Boolean {
         return true
@@ -37,6 +38,11 @@ class RefillAccount(
     }
 
     override fun initListeners() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            App.profile.collect {
+                profile = it[App.idOfProfile]
+            }
+        }
 
         binding.apply {
 
@@ -58,10 +64,7 @@ class RefillAccount(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
 
                 }
@@ -85,7 +88,7 @@ class RefillAccount(
 
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        App.profile?.also {
+                        profile.also {
                             App.mainDB.profileDao().insertAll(
                                 it.copy(
                                     //                                assetBalance = profile.какой-то баланс + enteredBalance,
@@ -102,11 +105,10 @@ class RefillAccount(
                 cancel()
             }
 
-            balanceTextviewRefillAccountDialog.text =
-                "${
-                    App.profile?.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
-                        ?: "balance error"
-                }"
+            balanceTextviewRefillAccountDialog.text = "${
+                profile.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
+                    ?: "balance error"
+            }"
 
         }
     }
