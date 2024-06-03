@@ -59,6 +59,8 @@ class SignInActivity : AppCompatActivity() {
 
         initListeners()
 
+        paintDots()
+
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
@@ -109,7 +111,9 @@ class SignInActivity : AppCompatActivity() {
     private fun startActivityWithMainLogic() {
         val intent = Intent(this@SignInActivity, HostActivity::class.java)
         startActivity(intent)
+        pinCode = ""
         this@SignInActivity.finish()
+
     }
 
 
@@ -234,7 +238,9 @@ class SignInActivity : AppCompatActivity() {
 
         delay(300)
 
-//        paintDots(count = 100)
+//        pinCode = ""
+
+//        paintDots()
 
 //        delay(300)
     }
