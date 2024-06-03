@@ -45,7 +45,7 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                 }
                 .build()
             val request = ImageRequest.Builder(coinIcon.context)
-                .data("https://cryptofonts.com/img/icons/${data[position].symbol.lowercase()}.svg")
+                .data("$API_ICON${data[position].symbol.lowercase()}.svg")
                 .target(onSuccess = {
                     coinIcon.setImageDrawable(it)
                 },
