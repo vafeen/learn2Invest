@@ -36,6 +36,7 @@ class MarketReviewFragment : Fragment() {
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
     private val adapter = MarketReviewAdapter(recyclerData)
+    private var filterByPriceFLag = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,10 +67,21 @@ class MarketReviewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
             filterByPrice.setOnClickListener {
+                filterByPriceFLag = filterByPriceFLag.not()
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                recyclerData.sortByDescending { it.priceUsd }
+                if (filterByPriceFLag) {
+                    recyclerData.sortByDescending { it.priceUsd }
+                    Loher.d(recyclerData.find{ it.symbol == "CJ" }.toString())
+                    filterByPrice.setIconResource(R.drawable.arrow_bottom_red)
+                    filterByPrice.setIconTintResource(R.color.recession)
+                }
+                else {
+                    recyclerData.sortBy { it.priceUsd }
+                    filterByPrice.setIconResource(R.drawable.arrow_top_green)
+                    filterByPrice.setIconTintResource(R.color.label)
+                }
                 adapter.notifyDataSetChanged()
             }
             textInputLayout.setEndIconOnClickListener {
