@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
+import ru.surf.learn2invest.ui.alert_dialogs.PriceAlertDialog
 
 class PriceAlertAdapter(
     data: List<PriceAlert>, val context: Context,
@@ -81,7 +82,7 @@ class PriceAlertAdapter(
             view.findViewById<ImageButton>(R.id.remove_alert_item).setOnClickListener {
 
                 lifecycleScope.launch(Dispatchers.IO) {
-                    Learn2InvestApp.mainDB.priceAlertDao().delete(alert)
+                    App.mainDB.priceAlertDao().delete(alert)
                 }
 
             }

@@ -9,17 +9,15 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
-    context: Context,
-    val lifecycleScope: LifecycleCoroutineScope
+    context: Context, val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
-    private var binding =
-        SellDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true
@@ -30,7 +28,7 @@ class Sell(
 
         binding.apply {
             balanceNumSellDialog.text =
-                Learn2InvestApp.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
 
             lifecycleScope.launch(Dispatchers.Main) {
@@ -90,10 +88,7 @@ class Sell(
 
             enteringNumberOfLotsSellDialog.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                    s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
 
                 }
@@ -124,11 +119,9 @@ class Sell(
         binding.apply {
             val priceText = priceNumberSellDialog.text.toString()
 
-            val price = priceText.substring(1, priceText.length)
-                .toFloatOrNull() ?: 0f
+            val price = priceText.substring(1, priceText.length).toFloatOrNull() ?: 0f
 
-            val number = enteringNumberOfLotsSellDialog.text.toString()
-                .toIntOrNull() ?: 0
+            val number = enteringNumberOfLotsSellDialog.text.toString().toIntOrNull() ?: 0
 
             return price * (number + if (onFuture) {
                 1

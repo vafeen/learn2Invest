@@ -12,12 +12,14 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import java.util.concurrent.Executor
 
@@ -150,7 +152,7 @@ class SignInActivity : AppCompatActivity() {
         if (userDataIsChanged) {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                Learn2InvestApp.mainDB.profileDao().insertAll(user)
+                App.mainDB.profileDao().insertAll(user)
             }
 
         }
@@ -171,7 +173,7 @@ class SignInActivity : AppCompatActivity() {
                 ) {
                     super.onAuthenticationSucceeded(result)
 
-                    //Loher.d("Success")
+                    Loher.d("Success")
 
                     if (intent.action == SignINActivityActions.SignUP.action) {
                         user = user.copy(biometry = true)
@@ -203,14 +205,14 @@ class SignInActivity : AppCompatActivity() {
 
     private fun initProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val list = Learn2InvestApp.mainDB.profileDao().getProfile()
+            val list = App.mainDB.profileDao().getAllAsFlow().first()
 
             if (list.isNotEmpty()) {
                 user = list[0]
 
-                //Loher.d("user = $user")
+                Loher.d("user = $user")
             } else {
-                //Loher.e("user not found")
+                Loher.e("user not found")
             }
         }
     }
