@@ -22,8 +22,8 @@ import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
+import ru.surf.learn2invest.network_components.responses.APIWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
-import ru.surf.learn2invest.network_components.responses.MarketReviewResponse
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
 
@@ -128,12 +128,12 @@ class MarketReviewFragment : Fragment() {
 
         this.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                var result: ResponseWrapper<MarketReviewResponse> = coinClient.getMarketReview()
+                var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> = coinClient.getMarketReview()
                 withContext(Dispatchers.Main){
                     when (result) {
                         is ResponseWrapper.Success -> {
-                            recyclerData.addAll((result as ResponseWrapper.Success<MarketReviewResponse>).value.data)
-                            data.addAll((result as ResponseWrapper.Success<MarketReviewResponse>).value.data)
+                            recyclerData.addAll(result.value.data)
+                            data.addAll(result.value.data)
                             setRecycler()
                         }
                         is ResponseWrapper.NetworkError -> setError()
