@@ -11,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,11 +73,11 @@ class MarketReviewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
             textInputLayout.setEndIconOnClickListener {
-                textView2.visibility = GONE
-                clearTv.visibility = GONE
-                filterByPrice.visibility = VISIBLE
-                filterByMarketcap.visibility = VISIBLE
-                filterByChangePercent24Hr.visibility = VISIBLE
+                textView2.isVisible = false
+                clearTv.isVisible = false
+                filterByPrice.isVisible = true
+                filterByMarketcap.isVisible = true
+                filterByChangePercent24Hr.isVisible = true
                 searchEditText.text.clear()
                 recyclerData.clear()
                 recyclerData.addAll(data)
@@ -86,8 +87,8 @@ class MarketReviewFragment : Fragment() {
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
             }
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
-                textView2.visibility = VISIBLE
-                clearTv.visibility = VISIBLE
+                textView2.isVisible = true
+                clearTv.isVisible = true
                 filterByPrice.visibility = INVISIBLE
                 filterByMarketcap.visibility = INVISIBLE
                 filterByChangePercent24Hr.visibility = INVISIBLE
@@ -152,22 +153,22 @@ class MarketReviewFragment : Fragment() {
         //setError()
     }
     private fun setLoading () {
-        binding.marketReviewRecyclerview.visibility = GONE
-        binding.progressBar.visibility = VISIBLE
+        binding.marketReviewRecyclerview.isVisible = false
+        binding.progressBar.isVisible = true
     }
     private fun setError () {
-        binding.marketReviewRecyclerview.visibility = GONE
-        binding.progressBar.visibility = GONE
-        binding.networkErrorTv.visibility = VISIBLE
-        binding.networkErrorIv.visibility = VISIBLE
+        binding.marketReviewRecyclerview.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.networkErrorTv.isVisible = true
+        binding.networkErrorIv.isVisible = true
     }
     private fun setRecycler () {
         Log.d("SUCCES", "Грузим данные")
         binding.searchEditText.setAdapter(ArrayAdapter(this.requireContext(),
             android.R.layout.simple_expandable_list_item_1,
             recyclerData.map { it.name }))
-        binding.marketReviewRecyclerview.visibility = VISIBLE
-        binding.progressBar.visibility = GONE
+        binding.marketReviewRecyclerview.isVisible = true
+        binding.progressBar.isVisible = false
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
     }
