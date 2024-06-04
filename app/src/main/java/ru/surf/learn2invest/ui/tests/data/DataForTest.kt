@@ -19,9 +19,11 @@ val testProfile = Profile(
     fiatBalance = 0,
     assetBalance = 0,
 
-).let {
-    it.copy(hash = PasswordHasher(user = it).passwordToHash("0000"),
-        tradingPasswordHash = PasswordHasher(user = it).passwordToHash("1235789"))
+    ).let {
+    it.copy(
+        hash = PasswordHasher(user = it).passwordToHash("0000"),
+//        tradingPasswordHash = PasswordHasher(user = it).passwordToHash("1235789"))
+    )
 }
 val testAlerts = listOf(
     PriceAlert(
