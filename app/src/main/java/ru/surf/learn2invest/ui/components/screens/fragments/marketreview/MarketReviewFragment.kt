@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
@@ -127,7 +128,7 @@ class MarketReviewFragment : Fragment() {
                         )
                     Learn2InvestApp.mainDB
                         .searchedCoinDao()
-                        .getAllAsList().map { searchedList.add(it.coinID) }
+                        .getAll().first().map { searchedList.add(it.coinID) }
                     withContext(Dispatchers.Main){
                         recyclerData.clear()
                         recyclerData.addAll(data.filter { searchedList.contains(it.name) })

@@ -3,6 +3,7 @@ package ru.surf.learn2invest.noui.database_components.dao
 import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 
@@ -15,8 +16,6 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
     @Query("select * from searchedcoin")
     fun getAll(): Flow<List<SearchedCoin>>
 
-    @Query("select * from searchedcoin")
-    fun getAllAsList(): List<SearchedCoin>
     @Query("delete from searchedcoin")
     fun deleteAll()
     /**
@@ -24,7 +23,7 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
      *  При потенциальном количестве записей больше этого значения, часть записей будет удалена
      */
     suspend fun insertByLimit(limit: Int, vararg entities: SearchedCoin) {
-        val coinsInDB = getAllAsList()
+        val coinsInDB = getAll().first()
         val resultSize = coinsInDB.size + entities.size
         if (resultSize > limit) {
             val countToDel = coinsInDB.size + entities.size - limit
