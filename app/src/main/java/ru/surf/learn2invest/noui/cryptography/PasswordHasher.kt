@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.noui.cryptography
 
+import android.util.Log
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import java.security.MessageDigest
 
@@ -25,13 +26,14 @@ class PasswordHasher(
      * чтобы усложнить подбор пароля
      */
     private fun String.addSaltToMessage(): String {
-        return "${user.firstName}\\\\$this////${user.lastName}"
+        return "${user.firstName}${this}${user.lastName}"
     }
 
     /**
      * Функция получения hash'а пароля
      */
     fun passwordToHash(password: String): String {
+        Log.d("pasword", "password:${password} = ${password.addSaltToMessage().getSHA256Hash()}")
         return password.addSaltToMessage().getSHA256Hash()
     }
 
@@ -39,9 +41,12 @@ class PasswordHasher(
     /**
      * Метод верификации(проверки) пользовательского пароля
      */
-    fun verify(password: String): Boolean {
+    fun verifyPIN(password: String): Boolean {
 
         return passwordToHash(password = password) == user.hash
     }
 
+    fun verifyTradingPassword(password: String): Boolean {
+        return passwordToHash(password = password) == user.tradingPasswordHash
+    }
 }

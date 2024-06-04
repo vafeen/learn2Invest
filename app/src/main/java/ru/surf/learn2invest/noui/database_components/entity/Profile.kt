@@ -19,4 +19,5 @@ data class Profile(
     val fiatBalance: Int,
     val assetBalance: Int,
     val hash: String? = null,
+    val tradingPasswordHash: String? = null
 )

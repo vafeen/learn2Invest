@@ -163,7 +163,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkAuthenticationPin(): Boolean = PasswordHasher(user = user).verify(pinCode)
+    private fun checkAuthenticationPin(): Boolean = PasswordHasher(user = user).verifyPIN(pinCode)
 
     private suspend fun showErrorPINCode() {
 
