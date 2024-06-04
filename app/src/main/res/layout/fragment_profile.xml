@@ -204,7 +204,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/change_fingerprint"
+            android:text="@string/change_trading_password"
             android:textAppearance="@style/Text.Medium.16"/>
         <ImageButton
             android:layout_width="wrap_content"
