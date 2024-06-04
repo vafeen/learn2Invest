@@ -18,7 +18,6 @@ import java.util.Locale
 class LineChartHelper(private val context: Context) {
     private lateinit var chart: LineChart
     companion object {
-        private val timeFormatter = SimpleDateFormat("H:mm", Locale.getDefault())
         private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
     }
 
@@ -36,15 +35,13 @@ class LineChartHelper(private val context: Context) {
             }
 
             xAxis.apply {
-                //axisMinimum = 0f
-                //axisMaximum = 23f
+                axisMinimum = -0.3f
+                axisMaximum = 6.3f
                 isGranularityEnabled = true
-                //granularity = 4f
                 granularity = 1f
                 textSize = 10f
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
-                //valueFormatter = TimeValueFormatter()
                 valueFormatter = DateValueFormatter()
                 typeface = ResourcesCompat.getFont(context,R.font.montserrat_medium)
             }
@@ -80,15 +77,6 @@ class LineChartHelper(private val context: Context) {
 
         setDrawFilled(true)
         fillDrawable = ContextCompat.getDrawable(context,R.drawable.line_chart_style)
-    }
-
-    private class TimeValueFormatter : ValueFormatter() {
-        override fun getFormattedValue(value: Float): String {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, value.toInt())
-            calendar.set(Calendar.MINUTE,0)
-            return timeFormatter.format(calendar.time)
-        }
     }
 
     private class DateValueFormatter:ValueFormatter(){
