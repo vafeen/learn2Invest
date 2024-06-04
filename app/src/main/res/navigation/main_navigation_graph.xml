@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/portfolioFragment"
-        android:name="ru.surf.learn2invest.ui.components.screens.fragments.portfolio.PortfolioFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.AssetReviewFragment"
         android:label="fragment_portfolio"
         tools:layout="@layout/fragment_portfolio">
         <action

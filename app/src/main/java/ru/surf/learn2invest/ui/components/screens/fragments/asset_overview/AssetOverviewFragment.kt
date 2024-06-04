@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
+import ru.surf.learn2invest.network_components.CoinAPIService
+import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 
 // Вкладка Обзор в Обзоре актива
 class AssetOverviewFragment : Fragment() {
@@ -22,7 +24,10 @@ class AssetOverviewFragment : Fragment() {
     ): View {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
-        viewModel = ViewModelProvider(this)[AssetOverviewViewModel::class.java]
+
+        val coinAPIService = CoinRetrofitClient.client.create(CoinAPIService::class.java)
+        val factory = AssetOverviewViewModelFactory(coinAPIService)
+        viewModel = ViewModelProvider(this,factory)[AssetOverviewViewModel::class.java]
 
         chartHelper.setupChart(binding.chart)
 
