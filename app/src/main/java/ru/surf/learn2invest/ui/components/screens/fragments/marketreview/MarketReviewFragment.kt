@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,7 +34,8 @@ class MarketReviewFragment : Fragment() {
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
     private val adapter = MarketReviewAdapter(recyclerData)
-    private var filterByPriceFLag = true
+    private var filterByPriceFLag = false
+    private var filterByPriceIsFirstActive = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +52,7 @@ class MarketReviewFragment : Fragment() {
             filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
             filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
             filterByMarketcap.setOnClickListener {
+                filterByPriceIsFirstActive = true
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
@@ -61,6 +60,7 @@ class MarketReviewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
             filterByChangePercent24Hr.setOnClickListener {
+                filterByPriceIsFirstActive = true
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
@@ -68,22 +68,24 @@ class MarketReviewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
             filterByPrice.setOnClickListener {
-                filterByPriceFLag = filterByPriceFLag.not()
                 filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                if (filterByPriceIsFirstActive.not())
+                    filterByPriceFLag = filterByPriceFLag.not()
                 if (filterByPriceFLag) {
                     recyclerData.sortByDescending { it.priceUsd }
-                    Loher.d(recyclerData.find{ it.symbol == "CJ" }.toString())
+                    Loher.d(recyclerData.find { it.symbol == "CJ" }.toString())
                     filterByPrice.setIconResource(R.drawable.arrow_bottom_red)
                     filterByPrice.setIconTintResource(R.color.recession)
-                }
-                else {
+                } else {
                     recyclerData.sortBy { it.priceUsd }
                     filterByPrice.setIconResource(R.drawable.arrow_top_green)
                     filterByPrice.setIconTintResource(R.color.label)
                 }
-                adapter.notifyDataSetChanged()
+                    adapter.notifyDataSetChanged()
+
+                filterByPriceIsFirstActive = false
             }
             textInputLayout.setEndIconOnClickListener {
                 textView2.isVisible = false
