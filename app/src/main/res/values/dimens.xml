@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_dialogs_card_content">10dp</dimen>
+    <dimen name="margin_dialogs_card_content_start">19dp</dimen>
+    <dimen name="margin_dialogs_card_content_end_for_icon">40dp</dimen>
+    <dimen name="margin_dialogs_card_content_top_u_nizhnego">23dp</dimen>
+    <dimen name="margin_dialogs_card_content_top_u_verhnego">7dp</dimen>
+    <dimen name="margin_dialogs_card_content_top_u_odinokogo">15dp</dimen>
+
 </resources>

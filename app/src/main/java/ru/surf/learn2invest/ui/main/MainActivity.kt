@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -10,17 +11,21 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
+import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        context = this
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -38,22 +45,9 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
 
 //         data for testing (need to remove)
-        lifecycleScope.launch(Dispatchers.IO) {
-            Learn2InvestApp.mainDB.profileDao().insertAll(
-                Profile(
-                    id = 0,
-                    firstName = "A",
-                    lastName = "Vafeen",
-                    pin = 0,
-                    notification = true,
-                    biometry = true,
-                    confirmDeal = true,
-                    fiatBalance = 0,
-                    assetBalance = 0,
-                ).let {
-                    it.copy(hash = PasswordHasher(user = it).passwordToHash("0000"))
-                }
-            )
+        lifecycleScope.apply {
+            insertProfileInCoroutineScope(this)
+            insertAlertInCoroutineScope(this)
         }
 
 
@@ -64,12 +58,16 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             val deferred =
-                async(Dispatchers.IO) { Learn2InvestApp.mainDB.profileDao().getProfile() }
+                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
 
             delay(1000)
 
             val intent = if (deferred.await().isNotEmpty()) {
 
+                App.profile = deferred.await()[App.idOfProfile]
+
+                //Loher.d("profile = ${Learn2InvestApp.profile}")
+                Loher.d("profile = ${App.profile}")
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
@@ -78,11 +76,10 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 Intent(this@MainActivity, SignInActivity::class.java)
-//                TODO:Володь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
+//                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
             startActivity(intent)
-
             this@MainActivity.finish()
 
         }
