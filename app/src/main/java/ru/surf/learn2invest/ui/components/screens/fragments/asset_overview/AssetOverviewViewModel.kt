@@ -23,10 +23,10 @@ class AssetOverviewViewModel(
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             val endTime = calendar.timeInMillis
-            calendar.add(Calendar.DAY_OF_YEAR, -7)
+            calendar.add(Calendar.DAY_OF_YEAR, -8)
             val startTime = calendar.timeInMillis
 
-            val response = coinAPIService.getCoinHistory("dogecoin", "d1", startTime, endTime)
+            val response = coinAPIService.getCoinHistory("bitcoin", "d1", startTime, endTime)
             val data = response.data.mapIndexed { index, coinPriceResponse ->
                 Entry(index.toFloat(), coinPriceResponse.priceUsd.toFloat())
             }

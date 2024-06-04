@@ -60,8 +60,16 @@ class LineChartHelper(private val context: Context) {
         val lineDataSet = LineDataSet(data, "List")
         val lineData = LineData(lineDataSet)
         styleLineDataSet(lineDataSet)
-        chart.data = lineData
-        chart.invalidate()
+
+        val minY = data.minByOrNull { it.y }?.y ?: 0f
+        val maxY = data.maxByOrNull { it.y }?.y ?: 0f
+
+        chart.apply {
+            axisLeft.axisMinimum = minY - (0.1f * (maxY - minY)) // Небольшой отступ снизу
+            axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY)) // Небольшой отступ сверху
+            this.data = lineData
+            invalidate()
+        }
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
