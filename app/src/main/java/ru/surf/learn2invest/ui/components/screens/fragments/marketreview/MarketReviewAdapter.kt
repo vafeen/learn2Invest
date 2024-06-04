@@ -59,7 +59,7 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                         coinIcon.setImageResource(R.drawable.coin_placeholder)
                     },
                     onStart = {
-                        coinIcon.setImageResource(R.drawable.coin_placeholder)
+                        coinIcon.setImageResource(R.drawable.placeholder)
                     })
                 .build()
             imageLoader.enqueue(request)
