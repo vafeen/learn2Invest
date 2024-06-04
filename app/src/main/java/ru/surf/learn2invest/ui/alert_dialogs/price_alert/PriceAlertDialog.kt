@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.price_alert
+package ru.surf.learn2invest.ui.alert_dialogs
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,12 +9,14 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.Learn2InvestApp
 import ru.surf.learn2invest.databinding.PriceAlertDialogBinding
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.alert_dialogs.price_alert.PriceAlertAdapter
 
 
 class PriceAlertDialog(
@@ -55,6 +57,11 @@ class PriceAlertDialog(
         }")
     }
 
+    private fun initData() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            alerts = App.mainDB.priceAlertDao().getAllAsFlow().first()
+        }
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun initDialog(): CustomAlertDialog {
@@ -62,7 +69,7 @@ class PriceAlertDialog(
 
         lifecycleScope.launch(Dispatchers.Main) {
 
-            Learn2InvestApp.mainDB.priceAlertDao().getAll().collect {
+            App.mainDB.priceAlertDao().getAllAsFlow().collect {
 
                 alertAdapter.alerts = it
 
@@ -112,7 +119,7 @@ class PriceAlertDialog(
             buttonCreatePriceAlertPriceAlertDialog.setOnClickListener {
 
                 lifecycleScope.launch(Dispatchers.IO) {
-                    Learn2InvestApp.mainDB.priceAlertDao().insertAll(
+                    App.mainDB.priceAlertDao().insertAll(
                         PriceAlert(
                             symbol = "",
                             coinPrice = pricePriceAlertDialog.text.toString().roundTo(),
@@ -123,6 +130,7 @@ class PriceAlertDialog(
                     )
                 }
 
+                cancel()
             }
 
             buttonExitPriceAlertDialog.setOnClickListener {
@@ -180,7 +188,10 @@ class PriceAlertDialog(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
                 ) {
                     changeVisibilityIcons()
                 }

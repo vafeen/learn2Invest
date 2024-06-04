@@ -10,10 +10,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
@@ -30,9 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        context = this
-
         setContentView(binding.root)
+
+        context = this
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -55,11 +57,14 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
 
+
             delay(1000)
 
-            val intent = if (Learn2InvestApp.profile != null) {
+            val intent = if (App.profile != null) {
 
-                //Loher.d("profile = ${Learn2InvestApp.profile}")
+
+                //Loher.d("profile = ${App.profile}")
+                Loher.d("profile = ${App.profile}")
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
@@ -71,10 +76,9 @@ class MainActivity : AppCompatActivity() {
 //                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
-//            startActivity(intent)
-            val ii = Intent(context, TradingPasswordActivity::class.java)
-            startActivity(ii)
-//            this@MainActivity.finish()
+
+            startActivity(intent)
+            this@MainActivity.finish()
 
         }
     }

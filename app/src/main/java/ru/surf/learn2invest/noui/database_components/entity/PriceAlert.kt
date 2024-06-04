@@ -7,11 +7,12 @@ import androidx.room.PrimaryKey
 /**
  * Объект задания уведомления об изменении цены
  */
+
 @Entity
 class PriceAlert(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    val symbol: String,
-    val coinPrice: Float,
-    val changePercent24Hr: Float,
+    val symbol: String, //Абревиатура
+    val coinPrice: Float, //Целевая Цена
+    val changePercent24Hr: Float, //Целевой Процент изменения
     val comment: String?
 )

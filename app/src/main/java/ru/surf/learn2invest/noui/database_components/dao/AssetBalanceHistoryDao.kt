@@ -5,17 +5,19 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.noui.database_components.dao.parent.FlowGetAllImplementation
-import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
+import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
+
+
 
 
 @Dao
-interface PriceAlertDao : DataAccessObject<PriceAlert>,
-    FlowGetAllImplementation<PriceAlert> {
+interface AssetBalanceHistoryDao : DataAccessObject<AssetBalanceHistory>,
+    FlowGetAllImplementation<AssetBalanceHistory> {
 
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */
+    @Query("select * from assetbalancehistory")
+    override fun getAllAsFlow(): Flow<List<AssetBalanceHistory>>
 
-    @Query("select * from pricealert")
-    override fun getAllAsFlow(): Flow<List<PriceAlert>>
 }

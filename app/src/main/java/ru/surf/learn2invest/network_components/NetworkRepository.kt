@@ -2,10 +2,13 @@ package ru.surf.learn2invest.network_components
 
 import android.util.Log
 import retrofit2.HttpException
-import ru.surf.learn2invest.network_components.responses.CoinHistoryResponse
-import ru.surf.learn2invest.network_components.responses.MarketReviewResponse
+import ru.surf.learn2invest.network_components.responses.APIWrapper
+import ru.surf.learn2invest.network_components.responses.AugmentedCoinReviewResponse
+import ru.surf.learn2invest.network_components.responses.CoinPriceResponse
+import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.network_components.util.Const
+import ru.surf.learn2invest.noui.logs.Loher
 
 /**
  * Пример использования (Вариант для запуска из Activity):
@@ -37,7 +40,7 @@ class NetworkRepository {
         CoinAPIService::class.java
     )
 
-    suspend fun getMarketReview(): ResponseWrapper<MarketReviewResponse> {
+    suspend fun getMarketReview(): ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> {
         try {
             val response = coinAPIService.getMarketReview()
             Log.d("RETROFIT", response.toString())
@@ -52,10 +55,16 @@ class NetworkRepository {
             return ResponseWrapper.NetworkError
         }
     }
-    suspend fun getCoinHistory(id: String): ResponseWrapper<CoinHistoryResponse> {
+
+    /**
+     * выводит историю цен коина за предыдущие 6 дней, не считая сегодня
+     * id - название коина
+     * например bitcoin
+    **/
+    suspend fun getCoinHistory(id: String): ResponseWrapper<APIWrapper<List<CoinPriceResponse>>> {
         try {
             val response = coinAPIService.getCoinHistory(
-                id = id,
+                id = id.lowercase(),
                 interval = Const.INTERVAL,
                 start = System.currentTimeMillis() - Const.WEEK,
                 end = System.currentTimeMillis()
@@ -69,6 +78,26 @@ class NetworkRepository {
         }
         catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
+            return ResponseWrapper.NetworkError
+        }
+    }
+
+    suspend fun getCoinReview(id: String): ResponseWrapper<APIWrapper<AugmentedCoinReviewResponse>> {
+        try {
+            val response = coinAPIService.getCoinReview(
+                id = id.lowercase()
+            )
+            Log.d("RETROFIT", response.toString())
+            return ResponseWrapper.Success(response)
+        }
+        catch (e: HttpException) {
+            Log.d("RETROFIT", "HTTP Error: ${e.code()}")
+            Loher.d(e.toString())
+            return ResponseWrapper.NetworkError
+        }
+        catch (e: Exception) {
+            Log.d("RETROFIT", "Error: ${e.message}")
+            Loher.d(e.toString())
             return ResponseWrapper.NetworkError
         }
     }

@@ -3,7 +3,7 @@ package ru.surf.learn2invest.ui.tests.data
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.database_components.entity.Profile
@@ -48,14 +48,14 @@ val testAlerts = listOf(
 
 fun insertProfileInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
-        Learn2InvestApp.mainDB.profileDao().insertAll(testProfile)
+        App.mainDB.profileDao().insertAll(testProfile)
     }
 }
 
 fun insertAlertInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
 
-        Learn2InvestApp.mainDB.priceAlertDao().insertAll(
+        App.mainDB.priceAlertDao().insertAll(
             *testAlerts.toTypedArray()
         )
 

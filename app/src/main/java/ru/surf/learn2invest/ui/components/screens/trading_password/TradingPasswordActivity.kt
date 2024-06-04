@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 
@@ -74,7 +74,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             var rule4IsTrue = false
             var rule5IsTrue = false
 
-            when (Learn2InvestApp.profile?.tradingPasswordHash) {
+            when (App.profile?.tradingPasswordHash) {
                 null -> {
                     imageRule5.isVisible = false
 
@@ -135,7 +135,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
 
             // какая-то хуйня
-            imageRule5.setImageDrawable(if (Learn2InvestApp.profile?.let {
+            imageRule5.setImageDrawable(if (App.profile?.let {
                     val x = PasswordHasher(it).verifyTradingPassword("${passwordLast.text}")
                     Log.d("password", "verify? - $x")
                     x
@@ -150,7 +150,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             buttonDoTrading.isVisible = (
                     rule1IsTrue && rule2IsTrue
                             && rule3IsTrue && rule4IsTrue &&
-                            if (Learn2InvestApp.profile?.tradingPasswordHash
+                            if (App.profile?.tradingPasswordHash
                                 != null
                             ) {
                                 rule5IsTrue
@@ -166,7 +166,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
         binding.apply {
 
-            headerTradingPasswordActivity.text = if (Learn2InvestApp.profile?.tradingPasswordHash
+            headerTradingPasswordActivity.text = if (App.profile?.tradingPasswordHash
                 != null
             ) {
                 "Изменение торгового пароля"
@@ -184,7 +184,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             rulesTrpass5.text = "Старый пароль верен"
 
-            if (Learn2InvestApp.profile?.tradingPasswordHash
+            if (App.profile?.tradingPasswordHash
                 != null
             ) {
                 rulesTrpass5.isVisible = true
@@ -254,9 +254,9 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             buttonDoTrading.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    Learn2InvestApp.profile?.let { prof ->
+                    App.profile?.let { prof ->
 
-                        Learn2InvestApp.mainDB.profileDao().insertAll(
+                        App.mainDB.profileDao().insertAll(
                             prof.copy(
                                 tradingPasswordHash = PasswordHasher(prof).passwordToHash(
                                     passwordConfirm.text.toString()

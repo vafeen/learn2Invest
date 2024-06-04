@@ -9,7 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
@@ -85,8 +85,8 @@ class RefillAccount(
 
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        Learn2InvestApp.profile?.also {
-                            Learn2InvestApp.mainDB.profileDao().insertAll(
+                        App.profile?.also {
+                            App.mainDB.profileDao().insertAll(
                                 it.copy(
                                     //                                assetBalance = profile.какой-то баланс + enteredBalance,
                                     //                                fiatBalance = profile.какой-то баланс + enteredBalance
@@ -104,7 +104,7 @@ class RefillAccount(
 
             balanceTextviewRefillAccountDialog.text =
                 "${
-                    Learn2InvestApp.profile?.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
+                    App.profile?.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
                         ?: "balance error"
                 }"
 
