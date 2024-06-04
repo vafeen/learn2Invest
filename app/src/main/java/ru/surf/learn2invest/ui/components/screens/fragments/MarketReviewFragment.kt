@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 
+// Экран Обзор рынка
 class MarketReviewFragment : Fragment() {
     private lateinit var binding: FragmentMarketReviewBinding
 

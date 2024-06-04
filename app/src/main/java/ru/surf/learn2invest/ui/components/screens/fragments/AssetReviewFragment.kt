@@ -12,6 +12,7 @@ import ru.surf.learn2invest.databinding.FragmentAssetReviewBinding
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewViewModel
 
+// Экран Обзор актива
 class AssetReviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetReviewBinding
     override fun onCreateView(

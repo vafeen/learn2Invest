@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
 
+// Вкладка Обзор в Обзоре актива
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
     private lateinit var chartHelper: LineChartHelper
