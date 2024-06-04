@@ -15,7 +15,7 @@ class PortfolioViewModel(
     private val _chartData = MutableLiveData<List<Entry>>()
     val chartData: LiveData<List<Entry>> get() = _chartData
 
-    val testData = listOf(
+    private val testData = listOf(
         AssetBalanceHistory(assetBalance = 5f),
         AssetBalanceHistory(assetBalance = 4f),
         AssetBalanceHistory(assetBalance = 7f),
@@ -27,8 +27,7 @@ class PortfolioViewModel(
 
     fun loadChartData() {
         viewModelScope.launch {
-            assetBalanceHistoryDao.getAllAsFlow().collect{
-                balanceHistories ->
+            assetBalanceHistoryDao.getAllAsFlow().collect { balanceHistories ->
                 val data = balanceHistories.mapIndexed { index, assetBalanceHistory ->
                     Entry(index.toFloat(), assetBalanceHistory.assetBalance)
                 }

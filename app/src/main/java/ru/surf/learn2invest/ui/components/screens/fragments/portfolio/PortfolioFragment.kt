@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 
@@ -21,13 +22,16 @@ class PortfolioFragment : Fragment() {
     ): View {
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
-        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
+
+        val factory = PortfolioViewModelFactory(App.mainDB.assetBalanceHistoryDao())
+        viewModel = ViewModelProvider(this, factory)[PortfolioViewModel::class.java]
 
         chartHelper.setupChart(binding.chart)
 
         viewModel.chartData.observe(viewLifecycleOwner) { data ->
             chartHelper.updateData(data)
         }
+        viewModel.insertTestData()
         viewModel.loadChartData()
 
         return binding.root
