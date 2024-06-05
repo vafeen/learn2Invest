@@ -16,3 +16,5 @@ object CoinRetrofitClient {
         .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)).build())
         .build()
 }
+
+fun Double.round() = "\\S*\\.[0]*[0-9]{2}".toRegex().find(this.toBigDecimal().toPlainString())?.value

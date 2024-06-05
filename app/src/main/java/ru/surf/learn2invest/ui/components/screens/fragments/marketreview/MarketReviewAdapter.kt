@@ -12,6 +12,7 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
+import ru.surf.learn2invest.network_components.util.round
 import ru.surf.learn2invest.noui.logs.Loher
 
 class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
@@ -39,11 +40,11 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                 else
                     data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = "\$${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].priceUsd.toBigDecimal().toPlainString())?.value}"
+            coinTopNumericInfo.text = "\$${data[position].priceUsd.round()}"
             if (data[position].changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
-            coinBottomNumericInfo.text = "${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].changePercent24Hr.toBigDecimal().toPlainString())?.value ?: 0}%"
+            coinBottomNumericInfo.text = "${data[position].changePercent24Hr.round() ?: 0}%"
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {
