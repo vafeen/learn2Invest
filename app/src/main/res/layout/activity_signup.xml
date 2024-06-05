@@ -109,6 +109,7 @@
         android:layout_marginHorizontal="64dp"
         android:layout_marginTop="50dp"
         android:backgroundTint="@color/btn_asset"
+        android:enabled="false"
         android:paddingVertical="20dp"
         android:text="@string/signup_btn_text"
         android:textAllCaps="true"
