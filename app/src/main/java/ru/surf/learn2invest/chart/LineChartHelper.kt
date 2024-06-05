@@ -25,6 +25,8 @@ class LineChartHelper(private val context: Context) {
         this.chart = lineChart
         lineChart.apply {
 
+            setExtraOffsets(0f, 0f, 0f, 10f)
+
             axisRight.isEnabled = false
 
             axisLeft.apply {
@@ -65,8 +67,8 @@ class LineChartHelper(private val context: Context) {
         val maxY = data.maxByOrNull { it.y }?.y ?: 0f
 
         chart.apply {
-            axisLeft.axisMinimum = minY - (0.1f * (maxY - minY)) // Небольшой отступ снизу
-            axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY)) // Небольшой отступ сверху
+            axisLeft.axisMinimum = minY - (0.05f * (maxY - minY)) // Небольшой отступ снизу
+            axisLeft.axisMaximum = maxY + (0.01f * (maxY - minY)) // Небольшой отступ сверху
             this.data = lineData
             invalidate()
         }
