@@ -36,6 +36,8 @@
 
         <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
+        <activity android:name=".ui.components.screens.SignUpActivity" />
+
         <activity android:name=".ui.tests.screens.DialogsTestActivity"/>
     </application>
 

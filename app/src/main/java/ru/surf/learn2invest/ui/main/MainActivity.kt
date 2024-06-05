@@ -17,6 +17,7 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
 //         data for testing (need to remove)
         lifecycleScope.apply {
-            insertProfileInCoroutineScope(this)
+            //insertProfileInCoroutineScope(this)
             insertAlertInCoroutineScope(this)
             insertPortfolioChartInCoroutineScope(this)
         }
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } else {
-                Intent(this@MainActivity, SignInActivity::class.java)
+                Intent(this@MainActivity, SignUpActivity::class.java)
 //                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
