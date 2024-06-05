@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
@@ -26,7 +27,7 @@ class PortfolioViewModel(
     )
 
     fun loadChartData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             assetBalanceHistoryDao.getAllAsFlow().collect { balanceHistories ->
                 val data = balanceHistories.mapIndexed { index, assetBalanceHistory ->
                     Entry(index.toFloat(), assetBalanceHistory.assetBalance)
@@ -37,7 +38,7 @@ class PortfolioViewModel(
     }
 
     fun insertTestData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             assetBalanceHistoryDao.insertAll(*testData.toTypedArray())
         }
     }

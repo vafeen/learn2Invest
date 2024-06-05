@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.network_components.CoinAPIService
 
@@ -20,7 +21,7 @@ class AssetOverviewViewModel(
     }
 
     fun loadChartData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val calendar = Calendar.getInstance()
             val endTime = calendar.timeInMillis
             calendar.add(Calendar.DAY_OF_YEAR, -8)
