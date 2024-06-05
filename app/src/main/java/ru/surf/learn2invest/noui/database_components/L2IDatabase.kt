@@ -86,5 +86,4 @@ abstract class L2IDatabase : RoomDatabase() {
 
     abstract fun transactionDao(): TransactionDao
 
-
 }
