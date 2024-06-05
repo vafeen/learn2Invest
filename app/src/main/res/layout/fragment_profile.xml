@@ -71,9 +71,9 @@
             android:id="@+id/reset_stats_Btn_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:clickable="false"
             app:layout_constraintTop_toBottomOf="@+id/firstName_lastName_TV"
             app:srcCompat="@drawable/arrow_right_gray" />
     </LinearLayout>
@@ -95,8 +95,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="22dp"
-        android:clickable="false"
         android:backgroundTint="@color/white"
+        android:clickable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
         app:srcCompat="@drawable/gear" />
@@ -124,9 +124,9 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/notification_Btn_switcher"
             android:layout_width="wrap_content"
-            android:clickable="false"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:clickable="false"
             android:theme="@style/switch_style" />
     </LinearLayout>
 
@@ -154,9 +154,9 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/biometry_Btn_switcher"
             android:layout_width="wrap_content"
-            android:clickable="false"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:clickable="false"
             android:theme="@style/switch_style" />
     </LinearLayout>
 
@@ -184,8 +184,8 @@
             android:id="@+id/confirm_deal_Btn_switcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
             android:layout_weight="2"
+            android:clickable="false"
             android:theme="@style/switch_style" />
     </LinearLayout>
 
@@ -214,8 +214,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:clickable="false"
             android:backgroundTint="@color/white"
+            android:clickable="false"
             app:srcCompat="@drawable/arrow_right_gray" />
     </LinearLayout>
 
@@ -227,9 +227,11 @@
         android:layout_marginTop="75dp"
         android:layout_marginEnd="21dp"
         android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn">
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:layout_width="match_parent"
@@ -244,8 +246,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:clickable="false"
             android:backgroundTint="@color/white"
+            android:clickable="false"
             app:srcCompat="@drawable/arrow_right_gray" />
     </LinearLayout>
 

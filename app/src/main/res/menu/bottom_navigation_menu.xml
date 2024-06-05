@@ -4,7 +4,7 @@
     <item
         android:id="@+id/portfolioFragment"
         android:icon="@drawable/home_bottom_icon"
-        android:title="@string/my_investments"/>
+        android:title="@string/portfolio"/>
 
     <item
         android:id="@+id/marketReviewFragment"
