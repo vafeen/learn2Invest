@@ -31,7 +31,6 @@ class PortfolioFragment : Fragment() {
         viewModel.chartData.observe(viewLifecycleOwner) { data ->
             chartHelper.updateData(data)
         }
-        viewModel.insertTestData()
         viewModel.loadChartData()
 
         return binding.root

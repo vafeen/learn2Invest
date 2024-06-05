@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.network_components.CoinAPIService
 
 class AssetOverviewViewModel(
@@ -31,7 +32,9 @@ class AssetOverviewViewModel(
             val data = response.data.mapIndexed { index, coinPriceResponse ->
                 Entry(index.toFloat(), coinPriceResponse.priceUsd.toFloat())
             }
-            _chartData.value = data
+            withContext(Dispatchers.Main) {
+                _chartData.value = data
+            }
         }
     }
 }
