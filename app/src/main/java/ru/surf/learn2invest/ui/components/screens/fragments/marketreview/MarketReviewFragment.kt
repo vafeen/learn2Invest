@@ -28,8 +28,7 @@ import ru.surf.learn2invest.noui.logs.Loher
 
 
 class MarketReviewFragment : Fragment() {
-    private var _binding: FragmentMarketReviewBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private var recyclerData = mutableListOf<CoinReviewResponse>()
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
@@ -41,7 +40,6 @@ class MarketReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarketReviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
