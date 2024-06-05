@@ -27,6 +27,7 @@ class Sell(
 
 
         binding.apply {
+
             balanceNumSellDialog.text =
                 App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
             //            поставить нужный тип баланса
