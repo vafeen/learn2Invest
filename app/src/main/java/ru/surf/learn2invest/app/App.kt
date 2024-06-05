@@ -28,7 +28,7 @@ class App : Application() {
 
         mainDB = L2IDatabase.buildDatabase(context = this)
 
-        profileFlow = mainDB.profileDao().getProfileAsFlow()
+        profileFlow = mainDB.profileDao().getAllAsFlow()
 
         with(ProcessLifecycleOwner.get()) {
             lifecycleScope.launch(Dispatchers.IO) {
