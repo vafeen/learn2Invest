@@ -24,7 +24,7 @@
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
     <string name="price_alert_text">Price alert</string>
-    <string name="my_investments">Мои инвестиции</string>
+    <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
     <string name="account_funds">Средства на счете</string>
     <string name="top_up">Пополнить</string>

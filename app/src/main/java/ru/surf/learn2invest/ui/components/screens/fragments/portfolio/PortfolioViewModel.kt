@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
-import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 
 class PortfolioViewModel(
     private val assetBalanceHistoryDao: AssetBalanceHistoryDao
