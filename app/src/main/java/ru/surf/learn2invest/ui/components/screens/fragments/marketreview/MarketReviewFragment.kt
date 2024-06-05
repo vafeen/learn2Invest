@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.Learn2InvestApp
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -110,7 +110,7 @@ class MarketReviewFragment : Fragment() {
 
             clearTv.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    Learn2InvestApp.mainDB.searchedCoinDao().deleteAll()
+                    App.mainDB.searchedCoinDao().deleteAll()
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         adapter.notifyDataSetChanged()
@@ -121,12 +121,12 @@ class MarketReviewFragment : Fragment() {
             searchEditText.setOnItemClickListener { parent, view, position, id ->
                 var searchedList = mutableListOf<String>()
                 lifecycleScope.launch(Dispatchers.IO) {
-                    Learn2InvestApp.mainDB
+                    App.mainDB
                         .searchedCoinDao()
                         .insertAll(
                             SearchedCoin(coinID = searchEditText.text.toString())
                         )
-                    Learn2InvestApp.mainDB
+                    App.mainDB
                         .searchedCoinDao()
                         .getAll().first().map { searchedList.add(it.coinID) }
                     withContext(Dispatchers.Main){

@@ -25,7 +25,6 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
         Profile::class,
         SearchedCoin::class,
         Transaction::class,
-        SearchedCoin::class,
     ], version = 1
 )
 /**
@@ -87,5 +86,4 @@ abstract class L2IDatabase : RoomDatabase() {
 
     abstract fun transactionDao(): TransactionDao
 
-    abstract fun searchedCoinDao(): SearchedCoinDao
 }
