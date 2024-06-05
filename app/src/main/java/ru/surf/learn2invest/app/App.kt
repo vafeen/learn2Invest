@@ -24,4 +24,5 @@ class App : Application() {
         this.registerNotificationChannels(NotificationChannels.allChannels)
 
     }
+
 }

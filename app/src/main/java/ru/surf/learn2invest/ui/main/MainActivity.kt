@@ -20,6 +20,7 @@ import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
+import ru.surf.learn2invest.ui.tests.data.insertPortfolioChartInCoroutineScope
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.apply {
             insertProfileInCoroutineScope(this)
             insertAlertInCoroutineScope(this)
+            insertPortfolioChartInCoroutineScope(this)
         }
 
 
