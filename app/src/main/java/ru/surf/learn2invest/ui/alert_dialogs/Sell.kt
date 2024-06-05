@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
@@ -20,7 +19,6 @@ class Sell(
 
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
 
-    private lateinit var profile: Profile
     override fun setCancelable(): Boolean {
         return true
     }
@@ -29,15 +27,11 @@ class Sell(
 
 
         binding.apply {
-            lifecycleScope.launch(Dispatchers.IO) {
-                App.profile.collect {
-                    profile = it[App.idOfProfile]
-                }
-            }.invokeOnCompletion {
-                balanceNumSellDialog.text =
-                    profile.fiatBalance.toString() // TODO()Володь, Сюда также нужно
-                //            поставить нужный тип баланса
-            }
+
+            balanceNumSellDialog.text =
+                App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+            //            поставить нужный тип баланса
+
             lifecycleScope.launch(Dispatchers.Main) {
                 while (true) {
                     val str = "777777"

@@ -17,6 +17,7 @@ import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.ResetStats
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -42,146 +43,109 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
+        App.profile.let { appProfile ->
+            lifecycleScope.launch(Dispatchers.Main) {
 
-        lifecycleScope.launch(Dispatchers.Main) {
+                binding.also { fr ->
 
-            App.profile.collect { profList ->
+                    fr.firstNameLastNameTV.text = appProfile.let { pr ->
+                        "${pr.firstName}\n${pr.lastName}"
+                    }
 
-                if (profList.isNotEmpty()) {
+                    fr.notificationBtnSwitcher.isChecked = appProfile.notification
 
-                    val profile = profList[App.idOfProfile]
+                    fr.biometryBtnSwitcher.isChecked = appProfile.biometry
 
-                    binding.also { fr ->
-
-                        fr.firstNameLastNameTV.text = profile.let { pr ->
-                            "${pr.firstName}\n${pr.lastName}"
-                        }
-
-                        fr.notificationBtnSwitcher.isChecked = profile.notification
-
-                        fr.biometryBtnSwitcher.isChecked = profile.biometry
-
-                        fr.confirmDealBtnSwitcher.isChecked = profile.confirmDeal
+                    fr.confirmDealBtnSwitcher.isChecked = appProfile.confirmDeal
 
 
 
-                        fr.deleteProfileTV.setOnClickListener {
+                    fr.deleteProfileTV.setOnClickListener {
 
-                            AskToDeleteProfile(
-                                context = context, lifecycleScope = lifecycleScope
-                            ).initDialog().show()
+                        AskToDeleteProfile(
+                            context = context, lifecycleScope = lifecycleScope
+                        ).initDialog().show()
 
-                        }
+                    }
 
-                        val resetStats = {
 
-                            ResetStats(
-                                context = context, lifecycleScope = lifecycleScope
-                            ).initDialog().show()
+                    fr.resetStatsBtn.setOnClickListener {
 
-                        }
-                        fr.resetStatsBtn.setOnClickListener {
-                            resetStats()
-                        }
-                        fr.resetStatsBtnArrow.setOnClickListener {
-                            resetStats()
-                        }
+                        ResetStats(
+                            context = context, lifecycleScope = lifecycleScope
+                        ).initDialog().show()
+                    }
 
-                        fr.notificationBtn.setOnClickListener {
 
-                            fr.notificationBtnSwitcher.isChecked =
+                    fr.notificationBtn.setOnClickListener {
 
-                                if (fr.notificationBtnSwitcher.isChecked) {
+                        fr.notificationBtnSwitcher.isChecked =
 
-                                    updateProfile(profile.copy(notification = false))
+                            if (fr.notificationBtnSwitcher.isChecked) {
 
-                                    false
-                                } else {
+                                updateProfile(appProfile.copy(notification = false))
 
-                                    updateProfile(profile.copy(notification = true))
+                                false
+                            } else {
 
-                                    true
-                                }
-                        }
+                                updateProfile(appProfile.copy(notification = true))
 
-                        fr.notificationBtnSwitcher.setOnClickListener {
-                            updateProfile(
-                                profile.copy(
-                                    notification =
-                                    fr.notificationBtnSwitcher.isChecked
-                                )
-                            )
-                        }
+                                true
+                            }
+                    }
 
 
 
 
-                        fr.biometryBtn.setOnClickListener {
+                    fr.biometryBtn.setOnClickListener {
 
-                            fr.biometryBtnSwitcher.isChecked =
+                        fr.biometryBtnSwitcher.isChecked =
 
-                                if (fr.biometryBtnSwitcher.isChecked) {
+                            if (fr.biometryBtnSwitcher.isChecked) {
 
-                                    updateProfile(profile.copy(biometry = false))
+                                updateProfile(appProfile.copy(biometry = false))
 
-                                    false
-                                } else {
+                                false
+                            } else {
 
-                                    updateProfile(profile.copy(biometry = true))
+                                updateProfile(appProfile.copy(biometry = true))
 
-                                    true
-                                }
-                        }
-
-                        fr.biometryBtnSwitcher.setOnClickListener {
-                            updateProfile(
-                                profile.copy(
-                                    biometry =
-                                    fr.biometryBtnSwitcher.isChecked
-                                )
-                            )
-                        }
+                                true
+                            }
+                    }
 
 
+                    fr.confirmDealBtn.setOnClickListener {
 
+                        fr.confirmDealBtnSwitcher.isChecked =
 
+                            if (fr.confirmDealBtnSwitcher.isChecked) {
+                                updateProfile(appProfile.copy(confirmDeal = false))
 
-                        fr.confirmDealBtn.setOnClickListener {
+                                false
+                            } else {
+                                updateProfile(appProfile.copy(confirmDeal = true))
 
-                            fr.confirmDealBtnSwitcher.isChecked =
+                                true
+                            }
+                    }
 
-                                if (fr.confirmDealBtnSwitcher.isChecked) {
-                                    updateProfile(profile.copy(confirmDeal = false))
+                    fr.confirmDealBtnSwitcher.setOnClickListener {
+                        updateProfile(appProfile.copy(confirmDeal = fr.confirmDealBtnSwitcher.isChecked))
+                    }
 
-                                    false
-                                } else {
-                                    updateProfile(profile.copy(confirmDeal = true))
+                    fr.changePINBtn.setOnClickListener {
+                        startActivity(Intent(context, SignInActivity::class.java).let {
 
-                                    true
-                                }
-                        }
+                            it.action = SignINActivityActions.ChangingPIN.action
 
-                        fr.confirmDealBtnSwitcher.setOnClickListener {
-                            updateProfile(profile.copy(confirmDeal = fr.confirmDealBtnSwitcher.isChecked))
-                        }
+                            it
+                        })
+                    }
 
+                    fr.changeTradingPasswordBtn.setOnClickListener {
 
-                        val changePin = {
-                            startActivity(Intent(context, SignInActivity::class.java).let {
-
-                                it.action = SignINActivityActions.ChangingPIN.action
-
-                                it
-                            })
-                        }
-
-                        fr.changePINBtn.setOnClickListener {
-                            changePin()
-                        }
-
-                        fr.changePINBtnArrow.setOnClickListener {
-                            changePin()
-                        }
+                        startActivity(Intent(context, TradingPasswordActivity::class.java))
 
                     }
                 }

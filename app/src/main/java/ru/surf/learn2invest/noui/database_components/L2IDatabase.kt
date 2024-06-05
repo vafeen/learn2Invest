@@ -48,9 +48,9 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
  *
  * lifecycleScope.launch(Dispatchers.Main) {
  *
- * Learn2InvestApp.mainDB.someDao().getAllAsFlow().collect { someList = it } // подписка на изменения
+ * App.mainDB.someDao().getAllAsFlow().collect { someList = it } // подписка на изменения
  *
- * someList = Learn2InvestApp.mainDB.someDao().getAllAsFlow().first() // разовая акция
+ * someList = App.mainDB.someDao().getAllAsFlow().first() // разовая акция
  * }
  * ```
  *

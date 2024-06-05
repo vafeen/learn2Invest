@@ -62,6 +62,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:text="@string/drop_statistics"
             android:textAppearance="@style/Text.Medium.16" />
@@ -70,6 +71,7 @@
             android:id="@+id/reset_stats_Btn_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/firstName_lastName_TV"
@@ -93,6 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="22dp"
+        android:clickable="false"
         android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
@@ -113,6 +116,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:text="@string/notification"
             android:textAppearance="@style/Text.Medium.16" />
@@ -120,6 +124,7 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/notification_Btn_switcher"
             android:layout_width="wrap_content"
+            android:clickable="false"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:theme="@style/switch_style" />
@@ -141,6 +146,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/biometry"
             android:textAppearance="@style/Text.Medium.16" />
@@ -148,6 +154,7 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/biometry_Btn_switcher"
             android:layout_width="wrap_content"
+            android:clickable="false"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:theme="@style/switch_style" />
@@ -168,6 +175,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/confirm_deal"
             android:textAppearance="@style/Text.Medium.16" />
@@ -176,13 +184,13 @@
             android:id="@+id/confirm_deal_Btn_switcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:layout_weight="2"
             android:theme="@style/switch_style" />
     </LinearLayout>
 
-
     <LinearLayout
-        android:id="@+id/change_PIN_Btn"
+        android:id="@+id/change_trading_password_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
@@ -196,6 +204,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:text="Смена торгового пароля"
+            android:textAppearance="@style/Text.Medium.16" />
+
+        <ImageButton
+            android:id="@+id/change_trading_password_Btn_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:backgroundTint="@color/white"
+            app:srcCompat="@drawable/arrow_right_gray" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/change_PIN_Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="21dp"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:text="@string/change_PIN"
             android:textAppearance="@style/Text.Medium.16" />
@@ -205,6 +244,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:clickable="false"
             android:backgroundTint="@color/white"
             app:srcCompat="@drawable/arrow_right_gray" />
     </LinearLayout>

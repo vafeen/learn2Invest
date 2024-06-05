@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.AskToDeleteProfileDialogBinding
@@ -32,16 +31,7 @@ class AskToDeleteProfile(
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val dao = App.mainDB.profileDao()
-
-                val profileList = App.profile
-                    .first()
-
-                if (profileList.isNotEmpty()) {
-                    dao.delete(
-                        profileList[App.idOfProfile]
-                    )
-                }
+                App.profile?.let { profile -> App.mainDB.profileDao().delete(profile) }
             }
 
             (context as Activity).finish()

@@ -33,7 +33,7 @@ class Buy(
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text =
-                    App.profile.first()[App.idOfProfile].fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                    App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
                 //            поставить нужный тип баланса
 
                 while (true) {
@@ -62,7 +62,7 @@ class Buy(
 
                         val newNumberOfLots = if (text.isNotEmpty()) {
                             text.toString().toIntOrNull()?.let {
-                                val balance = App.profile.first()[App.idOfProfile].fiatBalance
+                                val balance = App.profile?.fiatBalance
                                     ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
                                 if (itog(onFuture = true) <= balance) {
                                     it + 1

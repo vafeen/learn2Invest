@@ -38,11 +38,6 @@ class RefillAccount(
     }
 
     override fun initListeners() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            App.profile.collect {
-                profile = it[App.idOfProfile]
-            }
-        }
 
         binding.apply {
 
