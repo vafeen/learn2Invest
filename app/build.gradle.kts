@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.coil.svg)
+    implementation(libs.androidx.navigation.fragment.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)

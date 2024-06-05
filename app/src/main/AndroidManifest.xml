@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".app.Learn2InvestApp"
+        android:name=".app.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -20,7 +20,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name="ru.surf.learn2invest.ui.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +36,7 @@
 
         <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
+        <activity android:name=".ui.tests.screens.DialogsTestActivity"/>
     </application>
 
 </manifest>

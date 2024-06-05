@@ -1,24 +1,24 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
+
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import ru.surf.learn2invest.databinding.ActivitySigninBinding
-import ru.surf.learn2invest.app.Learn2InvestApp
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
-
-
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.App
+import ru.surf.learn2invest.databinding.ActivitySigninBinding
+import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import java.util.concurrent.Executor
@@ -43,10 +43,15 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySigninBinding.inflate(layoutInflater)
+
 
         context = this
 
@@ -128,7 +133,7 @@ class SignInActivity : AppCompatActivity() {
                     updateProfileData()
                 }
 
-                Loher.d("Activity stop")
+                //Loher.d("Activity stop")
 
                 this@SignInActivity.finish()
             }
@@ -147,7 +152,7 @@ class SignInActivity : AppCompatActivity() {
         if (userDataIsChanged) {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                Learn2InvestApp.mainDB.profileDao().insertAll(user)
+                App.mainDB.profileDao().insertAll(user)
             }
 
         }
@@ -189,7 +194,7 @@ class SignInActivity : AppCompatActivity() {
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
 
-                    Loher.e("Authentication failed")
+                    //Loher.e("Authentication failed")
                 }
             })
 
@@ -200,7 +205,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun initProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val list = Learn2InvestApp.mainDB.profileDao().getProfile()
+            val list = App.mainDB.profileDao().getAllAsFlow().first()
 
             if (list.isNotEmpty()) {
                 user = list[0]
@@ -350,8 +355,8 @@ class SignInActivity : AppCompatActivity() {
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
 
-                                Loher.d("pin = $pinCode")
-                                Loher.d("fpin = $firstPin")
+                                //Loher.d("pin = $pinCode")
+                                //Loher.d("fpin = $firstPin")
 
                                 pinCode = ""
 
@@ -362,8 +367,8 @@ class SignInActivity : AppCompatActivity() {
                         }
 
                         firstPin == pinCode -> {
-                            Loher.d("$pinCode == $firstPin")
-                            Loher.d("user = $user")
+                            //Loher.d("$pinCode == $firstPin")
+                            //Loher.d("user = $user")
 
                             user = user.let {
                                 it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))

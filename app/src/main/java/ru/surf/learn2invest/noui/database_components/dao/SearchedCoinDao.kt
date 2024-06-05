@@ -34,4 +34,3 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
         insertAll(*entities)
     }
 }
-
