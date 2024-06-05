@@ -53,7 +53,6 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
-    //implementation(libs.androidx.core.i18n)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
@@ -64,5 +63,5 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     // for graphics
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation (libs.mpandroidchart)
 }
