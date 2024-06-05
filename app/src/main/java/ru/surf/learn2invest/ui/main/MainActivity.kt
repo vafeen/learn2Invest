@@ -17,11 +17,11 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
 import ru.surf.learn2invest.ui.tests.data.insertPortfolioChartInCoroutineScope
-import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             //insertProfileInCoroutineScope(lifecycleScope = lifecycleScope)
             insertAlertInCoroutineScope(lifecycleScope = lifecycleScope)
+            insertPortfolioChartInCoroutineScope(lifecycleScope = lifecycleScope)
         }.invokeOnCompletion {
             skipSplash()
         }
@@ -76,9 +77,8 @@ class MainActivity : AppCompatActivity() {
                     it
                 }
 
-                } else {
-                    Intent(this@MainActivity, SignUpActivity::class.java)
-//                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
+            } else {
+                Intent(this@MainActivity, SignUpActivity::class.java)
             }
 
             startActivity(intent)

@@ -15,11 +15,8 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivitySignupBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
-import ru.surf.learn2invest.ui.tests.data.testProfile
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -48,26 +45,16 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.signupBtn.setOnClickListener {
-            val profile = Profile(
-                id = 0,
-                firstName = name,
-                lastName = lastname,
-                pin = 0,
-                notification = false,
-                biometry = false,
-                confirmDeal = false,
-                fiatBalance = 0,
-                assetBalance = 0,
-            )
             lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.profileDao().insertAll(profile)
-            }
-            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
-                it.action = SignINActivityActions.SignUP.action
+                App.mainDB.profileDao().insertAll(App.profile.copy(firstName = name, lastName = lastname))
+            }.invokeOnCompletion {
+                startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
+                    it.action = SignINActivityActions.SignUP.action
 
-                it
-            })
-            this@SignUpActivity.finish()
+                    it
+                })
+                this@SignUpActivity.finish()
+            }
         }
     }
 
