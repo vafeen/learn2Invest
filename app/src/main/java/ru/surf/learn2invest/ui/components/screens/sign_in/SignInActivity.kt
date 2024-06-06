@@ -305,8 +305,8 @@ class SignInActivity : AppCompatActivity() {
                                 }
 
                             }.invokeOnCompletion {
-                                fingerPrintManager.setFailedCallback {
-
+                                fingerPrintManager.setHardwareErrorCallback {
+                                    onAuthenticationSucceeded()
                                 }.auth()
                             }
                         }

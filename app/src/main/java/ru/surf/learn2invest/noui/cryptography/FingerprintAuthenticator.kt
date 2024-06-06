@@ -59,6 +59,12 @@ class FingerprintAuthenticator(
         return this
     }
 
+    fun setHardwareErrorCallback(function: () -> Unit): FingerprintAuthenticator {
+        this.hardwareErrorCallback = function
+
+        return this
+    }
+
     fun setDesignBottomSheet(
         title: String,
         cancelText: String = "ОТМЕНА"
@@ -74,7 +80,7 @@ class FingerprintAuthenticator(
     }
 
     fun auth(): Job {
-       return lifecycleCoroutineScope.launch(Dispatchers.Main) {
+        return lifecycleCoroutineScope.launch(Dispatchers.Main) {
             initFingerPrintAuth()
 
             checkAuthenticationFingerprint()
@@ -84,6 +90,7 @@ class FingerprintAuthenticator(
     // callbacks
     private var failedCallBack: () -> Unit = {}
     private var successCallBack: () -> Unit = {}
+    private var hardwareErrorCallback: () -> Unit = {}
 
     // design bottom sheet
     private var titleText: String = "Example title"
@@ -125,6 +132,7 @@ class FingerprintAuthenticator(
                         Log.d("finger", "error")
                         Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
 
+                        hardwareErrorCallback()
                     }
 
                     override fun onAuthenticationFailed() {
