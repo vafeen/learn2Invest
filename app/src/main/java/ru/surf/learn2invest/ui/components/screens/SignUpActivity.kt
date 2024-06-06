@@ -6,8 +6,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -99,8 +102,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        val nameValid = name.isNotEmpty() && !hasSpaces(name) && name.length <= 24
-        val lastnameValid = lastname.isNotEmpty() && !hasSpaces(lastname) && lastname.length <= 24
+        val nameValid = validateName()
+        val lastnameValid = validateLastname()
 
         if (nameValid && lastnameValid) {
             binding.signupBtn.isEnabled = true
@@ -110,6 +113,54 @@ class SignUpActivity : AppCompatActivity() {
             binding.signupBtn.isEnabled = false
             binding.signupBtn.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.btn_asset)
+        }
+    }
+
+    private fun validateName(): Boolean {
+        return when {
+            name.isEmpty() -> {
+                binding.nameErrorTextView.text = "Поле не может быть пустым"
+                binding.nameErrorTextView.isVisible = true
+                false
+            }
+            hasSpaces(name) -> {
+                binding.nameErrorTextView.text = "Поле не может содержать пробелы"
+                binding.nameErrorTextView.isVisible = true
+                false
+            }
+            name.length > 24 -> {
+                binding.nameErrorTextView.text = "Превышен лимит длины"
+                binding.nameErrorTextView.isVisible = true
+                false
+            }
+            else -> {
+                binding.nameErrorTextView.isVisible = false
+                true
+            }
+        }
+    }
+
+    private fun validateLastname(): Boolean {
+        return when {
+            lastname.isEmpty() -> {
+                binding.lastnameErrorTextView.text = "Поле не может быть пустым"
+                binding.lastnameErrorTextView.isVisible = true
+                false
+            }
+            hasSpaces(lastname) -> {
+                binding.lastnameErrorTextView.text = "Поле не может содержать пробелы"
+                binding.lastnameErrorTextView.isVisible = true
+                false
+            }
+            lastname.length > 24 -> {
+                binding.lastnameErrorTextView.text = "Превышен лимит длины"
+                binding.lastnameErrorTextView.isVisible = true
+                false
+            }
+            else -> {
+                binding.lastnameErrorTextView.isVisible = false
+                true
+            }
         }
     }
 
