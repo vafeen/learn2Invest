@@ -6,6 +6,10 @@ import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
 /**
@@ -38,7 +42,10 @@ import java.util.concurrent.Executor
  *
  * ```
  */
-class FingerprintAuthenticator(private val context: Activity) {
+class FingerprintAuthenticator(
+    private val context: Activity,
+    val lifecycleCoroutineScope: LifecycleCoroutineScope
+) {
 
     fun setSuccessCallback(function: () -> Unit): FingerprintAuthenticator {
         this.successCallBack = function
@@ -66,10 +73,12 @@ class FingerprintAuthenticator(private val context: Activity) {
         return this
     }
 
-    fun auth() {
-        initFingerPrintAuth()
+    fun auth(): Job {
+       return lifecycleCoroutineScope.launch(Dispatchers.Main) {
+            initFingerPrintAuth()
 
-        checkAuthenticationFingerprint()
+            checkAuthenticationFingerprint()
+        }
     }
 
     // callbacks
