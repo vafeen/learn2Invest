@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/create_account_text_view" />
 
     <View
-        android:id="@+id/name_not_empty"
+        android:id="@+id/margin_top_divider"
         android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginTop="18dp"
@@ -41,7 +41,7 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/signup_edit_text_background"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/name_not_empty">
+        app:layout_constraintTop_toBottomOf="@id/margin_top_divider">
 
         <EditText
             android:id="@+id/input_name_edit_text"

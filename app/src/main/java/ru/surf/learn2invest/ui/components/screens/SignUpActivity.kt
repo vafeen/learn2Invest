@@ -33,8 +33,13 @@ class SignUpActivity : AppCompatActivity() {
         setupNameEditText()
         setupLastnameEditText()
 
-        setupNameClearIconImageView()
-        setupLastnameClearIconImageView()
+        binding.nameClear.setOnClickListener {
+            nameClearIconClick()
+        }
+
+        binding.lastnameClear.setOnClickListener {
+            lastnameClearIconClick()
+        }
 
         binding.inputNameEditText.addTextChangedListener {
             validateFields()
@@ -45,33 +50,22 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.signupBtn.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.profileDao().insertAll(App.profile.copy(firstName = name, lastName = lastname))
-            }.invokeOnCompletion {
-                startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
-                    it.action = SignINActivityActions.SignUP.action
-
-                    it
-                })
-                this@SignUpActivity.finish()
-            }
+            signUpButtonClick()
         }
     }
 
-    private fun setupNameClearIconImageView() {
-        binding.nameClear.setOnClickListener {
-            binding.inputNameEditText.setText("")
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(binding.inputNameEditText.windowToken, 0)
-        }
+    private fun nameClearIconClick() {
+        binding.inputNameEditText.setText("")
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.inputNameEditText.windowToken, 0)
     }
 
-    private fun setupLastnameClearIconImageView() {
-        binding.lastnameClear.setOnClickListener {
-            binding.inputLastnameEditText.setText("")
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(binding.inputLastnameEditText.windowToken, 0)
-        }
+    private fun lastnameClearIconClick() {
+
+        binding.inputLastnameEditText.setText("")
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.inputLastnameEditText.windowToken, 0)
+
     }
 
     private fun setupNameEditText() {
@@ -105,12 +99,31 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (name.isNotEmpty() && lastname.isNotEmpty()) {
+        val nameValid = name.isNotEmpty() && !hasSpaces(name) && name.length <= 24
+        val lastnameValid = lastname.isNotEmpty() && !hasSpaces(lastname) && lastname.length <= 24
+
+        if (nameValid && lastnameValid) {
             binding.signupBtn.isEnabled = true
-            binding.signupBtn.backgroundTintList = ContextCompat.getColorStateList(this, R.color.main_background)
+            binding.signupBtn.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.main_background)
         } else {
             binding.signupBtn.isEnabled = false
-            binding.signupBtn.backgroundTintList = ContextCompat.getColorStateList(this, R.color.btn_asset)
+            binding.signupBtn.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.btn_asset)
+        }
+    }
+
+    private fun signUpButtonClick() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            App.mainDB.profileDao()
+                .insertAll(App.profile.copy(firstName = name, lastName = lastname))
+        }.invokeOnCompletion {
+            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
+                it.action = SignINActivityActions.SignUP.action
+
+                it
+            })
+            this@SignUpActivity.finish()
         }
     }
 
@@ -120,5 +133,9 @@ class SignUpActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+
+    private fun hasSpaces(s: CharSequence?): Boolean {
+        return s?.contains(" ") == true
     }
 }
