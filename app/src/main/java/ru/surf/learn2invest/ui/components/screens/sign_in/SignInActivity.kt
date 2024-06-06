@@ -50,8 +50,7 @@ class SignInActivity : AppCompatActivity() {
         paintDots()
 
         fingerPrintManager = FingerprintAuthenticator(
-            context = this,
-            lifecycleCoroutineScope = lifecycleScope
+            context = this, lifecycleCoroutineScope = lifecycleScope
         ).setSuccessCallback {
             if (intent.action == SignINActivityActions.SignUP.action) {
                 profile = profile.copy(biometry = true)
@@ -98,18 +97,6 @@ class SignInActivity : AppCompatActivity() {
         pinCode = ""
     }
 
-
-//    private fun updateProfileData() {
-//        if (userDataIsChanged) {
-//
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                App.mainDB.profileDao().insertAll(profile)
-//            }
-//
-//        }
-//    }
-
-
     private fun onAuthenticationSucceeded() {
         when (intent.action) {
 
@@ -125,18 +112,19 @@ class SignInActivity : AppCompatActivity() {
 
             SignINActivityActions.SignUP.action -> {
 
-                fingerPrintManager.auth().invokeOnCompletion {
+//                fingerPrintManager.auth()
+//                    .invokeOnCompletion {
 
-                    startActivityWithMainLogic()
+                startActivityWithMainLogic()
 
 //                lifecycleScope.launch(Dispatchers.IO) {
 //                updateProfileData()
 //                }
 
-                    //Loher.d("Activity stop")
+                //Loher.d("Activity stop")
 
-                    this@SignInActivity.finish()
-                }
+                this@SignInActivity.finish()
+//                }
             }
 
             SignINActivityActions.ChangingPIN.action -> {
@@ -316,11 +304,11 @@ class SignInActivity : AppCompatActivity() {
                                     showTruePINCode()
                                 }
 
-                                fingerPrintManager.auth()
                             }.invokeOnCompletion {
-                                onAuthenticationSucceeded()
-                            }
+                                fingerPrintManager.setFailedCallback {
 
+                                }.auth()
+                            }
                         }
 
                         firstPin != pinCode -> {
@@ -401,8 +389,6 @@ class SignInActivity : AppCompatActivity() {
                                     showTruePINCode()
 
                                 }.invokeOnCompletion {
-                                    fingerPrintManager.auth()
-
                                     pinCode = ""
                                 }
 
