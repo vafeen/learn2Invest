@@ -1,13 +1,19 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
+import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +24,7 @@ import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+
 
 class TradingPasswordActivity : AppCompatActivity() {
 
@@ -129,6 +136,7 @@ class TradingPasswordActivity : AppCompatActivity() {
         }
     }
 
+
     private fun checkPassword() {
         binding.apply {
 
@@ -165,10 +173,8 @@ class TradingPasswordActivity : AppCompatActivity() {
                         no
                     }
                 } else {
-                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() &&
-                        verifyTradingPassword(
-                            user = profile,
-                            password = passwordEdit.text.toString()
+                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() && verifyTradingPassword(
+                            user = profile, password = passwordEdit.text.toString()
                         )
                     ) {
                         ok
@@ -275,11 +281,43 @@ class TradingPasswordActivity : AppCompatActivity() {
         }
     }
 
+    private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
+        ?.show(WindowInsetsCompat.Type.ime())
+
+    private fun View.hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
 
     private fun initListeners() {
 
         binding.apply {
+            when (action) {
+                TradingPasswordActivityActions.CreateTradingPassword -> {
+                    passwordEdit.apply {
+                        requestFocus()
 
+                        showKeyboard()
+                    }
+                }
+
+                TradingPasswordActivityActions.ChangeTradingPassword -> {
+                    passwordLast.apply {
+                        requestFocus()
+
+                        showKeyboard()
+                    }
+                }
+
+                TradingPasswordActivityActions.RemoveTradingPassword -> {
+                    passwordEdit.apply {
+                        requestFocus()
+
+                        showKeyboard()
+                    }
+                }
+            }
             arrowBackTpactivity.setOnClickListener {
                 this@TradingPasswordActivity.finish()
             }
@@ -301,6 +339,18 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
             })
 
+            passwordLast.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+                    passwordLast.clearFocus()
+
+                    passwordEdit.requestFocus()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
+
             passwordEdit.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -318,6 +368,19 @@ class TradingPasswordActivity : AppCompatActivity() {
 
                 }
             })
+
+            passwordEdit.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+                    passwordEdit.clearFocus()
+
+                    passwordConfirm.requestFocus()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
+
             passwordConfirm.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -336,6 +399,18 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
             })
 
+            passwordConfirm.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+
+                    passwordConfirm.clearFocus()
+
+                    passwordConfirm.hideKeyboard()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
             buttonDoTrading.setOnClickListener {
 
                 lifecycleScope.launch(Dispatchers.IO) {
