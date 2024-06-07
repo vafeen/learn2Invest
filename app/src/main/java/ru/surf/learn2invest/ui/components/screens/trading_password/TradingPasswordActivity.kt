@@ -1,9 +1,11 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -15,9 +17,20 @@ import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 
 class TradingPasswordActivity : AppCompatActivity() {
+
     private lateinit var binding: TradingPasswordActivityBinding
+
+
+    private lateinit var action: TradingPasswordActivityActions
+
+
+    private var ok: Drawable? = null
+
+    private var no: Drawable? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,93 +39,112 @@ class TradingPasswordActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        // TODO (Найдите пж норм иконки галочки и крестика
+        ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
+
+        no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
+
+
+        action = when (intent.action.toString()) {
+            TradingPasswordActivityActions.ChangeTradingPassword.action -> TradingPasswordActivityActions.ChangeTradingPassword
+
+            TradingPasswordActivityActions.CreateTradingPassword.action -> TradingPasswordActivityActions.CreateTradingPassword
+
+            TradingPasswordActivityActions.RemoveTradingPassword.action -> TradingPasswordActivityActions.RemoveTradingPassword
+
+            else -> {
+                // finish if action is not defined
+                this@TradingPasswordActivity.finish()
+
+                Log.e("TradingPasswordActivity", "FATAL: Intent.action is not defined ")
+
+                TradingPasswordActivityActions.CreateTradingPassword
+            }
+        }
+
+        configureVisibilities()
+
         initListeners()
 
         checkPassword()
     }
 
-    private fun String.isThisContains3NumbersOfEmpty(): Boolean {
+    private fun configureVisibilities() {
 
-        Log.d("empty", ifEmpty { "empty" })
-        if (this == "") {
-            return true
-        }
-        for (number in 0..9) {
-            if (contains("$number".repeat(3))) {
-                return true
-            }
-        }
-        Log.d("et", this)
-
-        return false
-    }
-
-    private fun String.isThisContainsSequenceOrEmpty(): Boolean {
-
-        for (number in 0..6) {
-            if (contains(
-                    "$number${number + 1}${number + 2}${number + 3}"
-                ) || isEmpty()
-            ) {
-                return true
-            }
-        }
-        return false
-
-    }
-
-
-    private fun checkPassword() {
         binding.apply {
-            // TODO (Найдите пж норм иконки галочки и крестика
-            val ok =
-                ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
 
-            val no =
-                ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
+            headerTradingPasswordActivity.text = action.actionName
 
-            var rule1IsTrue = false
-            var rule2IsTrue = false
-            var rule3IsTrue = false
-            var rule4IsTrue = false
-            var rule5IsTrue = false
+            buttonDoTrading.text = action.mainButtonAction
 
-            when (profile.tradingPasswordHash) {
-                null -> {
-                    imageRule5.isVisible = false
+            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
+
+            rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
+
+            rulesTrpass3.text = "Нет последовательности более трех цифр"
+
+            rulesTrpass4.text = "Пароли совпадают"
+
+            rulesTrpass5.text = "Старый пароль верен"
+
+            when (action) {
+
+                TradingPasswordActivityActions.CreateTradingPassword -> {
+                    textInputLayout1.isVisible = false
 
                     rulesTrpass5.isVisible = false
 
-                    textInputLayout1.isVisible = false
+                    imageRule5.isVisible = false
                 }
 
-                else -> {
-                    imageRule5.isVisible = true
+                TradingPasswordActivityActions.ChangeTradingPassword -> {
+                    textInputLayout1.isVisible = true
 
                     rulesTrpass5.isVisible = true
 
-                    textInputLayout1.isVisible = true
+                    imageRule5.isVisible = true
+                }
+
+                TradingPasswordActivityActions.RemoveTradingPassword -> {
+                    textInputLayout1.isVisible = false
+
+                    rulesTrpass1.isVisible = false
+
+                    imageRule1.isVisible = false
+
+                    rulesTrpass2.isVisible = false
+
+                    imageRule2.isVisible = false
+
+                    rulesTrpass3.isVisible = false
+
+                    imageRule3.isVisible = false
+
+                    rulesTrpass5.isVisible = false
+
+                    imageRule5.isVisible = false
                 }
 
             }
+        }
+    }
+
+    private fun checkPassword() {
+        binding.apply {
 
 
             imageRule1.setImageDrawable(
                 if ((passwordEdit.text?.length ?: 0) >= 6) {
-                    rule1IsTrue = true
                     ok
                 } else {
-
                     no
                 }
             )
+
             imageRule2.setImageDrawable(
                 if (passwordEdit.text.toString().isThisContains3NumbersOfEmpty()) {
-
                     no
                 } else {
-
-                    rule2IsTrue = true
                     ok
                 }
             )
@@ -121,56 +153,123 @@ class TradingPasswordActivity : AppCompatActivity() {
                 if (passwordEdit.text.toString().isThisContainsSequenceOrEmpty()) {
                     no
                 } else {
-
-                    rule3IsTrue = true
                     ok
                 }
             )
 
             imageRule4.setImageDrawable(
-                if (passwordEdit.text.toString() == passwordConfirm.text.toString() && passwordEdit.text?.isNotEmpty() == true) {
-                    rule4IsTrue = true
-                    ok
+                if (action != TradingPasswordActivityActions.RemoveTradingPassword) {
+                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() && passwordEdit.text?.isNotEmpty() == true) {
+                        ok
+                    } else {
+                        no
+                    }
                 } else {
-                    no
+                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() &&
+                        verifyTradingPassword(
+                            user = profile,
+                            password = passwordEdit.text.toString()
+                        )
+                    ) {
+                        ok
+                    } else {
+                        no
+                    }
                 }
             )
 
-
-            // какая-то хуйня
             imageRule5.setImageDrawable(
                 if (profile.let {
-                        val x = PasswordHasher(it).verifyTradingPassword("${passwordLast.text}")
+                        val x = verifyTradingPassword(
+                            user = profile, password = "${passwordLast.text}"
+                        )
 
                         Log.d("password", "verify? - $x")
 
                         x
                     }) {
-                    rule5IsTrue = true
                     ok
                 } else {
                     no
                 }
             )
 
-            buttonDoTrading.isVisible =
-                (rule1IsTrue && rule2IsTrue && rule3IsTrue && rule4IsTrue && if (profile.tradingPasswordHash != null) {
-                    rule5IsTrue
-                } else {
-                    true
-                })
+            buttonDoTrading.isVisible = mainButtonIsVisible()
 
             buttonDoTrading.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    App.mainDB.profileDao().insertAll(
-                        profile.copy(
-                            tradingPasswordHash = PasswordHasher(user = profile).passwordToHash(
+                when (action) {
+
+                    TradingPasswordActivityActions.CreateTradingPassword -> {
+                        profile = profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
                                 password = "${passwordConfirm.text}"
                             )
                         )
-                    )
+
+                        updateProfile()
+                    }
+
+                    TradingPasswordActivityActions.ChangeTradingPassword -> {
+                        profile = profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
+                                password = "${passwordConfirm.text}"
+                            )
+                        )
+
+                        updateProfile()
+                    }
+
+                    TradingPasswordActivityActions.RemoveTradingPassword -> {
+                        profile = profile.copy(tradingPasswordHash = null)
+
+                        updateProfile()
+                    }
+
                 }
                 this@TradingPasswordActivity.finish()
+            }
+
+        }
+    }
+
+    private fun ImageView.isOk(): Boolean = this.drawable == ok
+
+
+    private fun mainButtonIsVisible(): Boolean {
+
+        return when (action) {
+//            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
+//
+//                    rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
+//
+//                rulesTrpass3.text = "Нет последовательности более трех цифр"
+//
+//            rulesTrpass4.text = "Пароли совпадают"
+//
+//                    rulesTrpass5.text = "Старый пароль верен"
+            TradingPasswordActivityActions.CreateTradingPassword -> {
+                binding.let {
+
+                    it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk()
+
+                }
+            }
+
+
+            TradingPasswordActivityActions.ChangeTradingPassword -> {
+
+                binding.let {
+                    it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk() && it.imageRule5.isOk()
+
+                }
+            }
+
+            TradingPasswordActivityActions.RemoveTradingPassword -> {
+                binding.imageRule4.isOk()
             }
 
         }
@@ -180,32 +279,6 @@ class TradingPasswordActivity : AppCompatActivity() {
     private fun initListeners() {
 
         binding.apply {
-
-            headerTradingPasswordActivity.text = if (profile.tradingPasswordHash != null) {
-                "Изменение торгового пароля"
-            } else {
-                "Создание торгового пароля"
-            }
-
-            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
-
-            rulesTrpass2.text = "Не более двух одинаковых цифр"
-
-            rulesTrpass3.text = "Нет последовательности более трех цифр"
-
-            rulesTrpass4.text = "Пароли совпадают"
-
-            rulesTrpass5.text = "Старый пароль верен"
-
-            if (profile.tradingPasswordHash != null) {
-                rulesTrpass5.isVisible = true
-
-                imageRule5.isVisible = true
-            } else {
-                rulesTrpass5.isVisible = false
-
-                imageRule5.isVisible = false
-            }
 
             arrowBackTpactivity.setOnClickListener {
                 this@TradingPasswordActivity.finish()
@@ -269,7 +342,9 @@ class TradingPasswordActivity : AppCompatActivity() {
 
                     App.mainDB.profileDao().insertAll(
                         profile.copy(
-                            tradingPasswordHash = PasswordHasher(profile).passwordToHash(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
                                 passwordConfirm.text.toString()
                             )
                         )
@@ -285,6 +360,44 @@ class TradingPasswordActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun updateProfile() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            App.mainDB.profileDao().insertAll(profile)
+        }
+    }
+
+    private fun String.isThisContains3NumbersOfEmpty(): Boolean {
+
+        Log.d("empty", ifEmpty { "empty" })
+        if (this == "") {
+            return true
+        }
+        for (number in 0..9) {
+            if (contains("$number".repeat(3))) {
+                return true
+            }
+        }
+        Log.d("et", this)
+
+        return false
+    }
+
+    private fun String.isThisContainsSequenceOrEmpty(): Boolean {
+
+        for (number in 0..6) {
+            if (contains(
+                    "$number${number + 1}${number + 2}${number + 3}"
+                ) || isEmpty()
+            ) {
+                return true
+            }
+        }
+        return false
+
+    }
+
+
 }
 
 

@@ -15,7 +15,6 @@ data class Profile(
     val lastName: String, //Фамилия
     val notification: Boolean, //Вкл/Вкл уведомлений (алерты)
     val biometry: Boolean, //Вкл/Выкл входа по биометрии
-    val confirmDeal: Boolean, //Вкл/Выкл диалога с подтверждением действия купли продажи
     val fiatBalance: Int, //Баланс обычных денег
     val assetBalance: Int, //Суммарная стоимость активов (обновляется после покупки чего либо или продажи)
     val hash: String? = null, //Хэш пина

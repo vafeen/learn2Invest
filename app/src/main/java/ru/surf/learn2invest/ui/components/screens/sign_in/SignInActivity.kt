@@ -17,6 +17,7 @@ import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 
 
@@ -38,7 +39,6 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySigninBinding.inflate(layoutInflater)
-
 
         context = this
 
@@ -144,8 +144,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
 
-    private fun checkAuthenticationPin(): Boolean =
-        PasswordHasher(user = profile).verifyPIN(pinCode)
+    private fun checkAuthenticationPin(): Boolean = verifyPIN(user = profile, pinCode)
 
     private suspend fun showErrorPINCode() {
 
@@ -301,9 +300,12 @@ class SignInActivity : AppCompatActivity() {
                             //Loher.d("$pinCode == $firstPin")
                             //Loher.d("user = $user")
 
-                            profile = profile.let {
-                                it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))
-                            }
+                            profile = profile.copy(
+                                hash = PasswordHasher(
+                                    firstName = profile.firstName,
+                                    lastName = profile.lastName
+                                ).passwordToHash(pinCode)
+                            )
 
                             lifecycleScope.launch(Dispatchers.Main) {
                                 showTruePINCode()
@@ -376,9 +378,12 @@ class SignInActivity : AppCompatActivity() {
                         firstPin != "" && isVerified -> {
                             if (pinCode == firstPin) {
 
-                                profile = profile.let {
-                                    it.copy(hash = PasswordHasher(user = it).passwordToHash(pinCode))
-                                }
+                                profile = profile.copy(
+                                    hash = PasswordHasher(
+                                        firstName = profile.firstName,
+                                        lastName = profile.lastName
+                                    ).passwordToHash(pinCode)
+                                )
 
                                 userDataIsChanged = true
 
