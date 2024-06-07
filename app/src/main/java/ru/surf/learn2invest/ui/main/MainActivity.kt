@@ -17,12 +17,11 @@ import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
-import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
-import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
     private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +39,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-//         data for testing (need to remove)
-        lifecycleScope.launch(Dispatchers.IO) {
-            insertProfileInCoroutineScope(lifecycleScope = lifecycleScope)
-            insertAlertInCoroutineScope(lifecycleScope = lifecycleScope)
-        }.invokeOnCompletion {
-            skipSplash()
-        }
+        skipSplash()
     }
 
     // Функция проверки, есть ли у нас зарегистрированный пользователь

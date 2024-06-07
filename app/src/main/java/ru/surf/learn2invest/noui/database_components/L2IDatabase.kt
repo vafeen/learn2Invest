@@ -6,13 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
-import ru.surf.learn2invest.noui.database_components.dao.PriceAlertDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
 import ru.surf.learn2invest.noui.database_components.dao.SearchedCoinDao
 import ru.surf.learn2invest.noui.database_components.dao.TransactionDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.database_components.entity.PriceAlert
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.Transaction
@@ -21,7 +19,6 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
     entities = [
         AssetBalanceHistory::class,
         AssetInvest::class,
-        PriceAlert::class,
         Profile::class,
         SearchedCoin::class,
         Transaction::class,
@@ -77,8 +74,6 @@ abstract class L2IDatabase : RoomDatabase() {
     abstract fun assetBalanceHistoryDao(): AssetBalanceHistoryDao
 
     abstract fun assetInvestDao(): AssetInvestDao
-
-    abstract fun priceAlertDao(): PriceAlertDao
 
     abstract fun profileDao(): ProfileDao
 

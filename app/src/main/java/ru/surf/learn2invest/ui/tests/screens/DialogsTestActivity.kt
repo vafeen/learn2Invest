@@ -7,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import ru.surf.learn2invest.databinding.ActivityDialogsTestBinding
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.Buy
-import ru.surf.learn2invest.ui.alert_dialogs.PriceAlertDialog
 import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.alert_dialogs.Sell
 import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
@@ -49,16 +48,6 @@ class DialogsTestActivity : AppCompatActivity() {
             buyShowForTesting.setOnClickListener {
 
                 Buy(context = context, lifecycleScope = lifecycleScope).initDialog().show()
-
-            }
-
-            priceAlertShowForTesting.setOnClickListener {
-
-                PriceAlertDialog(
-                    context = context,
-                    currentPrice = 100f,
-                    lifecycleScope = lifecycleScope
-                ).initDialog().show()
 
             }
 

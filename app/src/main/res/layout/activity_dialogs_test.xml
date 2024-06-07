@@ -29,44 +29,6 @@
         app:layout_constraintTop_toBottomOf="@+id/askToDeleteProfile_show_for_testing"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/noAssetForSale_show_for_testing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="noAssetForSale dialog"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buy_show_for_testing"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/notEnoughMoneyForBuy_show_for_testing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="NotEnoughMoneyForBuy dialog"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noAssetForSale_show_for_testing"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/priceAlert_show_for_testing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="priceAlert dialog"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notEnoughMoneyForBuy_show_for_testing"
-        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/refill_account_show_for_testing"
@@ -78,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceAlert_show_for_testing"
+        app:layout_constraintTop_toBottomOf="@+id/buy_show_for_testing"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -92,6 +54,19 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/refill_account_show_for_testing"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/reset_stats_for_testing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="reset stats dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sell_show_for_testing"
         app:layout_constraintVertical_bias="0.0" />
 
 
