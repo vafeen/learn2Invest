@@ -102,24 +102,21 @@ class ProfileFragment : Fragment() {
 
                 fr.biometryBtn.setOnClickListener {
 
-                    fr.biometryBtnSwitcher.isChecked =
+                    if (fr.biometryBtnSwitcher.isChecked) {
+                        updateProfile(appProfile.copy(biometry = false))
 
-                        if (fr.biometryBtnSwitcher.isChecked) {
+                        fr.biometryBtnSwitcher.isChecked = false
+                    } else {
 
-                            updateProfile(appProfile.copy(biometry = false))
+                        FingerprintAuthenticator(context = requireContext() as Activity).setSuccessCallback {
+                            updateProfile(appProfile.copy(biometry = true))
 
-                            false
-                        } else {
+                            fr.biometryBtnSwitcher.isChecked = true
+                        }.setDesignBottomSheet(
+                            title = "Биометрия"
+                        ).auth()
 
-                            var result = false
-
-                            FingerprintAuthenticator(context = requireContext() as Activity).setSuccessCallback {
-                                updateProfile(appProfile.copy(biometry = true))
-                                result = true
-                            }.auth()
-
-                            result
-                        }
+                    }
                 }
 
                 fr.changeTradingPasswordBtn.setOnClickListener {
