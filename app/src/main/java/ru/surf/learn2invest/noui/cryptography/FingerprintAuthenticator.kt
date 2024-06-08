@@ -114,7 +114,11 @@ class FingerprintAuthenticator(private val context: Activity) {
                         super.onAuthenticationError(errorCode, errString)
 
                         Log.d("finger", "error")
-                        Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "На устройстве выключена биометрия",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
                     }
 

@@ -112,7 +112,8 @@ class ProfileFragment : Fragment() {
                             updateProfile(appProfile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
-                        }.setDesignBottomSheet(
+                        }
+                            .setDesignBottomSheet(
                             title = "Биометрия"
                         ).auth()
 
