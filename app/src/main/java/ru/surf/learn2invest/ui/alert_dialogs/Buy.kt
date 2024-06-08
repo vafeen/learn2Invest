@@ -9,7 +9,6 @@ import android.view.View
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
@@ -33,7 +32,7 @@ class Buy(
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text =
-                    App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                    App.profile.fiatBalance.toString() // TODO()Володь, Сюда также нужно
                 //            поставить нужный тип баланса
 
                 while (true) {
@@ -62,8 +61,8 @@ class Buy(
 
                         val newNumberOfLots = if (text.isNotEmpty()) {
                             text.toString().toIntOrNull()?.let {
-                                val balance = App.profile?.fiatBalance
-                                    ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
+                                val balance =
+                                    App.profile.fiatBalance // TODO(Володь, тут также поменять баланс на нужный)
                                 if (itog(onFuture = true) <= balance) {
                                     it + 1
                                 } else {
@@ -94,10 +93,7 @@ class Buy(
 
             enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                    s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
 
                 }
@@ -129,11 +125,9 @@ class Buy(
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
 
-            val price = priceText.substring(1, priceText.length)
-                .toFloatOrNull() ?: 0f
+            val price = priceText.substring(1, priceText.length).toFloatOrNull() ?: 0f
 
-            val number = enteringNumberOfLotsBuyDialog.text.toString()
-                .toIntOrNull() ?: 0
+            val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
             return price * (number + if (onFuture) {
                 1
