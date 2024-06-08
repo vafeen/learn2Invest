@@ -35,11 +35,7 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            coinTopTextInfo.text =
-                if (data[position].name.length > 12)
-                    "${data[position].name.substring(0..12)}..."
-                else
-                    data[position].name
+            coinTopTextInfo.text = data[position].name
             coinBottomTextInfo.text = data[position].symbol
             coinTopNumericInfo.text = "\$${
                 "\\S*\\.[0]*[0-9]{2}".toRegex()

@@ -21,6 +21,8 @@
             android:id="@+id/coin_top_text_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="10"
             tools:text="Bitcoin"
             android:textAppearance="@style/Text.SemiBold.17"/>
         <TextView
@@ -29,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             tools:text="BTCB"
+            android:maxLines="1"
             android:textAppearance="@style/Text.Regular.15"
             tools:textColor="@color/sibn"/>
     </LinearLayout>
@@ -45,12 +48,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/Text.SemiBold.17"
             tools:text="+ 1,452.6$"
+            android:maxLines="1"
             tools:textColor="@color/increase"/>
         <TextView
             android:id="@+id/coin_bottom_numeric_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:maxLines="1"
             android:textAppearance="@style/Text.Regular.15"
             tools:text="58,755$"/>
     </LinearLayout>
