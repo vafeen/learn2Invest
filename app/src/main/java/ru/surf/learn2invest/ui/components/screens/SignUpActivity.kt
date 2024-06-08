@@ -30,9 +30,9 @@ class SignUpActivity : AppCompatActivity() {
     private var lastname: String = ""
 
     companion object{
-        private val EMPTY_ERROR = "Поле не может быть пустым"
-        private val SPACE_ERROR = "Поле не может содержать пробелы"
-        private val LENGTH_ERROR = "Превышен лимит длины"
+        private const val EMPTY_ERROR = "Пустое поле"
+        private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
+        private const val LENGTH_ERROR = "Превышен лимит длины"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,9 +146,7 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            hasSpaces(name) -> {
-                binding.nameErrorTextView.text = SPACE_ERROR
-                binding.nameErrorTextView.isVisible = true
+            hasLeadingOrTrailingSpaces(name) -> {
                 false
             }
 
@@ -171,9 +169,7 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            hasSpaces(lastname) -> {
-                binding.lastnameErrorTextView.text = SPACE_ERROR
-                binding.lastnameErrorTextView.isVisible = true
+            hasLeadingOrTrailingSpaces(lastname) -> {
                 false
             }
 
@@ -196,6 +192,11 @@ class SignUpActivity : AppCompatActivity() {
             binding.nameErrorTextView.isVisible = true
             return true
         } else {
+            if (hasLeadingOrTrailingSpaces(name)) {
+                binding.nameErrorTextView.text = SPACE_ERROR
+                binding.nameErrorTextView.isVisible = true
+                return true
+            }
             binding.nameErrorTextView.isVisible = false
         }
         binding.inputLastnameEditText.requestFocus()
@@ -208,12 +209,18 @@ class SignUpActivity : AppCompatActivity() {
             binding.lastnameErrorTextView.isVisible = true
             return true
         } else {
+            if (hasLeadingOrTrailingSpaces(lastname)) {
+                binding.lastnameErrorTextView.text = SPACE_ERROR
+                binding.lastnameErrorTextView.isVisible = true
+                return true
+            }
             binding.lastnameErrorTextView.isVisible = false
             binding.inputLastnameEditText.hideKeyboard()
             binding.inputLastnameEditText.clearFocus()
         }
         return false
     }
+
 
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -236,7 +243,8 @@ class SignUpActivity : AppCompatActivity() {
     private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
         ?.show(WindowInsetsCompat.Type.ime())
 
-    private fun hasSpaces(s: CharSequence?): Boolean {
-        return s?.contains(" ") == true
+    private fun hasLeadingOrTrailingSpaces(s: CharSequence?): Boolean {
+        if (s.isNullOrEmpty()) return false
+        return s.startsWith(" ") || s.endsWith(" ")
     }
 }
