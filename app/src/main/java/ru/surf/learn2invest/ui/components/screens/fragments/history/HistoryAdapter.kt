@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const
 import ru.surf.learn2invest.noui.database_components.entity.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
-import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewAdapter
 
 class HistoryAdapter(private val data: List<Transaction>) :
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
@@ -24,6 +24,7 @@ class HistoryAdapter(private val data: List<Transaction>) :
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_bottom_text_info)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
+        lateinit var disposable: Disposable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,11 +37,7 @@ class HistoryAdapter(private val data: List<Transaction>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            coinTopTextInfo.text =
-                if (data[position].name.length > 12)
-                    "${data[position].name.substring(0..12)}..."
-                else
-                    data[position].name
+            coinTopTextInfo.text = data[position].name
             coinBottomTextInfo.text = data[position].symbol
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
@@ -67,10 +64,15 @@ class HistoryAdapter(private val data: List<Transaction>) :
                         coinIcon.setImageResource(R.drawable.placeholder)
                     })
                 .build()
-            imageLoader.enqueue(request)
+            disposable = imageLoader.enqueue(request)
             itemView.setOnClickListener {
                 Loher.d(data[position].coinPrice.toString())
             }
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.disposable.dispose()
     }
 }
