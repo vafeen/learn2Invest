@@ -81,7 +81,7 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.nameClear.visibility = clearButtonVisibility(s)
+                binding.nameClear.isVisible = !s.isNullOrEmpty()
                 name = s.toString()
             }
 
@@ -96,7 +96,7 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.lastnameClear.visibility = clearButtonVisibility(s)
+                binding.lastnameClear.isVisible = !s.isNullOrEmpty()
                 lastname = s.toString()
             }
 
@@ -185,14 +185,6 @@ class SignUpActivity : AppCompatActivity() {
                 it
             })
             this@SignUpActivity.finish()
-        }
-    }
-
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
         }
     }
     private fun View.hideKeyboard() {
