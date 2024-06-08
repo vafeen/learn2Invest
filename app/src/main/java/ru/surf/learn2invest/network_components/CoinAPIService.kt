@@ -5,11 +5,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.surf.learn2invest.network_components.responses.APIWrapper
 import ru.surf.learn2invest.network_components.responses.AugmentedCoinReviewResponse
-import ru.surf.learn2invest.network_components.util.Const.API_HISTORY
-import ru.surf.learn2invest.network_components.util.Const.API_MARKET_REVIEW
 import ru.surf.learn2invest.network_components.responses.CoinPriceResponse
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.Const.API_COIN_REVIEW
+import ru.surf.learn2invest.network_components.util.Const.API_HISTORY
+import ru.surf.learn2invest.network_components.util.Const.API_MARKET_REVIEW
 
 interface CoinAPIService {
     @GET(API_MARKET_REVIEW)

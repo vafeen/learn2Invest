@@ -6,6 +6,10 @@ import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
 /**
@@ -38,7 +42,10 @@ import java.util.concurrent.Executor
  *
  * ```
  */
-class FingerprintAuthenticator(private val context: Activity) {
+class FingerprintAuthenticator(
+    private val context: Activity,
+    val lifecycleCoroutineScope: LifecycleCoroutineScope
+) {
 
     fun setSuccessCallback(function: () -> Unit): FingerprintAuthenticator {
         this.successCallBack = function
@@ -48,6 +55,12 @@ class FingerprintAuthenticator(private val context: Activity) {
 
     fun setFailedCallback(function: () -> Unit): FingerprintAuthenticator {
         this.failedCallBack = function
+
+        return this
+    }
+
+    fun setHardwareErrorCallback(function: () -> Unit): FingerprintAuthenticator {
+        this.hardwareErrorCallback = function
 
         return this
     }
@@ -66,15 +79,18 @@ class FingerprintAuthenticator(private val context: Activity) {
         return this
     }
 
-    fun auth() {
-        initFingerPrintAuth()
+    fun auth(): Job {
+        return lifecycleCoroutineScope.launch(Dispatchers.Main) {
+            initFingerPrintAuth()
 
-        checkAuthenticationFingerprint()
+            checkAuthenticationFingerprint()
+        }
     }
 
     // callbacks
     private var failedCallBack: () -> Unit = {}
     private var successCallBack: () -> Unit = {}
+    private var hardwareErrorCallback: () -> Unit = {}
 
     // design bottom sheet
     private var titleText: String = "Example title"
@@ -116,6 +132,7 @@ class FingerprintAuthenticator(private val context: Activity) {
                         Log.d("finger", "error")
                         Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
 
+                        hardwareErrorCallback()
                     }
 
                     override fun onAuthenticationFailed() {

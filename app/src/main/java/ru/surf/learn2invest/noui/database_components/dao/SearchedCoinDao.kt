@@ -18,6 +18,7 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin> {
 
     @Query("delete from searchedcoin")
     fun deleteAll()
+
     /**
      *  @param limit максимальное количество записей в БД.
      *  При потенциальном количестве записей больше этого значения, часть записей будет удалена
