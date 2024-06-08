@@ -4,10 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +28,12 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var textWatcher: TextWatcher
     private var name: String = ""
     private var lastname: String = ""
+
+    companion object{
+        private val EMPTY_ERROR = "Поле не может быть пустым"
+        private val SPACE_ERROR = "Поле не может содержать пробелы"
+        private val LENGTH_ERROR = "Превышен лимит длины"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,25 +64,35 @@ class SignUpActivity : AppCompatActivity() {
             signUpButtonClick()
         }
 
-        binding.inputNameEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
-                binding.inputLastnameEditText.requestFocus()
-                true
-            } else {
-                false
+        binding.inputNameEditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                return@setOnEditorActionListener onNextClicked()
             }
+            false
+        }
+
+        binding.inputLastnameEditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                return@setOnEditorActionListener onDoneClicked()
+            }
+            false
         }
     }
 
     private fun nameClearIconClick() {
-        binding.inputNameEditText.setText("")
-        binding.inputNameEditText.hideKeyboard()
+        binding.inputNameEditText.text.clear()
+        binding.inputNameEditText.showKeyboard()
+        binding.inputNameEditText.requestFocus()
+        binding.nameErrorTextView.text = EMPTY_ERROR
+        binding.nameErrorTextView.isVisible = true
     }
 
     private fun lastnameClearIconClick() {
-
-        binding.inputLastnameEditText.setText("")
-        binding.inputLastnameEditText.hideKeyboard()
+        binding.inputLastnameEditText.text.clear()
+        binding.inputLastnameEditText.showKeyboard()
+        binding.inputLastnameEditText.requestFocus()
+        binding.lastnameErrorTextView.text = EMPTY_ERROR
+        binding.lastnameErrorTextView.isVisible = true
     }
 
     private fun setupNameEditText() {
@@ -123,19 +143,17 @@ class SignUpActivity : AppCompatActivity() {
     private fun validateName(): Boolean {
         return when {
             name.isEmpty() -> {
-                binding.nameErrorTextView.text = "Поле не может быть пустым"
-                binding.nameErrorTextView.isVisible = true
                 false
             }
 
             hasSpaces(name) -> {
-                binding.nameErrorTextView.text = "Поле не может содержать пробелы"
+                binding.nameErrorTextView.text = SPACE_ERROR
                 binding.nameErrorTextView.isVisible = true
                 false
             }
 
             name.length > 24 -> {
-                binding.nameErrorTextView.text = "Превышен лимит длины"
+                binding.nameErrorTextView.text = LENGTH_ERROR
                 binding.nameErrorTextView.isVisible = true
                 false
             }
@@ -150,19 +168,17 @@ class SignUpActivity : AppCompatActivity() {
     private fun validateLastname(): Boolean {
         return when {
             lastname.isEmpty() -> {
-                binding.lastnameErrorTextView.text = "Поле не может быть пустым"
-                binding.lastnameErrorTextView.isVisible = true
                 false
             }
 
             hasSpaces(lastname) -> {
-                binding.lastnameErrorTextView.text = "Поле не может содержать пробелы"
+                binding.lastnameErrorTextView.text = SPACE_ERROR
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
 
             lastname.length > 24 -> {
-                binding.lastnameErrorTextView.text = "Превышен лимит длины"
+                binding.lastnameErrorTextView.text = LENGTH_ERROR
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
@@ -172,6 +188,31 @@ class SignUpActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    private fun onNextClicked(): Boolean {
+        if (name.isEmpty()) {
+            binding.nameErrorTextView.text = EMPTY_ERROR
+            binding.nameErrorTextView.isVisible = true
+            return true
+        } else {
+            binding.nameErrorTextView.isVisible = false
+        }
+        binding.inputLastnameEditText.requestFocus()
+        return false
+    }
+
+    private fun onDoneClicked(): Boolean {
+        if (lastname.isEmpty()) {
+            binding.lastnameErrorTextView.text = EMPTY_ERROR
+            binding.lastnameErrorTextView.isVisible = true
+            return true
+        } else {
+            binding.lastnameErrorTextView.isVisible = false
+            binding.inputLastnameEditText.hideKeyboard()
+            binding.inputLastnameEditText.clearFocus()
+        }
+        return false
     }
 
     private fun signUpButtonClick() {
@@ -191,6 +232,9 @@ class SignUpActivity : AppCompatActivity() {
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
+
+    private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
+        ?.show(WindowInsetsCompat.Type.ime())
 
     private fun hasSpaces(s: CharSequence?): Boolean {
         return s?.contains(" ") == true
