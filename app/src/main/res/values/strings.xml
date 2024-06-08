@@ -24,7 +24,7 @@
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
     <string name="price_alert_text">Price alert</string>
-    <string name="my_investments">Мои инвестиции</string>
+    <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
     <string name="account_funds">Средства на счете</string>
     <string name="top_up">Пополнить</string>
@@ -52,10 +52,13 @@
     <string name="biometry">Биометрия</string>
     <string name="confirm_deal">Подтверждение сделок</string>
     <string name="change_PIN">Смена PIN-кода</string>
-    <string name="change_fingerprint">Смена отпечатка пальца</string>
+    <string name="change_trading_password">Смена Торгового пароля</string>
+    <string name="add_trading_password">Добавление Торгового пароля</string>
     <string name="enter_pin_str">Введите PIN-код</string>
     <string name="capitalisation">Капитализация:</string>
     <string name="review_text">Обзор</string>
     <string name="no_interest_error">Вы не интересовались\nданным активом</string>
     <string name="repeat_pin">Повторите PIN-код</string>
+    <string name="reset_stats">    Вы точно хотите\nсбросить статистику?</string>
+    <string name="create_trading_pass">Создать торговый пароль</string>
 </resources>

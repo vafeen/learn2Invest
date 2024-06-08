@@ -9,6 +9,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
@@ -29,11 +30,12 @@ class Buy(
 
 
         binding.apply {
-         balanceNumBuyDialog.text =
-                App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
-            //            поставить нужный тип баланса
-
             lifecycleScope.launch(Dispatchers.Main) {
+
+                balanceNumBuyDialog.text =
+                    App.profile?.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                //            поставить нужный тип баланса
+
                 while (true) {
                     val str = "777777"
                     priceNumberBuyDialog.text = str  // TODO Сюда нужно будет кидать цену,
@@ -55,28 +57,27 @@ class Buy(
             }
 
             imageButtonPlusBuyDialog.setOnClickListener {
-                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
+                lifecycleScope.launch(Dispatchers.Main) {
+                    enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
 
-                    val newNumberOfLots = if (text.isNotEmpty()) {
-                        text.toString().toIntOrNull()?.let {
-                            val balance = App.profile?.fiatBalance
-                                ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
-                            val itog = itog(onFuture = true)
-                            //Loher.d("itog = $itog")
-                            if (itog(onFuture = true) <= balance) {
-                                it + 1
-                            } else {
-                                it
-                            }
-                        } ?: 0
-                    } else {
-                        1
-                    }
+                        val newNumberOfLots = if (text.isNotEmpty()) {
+                            text.toString().toIntOrNull()?.let {
+                                val balance = App.profile?.fiatBalance
+                                    ?: 0 // TODO(Володь, тут также поменять баланс на нужный)
+                                if (itog(onFuture = true) <= balance) {
+                                    it + 1
+                                } else {
+                                    it
+                                }
+                            } ?: 0
+                        } else {
+                            1
+                        }
 
-                    "$newNumberOfLots"
-                })
+                        "$newNumberOfLots"
+                    })
+                }
             }
-
             imageButtonMinusBuyDialog.setOnClickListener {
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
                     val newNumberOfLots = text.toString().toIntOrNull()?.let {

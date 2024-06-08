@@ -9,9 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
@@ -42,42 +40,39 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        skipSplash()
 
 //         data for testing (need to remove)
-        lifecycleScope.apply {
-            insertProfileInCoroutineScope(this)
-            insertAlertInCoroutineScope(this)
+        lifecycleScope.launch(Dispatchers.IO) {
+            insertProfileInCoroutineScope(lifecycleScope = lifecycleScope)
+            insertAlertInCoroutineScope(lifecycleScope = lifecycleScope)
+        }.invokeOnCompletion {
+            skipSplash()
         }
-
-
     }
 
     // Функция проверки, есть ли у нас зарегистрированный пользователь
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
-
-            val deferred =
-                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
-
             delay(1000)
+        }.invokeOnCompletion {
 
-            val intent = if (deferred.await().isNotEmpty()) {
+            val intent =
+                if (true //App.profile.firstName == "undefined" && App.profile.lastName == "undefined"
+                ) {
 
-                App.profile = deferred.await()[App.idOfProfile]
 
-                //Loher.d("profile = ${Learn2InvestApp.profile}")
-                Loher.d("profile = ${App.profile}")
-                Intent(this@MainActivity, SignInActivity::class.java).let {
-                    it.action = SignINActivityActions.SignIN.action
+                    //Loher.d("profile = ${Learn2InvestApp.profile}")
+                    Loher.d("profile = ${App.profile}")
+                    Intent(this@MainActivity, SignInActivity::class.java).let {
+                        it.action = SignINActivityActions.SignIN.action
 
-                    it
-                }
+                        it
+                    }
 
-            } else {
-                Intent(this@MainActivity, SignInActivity::class.java)
+                } else {
+                    Intent(this@MainActivity, SignInActivity::class.java)
 //                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
-            }
+                }
 
             startActivity(intent)
             this@MainActivity.finish()
