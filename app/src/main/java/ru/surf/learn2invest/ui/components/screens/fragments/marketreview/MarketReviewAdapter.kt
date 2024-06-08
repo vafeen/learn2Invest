@@ -10,6 +10,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
@@ -23,6 +24,7 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_bottom_text_info)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
+        lateinit var disposable: Disposable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -67,7 +69,7 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
                         coinIcon.setImageResource(R.drawable.placeholder)
                     })
                 .build()
-            imageLoader.enqueue(request)
+            disposable = imageLoader.enqueue(request)
             itemView.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putString(
@@ -80,5 +82,10 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
                 )
             }
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.disposable.dispose()
     }
 }
