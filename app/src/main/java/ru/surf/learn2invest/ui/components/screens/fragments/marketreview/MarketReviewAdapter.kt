@@ -1,10 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -12,9 +14,9 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
-import ru.surf.learn2invest.noui.logs.Loher
 
-class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
+class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
+    RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_top_text_info)
@@ -39,11 +41,18 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                 else
                     data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = "\$${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].priceUsd.toBigDecimal().toPlainString())?.value}"
+            coinTopNumericInfo.text = "\$${
+                "\\S*\\.[0]*[0-9]{2}".toRegex()
+                    .find(data[position].priceUsd.toBigDecimal().toPlainString())?.value
+            }"
             if (data[position].changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
-            coinBottomNumericInfo.text = "${"\\S*\\.[0]*[0-9]{2}".toRegex().find(data[position].changePercent24Hr.toBigDecimal().toPlainString())?.value ?: 0}%"
+            coinBottomNumericInfo.text = "${
+                "\\S*\\.[0]*[0-9]{2}".toRegex().find(
+                    data[position].changePercent24Hr.toBigDecimal().toPlainString()
+                )?.value ?: 0
+            }%"
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {
@@ -64,7 +73,15 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : Recycler
                 .build()
             imageLoader.enqueue(request)
             itemView.setOnClickListener {
-                Loher.d(data[position].priceUsd.toBigDecimal().toPlainString())
+                val bundle = Bundle()
+                bundle.putString(
+                    "symbol",
+                    data[position].symbol
+                ) //TODO Придумать место для констант всего приложения
+                findNavController(itemView).navigate(
+                    R.id.action_marketReviewFragment_to_assetReviewFragment,
+                    bundle
+                )
             }
         }
     }
