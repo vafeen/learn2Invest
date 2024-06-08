@@ -34,7 +34,7 @@ import ru.surf.learn2invest.noui.logs.Loher
  *   }
  * }
  * ```
-**/
+ **/
 class NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(
         CoinAPIService::class.java
@@ -45,12 +45,10 @@ class NetworkRepository {
             val response = coinAPIService.getMarketReview()
             Log.d("RETROFIT", response.toString())
             return ResponseWrapper.Success(response)
-        }
-        catch (e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("RETROFIT", "HTTP Error: ${e.code()}")
             return ResponseWrapper.NetworkError
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
             return ResponseWrapper.NetworkError
         }
@@ -60,7 +58,7 @@ class NetworkRepository {
      * выводит историю цен коина за предыдущие 6 дней, не считая сегодня
      * id - название коина
      * например bitcoin
-    **/
+     **/
     suspend fun getCoinHistory(id: String): ResponseWrapper<APIWrapper<List<CoinPriceResponse>>> {
         try {
             val response = coinAPIService.getCoinHistory(
@@ -71,12 +69,10 @@ class NetworkRepository {
             )
             Log.d("RETROFIT", response.toString())
             return ResponseWrapper.Success(response)
-        }
-        catch (e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("RETROFIT", "HTTP Error: ${e.code()}")
             return ResponseWrapper.NetworkError
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
             return ResponseWrapper.NetworkError
         }
@@ -89,13 +85,11 @@ class NetworkRepository {
             )
             Log.d("RETROFIT", response.toString())
             return ResponseWrapper.Success(response)
-        }
-        catch (e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("RETROFIT", "HTTP Error: ${e.code()}")
             Loher.d(e.toString())
             return ResponseWrapper.NetworkError
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
             Loher.d(e.toString())
             return ResponseWrapper.NetworkError

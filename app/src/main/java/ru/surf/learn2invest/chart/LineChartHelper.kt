@@ -17,6 +17,7 @@ import java.util.Locale
 
 class LineChartHelper(private val context: Context) {
     private lateinit var chart: LineChart
+
     companion object {
         private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
     }
@@ -45,7 +46,7 @@ class LineChartHelper(private val context: Context) {
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 valueFormatter = DateValueFormatter()
-                typeface = ResourcesCompat.getFont(context,R.font.montserrat_medium)
+                typeface = ResourcesCompat.getFont(context, R.font.montserrat_medium)
             }
             setTouchEnabled(true)
             isDragEnabled = true
@@ -58,7 +59,7 @@ class LineChartHelper(private val context: Context) {
         }
     }
 
-    fun updateData(data: List<Entry>){
+    fun updateData(data: List<Entry>) {
         val lineDataSet = LineDataSet(data, "List")
         val lineData = LineData(lineDataSet)
         styleLineDataSet(lineDataSet)
@@ -75,7 +76,7 @@ class LineChartHelper(private val context: Context) {
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = ContextCompat.getColor(context,R.color.graphic)
+        color = ContextCompat.getColor(context, R.color.graphic)
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true
@@ -86,13 +87,13 @@ class LineChartHelper(private val context: Context) {
         mode = LineDataSet.Mode.CUBIC_BEZIER
 
         setDrawFilled(true)
-        fillDrawable = ContextCompat.getDrawable(context,R.drawable.line_chart_style)
+        fillDrawable = ContextCompat.getDrawable(context, R.drawable.line_chart_style)
     }
 
-    private class DateValueFormatter:ValueFormatter(){
+    private class DateValueFormatter : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
-            val calendar= Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -(6-value.toInt()))
+            val calendar = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_YEAR, -(6 - value.toInt()))
             }
             return dateFormatter.format(calendar.time)
         }

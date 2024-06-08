@@ -13,7 +13,6 @@ data class Profile(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val firstName: String, //Имя
     val lastName: String, //Фамилия
-    val notification: Boolean, //Вкл/Вкл уведомлений (алерты)
     val biometry: Boolean, //Вкл/Выкл входа по биометрии
     val fiatBalance: Int, //Баланс обычных денег
     val assetBalance: Int, //Суммарная стоимость активов (обновляется после покупки чего либо или продажи)

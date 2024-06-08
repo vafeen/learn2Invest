@@ -39,7 +39,6 @@ class App : Application() {
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",
-                            notification = false,
                             biometry = false,
                             fiatBalance = 0,
                             assetBalance = 0,

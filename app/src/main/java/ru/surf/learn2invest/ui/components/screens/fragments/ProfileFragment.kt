@@ -58,8 +58,6 @@ class ProfileFragment : Fragment() {
                     "${pr.firstName}\n${pr.lastName}"
                 }
 
-                fr.notificationBtnSwitcher.isChecked = appProfile.notification
-
                 fr.biometryBtnSwitcher.isChecked = appProfile.biometry
 
                 fr.confirmDealBtnSwitcher.isChecked = appProfile.tradingPasswordHash != null
@@ -83,23 +81,6 @@ class ProfileFragment : Fragment() {
                 }
 
 
-                fr.notificationBtn.setOnClickListener {
-
-                    fr.notificationBtnSwitcher.isChecked =
-
-                        if (fr.notificationBtnSwitcher.isChecked) {
-
-                            updateProfile(appProfile.copy(notification = false))
-
-                            false
-                        } else {
-
-                            updateProfile(appProfile.copy(notification = true))
-
-                            true
-                        }
-                }
-
                 fr.biometryBtn.setOnClickListener {
 
                     if (fr.biometryBtnSwitcher.isChecked) {
@@ -108,14 +89,17 @@ class ProfileFragment : Fragment() {
                         fr.biometryBtnSwitcher.isChecked = false
                     } else {
 
-                        FingerprintAuthenticator(context = requireContext() as Activity).setSuccessCallback {
+                        FingerprintAuthenticator(
+                            context = requireContext() as Activity,
+                            lifecycleCoroutineScope = lifecycleScope
+                        ).setSuccessCallback {
                             updateProfile(appProfile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
                         }
                             .setDesignBottomSheet(
-                            title = "Биометрия"
-                        ).auth()
+                                title = "Биометрия"
+                            ).auth()
 
                     }
                 }

@@ -13,7 +13,6 @@ val testProfile = Profile(
     id = 0,
     firstName = "A",
     lastName = "Vafeen",
-    notification = true,
     biometry = true,
     fiatBalance = 0,
     assetBalance = 0,

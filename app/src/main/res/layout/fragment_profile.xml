@@ -100,9 +100,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
         app:srcCompat="@drawable/gear" />
-
     <LinearLayout
-        android:id="@+id/notification_Btn"
+        android:id="@+id/biometry_Btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
@@ -112,36 +111,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_TV">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:text="@string/notification"
-            android:textAppearance="@style/Text.Medium.16" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/notification_Btn_switcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:theme="@style/switch_style" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/biometry_Btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="22dp"
-        android:weightSum="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_Btn">
 
         <TextView
             android:layout_width="wrap_content"
