@@ -20,3 +20,6 @@ object CoinRetrofitClient {
         )
         .build()
 }
+
+fun Double.round() =
+    "\\S*\\.[0]*[0-9]{2}".toRegex().find(this.toBigDecimal().toPlainString())?.value

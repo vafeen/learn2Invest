@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="ru.surf.learn2invest.ui.components.screens.fragments.HistoryFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history">
         <action
