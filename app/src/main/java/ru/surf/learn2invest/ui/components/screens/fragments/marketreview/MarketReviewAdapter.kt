@@ -15,7 +15,8 @@ import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.network_components.util.round
 import ru.surf.learn2invest.noui.logs.Loher
 
-class MarketReviewAdapter(private val data: List<CoinReviewResponse>) : RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
+class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
+    RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_top_text_info)
