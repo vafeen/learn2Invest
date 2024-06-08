@@ -53,20 +53,26 @@ class SignUpActivity : AppCompatActivity() {
         binding.signupBtn.setOnClickListener {
             signUpButtonClick()
         }
+
+        binding.inputNameEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
+                binding.inputLastnameEditText.requestFocus()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun nameClearIconClick() {
         binding.inputNameEditText.setText("")
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.inputNameEditText.windowToken, 0)
+        binding.inputNameEditText.hideKeyboard()
     }
 
     private fun lastnameClearIconClick() {
 
         binding.inputLastnameEditText.setText("")
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.inputLastnameEditText.windowToken, 0)
-
+        binding.inputLastnameEditText.hideKeyboard()
     }
 
     private fun setupNameEditText() {
@@ -121,16 +127,19 @@ class SignUpActivity : AppCompatActivity() {
                 binding.nameErrorTextView.isVisible = true
                 false
             }
+
             hasSpaces(name) -> {
                 binding.nameErrorTextView.text = "Поле не может содержать пробелы"
                 binding.nameErrorTextView.isVisible = true
                 false
             }
+
             name.length > 24 -> {
                 binding.nameErrorTextView.text = "Превышен лимит длины"
                 binding.nameErrorTextView.isVisible = true
                 false
             }
+
             else -> {
                 binding.nameErrorTextView.isVisible = false
                 true
@@ -145,16 +154,19 @@ class SignUpActivity : AppCompatActivity() {
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
+
             hasSpaces(lastname) -> {
                 binding.lastnameErrorTextView.text = "Поле не может содержать пробелы"
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
+
             lastname.length > 24 -> {
                 binding.lastnameErrorTextView.text = "Превышен лимит длины"
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
+
             else -> {
                 binding.lastnameErrorTextView.isVisible = false
                 true
@@ -182,6 +194,10 @@ class SignUpActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+    private fun View.hideKeyboard() {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun hasSpaces(s: CharSequence?): Boolean {
