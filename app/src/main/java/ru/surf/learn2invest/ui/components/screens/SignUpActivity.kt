@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -23,17 +22,14 @@ import ru.surf.learn2invest.databinding.ActivitySignupBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
+private const val EMPTY_ERROR = "Пустое поле"
+private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
+private const val LENGTH_ERROR = "Превышен лимит длины"
+
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private lateinit var textWatcher: TextWatcher
     private var name: String = ""
     private var lastname: String = ""
-
-    companion object{
-        private const val EMPTY_ERROR = "Пустое поле"
-        private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
-        private const val LENGTH_ERROR = "Превышен лимит длины"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,15 +60,15 @@ class SignUpActivity : AppCompatActivity() {
             signUpButtonClick()
         }
 
-        binding.inputNameEditText.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_NEXT || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+        binding.inputNameEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
                 return@setOnEditorActionListener onNextClicked()
             }
             false
         }
 
-        binding.inputLastnameEditText.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+        binding.inputLastnameEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 return@setOnEditorActionListener onDoneClicked()
             }
             false
@@ -96,8 +92,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setupNameEditText() {
-
-        textWatcher = object : TextWatcher {
+        binding.inputNameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -106,13 +101,11 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {}
-        }
-        binding.inputNameEditText.addTextChangedListener(textWatcher)
+        })
     }
 
     private fun setupLastnameEditText() {
-
-        textWatcher = object : TextWatcher {
+        binding.inputLastnameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -121,8 +114,7 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {}
-        }
-        binding.inputLastnameEditText.addTextChangedListener(textWatcher)
+        })
     }
 
     private fun validateFields() {
@@ -146,7 +138,9 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            hasLeadingOrTrailingSpaces(name) -> {
+            name.trim() != name -> {
+                binding.nameErrorTextView.text = SPACE_ERROR
+                binding.nameErrorTextView.isVisible = true
                 false
             }
 
@@ -169,7 +163,9 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            hasLeadingOrTrailingSpaces(lastname) -> {
+            lastname.trim() != lastname -> {
+                binding.lastnameErrorTextView.text = SPACE_ERROR
+                binding.lastnameErrorTextView.isVisible = true
                 false
             }
 
@@ -191,13 +187,6 @@ class SignUpActivity : AppCompatActivity() {
             binding.nameErrorTextView.text = EMPTY_ERROR
             binding.nameErrorTextView.isVisible = true
             return true
-        } else {
-            if (hasLeadingOrTrailingSpaces(name)) {
-                binding.nameErrorTextView.text = SPACE_ERROR
-                binding.nameErrorTextView.isVisible = true
-                return true
-            }
-            binding.nameErrorTextView.isVisible = false
         }
         binding.inputLastnameEditText.requestFocus()
         return false
@@ -209,18 +198,11 @@ class SignUpActivity : AppCompatActivity() {
             binding.lastnameErrorTextView.isVisible = true
             return true
         } else {
-            if (hasLeadingOrTrailingSpaces(lastname)) {
-                binding.lastnameErrorTextView.text = SPACE_ERROR
-                binding.lastnameErrorTextView.isVisible = true
-                return true
-            }
-            binding.lastnameErrorTextView.isVisible = false
             binding.inputLastnameEditText.hideKeyboard()
             binding.inputLastnameEditText.clearFocus()
         }
         return false
     }
-
 
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -235,6 +217,7 @@ class SignUpActivity : AppCompatActivity() {
             this@SignUpActivity.finish()
         }
     }
+
     private fun View.hideKeyboard() {
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
@@ -242,9 +225,4 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
         ?.show(WindowInsetsCompat.Type.ime())
-
-    private fun hasLeadingOrTrailingSpaces(s: CharSequence?): Boolean {
-        if (s.isNullOrEmpty()) return false
-        return s.startsWith(" ") || s.endsWith(" ")
-    }
 }
