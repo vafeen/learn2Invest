@@ -16,8 +16,9 @@ import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewAdapter
 
-class HistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class HistoryAdapter(private val data: List<Transaction>) :
+    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_top_text_info)
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_bottom_text_info)
@@ -44,8 +45,7 @@ class HistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapter<
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
-            }
-            else {
+            } else {
                 coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
             }
             coinBottomNumericInfo.text = "${data[position].dealPrice}$"

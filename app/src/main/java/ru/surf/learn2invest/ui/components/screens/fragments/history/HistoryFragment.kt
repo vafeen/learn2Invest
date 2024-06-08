@@ -38,11 +38,14 @@ class HistoryFragment : Fragment() {
                 Loher.d(it.size.toString())
                 data.addAll(it)
                 withContext(Dispatchers.Main) {
-                    Loher.d("Init recycler")
                     adapter.notifyDataSetChanged()
                 }
             }
         }
-        Loher.d("")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        data.clear()
     }
 }

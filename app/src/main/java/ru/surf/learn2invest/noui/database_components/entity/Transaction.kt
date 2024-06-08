@@ -14,6 +14,6 @@ open class Transaction(
     val symbol: String, //Абревиатура (BTC)
     val coinPrice: Double, //Закупочная цена одного
     val dealPrice: Double, //Общая умма сделки (цена * количество)
-    val amount: Int, //Количество
+    val amount: Double, //Количество
     val transactionType: TransactionsType
 )
