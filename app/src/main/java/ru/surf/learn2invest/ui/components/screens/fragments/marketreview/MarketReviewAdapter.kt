@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -73,10 +72,10 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
                     "symbol",
                     data[position].symbol
                 ) //TODO Придумать место для констант всего приложения
-                findNavController(itemView).navigate(
-                    R.id.action_marketReviewFragment_to_assetReviewFragment,
-                    bundle
-                )
+//                findNavController(itemView).navigate(
+//                    R.id.action_marketReviewFragment_to_assetReviewFragment,
+//                    bundle
+//                )
             }
         }
     }
