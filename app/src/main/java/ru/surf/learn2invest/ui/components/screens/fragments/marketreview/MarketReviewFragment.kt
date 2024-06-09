@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ import ru.surf.learn2invest.network_components.responses.APIWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 
 class MarketReviewFragment : Fragment() {
@@ -32,9 +34,12 @@ class MarketReviewFragment : Fragment() {
     private var recyclerData = mutableListOf<CoinReviewResponse>()
     private var data = mutableListOf<CoinReviewResponse>()
     private val coinClient = NetworkRepository()
-    private val adapter = MarketReviewAdapter(recyclerData)
+    private val adapter = MarketReviewAdapter(recyclerData) { coin ->
+        startAssetReviewIntent(coin)
+    }
     private var filterByPriceFLag = false
     private var filterByPriceIsFirstActive = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -179,6 +184,12 @@ class MarketReviewFragment : Fragment() {
         super.onStop()
         data.clear()
         recyclerData.clear()
+    }
+
+    private fun startAssetReviewIntent(coin: CoinReviewResponse) {
+        val playerIntent = Intent(requireContext(), AssetReviewActivity::class.java)
+        playerIntent.putExtra("symbol", coin.symbol)
+        startActivity(playerIntent)
     }
 
     private fun setLoading() {

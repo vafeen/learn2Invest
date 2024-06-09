@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,10 @@ import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.network_components.util.round
 
-class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
+class MarketReviewAdapter(
+    private val data: List<CoinReviewResponse>,
+    private val clickListener: CoinClickListener
+) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
@@ -66,18 +68,16 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
                     })
                 .build()
             disposable = imageLoader.enqueue(request)
+
             itemView.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString(
-                    "symbol",
-                    data[position].symbol
-                ) //TODO Придумать место для констант всего приложения
-//                findNavController(itemView).navigate(
-//                    R.id.action_marketReviewFragment_to_assetReviewFragment,
-//                    bundle
-//                )
+                //TODO Придумать место для констант всего приложения
+                clickListener.onCoinClick(data[position])
             }
         }
+    }
+
+    fun interface CoinClickListener {
+        fun onCoinClick(coin: CoinReviewResponse)
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
