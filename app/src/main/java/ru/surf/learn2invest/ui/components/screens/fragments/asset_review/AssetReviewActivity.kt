@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.asset_review
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.Disposable
@@ -10,6 +11,8 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
 import ru.surf.learn2invest.network_components.util.Const
+import ru.surf.learn2invest.ui.alert_dialogs.Buy
+import ru.surf.learn2invest.ui.alert_dialogs.Sell
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 
 // Экран Обзор актива
@@ -51,6 +54,14 @@ class AssetReviewActivity : AppCompatActivity() {
                 })
             .build()
         disposable = imageLoader.enqueue(request)
+
+        binding.buyAssetBtn.setOnClickListener {
+            Buy(this, lifecycleScope).initDialog().show()
+        }
+
+        binding.sellAssetBtn.setOnClickListener {
+            Sell(this, lifecycleScope).initDialog().show()
+        }
     }
 
     private fun goToFragment(fragment: Fragment) {
