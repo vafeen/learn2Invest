@@ -1,29 +1,27 @@
 package ru.surf.learn2invest.ui.components.screens.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
-import androidx.core.view.marginEnd
-import androidx.core.view.marginStart
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
+import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.ResetStats
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
+import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -36,37 +34,20 @@ class ProfileFragment : Fragment() {
 
         context = requireContext()
 
-        initListeners()
 
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        initListeners()
+    }
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
             App.mainDB.profileDao().insertAll(profile)
         }
-    }
-
-    private fun View.setLinearLayoutMargins(
-        start: Int = this.marginStart,
-        top: Int = this.marginTop,
-        end: Int = this.marginEnd,
-        bottom: Int = this.marginBottom,
-    ): LinearLayout.LayoutParams {
-        return LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).let {
-            it.setMargins(
-                start,
-                top,
-                end,
-                bottom,
-            )
-            it
-        }
-
     }
 
     private fun initListeners() {
@@ -77,11 +58,9 @@ class ProfileFragment : Fragment() {
                     "${pr.firstName}\n${pr.lastName}"
                 }
 
-                fr.notificationBtnSwitcher.isChecked = appProfile.notification
-
                 fr.biometryBtnSwitcher.isChecked = appProfile.biometry
 
-                fr.confirmDealBtnSwitcher.isChecked = appProfile.confirmDeal
+                fr.confirmDealBtnSwitcher.isChecked = appProfile.tradingPasswordHash != null
 
 
 
@@ -102,42 +81,54 @@ class ProfileFragment : Fragment() {
                 }
 
 
-                fr.notificationBtn.setOnClickListener {
-
-                    fr.notificationBtnSwitcher.isChecked =
-
-                        if (fr.notificationBtnSwitcher.isChecked) {
-
-                            updateProfile(appProfile.copy(notification = false))
-
-                            false
-                        } else {
-
-                            updateProfile(appProfile.copy(notification = true))
-
-                            true
-                        }
-                }
-
                 fr.biometryBtn.setOnClickListener {
 
-                    fr.biometryBtnSwitcher.isChecked =
+                    if (fr.biometryBtnSwitcher.isChecked) {
+                        updateProfile(appProfile.copy(biometry = false))
 
-                        if (fr.biometryBtnSwitcher.isChecked) {
+                        fr.biometryBtnSwitcher.isChecked = false
+                    } else {
 
-                            updateProfile(appProfile.copy(biometry = false))
-
-                            false
-                        } else {
-
+                        FingerprintAuthenticator(
+                            context = requireContext() as Activity,
+                            lifecycleCoroutineScope = lifecycleScope
+                        ).setSuccessCallback {
                             updateProfile(appProfile.copy(biometry = true))
 
-                            true
+                            fr.biometryBtnSwitcher.isChecked = true
                         }
+                            .setDesignBottomSheet(
+                                title = "Биометрия"
+                            ).auth()
+
+                    }
                 }
 
-                fr.changeTradingPasswordBtn.isVisible = appProfile.confirmDeal
+                fr.changeTradingPasswordBtn.setOnClickListener {
+                    startActivity(Intent(context, TradingPasswordActivity::class.java).apply {
+                        action = TradingPasswordActivityActions.ChangeTradingPassword.action
+                    })
+                }
 
+                fr.changeTradingPasswordBtn.isVisible = appProfile.tradingPasswordHash != null
+
+
+                val intentFoxTradingPasswordActivityByConditions =
+
+                    Intent(context, TradingPasswordActivity::class.java)
+                        .apply {
+                            action = when {
+
+                                !fr.confirmDealBtnSwitcher.isChecked -> {
+                                    TradingPasswordActivityActions.CreateTradingPassword.action
+                                }
+
+                                else -> {
+                                    TradingPasswordActivityActions.RemoveTradingPassword.action
+                                }
+
+                            }
+                        }
 
                 fr.confirmDealBtn.setOnClickListener {
 
@@ -145,30 +136,29 @@ class ProfileFragment : Fragment() {
 
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
 
-                    updateProfile(appProfile.copy(confirmDeal = fr.confirmDealBtnSwitcher.isChecked))
-
+                    startActivity(intentFoxTradingPasswordActivityByConditions)
                 }
 
                 fr.confirmDealBtnSwitcher.setOnClickListener {
-                    updateProfile(appProfile.copy(confirmDeal = fr.confirmDealBtnSwitcher.isChecked))
 
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
+
+                    startActivity(intentFoxTradingPasswordActivityByConditions)
+
                 }
+
+
+
+
+
+
 
                 fr.changePINBtn.setOnClickListener {
-                    startActivity(Intent(context, SignInActivity::class.java).let {
-
-                        it.action = SignINActivityActions.ChangingPIN.action
-
-                        it
-                    })
+                    Intent(context, SignInActivity::class.java).apply {
+                        action = SignINActivityActions.ChangingPIN.action
+                    }
                 }
 
-                fr.changeTradingPasswordBtn.setOnClickListener {
-
-                    startActivity(Intent(context, TradingPasswordActivity::class.java))
-
-                }
             }
         }
     }

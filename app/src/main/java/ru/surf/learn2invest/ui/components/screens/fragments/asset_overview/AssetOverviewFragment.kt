@@ -27,7 +27,7 @@ class AssetOverviewFragment : Fragment() {
 
         val coinAPIService = CoinRetrofitClient.client.create(CoinAPIService::class.java)
         val factory = AssetOverviewViewModelFactory(coinAPIService)
-        viewModel = ViewModelProvider(this,factory)[AssetOverviewViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[AssetOverviewViewModel::class.java]
 
         chartHelper.setupChart(binding.chart)
 

@@ -46,29 +46,41 @@ class MarketReviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         binding.apply {
-            filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-            filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-            filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+            filterByMarketcap.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.main_background))
+            filterByChangePercent24Hr.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.view_background))
+            filterByPrice.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.view_background))
             filterByMarketcap.setOnClickListener {
                 filterByPriceIsFirstActive = true
-                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByMarketcap.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByChangePercent24Hr.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 recyclerData.sortByDescending { it.marketCapUsd }
                 adapter.notifyDataSetChanged()
             }
             filterByChangePercent24Hr.setOnClickListener {
                 filterByPriceIsFirstActive = true
-                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByMarketcap.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByChangePercent24Hr.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByPrice.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 recyclerData.sortByDescending { it.changePercent24Hr }
                 adapter.notifyDataSetChanged()
             }
             filterByPrice.setOnClickListener {
-                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByMarketcap.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByChangePercent24Hr.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
                 if (filterByPriceIsFirstActive.not())
                     filterByPriceFLag = filterByPriceFLag.not()
                 if (filterByPriceFLag) {
@@ -81,7 +93,7 @@ class MarketReviewFragment : Fragment() {
                     filterByPrice.setIconResource(R.drawable.arrow_top_green)
                     filterByPrice.setIconTintResource(R.color.label)
                 }
-                    adapter.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
 
                 filterByPriceIsFirstActive = false
             }
@@ -93,11 +105,14 @@ class MarketReviewFragment : Fragment() {
                 filterByChangePercent24Hr.isVisible = true
                 searchEditText.text.clear()
                 recyclerData.clear()
-                recyclerData.addAll(data.sortedByDescending{it.marketCapUsd})
+                recyclerData.addAll(data.sortedByDescending { it.marketCapUsd })
                 adapter.notifyDataSetChanged()
-                filterByMarketcap.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByChangePercent24Hr.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByMarketcap.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
+                filterByChangePercent24Hr.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                filterByPrice.backgroundTintList =
+                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
             }
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
                 textView2.isVisible = true
@@ -129,7 +144,7 @@ class MarketReviewFragment : Fragment() {
                     App.mainDB
                         .searchedCoinDao()
                         .getAll().first().map { searchedList.add(it.coinID) }
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         recyclerData.addAll(data.filter { searchedList.contains(it.name) })
                         recyclerData.reverse()
@@ -142,19 +157,21 @@ class MarketReviewFragment : Fragment() {
         setLoading()
 
         this.lifecycleScope.launch(Dispatchers.IO) {
-                var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> = coinClient.getMarketReview()
-                withContext(Dispatchers.Main){
-                    when (result) {
-                        is ResponseWrapper.Success -> {
-                            data.addAll(result.value.data)
-                            data.removeIf { it.marketCapUsd == 0.0 }
-                            recyclerData.addAll(data)
-                            Loher.d(data.find { it.priceUsd == 0.0}.toString())
-                            setRecycler()
-                        }
-                        is ResponseWrapper.NetworkError -> setError()
+            var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> =
+                coinClient.getMarketReview()
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is ResponseWrapper.Success -> {
+                        data.addAll(result.value.data)
+                        data.removeIf { it.marketCapUsd == 0.0 }
+                        recyclerData.addAll(data)
+                        Loher.d(data.find { it.priceUsd == 0.0 }.toString())
+                        setRecycler()
                     }
+
+                    is ResponseWrapper.NetworkError -> setError()
                 }
+            }
         }
     }
 
@@ -163,21 +180,26 @@ class MarketReviewFragment : Fragment() {
         data.clear()
         recyclerData.clear()
     }
-    private fun setLoading () {
+
+    private fun setLoading() {
         binding.marketReviewRecyclerview.isVisible = false
         binding.progressBar.isVisible = true
     }
-    private fun setError () {
+
+    private fun setError() {
         binding.marketReviewRecyclerview.isVisible = false
         binding.progressBar.isVisible = false
         binding.networkErrorTv.isVisible = true
         binding.networkErrorIv.isVisible = true
     }
-    private fun setRecycler () {
+
+    private fun setRecycler() {
         Log.d("SUCCES", "Грузим данные")
-        binding.searchEditText.setAdapter(ArrayAdapter(this.requireContext(),
-            android.R.layout.simple_expandable_list_item_1,
-            recyclerData.map { it.name }))
+        binding.searchEditText.setAdapter(
+            ArrayAdapter(this.requireContext(),
+                android.R.layout.simple_expandable_list_item_1,
+                recyclerData.map { it.name })
+        )
         binding.marketReviewRecyclerview.isVisible = true
         binding.progressBar.isVisible = false
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())

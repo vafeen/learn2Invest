@@ -10,10 +10,10 @@ import androidx.room.PrimaryKey
 @Entity
 open class Transaction(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    val name: String = "coin", //Имя коина (Bitcoin)
+    val name: String, //Имя коина (Bitcoin)
     val symbol: String, //Абревиатура (BTC)
-    val iconURL: String = "iconURL", //URL для закачки иконки
-    val coinPrice: Int = 0, //Закупочная цена одного
-    val dealPrice: Int = 0, //Общая умма сделки (цена * количество)
-    val amount: Int = 0, //Количество
+    val coinPrice: Double, //Закупочная цена одного
+    val dealPrice: Double, //Общая умма сделки (цена * количество)
+    val amount: Double, //Количество
+    val transactionType: TransactionsType
 )
