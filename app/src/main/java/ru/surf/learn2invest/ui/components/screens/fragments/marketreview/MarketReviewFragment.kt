@@ -139,7 +139,7 @@ class MarketReviewFragment : Fragment() {
             }
 
             searchEditText.setOnItemClickListener { parent, view, position, id ->
-                var searchedList = mutableListOf<String>()
+                val searchedList = mutableListOf<String>()
                 lifecycleScope.launch(Dispatchers.IO) {
                     App.mainDB
                         .searchedCoinDao()
@@ -162,7 +162,7 @@ class MarketReviewFragment : Fragment() {
         setLoading()
 
         this.lifecycleScope.launch(Dispatchers.IO) {
-            var result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
+            val result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
                 coinClient.getMarketReview()
             withContext(Dispatchers.Main) {
                 when (result) {

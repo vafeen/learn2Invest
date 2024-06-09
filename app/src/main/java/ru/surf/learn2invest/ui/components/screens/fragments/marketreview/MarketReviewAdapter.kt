@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ class MarketReviewAdapter(
     private val clickListener: CoinClickListener
 ) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
-    private lateinit var drawable: Drawable
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)

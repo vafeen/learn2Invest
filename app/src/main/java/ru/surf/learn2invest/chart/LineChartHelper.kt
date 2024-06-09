@@ -69,7 +69,7 @@ class LineChartHelper(private val context: Context) {
 
         chart.apply {
             axisLeft.axisMinimum = minY - (0.05f * (maxY - minY)) // Небольшой отступ снизу
-            axisLeft.axisMaximum = maxY + (0.01f * (maxY - minY)) // Небольшой отступ сверху
+            axisLeft.axisMaximum = maxY + (0.05f * (maxY - minY)) // Небольшой отступ сверху
             this.data = lineData
             invalidate()
         }
