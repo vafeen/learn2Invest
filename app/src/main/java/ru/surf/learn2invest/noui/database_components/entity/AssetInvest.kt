@@ -14,8 +14,8 @@ class AssetInvest(
     val name: String, //Имя коина (Bitcoin)
     val symbol: String, //Абревиатура (BTC)
     val iconURL: String, //URL для закачки иконки
-    val coinPrice: Int, //Цена
-    val changePercent24Hr: Float, //удалить
+    val coinPrice: Double, //Цена
+    val changePercent24Hr: Double, //удалить
     val amount: Int, //Колличество
 )
 
