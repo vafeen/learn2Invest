@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/assetReviewFragment"
-        android:name="ru.surf.learn2invest.ui.components.screens.fragments.AssetReviewFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewFragment"
         android:label="fragment_new_playlist"
         tools:layout="@layout/fragment_asset_review" />
 </navigation>

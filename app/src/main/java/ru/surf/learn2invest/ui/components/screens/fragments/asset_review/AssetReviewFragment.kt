@@ -1,17 +1,14 @@
-package ru.surf.learn2invest.ui.components.screens.fragments
+package ru.surf.learn2invest.ui.components.screens.fragments.asset_review
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetReviewBinding
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewViewModel
 
 // Экран Обзор актива
 class AssetReviewFragment : Fragment() {
