@@ -16,7 +16,6 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.network_components.util.round
-import ru.surf.learn2invest.noui.logs.Loher
 
 class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
