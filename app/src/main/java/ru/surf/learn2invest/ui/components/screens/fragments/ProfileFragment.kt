@@ -17,7 +17,7 @@ import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
-import ru.surf.learn2invest.ui.alert_dialogs.ResetStats
+import ru.surf.learn2invest.ui.alert_dialogs.reset_stats.ResetStats
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
