@@ -14,8 +14,8 @@ data class Profile(
     val firstName: String, //Имя
     val lastName: String, //Фамилия
     val biometry: Boolean, //Вкл/Выкл входа по биометрии
-    val fiatBalance: Double, //Баланс обычных денег
-    val assetBalance: Double, //Суммарная стоимость активов (обновляется после покупки чего либо или продажи)
+    val fiatBalance: Float, //Баланс обычных денег
+    val assetBalance: Float, //Суммарная стоимость активов (обновляется после покупки чего либо или продажи)
     val hash: String? = null, //Хэш пина
     val tradingPasswordHash: String? = null // Хэш Торгового пароля
 )

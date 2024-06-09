@@ -24,7 +24,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         mainDB = L2IDatabase.buildDatabase(context = this)
 
         val profileFlow: Flow<List<Profile>> = mainDB.profileDao().getAllAsFlow()
@@ -34,25 +33,28 @@ class App : Application() {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
                         profile = profList[idOfProfile]
+                        Log.d("profile", "profile APP no else = $profile ")
+
                     } else {
                         profile = Profile(
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 0,
-                            assetBalance = 0,
+                            fiatBalance = 50540f,
+                            assetBalance = 0f,
                             hash = PasswordHasher(
                                 firstName = "undefined",
                                 lastName = "undefined"
                             ).passwordToHash("0000"),
-//                            tradingPasswordHash = PasswordHasher(
-//                                firstName = "undefined",
-//                                lastName = "undefined"
-//                            ).passwordToHash("1235789")
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = "undefined",
+                                lastName = "undefined"
+                            ).passwordToHash("1235789")
                         )
+                        Log.d("profile", "profile APP else  = $profile ")
+
                     }
-                    Log.d("profile", "profile = $profile ")
                 }
             }
         }

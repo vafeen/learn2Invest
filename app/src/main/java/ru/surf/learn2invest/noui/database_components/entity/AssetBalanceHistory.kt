@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class AssetBalanceHistory( // баланс портфеля
 
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val assetBalance: Double // стоимость портфеля
+    val assetBalance: Float // стоимость портфеля
 )

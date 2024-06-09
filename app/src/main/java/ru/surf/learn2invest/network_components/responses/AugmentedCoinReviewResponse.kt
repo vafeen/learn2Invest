@@ -5,12 +5,12 @@ data class AugmentedCoinReviewResponse(
     val rank: Int, //Ранг
     val symbol: String, //Абревиатура
     val name: String, //Название
-    val supply: Double,
-    val maxSupply: Double,
-    val marketCapUsd: Double, //Капитализация
-    val volumeUsd24Hr: Double,
-    val priceUsd: Double, //Цена
-    val changePercent24Hr: Double, //Процент изменения цены за 24 часа
-    val vwap24Hr: Double,
+    val supply: Float,
+    val maxSupply: Float,
+    val marketCapUsd: Float, //Капитализация
+    val volumeUsd24Hr: Float,
+    val priceUsd: Float, //Цена
+    val changePercent24Hr: Float, //Процент изменения цены за 24 часа
+    val vwap24Hr: Float,
     val explorer: String
 )

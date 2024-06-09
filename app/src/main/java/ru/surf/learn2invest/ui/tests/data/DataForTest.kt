@@ -14,8 +14,8 @@ val testProfile = Profile(
     firstName = "A",
     lastName = "Vafeen",
     biometry = true,
-    fiatBalance = 0,
-    assetBalance = 0,
+    fiatBalance = 0f,
+    assetBalance = 0f,
 
     ).copy(
     hash = PasswordHasher(
