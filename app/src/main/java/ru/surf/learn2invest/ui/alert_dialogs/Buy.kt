@@ -4,14 +4,17 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
@@ -29,25 +32,29 @@ class Buy(
 
 
         binding.apply {
+
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text =
-                    App.profile.fiatBalance.toString() // TODO()Володь, Сюда также нужно
+                    App.profile.fiatBalance.getWithCurrency() // TODO()Володь, Сюда также нужно
                 //            поставить нужный тип баланса
 
-                while (true) {
-                    val str = "777777"
-                    priceNumberBuyDialog.text = str  // TODO Сюда нужно будет кидать цену,
-                    // которая приходит через ретрофит
+//                while (true) {
+                val str = 777777f
+                priceNumberBuyDialog.text =
+                    str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
+                // которая приходит через ретрофит
 
-                    updateFields()
-                    delay(2000)
-                }
+                updateFields()
+                delay(2000)
+//                }
             }
 
             buttonExitBuyDialog.setOnClickListener {
                 cancel()
             }
+
+            buttonBuyBuyDialog.isVisible = false
 
             buttonBuyBuyDialog.setOnClickListener {
                 // TODO Логика продажи
@@ -56,39 +63,52 @@ class Buy(
             }
 
             imageButtonPlusBuyDialog.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
 
-                        val newNumberOfLots = if (text.isNotEmpty()) {
-                            text.toString().toIntOrNull()?.let {
-                                val balance =
-                                    App.profile.fiatBalance // TODO(Володь, тут также поменять баланс на нужный)
-                                if (itog(onFuture = true) <= balance) {
-                                    it + 1
-                                } else {
-                                    it
+                lifecycleScope.launch(Dispatchers.Main) {
+
+                    enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
+
+                        (numOfLotsText.toString().toIntOrNull() ?: 0).let {
+                            val balance = App.profile.fiatBalance
+                            when {
+                                it == 0 -> {
+                                    ""
                                 }
-                            } ?: 0
-                        } else {
-                            1
+
+                                resultPrice(onFuture = true) <= balance -> {
+                                    (it + 1).toString()
+                                }
+
+                                else -> {
+                                    it.toString()
+                                }
+                            }
                         }
 
-                        "$newNumberOfLots"
                     })
                 }
             }
             imageButtonMinusBuyDialog.setOnClickListener {
-                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
-                    val newNumberOfLots = text.toString().toIntOrNull()?.let {
-                        if (it > 0) {
-                            it - 1
-                        } else {
-                            it
-                        }
-                    } ?: 0
 
-                    "$newNumberOfLots"
-                })
+                enteringNumberOfLotsBuyDialog.setText(
+                    enteringNumberOfLotsBuyDialog.text.let { text ->
+
+                        text.toString().toIntOrNull()?.let {
+                            when {
+                                it == 1 || it == 0 -> {
+                                    ""
+                                }
+
+                                it > 1 -> {
+                                    (it - 1).toString()
+                                }
+
+                                else -> {
+                                    it.toString()
+                                }
+                            }
+                        }
+                    })
             }
 
             enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
@@ -107,28 +127,62 @@ class Buy(
                 }
             })
 
+            tradingPassword.isVisible = if (App.profile.tradingPasswordHash != null) {
+
+                tradingPasswordTV.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(
+                        s: CharSequence?, start: Int, count: Int, after: Int
+                    ) {
+
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        buttonBuyBuyDialog.isVisible = s?.isTrueTradingPassword() ?: false
+                    }
+                })
+
+                true
+
+            } else {
+                false
+
+            }
+            Loher.e("вернулось ${tradingPassword.isVisible}")
         }
     }
+
 
     override fun getDialogView(): View {
         return binding.root
     }
 
     private fun updateFields() {
-        binding.itogoBuyDialog.text = "Итого: $ ${itog(onFuture = false)}"
+        "Итого: ${resultPrice(onFuture = false).getWithCurrency()}".also {
+            binding.itogoBuyDialog.text = it
+        }
     }
 
 
-    private fun itog(
+    private fun resultPrice(
         onFuture: Boolean
     ): Float {
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
 
-            val price = priceText.substring(1, priceText.length).toFloatOrNull() ?: 0f
-
+            val price = priceText.substring(2, priceText.length).getFloatFromStringWithCurrency()
+            Log.e("error", "price  t= $price")
             val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
+            Log.e("error", "number = $number")
             return price * (number + if (onFuture) {
                 1
             } else {
