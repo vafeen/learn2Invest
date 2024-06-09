@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetReviewBinding
+import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewViewModel
 
@@ -26,6 +27,11 @@ class AssetReviewFragment : Fragment() {
             goToFragment(AssetOverviewFragment())
         }
 
+        Loher.d(
+            "Hello AssetReviewFragment ${
+                requireArguments().getString("symbol")
+            }"
+        )
         return binding.root
     }
 

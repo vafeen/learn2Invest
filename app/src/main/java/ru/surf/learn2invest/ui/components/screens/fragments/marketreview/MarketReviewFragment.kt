@@ -175,6 +175,12 @@ class MarketReviewFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        data.clear()
+        recyclerData.clear()
+    }
+
     private fun setLoading() {
         binding.marketReviewRecyclerview.isVisible = false
         binding.progressBar.isVisible = true
