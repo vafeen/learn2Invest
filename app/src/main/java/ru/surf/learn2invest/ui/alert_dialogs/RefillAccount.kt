@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
@@ -20,19 +19,20 @@ class RefillAccount(
 
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
 
-    private lateinit var profile: Profile
-
     override fun setCancelable(): Boolean {
         return true
     }
 
-    private fun changeVisibilityElements(
-        priceForRefill: Boolean = binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
-    ) {
+    private fun changeVisibilityElements() {
         binding.apply {
-            balanceClearRefillAccountDialog.isVisible = priceForRefill
+            balanceClearRefillAccountDialog.isVisible =
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
 
-            buttonRefillRefillAccountDialog.isVisible = priceForRefill
+            buttonRefillRefillAccountDialog.isVisible =
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
+                    .toFloatOrNull()?.let {
+                        it > 0
+                    } ?: false
         }
 
     }
@@ -83,16 +83,13 @@ class RefillAccount(
 
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        profile.also {
+                        App.profile.also {
                             App.mainDB.profileDao().insertAll(
                                 it.copy(
-                                    //                                assetBalance = profile.какой-то баланс + enteredBalance,
-                                    //                                fiatBalance = profile.какой-то баланс + enteredBalance
-                                    // TODO(Володь, какой тут баланс профиля пополнять, и почему все балансы блин интовые, если должны быть вещественными?????????????????)
+                                    fiatBalance = it.fiatBalance + enteredBalance
                                 )
                             )
                         }
-
                     }
 
                 }
@@ -100,10 +97,9 @@ class RefillAccount(
                 cancel()
             }
 
-            balanceTextviewRefillAccountDialog.text = "${
-                profile.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
+            balanceTextviewRefillAccountDialog.text =
+                App.profile.fiatBalance.getWithCurrency() // TODO(Володь, Какой тут баланс из профиля?)
                     ?: "balance error"
-            }"
 
         }
     }

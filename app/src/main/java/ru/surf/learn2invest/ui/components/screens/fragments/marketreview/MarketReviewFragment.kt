@@ -168,9 +168,9 @@ class MarketReviewFragment : Fragment() {
                 when (result) {
                     is ResponseWrapper.Success -> {
                         data.addAll(result.value.data)
-                        data.removeIf { it.marketCapUsd == 0.0 }
+                        data.removeIf { it.marketCapUsd == 0.0f }
                         recyclerData.addAll(data)
-                        Loher.d(data.find { it.priceUsd == 0.0 }.toString())
+                        Loher.d(data.find { it.priceUsd == 0.0f }.toString())
                         setRecycler()
                     }
 

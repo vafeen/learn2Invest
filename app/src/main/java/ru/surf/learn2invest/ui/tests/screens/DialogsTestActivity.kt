@@ -26,7 +26,7 @@ class DialogsTestActivity : AppCompatActivity() {
 
         initListeners()
 
-        insertProfileInCoroutineScope(lifecycleScope)
+//        insertProfileInCoroutineScope(lifecycleScope)
     }
 
     override fun onResume() {

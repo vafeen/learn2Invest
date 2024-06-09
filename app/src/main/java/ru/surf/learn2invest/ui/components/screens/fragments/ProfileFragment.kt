@@ -154,9 +154,11 @@ class ProfileFragment : Fragment() {
 
 
                 fr.changePINBtn.setOnClickListener {
-                    Intent(context, SignInActivity::class.java).apply {
-                        action = SignINActivityActions.ChangingPIN.action
-                    }
+                    startActivity(Intent(context, SignInActivity::class.java).let {
+                        it.action = SignINActivityActions.ChangingPIN.action
+
+                        it
+                    })
                 }
 
             }
