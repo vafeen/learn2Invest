@@ -18,13 +18,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginVertical="13dp">
         <TextView
-            android:id="@+id/coin_top_text_info"
+            android:id="@+id/coin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Bitcoin"
             android:textAppearance="@style/Text.SemiBold.17"/>
         <TextView
-            android:id="@+id/coin_bottom_text_info"
+            android:id="@+id/coin_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"

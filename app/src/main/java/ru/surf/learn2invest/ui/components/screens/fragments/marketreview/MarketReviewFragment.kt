@@ -23,7 +23,7 @@ import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.APIWrapper
-import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
+import ru.surf.learn2invest.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
@@ -31,8 +31,8 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private var recyclerData = mutableListOf<CoinReviewResponse>()
-    private var data = mutableListOf<CoinReviewResponse>()
+    private var recyclerData = mutableListOf<CoinReviewDto>()
+    private var data = mutableListOf<CoinReviewDto>()
     private val coinClient = NetworkRepository()
     private val adapter = MarketReviewAdapter(recyclerData) { coin ->
         startAssetReviewIntent(coin)
@@ -162,7 +162,7 @@ class MarketReviewFragment : Fragment() {
         setLoading()
 
         this.lifecycleScope.launch(Dispatchers.IO) {
-            var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> =
+            var result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
                 coinClient.getMarketReview()
             withContext(Dispatchers.Main) {
                 when (result) {
@@ -186,10 +186,13 @@ class MarketReviewFragment : Fragment() {
         recyclerData.clear()
     }
 
-    private fun startAssetReviewIntent(coin: CoinReviewResponse) {
-        val playerIntent = Intent(requireContext(), AssetReviewActivity::class.java)
-        playerIntent.putExtra("symbol", coin.symbol)
-        startActivity(playerIntent)
+    private fun startAssetReviewIntent(coin: CoinReviewDto) {
+        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("name", coin.name)
+        bundle.putString("symbol", coin.symbol)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun setLoading() {

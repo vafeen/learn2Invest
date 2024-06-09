@@ -38,14 +38,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/coin_top_text_info"
+            android:id="@+id/coin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Text.SemiBold.17"
             tools:text="Bitcoin" />
 
         <TextView
-            android:id="@+id/coin_bottom_text_info"
+            android:id="@+id/coin_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
