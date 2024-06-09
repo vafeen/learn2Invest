@@ -1,14 +1,15 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.alert_dialogs.reset_stats
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class ResetStats(
-    context: Context,
+    val context: Context,
     val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
@@ -21,9 +22,11 @@ class ResetStats(
         binding.apply {
             okResetStatsResetStatsDialog.setOnClickListener {
 
-                //TODO логика сброса статистики
+                resetStats(lifecycleScope = lifecycleScope)
 
                 cancel()
+
+                Toast.makeText(context, "Стата сброшена", Toast.LENGTH_LONG).show()
             }
 
             noReetStatsResetStatsDialog.setOnClickListener {
