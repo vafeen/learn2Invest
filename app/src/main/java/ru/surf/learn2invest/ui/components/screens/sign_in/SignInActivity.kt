@@ -390,6 +390,8 @@ class SignInActivity : AppCompatActivity() {
 
                                 }.invokeOnCompletion {
                                     pinCode = ""
+
+                                    onAuthenticationSucceeded()
                                 }
 
                             } else {
