@@ -9,17 +9,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,30 +49,29 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
 
-            val deferred =
-                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
-
             delay(1000)
 
-            val intent = if (deferred.await().isNotEmpty()) {
+            val undef = "undefined"
 
-                App.profile = deferred.await()[App.idOfProfile]
+            val intent = if (App.profile.firstName == undef &&
+                App.profile.lastName == undef
+            ) {
 
-                //Loher.d("profile = ${Learn2InvestApp.profile}")
-                Loher.d("profile = ${App.profile}")
+                Intent(this@MainActivity, SignUpActivity::class.java)
+
+            } else {
+
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
                     it
                 }
 
-            } else {
-                Intent(this@MainActivity, SignUpActivity::class.java)
             }
 
             startActivity(intent)
-            this@MainActivity.finish()
 
+            this@MainActivity.finish()
         }
     }
 }
