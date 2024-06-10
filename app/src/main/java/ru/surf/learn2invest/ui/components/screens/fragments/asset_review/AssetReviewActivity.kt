@@ -34,6 +34,10 @@ class AssetReviewActivity : AppCompatActivity() {
             finish()
         }
 
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, AssetOverviewFragment.newInstance(id ?: ""))
+            .commit()
+
         binding.assetReviewBtn.setOnClickListener {
             goToFragment(AssetOverviewFragment.newInstance(id ?: ""))
         }
@@ -67,6 +71,11 @@ class AssetReviewActivity : AppCompatActivity() {
         binding.sellAssetBtn.setOnClickListener {
             Sell(this, lifecycleScope).initDialog().show()
         }
+    }
+
+    override fun onDestroy() {
+        disposable.dispose()
+        super.onDestroy()
     }
 
     private fun goToFragment(fragment: Fragment) {

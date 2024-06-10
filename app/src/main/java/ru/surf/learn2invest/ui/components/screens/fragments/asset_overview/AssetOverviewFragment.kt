@@ -25,7 +25,7 @@ class AssetOverviewFragment : Fragment() {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
-        val id = arguments?.getString("id") ?: ""
+        val id = requireArguments().getString("id") ?: ""
 
         val coinAPIService = CoinRetrofitClient.client.create(CoinAPIService::class.java)
         val factory = AssetOverviewViewModelFactory(coinAPIService)

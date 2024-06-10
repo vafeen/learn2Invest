@@ -15,7 +15,7 @@ class CustomMarkerView(context: Context, layoutResource: Int) :
 
     // Вызывается каждый раз при перерисовке MarkerView, можно использовать для обновления контента (пользовательского интерфейса)
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
-        tvContent.text = e?.y.toString()
+        tvContent.text = e?.y?.toBigDecimal()?.toPlainString() ?: ""
 
         // Выполнит необходимое позиционирование
         super.refreshContent(e, highlight)
