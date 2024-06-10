@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +37,7 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var fingerPrintManager: FingerprintAuthenticator
 
+    private var keyBoardIsWork = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -241,11 +244,26 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    private fun blockKeyBoard() {
+        Log.d("block", "blocked")
+        keyBoardIsWork = false
+    }
+
+    private fun unBlockKeyBoard() {
+        Log.d("block", "un blocked")
+        keyBoardIsWork = true
+    }
+
     private fun updatePin(num: String) {
 
-        if (pinCode.length < 4) {
+        if (pinCode.length < 4 && keyBoardIsWork) {
             pinCode += num
+        } else {
+            Toast.makeText(context, "не тыкай с#ка", Toast.LENGTH_SHORT).show()
         }
+
+        Log.d("pin", "last = $firstPin")
+        Log.d("pin", "pin = $pinCode")
 
         paintDots()
 
@@ -255,17 +273,28 @@ class SignInActivity : AppCompatActivity() {
                 SignINActivityActions.SignIN.action -> {
                     if (checkAuthenticationPin()) {
 
+                        blockKeyBoard()
+
                         lifecycleScope.launch(Dispatchers.Main) {
                             showTruePINCode()
+                        }.invokeOnCompletion {
+
+                            onAuthenticationSucceeded()
                         }
-//                            .invokeOnCompletion {
-                        onAuthenticationSucceeded()
-//                        }
 
                     } else {
                         pinCode = ""
+
+                        blockKeyBoard()
+
                         lifecycleScope.launch(Dispatchers.Main) {
+
                             showErrorPINCode()
+
+                        }.invokeOnCompletion {
+
+                            unBlockKeyBoard()
+
                         }
 
                     }
@@ -276,17 +305,20 @@ class SignInActivity : AppCompatActivity() {
                         firstPin == "" -> {
                             firstPin = pinCode
 
+                            pinCode = ""
+
+                            blockKeyBoard()
+
                             lifecycleScope.launch(Dispatchers.Main) {
                                 delay(500)
-
-                                //Loher.d("pin = $pinCode")
-                                //Loher.d("fpin = $firstPin")
-
-                                pinCode = ""
 
                                 paintDots()
 
                                 binding.enterPinSignin.text = getString(R.string.repeat_pin)
+                            }.invokeOnCompletion {
+
+                                unBlockKeyBoard()
+
                             }
                         }
 
@@ -296,10 +328,11 @@ class SignInActivity : AppCompatActivity() {
 
                             profile = profile.copy(
                                 hash = PasswordHasher(
-                                    firstName = profile.firstName,
-                                    lastName = profile.lastName
+                                    firstName = profile.firstName, lastName = profile.lastName
                                 ).passwordToHash(pinCode)
                             )
+
+                            blockKeyBoard()
 
                             lifecycleScope.launch(Dispatchers.Main) {
                                 showTruePINCode()
@@ -307,6 +340,10 @@ class SignInActivity : AppCompatActivity() {
                                 fingerPrintManager.auth()
 
                                 onAuthenticationSucceeded()
+                            }.invokeOnCompletion {
+
+                                unBlockKeyBoard()
+
                             }
 
                         }
@@ -315,8 +352,14 @@ class SignInActivity : AppCompatActivity() {
 
                             pinCode = ""
 
+                            blockKeyBoard()
+
                             lifecycleScope.launch(Dispatchers.Main) {
                                 showErrorPINCode()
+                            }.invokeOnCompletion {
+
+                                unBlockKeyBoard()
+
                             }
                         }
                     }
@@ -334,12 +377,16 @@ class SignInActivity : AppCompatActivity() {
 
                                 pinCode = ""
 
+                                blockKeyBoard()
+
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     showTruePINCode()
                                 }.invokeOnCompletion {
                                     paintDots()
 
                                     binding.enterPinSignin.text = "Введите новый пинкод"
+
+                                    unBlockKeyBoard()
                                 }
 
                             } else {
@@ -374,8 +421,7 @@ class SignInActivity : AppCompatActivity() {
 
                                 profile = profile.copy(
                                     hash = PasswordHasher(
-                                        firstName = profile.firstName,
-                                        lastName = profile.lastName
+                                        firstName = profile.firstName, lastName = profile.lastName
                                     ).passwordToHash(pinCode)
                                 )
 
@@ -383,7 +429,7 @@ class SignInActivity : AppCompatActivity() {
 
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     withContext(Dispatchers.IO) {
-                                        App.mainDB.profileDao().insertAll(profile)
+                                        App.mainDB.profileDao().update(profile)
                                     }
 
                                     showTruePINCode()
