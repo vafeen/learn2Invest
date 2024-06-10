@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
@@ -59,6 +60,22 @@
         app:layout_constraintStart_toEndOf="@id/my_investments_text"
         app:layout_constraintTop_toBottomOf="@id/balance"
         tools:text="+5.21%" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="23dp"
+        android:src="@drawable/material_list"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="0"
+        app:tint="@color/black" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
@@ -151,5 +168,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/network_error_tv"
         app:srcCompat="@drawable/world_wide_web" />
+
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_investments_text">
+
+        <!-- Your main content goes here -->
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/recession"
+            android:clickable="false"
+            app:layout_constraintHeight_default="spread"
+            app:menu="@menu/drawer_items" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
