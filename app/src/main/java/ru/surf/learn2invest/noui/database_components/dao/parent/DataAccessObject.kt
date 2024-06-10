@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Update
 
 
 /**
@@ -17,6 +18,10 @@ interface DataAccessObject<T> {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)// insert && update
     suspend fun insertAll(vararg entities: T)
+
+    @Update
+    suspend fun update(vararg entities: T)
+
 
     /**
      * Удаление из базы данных одного объекта
