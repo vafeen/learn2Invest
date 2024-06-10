@@ -9,8 +9,8 @@ class AssetOverviewViewModelFactory(
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AssetOverviewViewModel::class.java)) {
-            return AssetOverviewViewModel(coinAPIService) as T
+        if (modelClass.isAssignableFrom(AssetViewModel::class.java)) {
+            return AssetViewModel(coinAPIService) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

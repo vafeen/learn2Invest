@@ -189,6 +189,7 @@ class MarketReviewFragment : Fragment() {
     private fun startAssetReviewIntent(coin: CoinReviewDto) {
         val intent = Intent(requireContext(), AssetReviewActivity::class.java)
         val bundle = Bundle()
+        bundle.putString("id", coin.id)
         bundle.putString("name", coin.name)
         bundle.putString("symbol", coin.symbol)
         intent.putExtras(bundle)

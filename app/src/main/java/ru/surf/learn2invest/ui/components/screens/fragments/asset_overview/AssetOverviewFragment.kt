@@ -15,7 +15,7 @@ import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
     private lateinit var chartHelper: LineChartHelper
-    private lateinit var viewModel: AssetOverviewViewModel
+    private lateinit var viewModel: AssetViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,17 +25,29 @@ class AssetOverviewFragment : Fragment() {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
+        val id = arguments?.getString("id") ?: ""
+
         val coinAPIService = CoinRetrofitClient.client.create(CoinAPIService::class.java)
         val factory = AssetOverviewViewModelFactory(coinAPIService)
-        viewModel = ViewModelProvider(this, factory)[AssetOverviewViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[AssetViewModel::class.java]
 
         chartHelper.setupChart(binding.chart)
 
-        viewModel.chartData.observe(viewLifecycleOwner) { data ->
+        viewModel.loadChartData(id) { data, marketCap ->
             chartHelper.updateData(data)
+            binding.capitalisation.text = marketCap.toString()
         }
-        viewModel.loadChartData()
 
         return binding.root
+    }
+
+    companion object {
+        fun newInstance(id: String): AssetOverviewFragment {
+            val fragment = AssetOverviewFragment()
+            val args = Bundle()
+            args.putString("id", id)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

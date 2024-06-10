@@ -26,12 +26,13 @@ class AssetReviewActivity : AppCompatActivity() {
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.assetReviewBtn.setOnClickListener {
-            goToFragment(AssetOverviewFragment())
-        }
-
+        val id = intent.getStringExtra("id")
         val name = intent.getStringExtra("name")
         val symbol = intent.getStringExtra("symbol")
+
+        binding.assetReviewBtn.setOnClickListener {
+            goToFragment(AssetOverviewFragment.newInstance(id?.lowercase() ?: ""))
+        }
 
         binding.coinName.text = name
         binding.coinSymbol.text = symbol
