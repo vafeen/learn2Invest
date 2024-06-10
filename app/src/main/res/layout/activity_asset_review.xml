@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/go_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -23,7 +23,7 @@
         android:layout_height="48dp"
         android:layout_marginVertical="12dp"
         android:layout_marginStart="25dp"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintStart_toEndOf="@+id/go_back"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/dollar_cash" />
 

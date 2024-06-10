@@ -30,8 +30,12 @@ class AssetReviewActivity : AppCompatActivity() {
         val name = intent.getStringExtra("name")
         val symbol = intent.getStringExtra("symbol")
 
+        binding.goBack.setOnClickListener {
+            finish()
+        }
+
         binding.assetReviewBtn.setOnClickListener {
-            goToFragment(AssetOverviewFragment.newInstance(id?.lowercase() ?: ""))
+            goToFragment(AssetOverviewFragment.newInstance(id ?: ""))
         }
 
         binding.coinName.text = name

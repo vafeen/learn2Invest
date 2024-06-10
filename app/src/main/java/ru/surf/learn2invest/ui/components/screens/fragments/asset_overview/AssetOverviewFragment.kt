@@ -35,7 +35,7 @@ class AssetOverviewFragment : Fragment() {
 
         viewModel.loadChartData(id) { data, marketCap ->
             chartHelper.updateData(data)
-            binding.capitalisation.text = marketCap.toString()
+            binding.capitalisation.text = marketCap
         }
 
         return binding.root

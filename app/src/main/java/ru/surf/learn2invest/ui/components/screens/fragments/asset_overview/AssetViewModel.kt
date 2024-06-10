@@ -8,12 +8,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.network_components.CoinAPIService
+import java.text.NumberFormat
+import java.util.Locale
 
 class AssetViewModel(
     private val coinAPIService: CoinAPIService
 ) : ViewModel() {
-    private var marketCap: Double = 0.0
-    fun loadChartData(id: String, onDataLoaded: (List<Entry>, Double) -> Unit) {
+    private var marketCap = 0.0
+    fun loadChartData(id: String, onDataLoaded: (List<Entry>, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val calendar = Calendar.getInstance()
             val endTime = calendar.timeInMillis
@@ -28,8 +30,12 @@ class AssetViewModel(
             val coinResponse = coinAPIService.getCoinReview(id)
             marketCap = coinResponse.data.marketCapUsd.toDouble()
 
+            val formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
+                maximumFractionDigits = 0
+            }.format(marketCap) + " $"
+
             withContext(Dispatchers.Main) {
-                onDataLoaded(data, marketCap)
+                onDataLoaded(data, formattedMarketCap)
             }
         }
     }
