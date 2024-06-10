@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.main
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,13 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
-import ru.surf.learn2invest.ui.tests.screens.DialogsTestActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,18 +50,18 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
 
-            delay(1000)
-
             val undef = "undefined"
 
             val intent = if (App.profile.firstName == undef &&
                 App.profile.lastName == undef
             ) {
-
+                delay(3000)
                 Intent(this@MainActivity, SignUpActivity::class.java)
-
             } else {
-
+                withContext(Dispatchers.Main) {
+                    runAnimatedText()
+                    delay(5000)
+                }
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
@@ -73,5 +74,14 @@ class MainActivity : AppCompatActivity() {
 
             this@MainActivity.finish()
         }
+    }
+
+    fun runAnimatedText() {
+        binding.splashTextView.text = "Здравствуй, ${App.profile.firstName}!"
+        binding.splashTextView.alpha = 0f
+
+        val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)
+        animator.duration = 5000 // Длительность анимации в миллисекундах
+        animator.start()
     }
 }
