@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -22,19 +23,23 @@ import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.APIWrapper
-import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
+import ru.surf.learn2invest.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private var recyclerData = mutableListOf<CoinReviewResponse>()
-    private var data = mutableListOf<CoinReviewResponse>()
+    private var recyclerData = mutableListOf<CoinReviewDto>()
+    private var data = mutableListOf<CoinReviewDto>()
     private val coinClient = NetworkRepository()
-    private val adapter = MarketReviewAdapter(recyclerData)
+    private val adapter = MarketReviewAdapter(recyclerData) { coin ->
+        startAssetReviewIntent(coin)
+    }
     private var filterByPriceFLag = false
     private var filterByPriceIsFirstActive = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -134,7 +139,7 @@ class MarketReviewFragment : Fragment() {
             }
 
             searchEditText.setOnItemClickListener { parent, view, position, id ->
-                var searchedList = mutableListOf<String>()
+                val searchedList = mutableListOf<String>()
                 lifecycleScope.launch(Dispatchers.IO) {
                     App.mainDB
                         .searchedCoinDao()
@@ -157,7 +162,7 @@ class MarketReviewFragment : Fragment() {
         setLoading()
 
         this.lifecycleScope.launch(Dispatchers.IO) {
-            var result: ResponseWrapper<APIWrapper<List<CoinReviewResponse>>> =
+            val result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
                 coinClient.getMarketReview()
             withContext(Dispatchers.Main) {
                 when (result) {
@@ -179,6 +184,16 @@ class MarketReviewFragment : Fragment() {
         super.onStop()
         data.clear()
         recyclerData.clear()
+    }
+
+    private fun startAssetReviewIntent(coin: CoinReviewDto) {
+        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("id", coin.id)
+        bundle.putString("name", coin.name)
+        bundle.putString("symbol", coin.symbol)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     private fun setLoading() {

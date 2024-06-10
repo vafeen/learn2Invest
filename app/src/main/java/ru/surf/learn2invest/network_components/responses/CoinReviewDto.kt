@@ -1,6 +1,6 @@
 package ru.surf.learn2invest.network_components.responses
 
-data class CoinReviewResponse(
+data class CoinReviewDto(
     val id: String, //ID название
     val rank: Int, //ранг
     val symbol: String, //Абревиатура

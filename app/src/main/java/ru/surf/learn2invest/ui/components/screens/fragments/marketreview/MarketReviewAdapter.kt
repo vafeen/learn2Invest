@@ -1,28 +1,29 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.network_components.responses.CoinReviewResponse
+import ru.surf.learn2invest.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.network_components.util.round
 
-class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
+class MarketReviewAdapter(
+    private val data: List<CoinReviewDto>,
+    private val clickListener: CoinClickListener
+) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
-        val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_top_text_info)
-        val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_bottom_text_info)
+        val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
+        val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
         lateinit var disposable: Disposable
@@ -67,18 +68,16 @@ class MarketReviewAdapter(private val data: List<CoinReviewResponse>) :
                     })
                 .build()
             disposable = imageLoader.enqueue(request)
+
             itemView.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString(
-                    "symbol",
-                    data[position].symbol
-                ) //TODO Придумать место для констант всего приложения
-                findNavController(itemView).navigate(
-                    R.id.action_marketReviewFragment_to_assetReviewFragment,
-                    bundle
-                )
+                //TODO Придумать место для констант всего приложения
+                clickListener.onCoinClick(data[position])
             }
         }
+    }
+
+    fun interface CoinClickListener {
+        fun onCoinClick(coin: CoinReviewDto)
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
