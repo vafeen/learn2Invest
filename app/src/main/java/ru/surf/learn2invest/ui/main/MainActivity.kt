@@ -55,12 +55,12 @@ class MainActivity : AppCompatActivity() {
             val intent = if (App.profile.firstName == undef &&
                 App.profile.lastName == undef
             ) {
-                delay(3000)
+                delay(1500)
                 Intent(this@MainActivity, SignUpActivity::class.java)
             } else {
                 withContext(Dispatchers.Main) {
                     runAnimatedText()
-                    delay(5000)
+                    delay(2000)
                 }
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         binding.splashTextView.alpha = 0f
 
         val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)
-        animator.duration = 5000 // Длительность анимации в миллисекундах
+        animator.duration = 2000 // Длительность анимации в миллисекундах
         animator.start()
     }
 }
