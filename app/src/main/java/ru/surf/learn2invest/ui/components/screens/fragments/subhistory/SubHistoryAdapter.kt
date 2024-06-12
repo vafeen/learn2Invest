@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const
@@ -15,13 +16,15 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 
-class SubHistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class SubHistoryAdapter(private val data: List<Transaction>) :
+    RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
+        lateinit var disposable: Disposable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,8 +46,7 @@ class SubHistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapt
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
-            }
-            else {
+            } else {
                 coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
             }
             coinBottomNumericInfo.text = "${data[position].dealPrice}$"
@@ -66,10 +68,15 @@ class SubHistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapt
                         coinIcon.setImageResource(R.drawable.placeholder)
                     })
                 .build()
-            imageLoader.enqueue(request)
+            disposable = imageLoader.enqueue(request)
             itemView.setOnClickListener {
                 Loher.d(data[position].coinPrice.toString())
             }
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.disposable.dispose()
     }
 }

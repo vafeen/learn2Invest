@@ -26,7 +26,7 @@ class SubHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
-        symbol = requireArguments().getString("id") //TODO Определиться где будут все константы
+        symbol = requireArguments().getString("symbol") //TODO Определиться где будут все константы
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
         if (symbol.isNullOrBlank().not())
@@ -43,10 +43,10 @@ class SubHistoryFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(id: String): SubHistoryFragment {
+        fun newInstance(symbol: String): SubHistoryFragment {
             val fragment = SubHistoryFragment()
             val args = Bundle()
-            args.putString("id", id)
+            args.putString("symbol", symbol)
             fragment.arguments = args
             return fragment
         }
