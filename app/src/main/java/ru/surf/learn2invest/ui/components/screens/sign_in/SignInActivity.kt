@@ -326,16 +326,20 @@ class SignInActivity : AppCompatActivity() {
                             //Loher.d("$pinCode == $firstPin")
                             //Loher.d("user = $user")
 
-                            profile = profile.copy(
-                                hash = PasswordHasher(
-                                    firstName = profile.firstName, lastName = profile.lastName
-                                ).passwordToHash(pinCode)
-                            )
 
                             blockKeyBoard()
 
                             lifecycleScope.launch(Dispatchers.Main) {
                                 showTruePINCode()
+
+                                App.mainDB.profileDao().update(
+                                    profile.copy(
+                                        hash = PasswordHasher(
+                                            firstName = profile.firstName,
+                                            lastName = profile.lastName
+                                        ).passwordToHash(pinCode)
+                                    )
+                                )
 
                                 fingerPrintManager.auth()
 
