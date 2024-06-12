@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -206,8 +207,10 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
+            val prof = App.profile.copy(firstName = name, lastName = lastname)
             App.mainDB.profileDao()
-                .insertAll(App.profile.copy(firstName = name, lastName = lastname))
+                .update(prof)
+            Log.d("profile", "sugnUp 213 = $prof")
         }.invokeOnCompletion {
             startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
                 it.action = SignINActivityActions.SignUP.action
