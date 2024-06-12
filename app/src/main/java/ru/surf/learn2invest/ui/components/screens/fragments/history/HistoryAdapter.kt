@@ -37,7 +37,10 @@ class HistoryAdapter(private val data: List<Transaction>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            coinTopTextInfo.text = data[position].name
+            coinTopTextInfo.text = if (data[position].name.length > 12)
+                "${data[position].name.substring(0..12)}..."
+            else
+                data[position].name
             coinBottomTextInfo.text = data[position].symbol
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
