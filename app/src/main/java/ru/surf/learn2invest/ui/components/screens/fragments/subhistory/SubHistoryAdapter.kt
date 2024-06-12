@@ -18,8 +18,8 @@ import ru.surf.learn2invest.noui.logs.Loher
 class SubHistoryAdapter(private val data: List<Transaction>): RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
-        val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_top_text_info)
-        val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_bottom_text_info)
+        val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
+        val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
     }

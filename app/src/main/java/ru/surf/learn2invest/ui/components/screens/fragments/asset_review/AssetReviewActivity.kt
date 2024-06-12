@@ -14,6 +14,7 @@ import ru.surf.learn2invest.network_components.util.Const
 import ru.surf.learn2invest.ui.alert_dialogs.Buy
 import ru.surf.learn2invest.ui.alert_dialogs.Sell
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
+import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 
 // Экран Обзор актива
 class AssetReviewActivity : AppCompatActivity() {
@@ -40,6 +41,10 @@ class AssetReviewActivity : AppCompatActivity() {
 
         binding.assetReviewBtn.setOnClickListener {
             goToFragment(AssetOverviewFragment.newInstance(id ?: ""))
+        }
+
+        binding.assetHistoryBtn.setOnClickListener {
+            goToFragment(SubHistoryFragment.newInstance(id ?: ""))
         }
 
         binding.coinName.text = name
