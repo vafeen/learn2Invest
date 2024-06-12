@@ -44,7 +44,7 @@ class AssetReviewActivity : AppCompatActivity() {
         }
 
         binding.assetHistoryBtn.setOnClickListener {
-            goToFragment(SubHistoryFragment.newInstance(id ?: ""))
+            goToFragment(SubHistoryFragment.newInstance(symbol ?: ""))
         }
 
         binding.coinName.text = name
