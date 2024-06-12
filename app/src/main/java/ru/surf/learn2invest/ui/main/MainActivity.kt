@@ -19,7 +19,6 @@ import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.mainDB
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -55,28 +54,20 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
             mainDB.profileDao().getAllAsFlow().collect { profList ->
-                if (profList.isNotEmpty()) {
+                val intent = if (profList.isNotEmpty()) {
                     profile = profList[App.idOfProfile]
+
                     Log.d("profile", "profile APP no else = $profile ")
 
-                    val undef = "undefined"
+                    withContext(Dispatchers.Main) {
+                        runAnimatedText()
+                        delay(2000)
+                    }
 
-                    val intent = if (App.profile.firstName == undef &&
-                        App.profile.lastName == undef
-                    ) {
-                        delay(1500)
-                        Intent(this@MainActivity, SignUpActivity::class.java)
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            runAnimatedText()
-                            delay(2000)
-                        }
+                    Intent(this@MainActivity, SignInActivity::class.java).let {
+                        it.action = SignINActivityActions.SignIN.action
 
-                        Intent(this@MainActivity, SignInActivity::class.java).let {
-                            it.action = SignINActivityActions.SignIN.action
-
-                            it
-                        }
+                        it
                     }
                 } else {
                     profile = Profile(
@@ -85,42 +76,17 @@ class MainActivity : AppCompatActivity() {
                         lastName = "undefined",
                         biometry = false,
                         fiatBalance = 50540f,
-                        assetBalance = 0f,
-                        hash = PasswordHasher(
-                            firstName = "undefined",
-                            lastName = "undefined"
-                        ).passwordToHash("0000"),
-                        tradingPasswordHash = PasswordHasher(
-                            firstName = "undefined",
-                            lastName = "undefined"
-                        ).passwordToHash("1235789")
+                        assetBalance = 0f
                     )
 
                     mainDB.profileDao().insertAll(profile)
 
                     Log.d("profile", "profile APP else  = $profile ")
 
+                    Intent(this@MainActivity, SignUpActivity::class.java)
                 }
 
                 delay(1000)
-
-                val undef = "undefined"
-
-                val intent = if (profile.firstName == undef &&
-                    profile.lastName == undef
-                ) {
-
-                    Intent(this@MainActivity, SignUpActivity::class.java)
-
-                } else {
-
-                    Intent(this@MainActivity, SignInActivity::class.java).let {
-                        it.action = SignINActivityActions.SignIN.action
-
-                        it
-                    }
-
-                }
 
                 startActivity(intent)
 
@@ -129,8 +95,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun runAnimatedText() {
-        binding.splashTextView.text = "Здравствуй, ${App.profile.firstName}!"
+    private fun runAnimatedText() {
+        binding.splashTextView.text = "Здравствуй, ${profile.firstName}!"
         binding.splashTextView.alpha = 0f
 
         val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)

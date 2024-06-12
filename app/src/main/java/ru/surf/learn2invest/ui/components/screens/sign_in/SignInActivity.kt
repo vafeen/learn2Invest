@@ -255,206 +255,208 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun updatePin(num: String) {
+        if (keyBoardIsWork) {
+            if (pinCode.length < 4) {
+                pinCode += num
+            }
 
-        if (pinCode.length < 4 && keyBoardIsWork) {
-            pinCode += num
-        } else {
-            Toast.makeText(context, "не тыкай с#ка", Toast.LENGTH_SHORT).show()
-        }
+            Log.d("pin", "last = $firstPin")
+            Log.d("pin", "pin = $pinCode")
 
-        Log.d("pin", "last = $firstPin")
-        Log.d("pin", "pin = $pinCode")
+            paintDots()
 
-        paintDots()
+            if (pinCode.length == 4) {
+                when (intent.action) {
 
-        if (pinCode.length == 4) {
-            when (intent.action) {
-
-                SignINActivityActions.SignIN.action -> {
-                    if (checkAuthenticationPin()) {
-
-                        blockKeyBoard()
-
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            showTruePINCode()
-                        }.invokeOnCompletion {
-
-                            onAuthenticationSucceeded()
-                        }
-
-                    } else {
-                        pinCode = ""
-
-                        blockKeyBoard()
-
-                        lifecycleScope.launch(Dispatchers.Main) {
-
-                            showErrorPINCode()
-
-                        }.invokeOnCompletion {
-
-                            unBlockKeyBoard()
-
-                        }
-
-                    }
-                }
-
-                SignINActivityActions.SignUP.action -> {
-                    when {
-                        firstPin == "" -> {
-                            firstPin = pinCode
-
-                            pinCode = ""
-
-                            blockKeyBoard()
-
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                delay(500)
-
-                                paintDots()
-
-                                binding.enterPinSignin.text = getString(R.string.repeat_pin)
-                            }.invokeOnCompletion {
-
-                                unBlockKeyBoard()
-
-                            }
-                        }
-
-                        firstPin == pinCode -> {
-                            //Loher.d("$pinCode == $firstPin")
-                            //Loher.d("user = $user")
-
+                    SignINActivityActions.SignIN.action -> {
+                        if (checkAuthenticationPin()) {
 
                             blockKeyBoard()
 
                             lifecycleScope.launch(Dispatchers.Main) {
                                 showTruePINCode()
-
-                                App.mainDB.profileDao().update(
-                                    profile.copy(
-                                        hash = PasswordHasher(
-                                            firstName = profile.firstName,
-                                            lastName = profile.lastName
-                                        ).passwordToHash(pinCode)
-                                    )
-                                )
-
-                                fingerPrintManager.auth()
-
-                                onAuthenticationSucceeded()
                             }.invokeOnCompletion {
 
-                                unBlockKeyBoard()
-
+                                onAuthenticationSucceeded()
                             }
 
-                        }
-
-                        firstPin != pinCode -> {
-
+                        } else {
                             pinCode = ""
 
                             blockKeyBoard()
 
                             lifecycleScope.launch(Dispatchers.Main) {
+
                                 showErrorPINCode()
+
                             }.invokeOnCompletion {
 
                                 unBlockKeyBoard()
 
                             }
+
                         }
                     }
 
-
-                }
-
-                SignINActivityActions.ChangingPIN.action -> {
-                    when {
-                        // вводит старый пароль
-                        firstPin == "" && !isVerified -> {
-                            //если ввел верно
-                            if (checkAuthenticationPin()) {
-                                isVerified = true
+                    SignINActivityActions.SignUP.action -> {
+                        when {
+                            firstPin == "" -> {
+                                firstPin = pinCode
 
                                 pinCode = ""
 
                                 blockKeyBoard()
 
                                 lifecycleScope.launch(Dispatchers.Main) {
-                                    showTruePINCode()
-                                }.invokeOnCompletion {
+                                    delay(500)
+
                                     paintDots()
 
-                                    binding.enterPinSignin.text = "Введите новый пинкод"
+                                    binding.enterPinSignin.text = getString(R.string.repeat_pin)
+                                }.invokeOnCompletion {
 
                                     unBlockKeyBoard()
-                                }
 
-                            } else {
-                                pinCode = ""
-
-                                lifecycleScope.launch(Dispatchers.Main) {
-                                    showErrorPINCode()
                                 }
                             }
-                        }
 
-                        //вводит новый
-                        firstPin == "" && isVerified -> {
+                            firstPin == pinCode -> {
+                                //Loher.d("$pinCode == $firstPin")
+                                //Loher.d("user = $user")
 
-                            firstPin = pinCode
 
-                            pinCode = ""
-
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                delay(500)
-
-                                paintDots()
-                            }.invokeOnCompletion {
-                                binding.enterPinSignin.text = "Повторите пинкод"
-                            }
-
-                        }
-
-                        // повторяет
-                        firstPin != "" && isVerified -> {
-                            if (pinCode == firstPin) {
-
-                                profile = profile.copy(
-                                    hash = PasswordHasher(
-                                        firstName = profile.firstName, lastName = profile.lastName
-                                    ).passwordToHash(pinCode)
-                                )
-
-                                userDataIsChanged = true
+                                blockKeyBoard()
 
                                 lifecycleScope.launch(Dispatchers.Main) {
-                                    withContext(Dispatchers.IO) {
-                                        App.mainDB.profileDao().update(profile)
-                                    }
-
                                     showTruePINCode()
 
-                                }.invokeOnCompletion {
-                                    pinCode = ""
+                                    App.mainDB.profileDao().update(
+                                        profile.copy(
+                                            hash = PasswordHasher(
+                                                firstName = profile.firstName,
+                                                lastName = profile.lastName
+                                            ).passwordToHash(pinCode)
+                                        )
+                                    )
+
+                                    fingerPrintManager.auth()
 
                                     onAuthenticationSucceeded()
+                                }.invokeOnCompletion {
+
+                                    unBlockKeyBoard()
+
                                 }
 
-                            } else {
+                            }
+
+                            firstPin != pinCode -> {
+
                                 pinCode = ""
+
+                                blockKeyBoard()
 
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     showErrorPINCode()
+                                }.invokeOnCompletion {
+
+                                    unBlockKeyBoard()
+
+                                }
+                            }
+                        }
+
+
+                    }
+
+                    SignINActivityActions.ChangingPIN.action -> {
+                        when {
+                            // вводит старый пароль
+                            firstPin == "" && !isVerified -> {
+                                //если ввел верно
+                                if (checkAuthenticationPin()) {
+                                    isVerified = true
+
+                                    pinCode = ""
+
+                                    blockKeyBoard()
+
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        showTruePINCode()
+                                    }.invokeOnCompletion {
+                                        paintDots()
+
+                                        binding.enterPinSignin.text = "Введите новый пинкод"
+
+                                        unBlockKeyBoard()
+                                    }
+
+                                } else {
+                                    pinCode = ""
+
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        showErrorPINCode()
+                                    }
+                                }
+                            }
+
+                            //вводит новый
+                            firstPin == "" && isVerified -> {
+
+                                firstPin = pinCode
+
+                                pinCode = ""
+
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    delay(500)
+
+                                    paintDots()
+                                }.invokeOnCompletion {
+                                    binding.enterPinSignin.text = "Повторите пинкод"
+                                }
+
+                            }
+
+                            // повторяет
+                            firstPin != "" && isVerified -> {
+                                if (pinCode == firstPin) {
+
+                                    userDataIsChanged = true
+
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        withContext(Dispatchers.IO) {
+                                            App.mainDB.profileDao().update(
+                                                profile.copy(
+                                                    hash = PasswordHasher(
+                                                        firstName = profile.firstName,
+                                                        lastName = profile.lastName
+                                                    ).passwordToHash(pinCode)
+                                                )
+                                            )
+                                        }
+
+                                        showTruePINCode()
+
+                                    }.invokeOnCompletion {
+                                        pinCode = ""
+
+                                        onAuthenticationSucceeded()
+                                    }
+
+                                } else {
+                                    pinCode = ""
+
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        showErrorPINCode()
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        } else {
+            Toast.makeText(context, "не тыкай с#ка", Toast.LENGTH_SHORT).show()
         }
     }
 
