@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".app.App"
@@ -31,12 +31,18 @@
 
         <activity
             android:name="ru.surf.learn2invest.ui.components.screens.host.HostActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
-        <activity android:name=".ui.tests.screens.DialogsTestActivity"/>
+        <activity android:name=".ui.components.screens.SignUpActivity" />
+
+        <activity android:name=".ui.tests.screens.DialogsTestActivity" />
+
+        <activity android:name=".ui.components.screens.trading_password.TradingPasswordActivity" />
+
+        <activity android:name=".ui.components.screens.fragments.asset_review.AssetReviewActivity" />
     </application>
 
 </manifest>

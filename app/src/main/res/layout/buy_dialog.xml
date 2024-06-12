@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
-    android:layout_height="350dp"
+    android:layout_height="400dp"
     android:background="@color/white">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
-        android:layout_height="350dp"
+        android:layout_height="400dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -251,17 +251,42 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <!--       TODO: Надь, поправь тут пожалуйста шрифт, как выберешь нужный) -->
+
         <TextView
             android:id="@+id/itogo_buy_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
             android:text="Итого: $ 0"
-            app:layout_constraintBottom_toTopOf="@+id/button_exit_buy_dialog"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintBottom_toTopOf="@+id/trading_password"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_buy_dialog"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_buy_dialog"
-            app:layout_constraintVertical_bias="0.75" />
+            app:layout_constraintVertical_bias="0.5" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/trading_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_exit_buy_dialog"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_buy_dialog"
+            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_buy_dialog"
+            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_buy_dialog"
+            app:layout_constraintVertical_bias="1.0"
+            app:passwordToggleEnabled="true">
+
+            <!-- Здесь наличие глазика контролируется -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/trading_password_TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Торговый пароль"
+                android:inputType="numberPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

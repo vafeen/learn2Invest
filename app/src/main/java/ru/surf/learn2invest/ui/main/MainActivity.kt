@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.main
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,22 +10,21 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
-import ru.surf.learn2invest.ui.tests.data.insertAlertInCoroutineScope
-import ru.surf.learn2invest.ui.tests.data.insertProfileInCoroutineScope
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
     private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,44 +44,44 @@ class MainActivity : AppCompatActivity() {
 
         skipSplash()
 
-//         data for testing (need to remove)
-        lifecycleScope.apply {
-            insertProfileInCoroutineScope(this)
-            insertAlertInCoroutineScope(this)
-        }
-
-
     }
 
     // Функция проверки, есть ли у нас зарегистрированный пользователь
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
 
-            val deferred =
-                async(Dispatchers.IO) { App.mainDB.profileDao().getAllAsFlow().first() }
+            val undef = "undefined"
 
-            delay(1000)
-
-            val intent = if (deferred.await().isNotEmpty()) {
-
-                App.profile = deferred.await()[App.idOfProfile]
-
-                //Loher.d("profile = ${Learn2InvestApp.profile}")
-                Loher.d("profile = ${App.profile}")
+            val intent = if (App.profile.firstName == undef &&
+                App.profile.lastName == undef
+            ) {
+                delay(1500)
+                Intent(this@MainActivity, SignUpActivity::class.java)
+            } else {
+                withContext(Dispatchers.Main) {
+                    runAnimatedText()
+                    delay(2000)
+                }
                 Intent(this@MainActivity, SignInActivity::class.java).let {
                     it.action = SignINActivityActions.SignIN.action
 
                     it
                 }
 
-            } else {
-                Intent(this@MainActivity, SignInActivity::class.java)
-//                TODO:Надь, вместо SignInActivity::class.java в этом блоке нужно активити с регистрацией
             }
 
             startActivity(intent)
-            this@MainActivity.finish()
 
+            this@MainActivity.finish()
         }
+    }
+
+    fun runAnimatedText() {
+        binding.splashTextView.text = "Здравствуй, ${App.profile.firstName}!"
+        binding.splashTextView.alpha = 0f
+
+        val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)
+        animator.duration = 2000 // Длительность анимации в миллисекундах
+        animator.start()
     }
 }

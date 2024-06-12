@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    id("kotlin-parcelize")
 }
 
 
@@ -53,8 +54,9 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.coil.svg)
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.coil.svg)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
@@ -64,4 +66,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    // for graphics
+    implementation (libs.mpandroidchart)
 }

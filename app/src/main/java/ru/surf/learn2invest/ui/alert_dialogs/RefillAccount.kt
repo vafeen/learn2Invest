@@ -14,24 +14,25 @@ import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
-    val context: Context,
-    private val lifecycleScope: LifecycleCoroutineScope
+    val context: Context, private val lifecycleScope: LifecycleCoroutineScope
 ) : CustomAlertDialog(context = context) {
 
-    private var binding =
-        RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
 
     override fun setCancelable(): Boolean {
         return true
     }
 
-    private fun changeVisibilityElements(
-        priceForRefill: Boolean = binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
-    ) {
+    private fun changeVisibilityElements() {
         binding.apply {
-            balanceClearRefillAccountDialog.isVisible = priceForRefill
+            balanceClearRefillAccountDialog.isVisible =
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
 
-            buttonRefillRefillAccountDialog.isVisible = priceForRefill
+            buttonRefillRefillAccountDialog.isVisible =
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
+                    .toFloatOrNull()?.let {
+                        it > 0
+                    } ?: false
         }
 
     }
@@ -58,10 +59,7 @@ class RefillAccount(
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
 
                 }
@@ -85,16 +83,13 @@ class RefillAccount(
 
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        App.profile?.also {
+                        App.profile.also {
                             App.mainDB.profileDao().insertAll(
                                 it.copy(
-                                    //                                assetBalance = profile.какой-то баланс + enteredBalance,
-                                    //                                fiatBalance = profile.какой-то баланс + enteredBalance
-                                    // TODO(Володь, какой тут баланс профиля пополнять, и почему все балансы блин интовые, если должны быть вещественными?????????????????)
+                                    fiatBalance = it.fiatBalance + enteredBalance
                                 )
                             )
                         }
-
                     }
 
                 }
@@ -103,10 +98,8 @@ class RefillAccount(
             }
 
             balanceTextviewRefillAccountDialog.text =
-                "${
-                    App.profile?.fiatBalance // TODO(Володь, Какой тут баланс из профиля?)
-                        ?: "balance error"
-                }"
+                App.profile.fiatBalance.getWithCurrency() // TODO(Володь, Какой тут баланс из профиля?)
+                    ?: "balance error"
 
         }
     }

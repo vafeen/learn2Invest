@@ -1,8 +1,13 @@
 package ru.surf.learn2invest.app
 
 import android.app.Application
-import ru.surf.learn2invest.notifications.NotificationChannels
-import ru.surf.learn2invest.notifications.registerNotificationChannels
+import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.L2IDatabase
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 
@@ -13,7 +18,7 @@ class App : Application() {
 
         var idOfProfile = 0
 
-        var profile: Profile? = null
+        lateinit var profile: Profile
     }
 
     override fun onCreate() {
@@ -21,7 +26,37 @@ class App : Application() {
 
         mainDB = L2IDatabase.buildDatabase(context = this)
 
-        this.registerNotificationChannels(NotificationChannels.allChannels)
+        val profileFlow: Flow<List<Profile>> = mainDB.profileDao().getAllAsFlow()
 
+        with(ProcessLifecycleOwner.get()) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                profileFlow.collect { profList ->
+                    if (profList.isNotEmpty()) {
+                        profile = profList[idOfProfile]
+                        Log.d("profile", "profile APP no else = $profile ")
+
+                    } else {
+                        profile = Profile(
+                            id = 0,
+                            firstName = "undefined",
+                            lastName = "undefined",
+                            biometry = false,
+                            fiatBalance = 50540f,
+                            assetBalance = 0f,
+                            hash = PasswordHasher(
+                                firstName = "undefined",
+                                lastName = "undefined"
+                            ).passwordToHash("0000"),
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = "undefined",
+                                lastName = "undefined"
+                            ).passwordToHash("1235789")
+                        )
+                        Log.d("profile", "profile APP else  = $profile ")
+
+                    }
+                }
+            }
+        }
     }
 }
