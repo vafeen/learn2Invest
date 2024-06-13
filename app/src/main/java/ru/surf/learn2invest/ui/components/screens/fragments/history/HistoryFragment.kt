@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
-import ru.surf.learn2invest.noui.database_components.entity.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.logs.Loher
 
 class HistoryFragment : Fragment() {
