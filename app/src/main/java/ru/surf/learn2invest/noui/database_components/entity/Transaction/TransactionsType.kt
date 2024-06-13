@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.noui.database_components.entity
+package ru.surf.learn2invest.noui.database_components.entity.Transaction
 
 enum class TransactionsType(val action: Int) {
     Buy(action = 1),
