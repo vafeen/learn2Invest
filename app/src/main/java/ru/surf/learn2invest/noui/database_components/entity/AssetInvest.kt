@@ -13,10 +13,8 @@ class AssetInvest(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String, //Имя коина (Bitcoin)
     val symbol: String, //Абревиатура (BTC)
-    val iconURL: String, //URL для закачки иконки
     val coinPrice: Float, //Цена
-    val changePercent24Hr: Float, //удалить
-    val amount: Int, //Колличество
+    val amount: Float, //Колличество
 )
 
 
