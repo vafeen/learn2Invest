@@ -14,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
@@ -32,10 +33,7 @@ class Buy(
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
     private var coin: AssetInvest = AssetInvest(
-        name = name,
-        symbol = symbol,
-        coinPrice = 0f,
-        amount = 0f
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
 
     override fun setCancelable(): Boolean {
@@ -140,9 +138,15 @@ class Buy(
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
 
-                    buttonBuyBuyDialog.isVisible =
-                        enteringNumberOfLotsBuyDialog.text.toString().isNotEmpty() &&
-                                enteringNumberOfLotsBuyDialog.text.toString().toInt() > 0
+                    buttonBuyBuyDialog.isVisible = enteringNumberOfLotsBuyDialog.text.toString()
+                        .isNotEmpty() && enteringNumberOfLotsBuyDialog.text.toString()
+                        .toInt() > 0 && if (App.profile.tradingPasswordHash != null) {
+                        verifyTradingPassword(
+                            user = App.profile, password = binding.tradingPasswordTV.text.toString()
+                        )
+                    } else {
+                        true
+                    }
 
                 }
             })
