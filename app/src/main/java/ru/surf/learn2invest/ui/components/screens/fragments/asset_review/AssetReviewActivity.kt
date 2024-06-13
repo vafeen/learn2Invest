@@ -80,7 +80,13 @@ class AssetReviewActivity : AppCompatActivity() {
         }
 
         binding.sellAssetBtn.setOnClickListener {
-            Sell(this, lifecycleScope).initDialog().show()
+            Sell(
+                context = this,
+                lifecycleScope = lifecycleScope,
+                id = id,
+                name = name,
+                symbol = symbol,
+            ).initDialog().show()
         }
     }
 
