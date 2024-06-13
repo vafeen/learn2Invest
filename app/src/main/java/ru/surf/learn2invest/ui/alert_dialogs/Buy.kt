@@ -31,6 +31,13 @@ class Buy(
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
+    private var coin: AssetInvest = AssetInvest(
+        name = name,
+        symbol = symbol,
+        coinPrice = 0f,
+        amount = 0f
+    )
+
     override fun setCancelable(): Boolean {
         return true
     }
@@ -40,6 +47,8 @@ class Buy(
 
 
         binding.apply {
+
+            enteringNumberOfLotsBuyDialog.setText("0")
 
             lifecycleScope.launch(Dispatchers.Main) {
 
@@ -102,7 +111,7 @@ class Buy(
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
-                                ""
+                                "0"
                             }
 
                             it > 1 -> {
@@ -132,7 +141,8 @@ class Buy(
                     updateFields()
 
                     buttonBuyBuyDialog.isVisible =
-                        enteringNumberOfLotsBuyDialog.text.toString().toInt() > 0
+                        enteringNumberOfLotsBuyDialog.text.toString().isNotEmpty() &&
+                                enteringNumberOfLotsBuyDialog.text.toString().toInt() > 0
 
                 }
             })
@@ -160,6 +170,7 @@ class Buy(
                 true
 
             } else {
+
                 false
 
             }
@@ -172,17 +183,13 @@ class Buy(
 
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
-        val x = binding.enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull()
+        val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
 
-        Log.d("buy", "x = \"${binding.enteringNumberOfLotsBuyDialog.text}\" -> $x")
-
-        val amount = (x ?: 0).toFloat()
-
-        if (balance > price * amount) {
+        if (balance > price * amountCurrent) {
 
             // обновление баланса
             App.profile = App.profile.copy(
-                fiatBalance = balance - price * amount
+                fiatBalance = balance - price * amountCurrent
             )
 
             lifecycleScope.launch(Dispatchers.IO) {
@@ -194,18 +201,20 @@ class Buy(
                             name = name,
                             symbol = symbol,
                             coinPrice = price,
-                            dealPrice = price * amount,
-                            amount = amount,
+                            dealPrice = price * amountCurrent,
+                            amount = amountCurrent,
                             transactionType = TransactionsType.Buy
                         )
                     )
 
                     // обновление портфеля
                     assetInvestDao().insertAll(
-                        AssetInvest(
-                            name = name, symbol = symbol, coinPrice = price, amount = amount
+                        coin.copy(
+                            coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                            amount = coin.amount + amountCurrent
                         )
                     )
+
                 }
             }
         }
@@ -229,7 +238,7 @@ class Buy(
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
 
-            val price = priceText.substring(2, priceText.length).getFloatFromStringWithCurrency()
+            val price = priceText.getFloatFromStringWithCurrency()
             Log.e("error", "price  t= $price")
             val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
@@ -240,6 +249,22 @@ class Buy(
                 0
             })
         }
+    }
+
+
+    override fun show() {
+        super.show()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
+
+            if (coinMayBeInPortfolio != null) {
+                coin = coinMayBeInPortfolio
+            }
+
+            Log.d("coin", "coin = $coin")
+        }
+
     }
 
 }
