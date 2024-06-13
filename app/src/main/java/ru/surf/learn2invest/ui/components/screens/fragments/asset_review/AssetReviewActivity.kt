@@ -27,9 +27,9 @@ class AssetReviewActivity : AppCompatActivity() {
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id = intent.getStringExtra("id")
-        val name = intent.getStringExtra("name")
-        val symbol = intent.getStringExtra("symbol")
+        val id = intent.getStringExtra("id") ?: ""
+        val name = intent.getStringExtra("name") ?: ""
+        val symbol = intent.getStringExtra("symbol") ?: ""
 
         binding.goBack.setOnClickListener {
             finish()
@@ -70,7 +70,13 @@ class AssetReviewActivity : AppCompatActivity() {
         disposable = imageLoader.enqueue(request)
 
         binding.buyAssetBtn.setOnClickListener {
-            Buy(this, lifecycleScope).initDialog().show()
+            Buy(
+                context = this,
+                lifecycleScope = lifecycleScope,
+                id = id,
+                name = name,
+                symbol = symbol,
+            ).initDialog().show()
         }
 
         binding.sellAssetBtn.setOnClickListener {

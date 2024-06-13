@@ -14,11 +14,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
-    context: Context, val lifecycleScope: LifecycleCoroutineScope
+    context: Context,
+    val lifecycleScope: LifecycleCoroutineScope,
+    val id: String,
+    val name: String,
+    val symbol: String
+
 ) : CustomAlertDialog(context = context) {
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
@@ -39,15 +47,16 @@ class Buy(
                     App.profile.fiatBalance.getWithCurrency() // TODO()Володь, Сюда также нужно
                 //            поставить нужный тип баланса
 
-//                while (true) {
-                val str = 777777f
-                priceNumberBuyDialog.text =
-                    str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
-                // которая приходит через ретрофит
+                while (true) {
+                    val str = 777f
+                    priceNumberBuyDialog.text =
+                        str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
+                    // которая приходит через ретрофит
 
-                updateFields()
-                delay(2000)
-//                }
+                    updateFields()
+
+                    delay(2000)
+                }
             }
 
             buttonExitBuyDialog.setOnClickListener {
@@ -57,58 +66,55 @@ class Buy(
             buttonBuyBuyDialog.isVisible = false
 
             buttonBuyBuyDialog.setOnClickListener {
-                // TODO Логика продажи
+                buy()
 
                 cancel()
             }
 
             imageButtonPlusBuyDialog.setOnClickListener {
 
-                lifecycleScope.launch(Dispatchers.Main) {
+                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
 
-                    enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
+                    (numOfLotsText.toString().toIntOrNull() ?: 0).let {
+                        val balance = App.profile.fiatBalance
+                        when {
+                            it == 0 -> {
+                                "1"
+                            }
 
-                        (numOfLotsText.toString().toIntOrNull() ?: 0).let {
-                            val balance = App.profile.fiatBalance
-                            when {
-                                it == 0 -> {
-                                    ""
-                                }
+                            resultPrice(onFuture = true) <= balance -> {
+                                (it + 1).toString()
+                            }
 
-                                resultPrice(onFuture = true) <= balance -> {
-                                    (it + 1).toString()
-                                }
-
-                                else -> {
-                                    it.toString()
-                                }
+                            else -> {
+                                it.toString()
                             }
                         }
+                    }
 
-                    })
-                }
+                })
+
             }
             imageButtonMinusBuyDialog.setOnClickListener {
 
-                enteringNumberOfLotsBuyDialog.setText(
-                    enteringNumberOfLotsBuyDialog.text.let { text ->
+                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
 
-                        text.toString().toIntOrNull()?.let {
-                            when {
-                                it == 1 || it == 0 -> {
-                                    ""
-                                }
+                    text.toString().toIntOrNull()?.let {
+                        when {
+                            it == 1 || it == 0 -> {
+                                ""
+                            }
 
-                                it > 1 -> {
-                                    (it - 1).toString()
-                                }
+                            it > 1 -> {
+                                (it - 1).toString()
+                            }
 
-                                else -> {
-                                    it.toString()
-                                }
+                            else -> {
+                                it.toString()
                             }
                         }
-                    })
+                    }
+                })
             }
 
             enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
@@ -124,6 +130,10 @@ class Buy(
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
+
+                    buttonBuyBuyDialog.isVisible =
+                        enteringNumberOfLotsBuyDialog.text.toString().toInt() > 0
+
                 }
             })
 
@@ -137,10 +147,7 @@ class Buy(
                     }
 
                     override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
+                        s: CharSequence?, start: Int, before: Int, count: Int
                     ) {
 
                     }
@@ -157,6 +164,50 @@ class Buy(
 
             }
             Loher.e("вернулось ${tradingPassword.isVisible}")
+        }
+    }
+
+    private fun buy() {
+        val balance = App.profile.fiatBalance
+
+        val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
+
+        val x = binding.enteringNumberOfLotsBuyDialog.toString().toIntOrNull()
+
+        Log.d("buy", "x = \"${binding.enteringNumberOfLotsBuyDialog.text}\" -> $x")
+
+        val amount = (x ?: 0).toFloat()
+
+        if (balance > price * amount) {
+
+            // обновление баланса
+            App.profile = App.profile.copy(
+                fiatBalance = balance - price * amount
+            )
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                App.mainDB.apply {
+
+                    // обновление истории
+                    transactionDao().insertAll(
+                        Transaction(
+                            name = name,
+                            symbol = symbol,
+                            coinPrice = price,
+                            dealPrice = price * amount,
+                            amount = amount,
+                            transactionType = TransactionsType.Buy
+                        )
+                    )
+
+                    // обновление портфеля
+                    assetInvestDao().insertAll(
+                        AssetInvest(
+                            name = name, symbol = symbol, coinPrice = price, amount = amount
+                        )
+                    )
+                }
+            }
         }
     }
 
