@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.app
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,6 @@ class App : Application() {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
                         profile = profList[idOfProfile]
-                        Log.d("profile", "profile APP no else = $profile ")
                     }
                 }
             }
