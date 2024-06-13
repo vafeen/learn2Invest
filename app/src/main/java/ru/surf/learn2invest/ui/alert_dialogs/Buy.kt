@@ -172,7 +172,7 @@ class Buy(
 
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
-        val x = binding.enteringNumberOfLotsBuyDialog.toString().toIntOrNull()
+        val x = binding.enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull()
 
         Log.d("buy", "x = \"${binding.enteringNumberOfLotsBuyDialog.text}\" -> $x")
 
