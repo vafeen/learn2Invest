@@ -182,7 +182,8 @@ class Sell(
 
         // обновление баланса
         App.profile = App.profile.copy(
-            fiatBalance = balance + price * amountCurrent
+            fiatBalance = balance + price * amountCurrent,
+            assetBalance = App.profile.assetBalance - price * amountCurrent
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
