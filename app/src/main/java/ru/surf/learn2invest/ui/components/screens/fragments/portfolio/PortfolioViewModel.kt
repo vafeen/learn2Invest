@@ -10,9 +10,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
+import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
+import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 
 class PortfolioViewModel(
-    private val assetBalanceHistoryDao: AssetBalanceHistoryDao
+    private val assetBalanceHistoryDao: AssetBalanceHistoryDao,
+    private val assetInvestDao: AssetInvestDao
 ) : ViewModel() {
     private val _chartData = MutableLiveData<List<Entry>>()
     val chartData: LiveData<List<Entry>> get() = _chartData
@@ -22,6 +25,8 @@ class PortfolioViewModel(
 
     private val _fiatBalance = MutableLiveData<Float>()
     val fiatBalance: LiveData<Float> get() = _fiatBalance
+
+    val assets: MutableList<AssetInvest> = mutableListOf()
 
     fun loadChartData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,6 +40,21 @@ class PortfolioViewModel(
                     _chartData.value = data
                 }
             }
+        }
+    }
+
+    fun loadAssetsData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            assetInvestDao.getAllAsFlow().collect {
+                assets.addAll(it)
+            }
+        }
+    }
+
+    fun loadBalanceData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _assetBalance.postValue(App.profile.assetBalance)
+            _fiatBalance.postValue(App.profile.fiatBalance)
         }
     }
 }
