@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.components.screens.fragments.history
+package ru.surf.learn2invest.ui.components.screens.fragments.subhistory
 
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +16,8 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 
-class HistoryAdapter(private val data: List<Transaction>) :
-    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+class SubHistoryAdapter(private val data: List<Transaction>) :
+    RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
@@ -37,11 +37,12 @@ class HistoryAdapter(private val data: List<Transaction>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            coinTopTextInfo.text = if (data[position].name.length > 12)
-                "${data[position].name.substring(0..12)}..."
-            else
-                data[position].name
-            coinBottomTextInfo.text = data[position].symbol
+            coinTopTextInfo.text =
+                if (data[position].name.length > 12)
+                    "${data[position].name.substring(0..12)}..."
+                else
+                    data[position].name
+            coinBottomTextInfo.text = data[position].amount.toString()
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
