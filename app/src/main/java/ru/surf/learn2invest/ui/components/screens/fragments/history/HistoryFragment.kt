@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
 import ru.surf.learn2invest.noui.database_components.entity.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 
 class HistoryFragment : Fragment() {
@@ -36,9 +36,14 @@ class HistoryFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             App.mainDB.transactionDao().getAllAsFlow().collect {
                 Loher.d(it.size.toString())
-                data.addAll(it)
-                withContext(Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
+                if (it.isEmpty()) {
+                    binding.historyRecyclerview.isVisible = false
+                    binding.noActionsTv.isVisible = true
+                } else {
+                    data.addAll(it)
+                    withContext(Dispatchers.Main) {
+                        adapter.notifyDataSetChanged()
+                    }
                 }
             }
         }

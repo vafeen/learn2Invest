@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,9 +33,14 @@ class SubHistoryFragment : Fragment() {
         if (symbol.isNullOrBlank().not())
             lifecycleScope.launch(Dispatchers.IO) {
                 App.mainDB.transactionDao().getFilteredBySymbol(symbol!!).collect {
-                    data.addAll(it)
-                    withContext(Dispatchers.Main) {
-                        adapter.notifyDataSetChanged()
+                    if (it.isEmpty()) {
+                        binding.assetHistory.isVisible = false
+                        binding.noActionsError.isVisible = true
+                    } else {
+                        data.addAll(it)
+                        withContext(Dispatchers.Main) {
+                            adapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }
