@@ -45,4 +45,8 @@
         <activity android:name=".ui.components.screens.fragments.asset_review.AssetReviewActivity" />
     </application>
 
+    <queries>
+        <package android:name="com.google.android.gm" />
+    </queries>
+
 </manifest>
