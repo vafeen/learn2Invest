@@ -32,6 +32,8 @@ class Buy(
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
+    private var haveAssetsOrNot = false
+
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
@@ -212,14 +214,22 @@ class Buy(
                         )
                     )
 
-                    // обновление портфеля
-                    assetInvestDao().insertAll(
-                        coin.copy(
-                            coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
-                            amount = coin.amount + amountCurrent
+                    if (haveAssetsOrNot) {
+                        assetInvestDao().update(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
                         )
-                    )
-
+                    } else {
+                        // обновление портфеля
+                        assetInvestDao().insertAll(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -264,6 +274,8 @@ class Buy(
             val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
+                haveAssetsOrNot = true
+
                 coin = coinMayBeInPortfolio
             }
 
