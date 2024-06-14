@@ -28,6 +28,14 @@ class PortfolioFragment : Fragment() {
 
         chartHelper.setupChart(binding.chart)
 
+        viewModel.assetBalance.observe(viewLifecycleOwner) { balance ->
+            binding.balanceText.text = "$${balance}"
+        }
+
+        viewModel.fiatBalance.observe(viewLifecycleOwner) { balance ->
+            binding.accountFunds.text = "$${balance}"
+        }
+
         viewModel.chartData.observe(viewLifecycleOwner) { data ->
             chartHelper.updateData(data)
         }

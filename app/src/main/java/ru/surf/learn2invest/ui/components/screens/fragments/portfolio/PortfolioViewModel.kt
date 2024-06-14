@@ -20,9 +20,13 @@ class PortfolioViewModel(
     private val _assetBalance = MutableLiveData<Float>()
     val assetBalance: LiveData<Float> get() = _assetBalance
 
+    private val _fiatBalance = MutableLiveData<Float>()
+    val fiatBalance: LiveData<Float> get() = _fiatBalance
+
     fun loadChartData() {
         viewModelScope.launch(Dispatchers.IO) {
             _assetBalance.postValue(App.profile.assetBalance)
+            _fiatBalance.postValue(App.profile.fiatBalance)
             assetBalanceHistoryDao.getAllAsFlow().collect { balanceHistories ->
                 val data = balanceHistories.mapIndexed { index, assetBalanceHistory ->
                     Entry(index.toFloat(), assetBalanceHistory.assetBalance)
