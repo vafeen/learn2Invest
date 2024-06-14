@@ -107,12 +107,6 @@ class PortfolioFragment : Fragment() {
                 openLink(Link.figma)
             }
 
-            languageType.text = "RUSSIAN"
-
-            language.setOnClickListener {
-
-            }
-
             versionCode.text = getVersionName()
 
 
