@@ -205,7 +205,7 @@ class Sell(
 
                 // обновление портфеля
                 if (amountCurrent < coin.amount) {
-                    assetInvestDao().insertAll(
+                    assetInvestDao().update(
                         coin.copy(
                             coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
                             amount = coin.amount - amountCurrent
