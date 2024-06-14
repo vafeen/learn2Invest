@@ -46,7 +46,10 @@ class PortfolioViewModel(
     fun loadAssetsData() {
         viewModelScope.launch(Dispatchers.IO) {
             assetInvestDao.getAllAsFlow().collect {
-                assets.addAll(it)
+                withContext(Dispatchers.Main) {
+                    assets.clear()
+                    assets.addAll(it)
+                }
             }
         }
     }

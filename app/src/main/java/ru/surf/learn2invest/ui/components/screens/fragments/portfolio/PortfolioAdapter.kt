@@ -37,18 +37,17 @@ class PortfolioAdapter(
 
     class PortfolioViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        private val coinIcon: ImageView = itemView.findViewById<ImageView>(R.id.coin_icon)
-        private val coinName: TextView = itemView.findViewById<TextView>(R.id.coin_name)
-        private val coinSymbol: TextView = itemView.findViewById<TextView>(R.id.coin_symbol)
+        private val coinIcon: ImageView = itemView.findViewById(R.id.coin_icon)
+        private val coinName: TextView = itemView.findViewById(R.id.coin_name)
+        private val coinSymbol: TextView = itemView.findViewById(R.id.coin_symbol)
         private val coinTopNumericInfo: TextView =
-            itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
-        val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
+            itemView.findViewById(R.id.coin_top_numeric_info)
         lateinit var disposable: Disposable
 
         fun bind(asset: AssetInvest) {
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
-            coinTopNumericInfo.text = "${asset.coinPrice}"
+            coinTopNumericInfo.text = asset.coinPrice.toString()
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {

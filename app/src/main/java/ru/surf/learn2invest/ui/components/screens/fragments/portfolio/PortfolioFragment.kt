@@ -19,7 +19,7 @@ class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
     private lateinit var viewModel: PortfolioViewModel
-    private val adapter = PortfolioAdapter() { asset ->
+    private val adapter = PortfolioAdapter { asset ->
         startAssetReviewIntent(asset)
     }
 
@@ -31,20 +31,20 @@ class PortfolioFragment : Fragment() {
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
+        setupAssetsRecyclerView()
+
         val factory = PortfolioViewModelFactory(
             App.mainDB.assetBalanceHistoryDao(),
             App.mainDB.assetInvestDao()
         )
         viewModel = ViewModelProvider(this, factory)[PortfolioViewModel::class.java]
 
-        setupAssetsRecyclerView()
-
         viewModel.assetBalance.observe(viewLifecycleOwner) { balance ->
-            binding.balanceText.text = "$${balance}"
+            binding.balanceText.text = "${balance}$"
         }
 
         viewModel.fiatBalance.observe(viewLifecycleOwner) { balance ->
-            binding.accountFunds.text = "$${balance}"
+            binding.accountFunds.text = "${balance}$"
         }
         viewModel.loadBalanceData()
 
