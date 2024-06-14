@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
+
 
 // Экран портфеля
 class PortfolioFragment : Fragment() {
@@ -57,16 +57,31 @@ class PortfolioFragment : Fragment() {
         activity?.apply {
             val drawerLayout: DrawerLayout = binding.drawerLayout
 
-            val toggle = ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
+            drawerLayout.addDrawerListener(
+                object : DrawerLayout.DrawerListener {
+                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                        // Вызывается при перемещении Drawer
+                        if (slideOffset > 0) {
+                            binding.imageButton.isVisible = false
+                        } else {
+                            binding.imageButton.isVisible = true
+                        }
+                    }
+
+                    override fun onDrawerOpened(drawerView: View) {
+                        // Вызывается, когда Drawer открыт
+                    }
+
+                    override fun onDrawerClosed(drawerView: View) {
+                        // Вызывается, когда Drawer закрыт
+                    }
+
+                    override fun onDrawerStateChanged(newState: Int) {
+                        // Вызывается при изменении состояния Drawer
+                    }
+
+                }
             )
-
-            drawerLayout.addDrawerListener(toggle)
-            toggle.syncState()
-
 
             initDrawerListeners()
         }
