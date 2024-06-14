@@ -6,4 +6,6 @@
     <dimen name="margin_dialogs_card_content_top_u_verhnego">7dp</dimen>
     <dimen name="margin_dialogs_card_content_top_u_odinokogo">15dp</dimen>
 
+    <dimen name="margin_horizontal_dev_str">20dp</dimen>
+    <dimen name="margin_top_dev_str">40dp</dimen>
 </resources>

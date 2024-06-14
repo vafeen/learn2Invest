@@ -5,6 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="23dp"
+        android:src="@drawable/material_list"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="0"
+        app:tint="@color/black" />
 
     <View
         android:id="@+id/view"
@@ -61,21 +76,6 @@
         app:layout_constraintTop_toBottomOf="@id/balance"
         tools:text="+5.21%" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_margin="23dp"
-        android:src="@drawable/material_list"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0"
-        app:tint="@color/black" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
@@ -173,9 +173,10 @@
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:visibility="visible"
 
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="spread"
         app:layout_constraintStart_toStartOf="parent"
@@ -186,13 +187,253 @@
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
-
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/recession"
+            android:background="@color/white"
             android:clickable="false"
-            app:layout_constraintHeight_default="spread"
-            app:menu="@menu/drawer_items" />
+            app:layout_constraintHeight_default="spread">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="none">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/learn2investCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    android:background="@drawable/my_investments_background"
+                    android:backgroundTint="@color/main_background"
+                    android:textAppearance="@style/Text.SemiBold.18"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0">
+
+                    <TextView
+                        android:id="@+id/learn2invest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:text="Learn2Invest"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/figma"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/language_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:text="Язык системы:"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/figma"
+                        app:layout_constraintVertical_bias="0" />
+
+
+                    <TextView
+                        android:id="@+id/language_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:text="test language"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="@+id/language_textView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/language_textView"
+                        app:layout_constraintTop_toTopOf="@+id/language_textView"
+                        app:layout_constraintVertical_bias="1.0" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contact_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
+
+                    app:layout_constraintVertical_bias="0">
+
+                    <TextView
+                        android:id="@+id/contact_us_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.0"
+                        android:text="Написать нам"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
+                        app:layout_constraintVertical_bias="0" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:src="@drawable/arrow_right_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    android:orientation="horizontal"
+                    android:textAppearance="@style/Text.SemiBold.18"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/contact_us"
+                    app:layout_constraintVertical_bias="0">
+
+                    <TextView
+                        android:id="@+id/code_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.0"
+
+                        android:text="Исходный код"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/contact_us"
+                        app:layout_constraintVertical_bias="0" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:src="@drawable/arrow_right_gray" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginBottom="@dimen/margin_top_dev_str"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintVertical_bias="0">
+
+                    <TextView
+                        android:id="@+id/version_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Версия:"
+                        android:textAppearance="@style/Text.SemiBold.18" />
+
+                    <TextView
+                        android:id="@+id/version_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="version test"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="@+id/version_TV"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/version_TV"
+                        app:layout_constraintTop_toTopOf="@+id/version_TV"
+                        app:layout_constraintVertical_bias="0.0" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/figma"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    android:orientation="horizontal"
+                    android:textAppearance="@style/Text.SemiBold.18"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/code"
+
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/figma_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.0"
+
+                        android:text="Макет в Figma"
+                        android:textAppearance="@style/Text.SemiBold.18"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/code"
+
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:src="@drawable/arrow_right_gray" />
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
