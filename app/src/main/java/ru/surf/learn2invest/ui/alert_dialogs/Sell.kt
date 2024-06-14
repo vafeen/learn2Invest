@@ -32,7 +32,8 @@ class Sell(
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
 
     private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+        assetID = id
     )
 
     override fun setCancelable(): Boolean {

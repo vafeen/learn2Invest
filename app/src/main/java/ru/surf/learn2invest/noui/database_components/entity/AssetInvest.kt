@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class AssetInvest(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val assetID: String,
     val name: String, //Имя коина (Bitcoin)
     val symbol: String, //Абревиатура (BTC)
     val coinPrice: Float, //Цена
