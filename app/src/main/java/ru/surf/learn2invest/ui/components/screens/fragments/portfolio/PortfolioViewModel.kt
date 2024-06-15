@@ -37,6 +37,8 @@ class PortfolioViewModel : ViewModel() {
     private val _priceChanges = MutableLiveData<Map<String, Float>>()
     val priceChanges: LiveData<Map<String, Float>> get() = _priceChanges
 
+    private val _portfolioChangePercentage = MutableLiveData<Float>()
+    val portfolioChangePercentage: LiveData<Float> get() = _portfolioChangePercentage
 
     fun loadChartData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -73,6 +75,7 @@ class PortfolioViewModel : ViewModel() {
     private fun loadPriceChanges() {
         viewModelScope.launch(Dispatchers.IO) {
             val priceChanges = mutableMapOf<String, Float>()
+            var totalCurrentValue = 0f
             for (asset in assets) {
                 val response = networkRepository.getCoinReview(asset.assetID)
                 if (response is ResponseWrapper.Success) {
@@ -81,11 +84,25 @@ class PortfolioViewModel : ViewModel() {
                     val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
                     val roundedPriceChange = BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
                     priceChanges[asset.symbol] = roundedPriceChange
+                    totalCurrentValue += currentPrice * asset.amount
                 }
             }
             withContext(Dispatchers.Main) {
                 _priceChanges.value = priceChanges
+                calculatePortfolioChangePercentage(totalCurrentValue)
             }
+        }
+    }
+
+    private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {
+        val initialBalance = App.profile.assetBalance
+        if (initialBalance != 0f) {
+            val changePercentage = ((totalCurrentValue - initialBalance) / initialBalance) * 100
+            val roundedChangePercentage =
+                BigDecimal(changePercentage.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+            _portfolioChangePercentage.value = roundedChangePercentage
+        } else {
+            _portfolioChangePercentage.value = 0f
         }
     }
 }

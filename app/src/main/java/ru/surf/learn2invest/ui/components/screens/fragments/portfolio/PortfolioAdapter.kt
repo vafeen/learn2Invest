@@ -13,6 +13,7 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import java.util.Locale
 
 class PortfolioAdapter(
     private val clickListener: AssetClickListener
@@ -51,7 +52,7 @@ class PortfolioAdapter(
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
             coinTopNumericInfo.text = asset.coinPrice.toString()
-            val formattedChange = String.format("%.2f%%", priceChange)
+            val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChange)
             coinBottomNumericInfo.text = if (priceChange >= 0) "+$formattedChange" else formattedChange
 
             val color = if (priceChange >= 0) {

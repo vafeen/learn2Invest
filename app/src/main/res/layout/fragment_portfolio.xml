@@ -9,7 +9,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="149dp"
-        android:background="@drawable/my_investments_background"
+        android:background="@drawable/portfolio_background"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="14dp"
-        android:background="@drawable/percent_background"
+        android:background="@drawable/percent_increase_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="4dp"
         android:textColor="@color/black"

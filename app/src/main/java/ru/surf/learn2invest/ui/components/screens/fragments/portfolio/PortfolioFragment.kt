@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.surf.learn2invest.app.App
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import java.util.Locale
 
 // Экран портфеля
 class PortfolioFragment : Fragment() {
@@ -63,6 +65,25 @@ class PortfolioFragment : Fragment() {
         viewModel.priceChanges.observe(viewLifecycleOwner) { priceChanges ->
             adapter.priceChanges = priceChanges
             adapter.notifyDataSetChanged()
+        }
+
+        viewModel.portfolioChangePercentage.observe(viewLifecycleOwner) { percentage ->
+            val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
+            binding.percent.text =
+                if (percentage >= 0) "+$formattedPercentage" else formattedPercentage
+
+            val background = if (percentage >= 0) {
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.percent_increase_background
+                )
+            } else {
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.percent_recession_background
+                )
+            }
+            binding.percent.background = background
         }
 
         return binding.root
