@@ -22,12 +22,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyPIN
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 
 
@@ -106,7 +106,7 @@ class SignInActivity : AppCompatActivity() {
     private fun updateProfileData() {
         if (userDataIsChanged) {
             lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.profileDao().update(profile)
+                DatabaseRepository.updateProfile(profile)
             }
         }
     }
