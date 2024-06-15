@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     firstName = "undefined",
                     lastName = "undefined",
                     biometry = false,
-                    fiatBalance = 50540f,
+                    fiatBalance = 0f,
                     assetBalance = 0f
                 )
 

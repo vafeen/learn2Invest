@@ -67,7 +67,8 @@ class PortfolioViewModel : ViewModel() {
 
     fun loadBalanceData() {
         viewModelScope.launch(Dispatchers.IO) {
-            _assetBalance.postValue(App.profile.assetBalance)
+            val totalBalance = App.profile.assetBalance + App.profile.fiatBalance
+            _assetBalance.postValue(totalBalance)
             _fiatBalance.postValue(App.profile.fiatBalance)
         }
     }
@@ -87,6 +88,7 @@ class PortfolioViewModel : ViewModel() {
                     totalCurrentValue += currentPrice * asset.amount
                 }
             }
+            totalCurrentValue += App.profile.fiatBalance
             withContext(Dispatchers.Main) {
                 _priceChanges.value = priceChanges
                 calculatePortfolioChangePercentage(totalCurrentValue)
@@ -95,7 +97,7 @@ class PortfolioViewModel : ViewModel() {
     }
 
     private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {
-        val initialBalance = App.profile.assetBalance
+        val initialBalance = App.profile.assetBalance + App.profile.fiatBalance
         if (initialBalance != 0f) {
             val changePercentage = ((totalCurrentValue - initialBalance) / initialBalance) * 100
             val roundedChangePercentage =
