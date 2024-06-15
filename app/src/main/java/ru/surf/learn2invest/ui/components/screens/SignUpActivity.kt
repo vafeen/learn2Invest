@@ -223,8 +223,8 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
             val prof = App.profile.copy(firstName = name, lastName = lastname)
-            App.mainDB.profileDao()
-                .update(prof)
+            DatabaseRepository
+                .updateProfile(prof)
             Log.d("profile", "sugnUp 213 = $prof")
         }.invokeOnCompletion {
             startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {

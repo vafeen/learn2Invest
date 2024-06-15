@@ -20,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
@@ -428,7 +427,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
                 lifecycleScope.launch(Dispatchers.IO) {
 
-                    App.mainDB.profileDao().insertAll(
+                    DatabaseRepository.insertAllProfile(
                         profile.copy(
                             tradingPasswordHash = PasswordHasher(
                                 firstName = profile.firstName, lastName = profile.lastName
@@ -451,7 +450,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun updateProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.profileDao().insertAll(profile)
+            DatabaseRepository.insertAllProfile(profile)
         }
     }
 

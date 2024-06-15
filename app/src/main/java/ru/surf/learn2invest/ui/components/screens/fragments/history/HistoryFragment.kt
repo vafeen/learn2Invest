@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
@@ -28,6 +27,7 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
 
@@ -43,8 +43,10 @@ class HistoryFragment : Fragment() {
             DatabaseRepository.getAllAsFlowTransaction().collect {
                 Loher.d(it.size.toString())
                 if (it.isEmpty()) {
-                    binding.historyRecyclerview.isVisible = false
-                    binding.noActionsTv.isVisible = true
+                    withContext(Dispatchers.Main) {
+                        binding.historyRecyclerview.isVisible = false
+                        binding.noActionsTv.isVisible = true
+                    }
                 } else {
                     data.addAll(it)
                     withContext(Dispatchers.Main) {
