@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Learn2Invest</string>
+    <string name="app_name" translatable="false">Learn2Invest</string>
     <string name="refill">Пополнить</string>
     <string name="buy">Купить</string>
     <string name="sell">Продать</string>
@@ -8,8 +8,8 @@
     <string name="close">Закрыть</string>
     <string name="no">Нет</string>
     <string name="yes_exactly">Да, точно</string>
-    <string name="example_balance">$50,540.00</string>
-    <string name="example_price">$10000</string>
+    <string name="example_balance" translatable="false">$50,540.00</string>
+    <string name="example_price" translatable="false">$10000</string>
     <string name="price_name">Цена</string>
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
@@ -17,13 +17,12 @@
     <string name="comment">Комментарий</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
     <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
-    <string name="asking_to_delete_profile">Вы точно хотите удалить\nпрофиль?</string>
+    <string name="asking_to_delete_profile">Вы точно хотите удалить профиль?</string>
     <string name="account">Счет</string>
-    <string name="enter_sum">Введите сумму</string>
     <string name="refill_account">Пополнение счета</string>
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
-    <string name="price_alert_text">Price alert</string>
+    <string name="price_alert_text" translatable="false">Price alert</string>
     <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
     <string name="account_funds">Средства на счете</string>
@@ -40,15 +39,14 @@
     <string name="market_review">Обзор рынка</string>
     <string name="search">Поиск</string>
     <string name="clear"><u>Очистить</u></string>
-    <string name="network_error">Проверьте подключение \n к интернету</string>
+    <string name="network_error">Проверьте подключение   к интернету</string>
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
-    <string name="no_actions">Вы не производили \n никаких действий</string>
+    <string name="no_actions">Вы не производили   никаких действий</string>
     <string name="profile">Профиль</string>
-    <string name="delete_profile"><u>Удалить \nпрофиль</u></string>
+    <string name="delete_profile"><u>Удалить  профиль</u></string>
     <string name="drop_statistics">Сброс статистики</string>
     <string name="settings">Настройки</string>
-    <string name="notification">Уведомления</string>
     <string name="biometry">Биометрия</string>
     <string name="confirm_deal">Подтверждение сделок</string>
     <string name="change_PIN">Смена PIN-кода</string>
@@ -57,8 +55,10 @@
     <string name="enter_pin_str">Введите PIN-код</string>
     <string name="capitalisation">Капитализация:</string>
     <string name="review_text">Обзор</string>
-    <string name="no_interest_error">Вы не интересовались\nданным активом</string>
+    <string name="no_interest_error">Вы не интересовались данным активом</string>
     <string name="repeat_pin">Повторите PIN-код</string>
-    <string name="reset_stats">    Вы точно хотите\nсбросить статистику?</string>
+    <string name="reset_stats">"    Вы точно хотите сбросить статистику?"</string>
     <string name="create_trading_pass">Создать торговый пароль</string>
+    <string name="not_enough_money_for_buy">Недостаточно денег для покупки</string>
+    <string name="enter_sum">Введите сумму</string>
 </resources>
