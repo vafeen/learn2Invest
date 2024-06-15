@@ -53,7 +53,7 @@ class AssetViewModel(
                 delay(5000)
                 when (val result = NetworkRepository.getCoinReview(id)) {
                     is ResponseWrapper.Success -> {
-                        if (data.isNotEmpty()) {
+                        if (data.size != 0) {
                             Loher.d("${result.value.data.priceUsd}")
                             data.removeLast()
                             data.add(Entry(data.size.toFloat(), result.value.data.priceUsd))

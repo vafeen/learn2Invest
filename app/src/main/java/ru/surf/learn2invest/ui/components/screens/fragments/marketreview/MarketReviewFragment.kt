@@ -42,6 +42,7 @@ class MarketReviewFragment : Fragment() {
     private var filterByPriceFLag = false
     private var filterByPriceIsFirstActive = true
     private lateinit var realTimeUpdateJob: Job
+    private var realTimeUpdateSemaphore = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,7 +60,9 @@ class MarketReviewFragment : Fragment() {
                 ColorStateList.valueOf(resources.getColor(R.color.view_background))
             filterByPrice.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.view_background))
+
             filterByMarketcap.setOnClickListener {
+                realTimeUpdateSemaphore = true
                 filterByPriceIsFirstActive = true
                 filterByMarketcap.backgroundTintList =
                     ColorStateList.valueOf(resources.getColor(R.color.main_background))
@@ -69,8 +72,11 @@ class MarketReviewFragment : Fragment() {
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 recyclerData.sortByDescending { it.marketCapUsd }
                 adapter.notifyDataSetChanged()
+                realTimeUpdateSemaphore = false
             }
+
             filterByChangePercent24Hr.setOnClickListener {
+                realTimeUpdateSemaphore = true
                 filterByPriceIsFirstActive = true
                 filterByMarketcap.backgroundTintList =
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
@@ -80,8 +86,11 @@ class MarketReviewFragment : Fragment() {
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 recyclerData.sortByDescending { it.changePercent24Hr }
                 adapter.notifyDataSetChanged()
+                realTimeUpdateSemaphore = false
             }
+
             filterByPrice.setOnClickListener {
+                realTimeUpdateSemaphore = true
                 filterByMarketcap.backgroundTintList =
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByChangePercent24Hr.backgroundTintList =
@@ -103,8 +112,10 @@ class MarketReviewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
 
                 filterByPriceIsFirstActive = false
+                realTimeUpdateSemaphore = false
             }
             textInputLayout.setEndIconOnClickListener {
+                realTimeUpdateSemaphore = true
                 textView2.isVisible = false
                 clearTv.isVisible = false
                 filterByPrice.isVisible = true
@@ -120,8 +131,11 @@ class MarketReviewFragment : Fragment() {
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList =
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
+                realTimeUpdateSemaphore = false
             }
+
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
+                realTimeUpdateSemaphore = true
                 textView2.isVisible = true
                 clearTv.isVisible = true
                 filterByPrice.visibility = INVISIBLE
@@ -132,17 +146,20 @@ class MarketReviewFragment : Fragment() {
 
             clearTv.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
+                    realTimeUpdateSemaphore = true
                     App.mainDB.searchedCoinDao().deleteAll()
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         adapter.notifyDataSetChanged()
                     }
+                    realTimeUpdateSemaphore = false
                 }
             }
 
             searchEditText.setOnItemClickListener { parent, view, position, id ->
                 val searchedList = mutableListOf<String>()
                 lifecycleScope.launch(Dispatchers.IO) {
+                    realTimeUpdateSemaphore = true
                     App.mainDB
                         .searchedCoinDao()
                         .insertAll(
@@ -157,6 +174,7 @@ class MarketReviewFragment : Fragment() {
                         recyclerData.reverse()
                         adapter.notifyDataSetChanged()
                         Loher.d(searchedList.toString())
+                        realTimeUpdateSemaphore = false
                     }
                 }
             }
@@ -171,6 +189,7 @@ class MarketReviewFragment : Fragment() {
                     is ResponseWrapper.Success -> {
                         data.addAll(result.value.data)
                         data.removeIf { it.marketCapUsd == 0.0f }
+                        data.sortByDescending { it.marketCapUsd }
                         recyclerData.addAll(data)
                         Loher.d(data.find { it.priceUsd == 0.0f }.toString())
                         setRecycler()
@@ -229,17 +248,18 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             while (true) {
                 delay(5000)
-                if (data.isNotEmpty()) {
-                    val firstElement =
-                        (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    val lastElement =
-                        (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    for (i in firstElement..lastElement) {
-                        when (val result = NetworkRepository.getCoinReview(data[i].id)) {
+                //  if (recyclerData.size != 0 && realTimeUpdateSemaphore.not()) {
+                val firstElement =
+                    (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                val lastElement =
+                    (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                for (i in firstElement..lastElement) {
+                    if (recyclerData.size != 0 && realTimeUpdateSemaphore.not()) {
+                        when (val result =
+                            NetworkRepository.getCoinReview(recyclerData[i].id)) {
                             is ResponseWrapper.Success -> {
                                 data[i] = result.value.data.toCoinReviewDto()
-                                recyclerData.clear()
-                                recyclerData.addAll(data)
+                                recyclerData[i] = result.value.data.toCoinReviewDto()
                                 withContext(Dispatchers.Main) {
                                     adapter.notifyItemChanged(i)
                                 }
@@ -249,6 +269,7 @@ class MarketReviewFragment : Fragment() {
                         }
                     }
                 }
+                //}
             }
         }
 
