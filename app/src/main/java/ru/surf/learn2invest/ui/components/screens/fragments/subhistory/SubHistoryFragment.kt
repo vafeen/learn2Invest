@@ -41,7 +41,6 @@ class SubHistoryFragment : Fragment() {
         return binding.root
     }
 
-
     companion object {
         fun newInstance(symbol: String): SubHistoryFragment {
             val fragment = SubHistoryFragment()

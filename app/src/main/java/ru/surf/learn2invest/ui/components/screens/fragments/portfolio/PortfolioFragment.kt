@@ -17,6 +17,7 @@ class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
     private lateinit var viewModel: PortfolioViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
