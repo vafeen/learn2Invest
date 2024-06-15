@@ -12,17 +12,17 @@ fun resetStats(lifecycleScope: LifecycleCoroutineScope) {
 //    Profile::class,
 //    SearchedCoin::class,
 //    Transaction::class,
-    val profile = App.profile.copy(
-        fiatBalance = 50000f
-    )
+	val profile = App.profile.copy(
+		fiatBalance = 50000f
+	)
 
-    lifecycleScope.launch(Dispatchers.IO) {
-      DatabaseRepository.apply {
-            clearAllTables()
+	lifecycleScope.launch(Dispatchers.IO) {
+		DatabaseRepository.apply {
+			clearAllTables()
 
-            insertAllProfile(
-                profile
-            )
-        }
-    }
+			insertAllProfile(
+				profile
+			)
+		}
+	}
 }

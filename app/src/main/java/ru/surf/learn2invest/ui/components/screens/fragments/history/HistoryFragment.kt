@@ -16,35 +16,32 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
 import ru.surf.learn2invest.noui.logs.Loher
 
 class HistoryFragment : Fragment() {
-    private lateinit var binding: FragmentHistoryBinding
-    private val data = mutableListOf<Transaction>()
-    private val adapter = HistoryAdapter(data)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
-        binding.historyRecyclerview.adapter = adapter
-        return binding.root
-    }
 
-    override fun onStart() {
-        super.onStart()
-        lifecycleScope.launch(Dispatchers.IO) {
-            DatabaseRepository.getAllAsFlowTransaction().collect {
-                Loher.d(it.size.toString())
-                data.addAll(it)
-                withContext(Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        }
-    }
 
-    override fun onStop() {
-        super.onStop()
-        data.clear()
-    }
+	private lateinit var binding: FragmentHistoryBinding
+	private var data = listOf<Transaction>()
+	private val adapter = HistoryAdapter(data)
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View {
+		binding = FragmentHistoryBinding.inflate(inflater, container, false)
+		binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
+		binding.historyRecyclerview.adapter = adapter
+		return binding.root
+	}
+
+	override fun onStart() {
+		super.onStart()
+		lifecycleScope.launch(Dispatchers.IO) {
+			DatabaseRepository.getAllAsFlowTransaction().collect {
+				Loher.d(it.size.toString())
+				data = it
+				withContext(Dispatchers.Main) {
+					adapter.notifyDataSetChanged()
+				}
+			}
+		}
+	}
 }
