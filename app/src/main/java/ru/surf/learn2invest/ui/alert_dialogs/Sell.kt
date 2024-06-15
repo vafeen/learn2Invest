@@ -39,7 +39,6 @@ class Sell(
                 balanceNumSellDialog.text =
                     App.profile.fiatBalance.getWithCurrency()
                 realTimeUpdateJob = startRealTimeUpdate()
-                    updateFields()
             }
 
             buttonExitSellDialog.setOnClickListener {
@@ -151,6 +150,7 @@ class Sell(
         super.cancel()
         realTimeUpdateJob.cancel()
     }
+
     override fun getDialogView(): View {
         return binding.root
     }

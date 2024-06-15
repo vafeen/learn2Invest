@@ -44,8 +44,6 @@ class Buy(
                     App.profile.fiatBalance.getWithCurrency()
 
                 realTimeUpdateJob = startRealTimeUpdate()
-
-                updateFields()
             }
 
             buttonExitBuyDialog.setOnClickListener {
