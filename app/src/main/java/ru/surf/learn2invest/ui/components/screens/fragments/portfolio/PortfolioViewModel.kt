@@ -32,12 +32,20 @@ class PortfolioViewModel : ViewModel() {
         }
 
     val assetBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
-        val profile = profiles[App.idOfProfile]
-        profile.assetBalance + profile.fiatBalance
+        if (profiles.isNotEmpty()) {
+            val profile = profiles[App.idOfProfile]
+            profile.assetBalance + profile.fiatBalance
+        } else {
+            0f
+        }
     }
 
     val fiatBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
-        profiles[App.idOfProfile].fiatBalance
+        if (profiles.isNotEmpty()) {
+            profiles[App.idOfProfile].fiatBalance
+        } else {
+            0f
+        }
     }
 
     val assetsFlow: Flow<List<AssetInvest>> = assetInvestDao.getAllAsFlow().onEach { assets ->
@@ -71,7 +79,7 @@ class PortfolioViewModel : ViewModel() {
     }
 
     private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {
-        val initialBalance = App.profile.assetBalance + App.profile.fiatBalance
+        val initialBalance = App.profile.assetBalance
         if (initialBalance != 0f) {
             val changePercentage = ((totalCurrentValue - initialBalance) / initialBalance) * 100
             val roundedChangePercentage =
