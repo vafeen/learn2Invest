@@ -19,6 +19,7 @@ class PortfolioAdapter(
 ) : RecyclerView.Adapter<PortfolioAdapter.PortfolioViewHolder>() {
 
     var assets: List<AssetInvest> = emptyList()
+    var priceChanges: Map<String, Float> = emptyMap()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PortfolioViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.coin_item, parent, false)
@@ -27,7 +28,7 @@ class PortfolioAdapter(
 
     override fun onBindViewHolder(holder: PortfolioViewHolder, position: Int) {
         val asset = assets[position]
-        holder.bind(asset)
+        holder.bind(asset, priceChanges[asset.symbol] ?: 0f)
         holder.itemView.setOnClickListener {
             clickListener.onCoinClick(asset)
         }
@@ -42,12 +43,23 @@ class PortfolioAdapter(
         private val coinSymbol: TextView = itemView.findViewById(R.id.coin_symbol)
         private val coinTopNumericInfo: TextView =
             itemView.findViewById(R.id.coin_top_numeric_info)
+        private val coinBottomNumericInfo: TextView =
+            itemView.findViewById(R.id.coin_bottom_numeric_info)
         lateinit var disposable: Disposable
 
-        fun bind(asset: AssetInvest) {
+        fun bind(asset: AssetInvest, priceChange: Float) {
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
             coinTopNumericInfo.text = asset.coinPrice.toString()
+            val formattedChange = String.format("%.2f%%", priceChange)
+            coinBottomNumericInfo.text = if (priceChange >= 0) "+$formattedChange" else formattedChange
+
+            val color = if (priceChange >= 0) {
+                itemView.context.getColor(R.color.increase)
+            } else {
+                itemView.context.getColor(R.color.recession)
+            }
+            coinBottomNumericInfo.setTextColor(color)
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {

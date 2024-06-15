@@ -60,6 +60,11 @@ class PortfolioFragment : Fragment() {
         adapter.assets = viewModel.assets
         adapter.notifyDataSetChanged()
 
+        viewModel.priceChanges.observe(viewLifecycleOwner) { priceChanges ->
+            adapter.priceChanges = priceChanges
+            adapter.notifyDataSetChanged()
+        }
+
         return binding.root
     }
 
