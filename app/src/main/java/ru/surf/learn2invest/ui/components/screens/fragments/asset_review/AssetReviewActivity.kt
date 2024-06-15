@@ -70,11 +70,11 @@ class AssetReviewActivity : AppCompatActivity() {
         disposable = imageLoader.enqueue(request)
 
         binding.buyAssetBtn.setOnClickListener {
-            Buy(this, lifecycleScope).initDialog().show()
+            Buy(this, lifecycleScope, id ?: "").initDialog().show()
         }
 
         binding.sellAssetBtn.setOnClickListener {
-            Sell(this, lifecycleScope).initDialog().show()
+            Sell(this, lifecycleScope, id ?: "").initDialog().show()
         }
     }
 

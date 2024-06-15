@@ -5,18 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Job
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
-import ru.surf.learn2invest.network_components.CoinAPIService
-import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 
 // Вкладка Обзор в Обзоре актива
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
     private lateinit var chartHelper: LineChartHelper
     private lateinit var viewModel: AssetViewModel
-
+    private lateinit var id: String
+    private lateinit var realTimeUpdateJob: Job
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,12 +24,9 @@ class AssetOverviewFragment : Fragment() {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
-        val id = requireArguments().getString("id") ?: ""
+        id = requireArguments().getString("id") ?: ""
 
-        val coinAPIService = CoinRetrofitClient.client.create(CoinAPIService::class.java)
-        val factory = AssetOverviewViewModelFactory(coinAPIService)
-        viewModel = ViewModelProvider(this, factory)[AssetViewModel::class.java]
-
+        viewModel = AssetViewModel()
         chartHelper.setupChart(binding.chart)
 
         viewModel.loadChartData(id) { data, marketCap ->
@@ -39,6 +35,18 @@ class AssetOverviewFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = viewModel.startRealTimeUpdate(id) { data ->
+            chartHelper.updateData(data)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        realTimeUpdateJob.cancel()
     }
 
     companion object {
