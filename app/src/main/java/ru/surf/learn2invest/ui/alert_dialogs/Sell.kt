@@ -186,7 +186,8 @@ class Sell(
 
         // обновление баланса
         App.profile = App.profile.copy(
-            fiatBalance = balance + price * amountCurrent
+            fiatBalance = balance + price * amountCurrent,
+            assetBalance = App.profile.assetBalance - price * amountCurrent
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -207,14 +208,18 @@ class Sell(
 
                 // обновление портфеля
                 if (amountCurrent < coin.amount) {
+
                     insertAllAssetInvest(
                         coin.copy(
                             coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
                             amount = coin.amount - amountCurrent
                         )
                     )
+
                 } else {
+
                     deleteAssetInvest(coin)
+
                 }
 
 

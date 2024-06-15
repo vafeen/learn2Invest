@@ -300,8 +300,8 @@ class TradingPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
-        ?.show(WindowInsetsCompat.Type.ime())
+    private fun View.showKeyboard() =
+        ViewCompat.getWindowInsetsController(this)?.show(WindowInsetsCompat.Type.ime())
 
     private fun View.hideKeyboard() {
         val inputMethodManager =

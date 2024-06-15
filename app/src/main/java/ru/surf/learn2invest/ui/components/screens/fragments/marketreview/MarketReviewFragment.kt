@@ -41,9 +41,7 @@ class MarketReviewFragment : Fragment() {
     private var filterByPriceIsFirstActive = true
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         return binding.root
     }
@@ -86,8 +84,7 @@ class MarketReviewFragment : Fragment() {
                     ColorStateList.valueOf(resources.getColor(R.color.view_background))
                 filterByPrice.backgroundTintList =
                     ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                if (filterByPriceIsFirstActive.not())
-                    filterByPriceFLag = filterByPriceFLag.not()
+                if (filterByPriceIsFirstActive.not()) filterByPriceFLag = filterByPriceFLag.not()
                 if (filterByPriceFLag) {
                     recyclerData.sortByDescending { it.priceUsd }
                     Loher.d(recyclerData.find { it.symbol == "CJ" }.toString())
@@ -131,7 +128,8 @@ class MarketReviewFragment : Fragment() {
             clearTv.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
 
-                    DatabaseRepository.deleteAllSearchedCoinDao()
+
+                    DatabaseRepository.deleteAllSearchedCoin()
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         adapter.notifyDataSetChanged()
@@ -145,8 +143,8 @@ class MarketReviewFragment : Fragment() {
                     DatabaseRepository.insertAllSearchedCoin(
                         SearchedCoin(coinID = searchEditText.text.toString())
                     )
-                    DatabaseRepository.getAllAsFlowSearchedCoin()
-                        .first().map { searchedList.add(it.coinID) }
+                    DatabaseRepository.getAllAsFlowSearchedCoin().first()
+                        .map { searchedList.add(it.coinID) }
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         recyclerData.addAll(data.filter { searchedList.contains(it.name) })

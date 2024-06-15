@@ -85,8 +85,7 @@ class SignInActivity : AppCompatActivity() {
 
             SignINActivityActions.SignUP.action -> {
 
-                binding.enterPinSignin.text =
-                    getString(R.string.create_pin)
+                binding.enterPinSignin.text = getString(R.string.create_pin)
 
 
                 binding.passButtonFingerprint.isVisible = false
@@ -94,8 +93,7 @@ class SignInActivity : AppCompatActivity() {
 
             SignINActivityActions.ChangingPIN.action -> {
 
-                binding.enterPinSignin.text =
-                    getString(R.string.enter_old_pin)
+                binding.enterPinSignin.text = getString(R.string.enter_old_pin)
 
 
             }
@@ -169,8 +167,7 @@ class SignInActivity : AppCompatActivity() {
         val home = (this.layoutParams as ConstraintLayout.LayoutParams).horizontalBias
 
         val gotoCenter = ValueAnimator.ofFloat(
-            home,
-            0.5f
+            home, 0.5f
         ).also {
             it.duration = 300
 
@@ -188,8 +185,7 @@ class SignInActivity : AppCompatActivity() {
         }
 
         val goPoDomam = ValueAnimator.ofFloat(
-            0.5f,
-            home
+            0.5f, home
         ).also {
             it.duration = 300
 
@@ -447,13 +443,13 @@ class SignInActivity : AppCompatActivity() {
                                 pinCode = ""
 
                                 animatePINCode(
-                                    truth = isVerified,
-                                    needReturn = true
+                                    truth = isVerified, needReturn = true
                                 ).invokeOnCompletion {
 
                                     if (isVerified) {
                                         binding.enterPinSignin.text =
                                             ContextCompat.getString(context, R.string.enter_new_pin)
+
                                     }
 
                                     paintDots()
@@ -477,6 +473,7 @@ class SignInActivity : AppCompatActivity() {
                                     paintDots()
 
                                 }.invokeOnCompletion {
+
                                     binding.enterPinSignin.text =
                                         ContextCompat.getString(context, R.string.repeat_pin)
 
@@ -502,8 +499,7 @@ class SignInActivity : AppCompatActivity() {
                                 }
 
                                 animatePINCode(
-                                    truth = truth,
-                                    needReturn = true
+                                    truth = truth, needReturn = true
                                 ).invokeOnCompletion {
                                     pinCode = ""
 

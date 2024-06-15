@@ -15,44 +15,40 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 class SubHistoryFragment : Fragment() {
+    private lateinit var binding: FragmentAssetHistoryBinding
+    private var data = mutableListOf<Transaction>()
+    private var symbol: String? = null
+    private val adapter = SubHistoryAdapter(data)
 
 
-	private lateinit var binding: FragmentAssetHistoryBinding
-	private var data = listOf<Transaction>()
-	private var symbol: String? = null
-	private val adapter = SubHistoryAdapter(data)
-
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View {
-		binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
-		symbol = requireArguments().getString("symbol") //TODO Определиться где будут все константы
-		binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
-		binding.assetHistory.adapter = adapter
-		if (symbol.isNullOrBlank().not())
-			lifecycleScope.launch(Dispatchers.IO) {
-				DatabaseRepository.getFilteredBySymbol(symbol!!).collect {
-					data = it
-					withContext(Dispatchers.Main) {
-						adapter.notifyDataSetChanged()
-					}
-				}
-			}
-		return binding.root
-	}
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
+        symbol = requireArguments().getString("symbol") //TODO Определиться где будут все константы
+        binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
+        binding.assetHistory.adapter = adapter
+        if (symbol.isNullOrBlank().not()) lifecycleScope.launch(Dispatchers.IO) {
+            DatabaseRepository.getFilteredBySymbolTransaction(symbol!!).collect {
+                data.addAll(it)
+                withContext(Dispatchers.Main) {
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        }
+        return binding.root
+    }
 
 
-	companion object {
+    companion object {
 
 
-		fun newInstance(symbol: String): SubHistoryFragment {
-			val fragment = SubHistoryFragment()
-			val args = Bundle()
-			args.putString("symbol", symbol)
-			fragment.arguments = args
-			return fragment
-		}
-	}
+        fun newInstance(symbol: String): SubHistoryFragment {
+            val fragment = SubHistoryFragment()
+            val args = Bundle()
+            args.putString("symbol", symbol)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 }

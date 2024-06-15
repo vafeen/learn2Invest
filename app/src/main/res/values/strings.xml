@@ -57,7 +57,6 @@
     <string name="reset_stats">"    Вы точно хотите сбросить статистику?"</string>
     <string name="create_trading_password">Создать торговый пароль</string>
     <string name="create_pin">Придумайте PIN-код</string>
-
     <string name="example_balance" translatable="false">$50,540.00</string>
     <string name="example_price" translatable="false">$10000</string>
     <string name="price_alert_text" translatable="false">Price alert</string>
@@ -85,5 +84,4 @@
     <string name="contains_spaces">Contains spaces at the beginning or end</string>
     <string name="limit_len_exceeded">Превышен лимит длины</string>
     <string name="hello">Здравствуй</string>
-
 </resources>

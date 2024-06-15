@@ -33,6 +33,8 @@ class Buy(
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
 
+    private var haveAssetsOrNot = false
+
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
@@ -194,7 +196,8 @@ class Buy(
 
             // обновление баланса
             App.profile = App.profile.copy(
-                fiatBalance = balance - price * amountCurrent
+                fiatBalance = balance - price * amountCurrent,
+                assetBalance = App.profile.assetBalance + price * amountCurrent
             )
 
             lifecycleScope.launch(Dispatchers.IO) {
@@ -213,13 +216,28 @@ class Buy(
                     )
 
                     // обновление портфеля
-                    insertAllAssetInvest(
-                        coin.copy(
-                            coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
-                            amount = coin.amount + amountCurrent
-                        )
-                    )
 
+                    if (haveAssetsOrNot) {
+
+
+                        updateAssetInvest(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
+                        )
+
+                    } else {
+
+                        insertAllAssetInvest(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
+
+                        )
+
+                    }
                 }
             }
         }
@@ -264,6 +282,8 @@ class Buy(
             val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
+                haveAssetsOrNot = true
+
                 coin = coinMayBeInPortfolio
             }
 
