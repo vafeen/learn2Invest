@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.noui.database_components.entity
+package ru.surf.learn2invest.noui.database_components.entity.Transaction
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

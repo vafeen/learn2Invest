@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
 import android.text.Editable
+import android.util.Log
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 
@@ -14,4 +15,10 @@ fun Editable.isTrueTradingPassword(): Boolean = PasswordHasher(
 
 fun Float.getWithCurrency(): String = "$ $this"
 
-fun String.getFloatFromStringWithCurrency(): Float = this.toFloat()
+fun String.getFloatFromStringWithCurrency(): Float {
+    val result = this.substring(2, this.length).toFloat()
+
+    Log.d("float", "result = $result")
+
+    return result
+}

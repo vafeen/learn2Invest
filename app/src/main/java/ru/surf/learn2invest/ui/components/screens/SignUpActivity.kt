@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivitySignupBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
@@ -28,204 +29,206 @@ private const val SPACE_ERROR = "Содержит пробелы в начале
 private const val LENGTH_ERROR = "Превышен лимит длины"
 
 class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
-    private var name: String = ""
-    private var lastname: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+	private lateinit var binding: ActivitySignupBinding
+	private var name: String = ""
+	private var lastname: String = ""
 
-        setupNameEditText()
-        setupLastnameEditText()
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
 
-        binding.nameClear.setOnClickListener {
-            nameClearIconClick()
-        }
+		binding = ActivitySignupBinding.inflate(layoutInflater)
+		setContentView(binding.root)
 
-        binding.lastnameClear.setOnClickListener {
-            lastnameClearIconClick()
-        }
+		setupNameEditText()
+		setupLastnameEditText()
 
-        binding.inputNameEditText.addTextChangedListener {
-            validateFields()
-        }
+		binding.nameClear.setOnClickListener {
+			nameClearIconClick()
+		}
 
-        binding.inputLastnameEditText.addTextChangedListener {
-            validateFields()
-        }
+		binding.lastnameClear.setOnClickListener {
+			lastnameClearIconClick()
+		}
 
-        binding.signupBtn.setOnClickListener {
-            signUpButtonClick()
-        }
+		binding.inputNameEditText.addTextChangedListener {
+			validateFields()
+		}
 
-        binding.inputNameEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                return@setOnEditorActionListener onNextClicked()
-            }
-            false
-        }
+		binding.inputLastnameEditText.addTextChangedListener {
+			validateFields()
+		}
 
-        binding.inputLastnameEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                return@setOnEditorActionListener onDoneClicked()
-            }
-            false
-        }
-    }
+		binding.signupBtn.setOnClickListener {
+			signUpButtonClick()
+		}
 
-    private fun nameClearIconClick() {
-        binding.inputNameEditText.text.clear()
-        binding.inputNameEditText.showKeyboard()
-        binding.inputNameEditText.requestFocus()
-        binding.nameErrorTextView.text = EMPTY_ERROR
-        binding.nameErrorTextView.isVisible = true
-    }
+		binding.inputNameEditText.setOnEditorActionListener { _, actionId, _ ->
+			if (actionId == EditorInfo.IME_ACTION_NEXT) {
+				return@setOnEditorActionListener onNextClicked()
+			}
+			false
+		}
 
-    private fun lastnameClearIconClick() {
-        binding.inputLastnameEditText.text.clear()
-        binding.inputLastnameEditText.showKeyboard()
-        binding.inputLastnameEditText.requestFocus()
-        binding.lastnameErrorTextView.text = EMPTY_ERROR
-        binding.lastnameErrorTextView.isVisible = true
-    }
+		binding.inputLastnameEditText.setOnEditorActionListener { _, actionId, _ ->
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				return@setOnEditorActionListener onDoneClicked()
+			}
+			false
+		}
+	}
 
-    private fun setupNameEditText() {
-        binding.inputNameEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+	private fun nameClearIconClick() {
+		binding.inputNameEditText.text.clear()
+		binding.inputNameEditText.showKeyboard()
+		binding.inputNameEditText.requestFocus()
+		binding.nameErrorTextView.text = EMPTY_ERROR
+		binding.nameErrorTextView.isVisible = true
+	}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.nameClear.isVisible = !s.isNullOrEmpty()
-                name = s.toString()
-            }
+	private fun lastnameClearIconClick() {
+		binding.inputLastnameEditText.text.clear()
+		binding.inputLastnameEditText.showKeyboard()
+		binding.inputLastnameEditText.requestFocus()
+		binding.lastnameErrorTextView.text = EMPTY_ERROR
+		binding.lastnameErrorTextView.isVisible = true
+	}
 
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
+	private fun setupNameEditText() {
+		binding.inputNameEditText.addTextChangedListener(object : TextWatcher {
+			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-    private fun setupLastnameEditText() {
-        binding.inputLastnameEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+				binding.nameClear.isVisible = !s.isNullOrEmpty()
+				name = s.toString()
+			}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.lastnameClear.isVisible = !s.isNullOrEmpty()
-                lastname = s.toString()
-            }
+			override fun afterTextChanged(s: Editable?) {}
+		})
+	}
 
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
+	private fun setupLastnameEditText() {
+		binding.inputLastnameEditText.addTextChangedListener(object : TextWatcher {
+			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-    private fun validateFields() {
-        val nameValid = validateName()
-        val lastnameValid = validateLastname()
+			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+				binding.lastnameClear.isVisible = !s.isNullOrEmpty()
+				lastname = s.toString()
+			}
 
-        if (nameValid && lastnameValid) {
-            binding.signupBtn.isEnabled = true
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.main_background)
-        } else {
-            binding.signupBtn.isEnabled = false
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.btn_asset)
-        }
-    }
+			override fun afterTextChanged(s: Editable?) {}
+		})
+	}
 
-    private fun validateName(): Boolean {
-        return when {
-            name.isEmpty() -> {
-                false
-            }
+	private fun validateFields() {
+		val nameValid = validateName()
+		val lastnameValid = validateLastname()
 
-            name.trim() != name -> {
-                binding.nameErrorTextView.text = SPACE_ERROR
-                binding.nameErrorTextView.isVisible = true
-                false
-            }
+		if (nameValid && lastnameValid) {
+			binding.signupBtn.isEnabled = true
+			binding.signupBtn.backgroundTintList =
+				ContextCompat.getColorStateList(this, R.color.main_background)
+		} else {
+			binding.signupBtn.isEnabled = false
+			binding.signupBtn.backgroundTintList =
+				ContextCompat.getColorStateList(this, R.color.btn_asset)
+		}
+	}
 
-            name.length > 24 -> {
-                binding.nameErrorTextView.text = LENGTH_ERROR
-                binding.nameErrorTextView.isVisible = true
-                false
-            }
+	private fun validateName(): Boolean {
+		return when {
+			name.isEmpty() -> {
+				false
+			}
 
-            else -> {
-                binding.nameErrorTextView.isVisible = false
-                true
-            }
-        }
-    }
+			name.trim() != name -> {
+				binding.nameErrorTextView.text = SPACE_ERROR
+				binding.nameErrorTextView.isVisible = true
+				false
+			}
 
-    private fun validateLastname(): Boolean {
-        return when {
-            lastname.isEmpty() -> {
-                false
-            }
+			name.length > 24 -> {
+				binding.nameErrorTextView.text = LENGTH_ERROR
+				binding.nameErrorTextView.isVisible = true
+				false
+			}
 
-            lastname.trim() != lastname -> {
-                binding.lastnameErrorTextView.text = SPACE_ERROR
-                binding.lastnameErrorTextView.isVisible = true
-                false
-            }
+			else -> {
+				binding.nameErrorTextView.isVisible = false
+				true
+			}
+		}
+	}
 
-            lastname.length > 24 -> {
-                binding.lastnameErrorTextView.text = LENGTH_ERROR
-                binding.lastnameErrorTextView.isVisible = true
-                false
-            }
+	private fun validateLastname(): Boolean {
+		return when {
+			lastname.isEmpty() -> {
+				false
+			}
 
-            else -> {
-                binding.lastnameErrorTextView.isVisible = false
-                true
-            }
-        }
-    }
+			lastname.trim() != lastname -> {
+				binding.lastnameErrorTextView.text = SPACE_ERROR
+				binding.lastnameErrorTextView.isVisible = true
+				false
+			}
 
-    private fun onNextClicked(): Boolean {
-        if (name.isEmpty()) {
-            binding.nameErrorTextView.text = EMPTY_ERROR
-            binding.nameErrorTextView.isVisible = true
-            return true
-        }
-        binding.inputLastnameEditText.requestFocus()
-        return false
-    }
+			lastname.length > 24 -> {
+				binding.lastnameErrorTextView.text = LENGTH_ERROR
+				binding.lastnameErrorTextView.isVisible = true
+				false
+			}
 
-    private fun onDoneClicked(): Boolean {
-        if (lastname.isEmpty()) {
-            binding.lastnameErrorTextView.text = EMPTY_ERROR
-            binding.lastnameErrorTextView.isVisible = true
-            return true
-        } else {
-            binding.inputLastnameEditText.hideKeyboard()
-            binding.inputLastnameEditText.clearFocus()
-        }
-        return false
-    }
+			else -> {
+				binding.lastnameErrorTextView.isVisible = false
+				true
+			}
+		}
+	}
 
-    private fun signUpButtonClick() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val prof = App.profile.copy(firstName = name, lastName = lastname)
-            App.mainDB.profileDao()
-                .update(prof)
-            Log.d("profile", "sugnUp 213 = $prof")
-        }.invokeOnCompletion {
-            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
-                it.action = SignINActivityActions.SignUP.action
+	private fun onNextClicked(): Boolean {
+		if (name.isEmpty()) {
+			binding.nameErrorTextView.text = EMPTY_ERROR
+			binding.nameErrorTextView.isVisible = true
+			return true
+		}
+		binding.inputLastnameEditText.requestFocus()
+		return false
+	}
 
-                it
-            })
-            this@SignUpActivity.finish()
-        }
-    }
+	private fun onDoneClicked(): Boolean {
+		if (lastname.isEmpty()) {
+			binding.lastnameErrorTextView.text = EMPTY_ERROR
+			binding.lastnameErrorTextView.isVisible = true
+			return true
+		} else {
+			binding.inputLastnameEditText.hideKeyboard()
+			binding.inputLastnameEditText.clearFocus()
+		}
+		return false
+	}
 
-    private fun View.hideKeyboard() {
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
+	private fun signUpButtonClick() {
+		lifecycleScope.launch(Dispatchers.IO) {
+			val prof = App.profile.copy(firstName = name, lastName = lastname)
+			DatabaseRepository
+				.updateProfile(prof)
+			Log.d("profile", "sugnUp 213 = $prof")
+		}.invokeOnCompletion {
+			startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
+				it.action = SignINActivityActions.SignUP.action
 
-    private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
-        ?.show(WindowInsetsCompat.Type.ime())
+				it
+			})
+			this@SignUpActivity.finish()
+		}
+	}
+
+	private fun View.hideKeyboard() {
+		val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+		inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+	}
+
+	private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
+		?.show(WindowInsetsCompat.Type.ime())
 }

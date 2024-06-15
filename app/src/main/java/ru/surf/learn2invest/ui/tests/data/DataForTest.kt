@@ -3,9 +3,9 @@ package ru.surf.learn2invest.ui.tests.data
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 
@@ -38,13 +38,13 @@ val testPortfolioChart = listOf(
 
 fun insertProfileInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
-        App.mainDB.profileDao().insertAll(testProfile)
+        DatabaseRepository.insertAllProfile(testProfile)
     }
 }
 
 
 fun insertPortfolioChartInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
-        App.mainDB.assetBalanceHistoryDao().insertAll(*testPortfolioChart.toTypedArray())
+        DatabaseRepository.insertAllAssetBalanceHistory(*testPortfolioChart.toTypedArray())
     }
 }

@@ -8,18 +8,33 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
+import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
-    context: Context, val lifecycleScope: LifecycleCoroutineScope
+    context: Context,
+    val lifecycleScope: LifecycleCoroutineScope,
+    val id: String,
+    val name: String,
+    val symbol: String
+
 ) : CustomAlertDialog(context = context) {
 
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
+
+    private var coin: AssetInvest = AssetInvest(
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+    )
 
     override fun setCancelable(): Boolean {
         return true
@@ -30,13 +45,13 @@ class Sell(
 
         binding.apply {
 
+            enteringNumberOfLotsSellDialog.setText("0")
+
             lifecycleScope.launch {
-                balanceNumSellDialog.text =
-                    App.profile.fiatBalance.getWithCurrency() // TODO()Володь, Сюда также нужно
-                //            поставить нужный тип баланса
+                balanceNumSellDialog.text = App.profile.fiatBalance.getWithCurrency()
 
                 while (true) {
-                    val str = 777777f
+                    val str = 777f
                     priceNumberSellDialog.text =
                         str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
                     // которая приходит через ретрофит
@@ -53,7 +68,7 @@ class Sell(
             buttonSellSellDialog.isVisible = false
 
             buttonSellSellDialog.setOnClickListener {
-                // TODO Логика продажи
+                sell()
 
                 cancel()
             }
@@ -65,7 +80,7 @@ class Sell(
                     val newNumberOfLots = if (text.isNotEmpty()) {
                         text.toString().toIntOrNull()?.let {
                             if (enteringNumberOfLotsSellDialog.text.toString()
-                                    .toFloat() < 10 // TODO()Сюда вместо 10-ти нужно закинуть количество имеющихся лотов бумаги этой бумаги
+                                    .toFloat() < coin.amount
                             ) {
                                 it + 1
                             } else {
@@ -86,7 +101,7 @@ class Sell(
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
-                                ""
+                                "0"
                             }
 
                             it > 1 -> {
@@ -114,6 +129,17 @@ class Sell(
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
+
+                    buttonSellSellDialog.isVisible = enteringNumberOfLotsSellDialog.text.toString()
+                        .isNotEmpty() && enteringNumberOfLotsSellDialog.text.toString()
+                        .toInt() > 0 && coin.amount > 0 && if (App.profile.tradingPasswordHash != null) {
+                        verifyTradingPassword(
+                            user = App.profile, password = binding.tradingPasswordTV.text.toString()
+                        )
+                    } else {
+                        true
+                    }
+
                 }
             })
 
@@ -127,10 +153,7 @@ class Sell(
                     }
 
                     override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
+                        s: CharSequence?, start: Int, before: Int, count: Int
                     ) {
 
                     }
@@ -151,6 +174,59 @@ class Sell(
         }
     }
 
+    private fun sell() {
+        val balance = App.profile.fiatBalance
+
+        val price = binding.priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
+
+        val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
+
+        // обновление баланса
+        App.profile = App.profile.copy(
+            fiatBalance = balance + price * amountCurrent,
+            assetBalance = App.profile.assetBalance - price * amountCurrent
+        )
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            DatabaseRepository.apply {
+
+                // обновление истории
+                insertAllTransaction(
+                    Transaction(
+                        name = name,
+                        symbol = symbol,
+                        coinPrice = price,
+                        dealPrice = price * amountCurrent,
+                        amount = amountCurrent,
+                        transactionType = TransactionsType.Sell
+                    )
+                )
+
+
+                // обновление портфеля
+                if (amountCurrent < coin.amount) {
+
+                    insertAllAssetInvest(
+                        coin.copy(
+                            coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
+                            amount = coin.amount - amountCurrent
+                        )
+                    )
+
+                } else {
+
+                    deleteAssetInvest(coin)
+
+                }
+
+
+            }
+        }
+
+
+    }
+
+
     override fun getDialogView(): View {
         return binding.root
     }
@@ -163,7 +239,7 @@ class Sell(
         binding.apply {
             val priceText = priceNumberSellDialog.text.toString()
 
-            val price = priceText.substring(2, priceText.length).getFloatFromStringWithCurrency()
+            val price = priceText.getFloatFromStringWithCurrency()
 
             val number = enteringNumberOfLotsSellDialog.text.toString().toIntOrNull() ?: 0
 
@@ -171,6 +247,22 @@ class Sell(
 
             return price * number
         }
+    }
+
+    override fun show() {
+        super.show()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val coinMayBeInPortfolio = DatabaseRepository
+                .getBySymbolAssetInvest(symbol = symbol)
+
+            if (coinMayBeInPortfolio != null) {
+                coin = coinMayBeInPortfolio
+            }
+
+            Log.d("coin", "coin = $coin")
+        }
+
     }
 
 }

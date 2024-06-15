@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
-import ru.surf.learn2invest.noui.database_components.entity.Transaction
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding
@@ -25,14 +25,14 @@ class SubHistoryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
         symbol = requireArguments().getString("symbol") //TODO Определиться где будут все константы
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
         if (symbol.isNullOrBlank().not())
             lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.transactionDao().getFilteredBySymbol(symbol!!).collect {
+                DatabaseRepository.getFilteredBySymbol(symbol!!).collect {
                     if (it.isEmpty()) {
                         binding.assetHistory.isVisible = false
                         binding.noActionsError.isVisible = true

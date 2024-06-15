@@ -13,7 +13,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.database_components.entity.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 
 @Database(
     entities = [
@@ -24,37 +24,6 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction
         Transaction::class,
     ], version = 1
 )
-/**
- * Доступ к данным осуществляется в coroutineScope{} с помощью
- *
- *  [mainDB](ru.surf.learn2invest.ui.main.App.mainDB)
- *
- * Посредством обращения через нее к определенным объектам DAO,
- *
- * например:
- * [assetInvestDao](Learn2InvestDatabase.assetInvestDao),
- *
- * а далее к одному из методов:
- * - [getAllAsFlow](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.getAllAsFlow)
- * - [insertAll](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.insertAll)
- * - [delete](ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao.delete)
- *
- * Полный пример:
- *```
- * var someList: List<Something>
- *
- * lifecycleScope.launch(Dispatchers.Main) {
- *
- * App.mainDB.someDao().getAllAsFlow().collect { someList = it } // подписка на изменения
- *
- * someList = App.mainDB.someDao().getAllAsFlow().first() // разовая акция
- * }
- * ```
- *
- * и дальше можно просто делать свои манипуляции с объектами базы данных:
- * - [insertAll](AssetInvestDao.insertAll)
- * - [delete](AssetInvestDao.delete)
- */
 abstract class L2IDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "learn2investDatabase.db"
