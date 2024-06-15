@@ -194,6 +194,7 @@ class Sell(
                 // обновление истории
                 transactionDao().insertAll(
                     Transaction(
+                        coinID = id,
                         name = name,
                         symbol = symbol,
                         coinPrice = price,
