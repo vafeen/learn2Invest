@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -216,7 +217,7 @@ class SignInActivity : AppCompatActivity() {
                     if (truePIN) {
                         Color.GREEN
                     } else {
-                        Color.RED
+                        ContextCompat.getColor(this@SignInActivity, R.color.error)
                     }
                 )
 
@@ -319,10 +320,10 @@ class SignInActivity : AppCompatActivity() {
             // error
             -1 -> {
                 changeColorOfFourDots(
-                    color1 = Color.RED,
-                    color2 = Color.RED,
-                    color3 = Color.RED,
-                    color4 = Color.RED,
+                    color1 = ContextCompat.getColor(this@SignInActivity, R.color.error),
+                    color2 = ContextCompat.getColor(this@SignInActivity, R.color.error),
+                    color3 = ContextCompat.getColor(this@SignInActivity, R.color.error),
+                    color4 = ContextCompat.getColor(this@SignInActivity, R.color.error),
                 )
             }
 
