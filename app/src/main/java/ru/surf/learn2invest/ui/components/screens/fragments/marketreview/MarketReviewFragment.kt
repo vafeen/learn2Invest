@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +26,7 @@ import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.APIWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
@@ -33,13 +36,12 @@ class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private var recyclerData = mutableListOf<CoinReviewDto>()
     private var data = mutableListOf<CoinReviewDto>()
-    private val coinClient = NetworkRepository()
     private val adapter = MarketReviewAdapter(recyclerData) { coin ->
         startAssetReviewIntent(coin)
     }
     private var filterByPriceFLag = false
     private var filterByPriceIsFirstActive = true
-
+    private lateinit var realTimeUpdateJob: Job
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -163,7 +165,7 @@ class MarketReviewFragment : Fragment() {
 
         this.lifecycleScope.launch(Dispatchers.IO) {
             val result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
-                coinClient.getMarketReview()
+                NetworkRepository.getMarketReview()
             withContext(Dispatchers.Main) {
                 when (result) {
                     is ResponseWrapper.Success -> {
@@ -172,6 +174,7 @@ class MarketReviewFragment : Fragment() {
                         recyclerData.addAll(data)
                         Loher.d(data.find { it.priceUsd == 0.0f }.toString())
                         setRecycler()
+                        realTimeUpdateJob = startRealtimeUpdate()
                     }
 
                     is ResponseWrapper.NetworkError -> setError()
@@ -184,6 +187,7 @@ class MarketReviewFragment : Fragment() {
         super.onStop()
         data.clear()
         recyclerData.clear()
+        realTimeUpdateJob.cancel()
     }
 
     private fun startAssetReviewIntent(coin: CoinReviewDto) {
@@ -220,4 +224,32 @@ class MarketReviewFragment : Fragment() {
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
     }
+
+    private fun startRealtimeUpdate(): Job =
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                delay(5000)
+                if (data.isNotEmpty()) {
+                    val firstElement =
+                        (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    val lastElement =
+                        (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    for (i in firstElement..lastElement) {
+                        when (val result = NetworkRepository.getCoinReview(data[i].id)) {
+                            is ResponseWrapper.Success -> {
+                                data[i] = result.value.data.toCoinReviewDto()
+                                recyclerData.clear()
+                                recyclerData.addAll(data)
+                                withContext(Dispatchers.Main) {
+                                    adapter.notifyItemChanged(i)
+                                }
+                            }
+
+                            is ResponseWrapper.NetworkError -> setError()
+                        }
+                    }
+                }
+            }
+        }
+
 }

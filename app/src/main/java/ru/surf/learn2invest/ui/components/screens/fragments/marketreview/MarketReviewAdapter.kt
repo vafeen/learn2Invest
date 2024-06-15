@@ -70,7 +70,6 @@ class MarketReviewAdapter(
             disposable = imageLoader.enqueue(request)
 
             itemView.setOnClickListener {
-                //TODO Придумать место для констант всего приложения
                 clickListener.onCoinClick(data[position])
             }
         }
