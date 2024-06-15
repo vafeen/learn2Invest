@@ -66,7 +66,7 @@ class PortfolioFragment : Fragment() {
     private fun startAssetReviewIntent(asset: AssetInvest) {
         val intent = Intent(requireContext(), AssetReviewActivity::class.java)
         val bundle = Bundle()
-        bundle.putString("id", asset.id.toString())
+        bundle.putString("id", asset.assetID)
         bundle.putString("name", asset.name)
         bundle.putString("symbol", asset.symbol)
         intent.putExtras(bundle)
