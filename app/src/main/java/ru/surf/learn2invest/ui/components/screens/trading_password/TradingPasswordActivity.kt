@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
@@ -28,227 +29,237 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 class TradingPasswordActivity : AppCompatActivity() {
 
-
-	private lateinit var binding: TradingPasswordActivityBinding
-
-
-	private lateinit var action: TradingPasswordActivityActions
+    private lateinit var binding: TradingPasswordActivityBinding
 
 
-	private var ok: Drawable? = null
-
-	private var no: Drawable? = null
+    private lateinit var action: TradingPasswordActivityActions
 
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    private var ok: Drawable? = null
 
-		binding = TradingPasswordActivityBinding.inflate(layoutInflater)
-
-		setContentView(binding.root)
-
-		// TODO (Найдите пж норм иконки галочки и крестика
-		ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
-
-		no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
+    private var no: Drawable? = null
 
 
-		action = when (intent.action.toString()) {
-			TradingPasswordActivityActions.ChangeTradingPassword.action -> TradingPasswordActivityActions.ChangeTradingPassword
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-			TradingPasswordActivityActions.CreateTradingPassword.action -> TradingPasswordActivityActions.CreateTradingPassword
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )
+            )
+        )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
-			TradingPasswordActivityActions.RemoveTradingPassword.action -> TradingPasswordActivityActions.RemoveTradingPassword
+        binding = TradingPasswordActivityBinding.inflate(layoutInflater)
 
-			else -> {
-				// finish if action is not defined
-				this@TradingPasswordActivity.finish()
+        setContentView(binding.root)
 
-				Log.e("TradingPasswordActivity", "FATAL: Intent.action is not defined ")
+        // TODO (Найдите пж норм иконки галочки и крестика
+        ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
 
-				TradingPasswordActivityActions.CreateTradingPassword
-			}
-		}
+        no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
 
-		configureVisibilities()
 
-		initListeners()
+        action = when (intent.action.toString()) {
+            TradingPasswordActivityActions.ChangeTradingPassword.action -> TradingPasswordActivityActions.ChangeTradingPassword
 
-		checkPassword()
-	}
+            TradingPasswordActivityActions.CreateTradingPassword.action -> TradingPasswordActivityActions.CreateTradingPassword
 
-	private fun configureVisibilities() {
+            TradingPasswordActivityActions.RemoveTradingPassword.action -> TradingPasswordActivityActions.RemoveTradingPassword
 
-		binding.apply {
+            else -> {
+                // finish if action is not defined
+                this@TradingPasswordActivity.finish()
 
-			headerTradingPasswordActivity.text = action.actionName
+                Log.e("TradingPasswordActivity", "FATAL: Intent.action is not defined ")
 
-			buttonDoTrading.text = action.mainButtonAction
+                TradingPasswordActivityActions.CreateTradingPassword
+            }
+        }
 
-			rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
+        configureVisibilities()
 
-			rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
+        initListeners()
 
-			rulesTrpass3.text = "Нет последовательности более трех цифр"
+        checkPassword()
+    }
 
-			rulesTrpass4.text = "Пароли совпадают"
+    private fun configureVisibilities() {
 
-			rulesTrpass5.text = "Старый пароль верен"
+        binding.apply {
 
-			when (action) {
+            headerTradingPasswordActivity.text = action.actionName
+
+            buttonDoTrading.text = action.mainButtonAction
+
+            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
+
+            rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
+
+            rulesTrpass3.text = "Нет последовательности более трех цифр"
+
+            rulesTrpass4.text = "Пароли совпадают"
+
+            rulesTrpass5.text = "Старый пароль верен"
+
+            when (action) {
 
 				TradingPasswordActivityActions.CreateTradingPassword -> {
 					textInputLayout1.isVisible = false
 
 					rulesTrpass5.isVisible = false
 
-					imageRule5.isVisible = false
-				}
+                    imageRule5.isVisible = false
+                }
 
-				TradingPasswordActivityActions.ChangeTradingPassword -> {
-					textInputLayout1.isVisible = true
+                TradingPasswordActivityActions.ChangeTradingPassword -> {
+                    textInputLayout1.isVisible = true
 
-					rulesTrpass5.isVisible = true
+                    rulesTrpass5.isVisible = true
 
-					imageRule5.isVisible = true
-				}
+                    imageRule5.isVisible = true
+                }
 
-				TradingPasswordActivityActions.RemoveTradingPassword -> {
-					textInputLayout1.isVisible = false
+                TradingPasswordActivityActions.RemoveTradingPassword -> {
+                    textInputLayout1.isVisible = false
 
-					rulesTrpass1.isVisible = false
+                    rulesTrpass1.isVisible = false
 
-					imageRule1.isVisible = false
+                    imageRule1.isVisible = false
 
-					rulesTrpass2.isVisible = false
+                    rulesTrpass2.isVisible = false
 
-					imageRule2.isVisible = false
+                    imageRule2.isVisible = false
 
-					rulesTrpass3.isVisible = false
+                    rulesTrpass3.isVisible = false
 
-					imageRule3.isVisible = false
+                    imageRule3.isVisible = false
 
-					rulesTrpass5.isVisible = false
+                    rulesTrpass5.isVisible = false
 
-					imageRule5.isVisible = false
-				}
+                    imageRule5.isVisible = false
+                }
 
-			}
-		}
-	}
-
-
-	private fun checkPassword() {
-		binding.apply {
+            }
+        }
+    }
 
 
-			imageRule1.setImageDrawable(
-				if ((passwordEdit.text?.length ?: 0) >= 6) {
-					ok
-				} else {
-					no
-				}
-			)
-
-			imageRule2.setImageDrawable(
-				if (passwordEdit.text.toString().isThisContains3NumbersOfEmpty()) {
-					no
-				} else {
-					ok
-				}
-			)
-
-			imageRule3.setImageDrawable(
-				if (passwordEdit.text.toString().isThisContainsSequenceOrEmpty()) {
-					no
-				} else {
-					ok
-				}
-			)
-
-			imageRule4.setImageDrawable(
-				if (action != TradingPasswordActivityActions.RemoveTradingPassword) {
-					if (passwordEdit.text.toString() == passwordConfirm.text.toString() && passwordEdit.text?.isNotEmpty() == true) {
-						ok
-					} else {
-						no
-					}
-				} else {
-					if (passwordEdit.text.toString() == passwordConfirm.text.toString() && verifyTradingPassword(
-							user = profile, password = passwordEdit.text.toString()
-						)
-					) {
-						ok
-					} else {
-						no
-					}
-				}
-			)
-
-			imageRule5.setImageDrawable(
-				if (profile.let {
-						val x = verifyTradingPassword(
-							user = profile, password = "${passwordLast.text}"
-						)
-
-						Log.d("password", "verify? - $x")
-
-						x
-					}) {
-					ok
-				} else {
-					no
-				}
-			)
-
-			buttonDoTrading.isVisible = mainButtonIsVisible()
-
-			buttonDoTrading.setOnClickListener {
-				when (action) {
-
-					TradingPasswordActivityActions.CreateTradingPassword -> {
-						profile = profile.copy(
-							tradingPasswordHash = PasswordHasher(
-								firstName = profile.firstName, lastName = profile.lastName
-							).passwordToHash(
-								password = "${passwordConfirm.text}"
-							)
-						)
-
-						updateProfile()
-					}
-
-					TradingPasswordActivityActions.ChangeTradingPassword -> {
-						profile = profile.copy(
-							tradingPasswordHash = PasswordHasher(
-								firstName = profile.firstName, lastName = profile.lastName
-							).passwordToHash(
-								password = "${passwordConfirm.text}"
-							)
-						)
-
-						updateProfile()
-					}
-
-					TradingPasswordActivityActions.RemoveTradingPassword -> {
-						profile = profile.copy(tradingPasswordHash = null)
-
-						updateProfile()
-					}
-
-				}
-				this@TradingPasswordActivity.finish()
-			}
-
-		}
-	}
-
-	private fun ImageView.isOk(): Boolean = this.drawable == ok
+    private fun checkPassword() {
+        binding.apply {
 
 
-	private fun mainButtonIsVisible(): Boolean {
+            imageRule1.setImageDrawable(
+                if ((passwordEdit.text?.length ?: 0) >= 6) {
+                    ok
+                } else {
+                    no
+                }
+            )
 
-		return when (action) {
+            imageRule2.setImageDrawable(
+                if (passwordEdit.text.toString().isThisContains3NumbersOfEmpty()) {
+                    no
+                } else {
+                    ok
+                }
+            )
+
+            imageRule3.setImageDrawable(
+                if (passwordEdit.text.toString().isThisContainsSequenceOrEmpty()) {
+                    no
+                } else {
+                    ok
+                }
+            )
+
+            imageRule4.setImageDrawable(
+                if (action != TradingPasswordActivityActions.RemoveTradingPassword) {
+                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() && passwordEdit.text?.isNotEmpty() == true) {
+                        ok
+                    } else {
+                        no
+                    }
+                } else {
+                    if (passwordEdit.text.toString() == passwordConfirm.text.toString() && verifyTradingPassword(
+                            user = profile, password = passwordEdit.text.toString()
+                        )
+                    ) {
+                        ok
+                    } else {
+                        no
+                    }
+                }
+            )
+
+            imageRule5.setImageDrawable(
+                if (profile.let {
+                        val x = verifyTradingPassword(
+                            user = profile, password = "${passwordLast.text}"
+                        )
+
+                        Log.d("password", "verify? - $x")
+
+                        x
+                    }) {
+                    ok
+                } else {
+                    no
+                }
+            )
+
+            buttonDoTrading.isVisible = mainButtonIsVisible()
+
+            buttonDoTrading.setOnClickListener {
+                when (action) {
+
+                    TradingPasswordActivityActions.CreateTradingPassword -> {
+                        profile = profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
+                                password = "${passwordConfirm.text}"
+                            )
+                        )
+
+                        updateProfile()
+                    }
+
+                    TradingPasswordActivityActions.ChangeTradingPassword -> {
+                        profile = profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
+                                password = "${passwordConfirm.text}"
+                            )
+                        )
+
+                        updateProfile()
+                    }
+
+                    TradingPasswordActivityActions.RemoveTradingPassword -> {
+                        profile = profile.copy(tradingPasswordHash = null)
+
+                        updateProfile()
+                    }
+
+                }
+                this@TradingPasswordActivity.finish()
+            }
+
+        }
+    }
+
+    private fun ImageView.isOk(): Boolean = this.drawable == ok
+
+
+    private fun mainButtonIsVisible(): Boolean {
+
+        return when (action) {
 //            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
 //
 //                    rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
@@ -258,220 +269,220 @@ class TradingPasswordActivity : AppCompatActivity() {
 //            rulesTrpass4.text = "Пароли совпадают"
 //
 //                    rulesTrpass5.text = "Старый пароль верен"
-			TradingPasswordActivityActions.CreateTradingPassword -> {
-				binding.let {
+            TradingPasswordActivityActions.CreateTradingPassword -> {
+                binding.let {
 
-					it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk()
+                    it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk()
 
-				}
-			}
-
-
-			TradingPasswordActivityActions.ChangeTradingPassword -> {
-
-				binding.let {
-					it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk() && it.imageRule5.isOk()
-
-				}
-			}
-
-			TradingPasswordActivityActions.RemoveTradingPassword -> {
-				binding.imageRule4.isOk()
-			}
-
-		}
-	}
-
-	private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
-		?.show(WindowInsetsCompat.Type.ime())
-
-	private fun View.hideKeyboard() {
-		val inputMethodManager =
-			getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-		inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-	}
-
-	private fun initListeners() {
-
-		binding.apply {
-			when (action) {
-				TradingPasswordActivityActions.CreateTradingPassword -> {
-					passwordEdit.apply {
-						requestFocus()
-
-						showKeyboard()
-					}
-				}
-
-				TradingPasswordActivityActions.ChangeTradingPassword -> {
-					passwordLast.apply {
-						requestFocus()
-
-						showKeyboard()
-					}
-				}
-
-				TradingPasswordActivityActions.RemoveTradingPassword -> {
-					passwordEdit.apply {
-						requestFocus()
-
-						showKeyboard()
-					}
-				}
-			}
-			arrowBackTpactivity.setOnClickListener {
-				this@TradingPasswordActivity.finish()
-			}
-			passwordLast.addTextChangedListener(object : TextWatcher {
-				override fun beforeTextChanged(
-					s: CharSequence?, start: Int, count: Int, after: Int
-				) {
-
-				}
-
-				override fun onTextChanged(
-					s: CharSequence?, start: Int, before: Int, count: Int
-				) {
-					checkPassword()
-				}
-
-				override fun afterTextChanged(s: Editable?) {
-
-				}
-			})
-
-			passwordLast.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-				if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-					// Ваш код для обработки нажатия клавиши "Enter" здесь
-					passwordLast.clearFocus()
-
-					passwordEdit.requestFocus()
-
-					return@OnKeyListener true
-				}
-				false
-			})
-
-			passwordEdit.addTextChangedListener(object : TextWatcher {
-				override fun beforeTextChanged(
-					s: CharSequence?, start: Int, count: Int, after: Int
-				) {
-
-				}
-
-				override fun onTextChanged(
-					s: CharSequence?, start: Int, before: Int, count: Int
-				) {
-					checkPassword()
-				}
-
-				override fun afterTextChanged(s: Editable?) {
-
-				}
-			})
-
-			passwordEdit.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-				if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-					// Ваш код для обработки нажатия клавиши "Enter" здесь
-					passwordEdit.clearFocus()
-
-					passwordConfirm.requestFocus()
-
-					return@OnKeyListener true
-				}
-				false
-			})
-
-			passwordConfirm.addTextChangedListener(object : TextWatcher {
-				override fun beforeTextChanged(
-					s: CharSequence?, start: Int, count: Int, after: Int
-				) {
-
-				}
-
-				override fun onTextChanged(
-					s: CharSequence?, start: Int, before: Int, count: Int
-				) {
-					checkPassword()
-				}
-
-				override fun afterTextChanged(s: Editable?) {
-
-				}
-			})
-
-			passwordConfirm.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-				if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-					// Ваш код для обработки нажатия клавиши "Enter" здесь
-
-					passwordConfirm.clearFocus()
-
-					passwordConfirm.hideKeyboard()
-
-					return@OnKeyListener true
-				}
-				false
-			})
-			buttonDoTrading.setOnClickListener {
-
-				lifecycleScope.launch(Dispatchers.IO) {
-
-					DatabaseRepository.insertAllProfile(
-						profile.copy(
-							tradingPasswordHash = PasswordHasher(
-								firstName = profile.firstName, lastName = profile.lastName
-							).passwordToHash(
-								passwordConfirm.text.toString()
-							)
-						)
-					)
-				}.invokeOnCompletion {
-					Log.d("app", "finish")
-					this@TradingPasswordActivity.finish()
-				}
+                }
+            }
 
 
-			}
+            TradingPasswordActivityActions.ChangeTradingPassword -> {
+
+                binding.let {
+                    it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk() && it.imageRule5.isOk()
+
+                }
+            }
+
+            TradingPasswordActivityActions.RemoveTradingPassword -> {
+                binding.imageRule4.isOk()
+            }
+
+        }
+    }
+
+    private fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
+        ?.show(WindowInsetsCompat.Type.ime())
+
+    private fun View.hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    private fun initListeners() {
+
+        binding.apply {
+            when (action) {
+                TradingPasswordActivityActions.CreateTradingPassword -> {
+                    passwordEdit.apply {
+                        requestFocus()
+
+                        showKeyboard()
+                    }
+                }
+
+                TradingPasswordActivityActions.ChangeTradingPassword -> {
+                    passwordLast.apply {
+                        requestFocus()
+
+                        showKeyboard()
+                    }
+                }
+
+                TradingPasswordActivityActions.RemoveTradingPassword -> {
+                    passwordEdit.apply {
+                        requestFocus()
+
+                        showKeyboard()
+                    }
+                }
+            }
+            arrowBackTpactivity.setOnClickListener {
+                this@TradingPasswordActivity.finish()
+            }
+            passwordLast.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
+                    checkPassword()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+
+                }
+            })
+
+            passwordLast.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+                    passwordLast.clearFocus()
+
+                    passwordEdit.requestFocus()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
+
+            passwordEdit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
+                    checkPassword()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+
+                }
+            })
+
+            passwordEdit.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+                    passwordEdit.clearFocus()
+
+                    passwordConfirm.requestFocus()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
+
+            passwordConfirm.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
+                    checkPassword()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+
+                }
+            })
+
+            passwordConfirm.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    // Ваш код для обработки нажатия клавиши "Enter" здесь
+
+                    passwordConfirm.clearFocus()
+
+                    passwordConfirm.hideKeyboard()
+
+                    return@OnKeyListener true
+                }
+                false
+            })
+            buttonDoTrading.setOnClickListener {
+
+                lifecycleScope.launch(Dispatchers.IO) {
+
+                    DatabaseRepository.insertAllProfile(
+                        profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
+                                passwordConfirm.text.toString()
+                            )
+                        )
+                    )
+                }.invokeOnCompletion {
+                    Log.d("app", "finish")
+                    this@TradingPasswordActivity.finish()
+                }
 
 
-		}
-	}
+            }
 
-	private fun updateProfile() {
-		lifecycleScope.launch(Dispatchers.IO) {
-			DatabaseRepository.insertAllProfile(profile)
-		}
-	}
 
-	private fun String.isThisContains3NumbersOfEmpty(): Boolean {
+        }
+    }
 
-		Log.d("empty", ifEmpty { "empty" })
-		if (this == "") {
-			return true
-		}
-		for (number in 0 .. 9) {
-			if (contains("$number".repeat(3))) {
-				return true
-			}
-		}
-		Log.d("et", this)
+    private fun updateProfile() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            DatabaseRepository.insertAllProfile(profile)
+        }
+    }
 
-		return false
-	}
+    private fun String.isThisContains3NumbersOfEmpty(): Boolean {
 
-	private fun String.isThisContainsSequenceOrEmpty(): Boolean {
+        Log.d("empty", ifEmpty { "empty" })
+        if (this == "") {
+            return true
+        }
+        for (number in 0..9) {
+            if (contains("$number".repeat(3))) {
+                return true
+            }
+        }
+        Log.d("et", this)
 
-		for (number in 0 .. 6) {
-			if (contains(
-					"$number${number + 1}${number + 2}${number + 3}"
-				) || isEmpty()
-			) {
-				return true
-			}
-		}
-		return false
+        return false
+    }
 
-	}
+    private fun String.isThisContainsSequenceOrEmpty(): Boolean {
+
+        for (number in 0..6) {
+            if (contains(
+                    "$number${number + 1}${number + 2}${number + 3}"
+                ) || isEmpty()
+            ) {
+                return true
+            }
+        }
+        return false
+
+    }
 
 }
 

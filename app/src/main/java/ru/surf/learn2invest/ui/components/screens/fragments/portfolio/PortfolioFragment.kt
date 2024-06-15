@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
@@ -22,9 +24,15 @@ class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
     private lateinit var viewModel: PortfolioViewModel
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
+
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_background)
 
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())

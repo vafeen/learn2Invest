@@ -6,12 +6,14 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -48,6 +50,17 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.main_background
+                )
+            )
+        )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.main_background)
 
         binding = ActivitySigninBinding.inflate(layoutInflater)
 
@@ -363,7 +376,7 @@ class SignInActivity : AppCompatActivity() {
 
                     SignINActivityActions.SignIN.action -> {
 
-                        blockKeyBoard()
+                            blockKeyBoard()
 
                         val isAuthSucceeded = checkAuthenticationPin()
 
@@ -443,7 +456,7 @@ class SignInActivity : AppCompatActivity() {
                                 //если ввел верно
                                 isVerified = checkAuthenticationPin()
 
-                                pinCode = ""
+                                    pinCode = ""
 
                                 animatePINCode(
                                     truth = isVerified,
