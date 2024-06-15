@@ -59,6 +59,5 @@
     <string name="repeat_pin">Повторите PIN-код</string>
     <string name="reset_stats">"    Вы точно хотите сбросить статистику?"</string>
     <string name="create_trading_pass">Создать торговый пароль</string>
-    <string name="not_enough_money_for_buy">Недостаточно денег для покупки</string>
     <string name="enter_sum">Введите сумму</string>
 </resources>
