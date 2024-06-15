@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="400dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,7 +143,7 @@
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
-            android:text="@string/example_price"
+            tools:text="@string/example_price"
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintBottom_toBottomOf="@+id/price_card_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/price_card_sell_dialog"
