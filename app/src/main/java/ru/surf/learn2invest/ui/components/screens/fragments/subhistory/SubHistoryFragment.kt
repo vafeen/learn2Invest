@@ -32,6 +32,7 @@ class SubHistoryFragment : Fragment() {
         if (symbol.isNullOrBlank().not())
             lifecycleScope.launch(Dispatchers.IO) {
                 App.mainDB.transactionDao().getFilteredBySymbol(symbol!!).collect {
+                    data.clear()
                     data.addAll(it)
                     withContext(Dispatchers.Main) {
                         adapter.notifyDataSetChanged()
@@ -40,7 +41,6 @@ class SubHistoryFragment : Fragment() {
             }
         return binding.root
     }
-
 
     companion object {
         fun newInstance(symbol: String): SubHistoryFragment {
