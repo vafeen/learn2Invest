@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 // Экран портфеля
@@ -33,12 +35,9 @@ class PortfolioFragment : Fragment() {
 
         setupAssetsRecyclerView()
 
-        val factory = PortfolioViewModelFactory(
-            App.mainDB.assetBalanceHistoryDao(),
-            App.mainDB.assetInvestDao()
-        )
-        viewModel = ViewModelProvider(this, factory)[PortfolioViewModel::class.java]
+        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
 
+        viewModel.loadBalanceData()
         viewModel.assetBalance.observe(viewLifecycleOwner) { balance ->
             binding.balanceText.text = "${balance}$"
         }
@@ -46,13 +45,16 @@ class PortfolioFragment : Fragment() {
         viewModel.fiatBalance.observe(viewLifecycleOwner) { balance ->
             binding.accountFunds.text = "${balance}$"
         }
-        viewModel.loadBalanceData()
 
         chartHelper.setupChart(binding.chart)
         viewModel.chartData.observe(viewLifecycleOwner) { data ->
             chartHelper.updateData(data)
         }
         viewModel.loadChartData()
+
+        binding.topUpBtn.setOnClickListener {
+            RefillAccount(requireContext(), lifecycleScope).initDialog().show()
+        }
 
         viewModel.loadAssetsData()
         adapter.assets = viewModel.assets

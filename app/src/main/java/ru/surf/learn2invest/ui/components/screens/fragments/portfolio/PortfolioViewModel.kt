@@ -13,10 +13,10 @@ import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 
-class PortfolioViewModel(
-    private val assetBalanceHistoryDao: AssetBalanceHistoryDao,
-    private val assetInvestDao: AssetInvestDao
-) : ViewModel() {
+class PortfolioViewModel : ViewModel() {
+    private val assetBalanceHistoryDao: AssetBalanceHistoryDao = App.mainDB.assetBalanceHistoryDao()
+    private val assetInvestDao: AssetInvestDao = App.mainDB.assetInvestDao()
+
     private val _chartData = MutableLiveData<List<Entry>>()
     val chartData: LiveData<List<Entry>> get() = _chartData
 
@@ -30,8 +30,6 @@ class PortfolioViewModel(
 
     fun loadChartData() {
         viewModelScope.launch(Dispatchers.IO) {
-            _assetBalance.postValue(App.profile.assetBalance)
-            _fiatBalance.postValue(App.profile.fiatBalance)
             assetBalanceHistoryDao.getAllAsFlow().collect { balanceHistories ->
                 val data = balanceHistories.mapIndexed { index, assetBalanceHistory ->
                     Entry(index.toFloat(), assetBalanceHistory.assetBalance)
