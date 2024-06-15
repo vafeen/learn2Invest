@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
@@ -40,13 +41,16 @@ class PortfolioFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
 
-        viewModel.loadBalanceData()
-        viewModel.assetBalance.observe(viewLifecycleOwner) { balance ->
-            binding.balanceText.text = "${balance}$"
+        lifecycleScope.launch {
+            viewModel.assetBalance.collect { balance ->
+                binding.balanceText.text = "${balance}$"
+            }
         }
 
-        viewModel.fiatBalance.observe(viewLifecycleOwner) { balance ->
-            binding.accountFunds.text = "${balance}$"
+        lifecycleScope.launch {
+            viewModel.fiatBalance.collect { balance ->
+                binding.accountFunds.text = "${balance}$"
+            }
         }
 
         chartHelper.setupChart(binding.chart)

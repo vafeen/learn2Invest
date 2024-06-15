@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
@@ -13,6 +15,7 @@ import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
+import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
@@ -21,16 +24,20 @@ import java.math.RoundingMode
 class PortfolioViewModel : ViewModel() {
     private val assetBalanceHistoryDao: AssetBalanceHistoryDao = App.mainDB.assetBalanceHistoryDao()
     private val assetInvestDao: AssetInvestDao = App.mainDB.assetInvestDao()
+    private val profileDao: ProfileDao = App.mainDB.profileDao()
     private val networkRepository = NetworkRepository()
 
     private val _chartData = MutableLiveData<List<Entry>>()
     val chartData: LiveData<List<Entry>> get() = _chartData
 
-    private val _assetBalance = MutableLiveData<Float>()
-    val assetBalance: LiveData<Float> get() = _assetBalance
+    val assetBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
+        val profile = profiles[App.idOfProfile]
+        profile.assetBalance + profile.fiatBalance
+    }
 
-    private val _fiatBalance = MutableLiveData<Float>()
-    val fiatBalance: LiveData<Float> get() = _fiatBalance
+    val fiatBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
+        profiles[App.idOfProfile].fiatBalance
+    }
 
     val assets: MutableList<AssetInvest> = mutableListOf()
 
@@ -65,14 +72,6 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
-    fun loadBalanceData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val totalBalance = App.profile.assetBalance + App.profile.fiatBalance
-            _assetBalance.postValue(totalBalance)
-            _fiatBalance.postValue(App.profile.fiatBalance)
-        }
-    }
-
     private fun loadPriceChanges() {
         viewModelScope.launch(Dispatchers.IO) {
             val priceChanges = mutableMapOf<String, Float>()
@@ -83,7 +82,9 @@ class PortfolioViewModel : ViewModel() {
                     val currentPrice = response.value.data.priceUsd
                     Loher.d("current price $currentPrice")
                     val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
-                    val roundedPriceChange = BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+                    val roundedPriceChange =
+                        BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP)
+                            .toFloat()
                     priceChanges[asset.symbol] = roundedPriceChange
                     totalCurrentValue += currentPrice * asset.amount
                 }
