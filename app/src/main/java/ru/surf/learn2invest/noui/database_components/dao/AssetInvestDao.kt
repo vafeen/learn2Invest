@@ -19,4 +19,9 @@ interface AssetInvestDao : DataAccessObject<AssetInvest>,
 
     @Query("select * from assetinvest")
     override fun getAllAsFlow(): Flow<List<AssetInvest>>
+
+
+    @Query("select * from assetinvest where symbol=:symbol")
+    suspend fun getBySymbol(symbol: String): AssetInvest?
 }
+

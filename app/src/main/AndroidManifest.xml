@@ -38,8 +38,6 @@
 
         <activity android:name=".ui.components.screens.SignUpActivity" />
 
-        <activity android:name=".ui.tests.screens.DialogsTestActivity" />
-
         <activity android:name=".ui.components.screens.trading_password.TradingPasswordActivity" />
 
         <activity android:name=".ui.components.screens.fragments.asset_review.AssetReviewActivity" />

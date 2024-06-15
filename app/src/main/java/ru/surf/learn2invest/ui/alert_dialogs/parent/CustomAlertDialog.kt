@@ -102,7 +102,7 @@ abstract class CustomAlertDialog(context: Context) {
         return ColorDrawable(Color.TRANSPARENT)
     }
 
-    fun show() {
+    open fun show() {
         if (initialized) {
             dialog.show()
         } else {

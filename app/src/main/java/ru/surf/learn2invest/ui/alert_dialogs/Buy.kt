@@ -18,15 +18,30 @@ import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
+import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
-    context: Context, val lifecycleScope: LifecycleCoroutineScope, val id: String
+    context: Context,
+    val lifecycleScope: LifecycleCoroutineScope,
+    val id: String,
+    val name: String,
+    val symbol: String
+
 ) : CustomAlertDialog(context = context) {
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
     private lateinit var realTimeUpdateJob: Job
+
+    private var haveAssetsOrNot = false
+
+    private var coin: AssetInvest = AssetInvest(
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+    )
 
     override fun setCancelable(): Boolean {
         return true
@@ -37,6 +52,8 @@ class Buy(
 
 
         binding.apply {
+
+            enteringNumberOfLotsBuyDialog.setText("0")
 
             lifecycleScope.launch(Dispatchers.Main) {
 
@@ -53,58 +70,55 @@ class Buy(
             buttonBuyBuyDialog.isVisible = false
 
             buttonBuyBuyDialog.setOnClickListener {
-                // TODO Логика продажи
+                buy()
 
                 cancel()
             }
 
             imageButtonPlusBuyDialog.setOnClickListener {
 
-                lifecycleScope.launch(Dispatchers.Main) {
+                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
 
-                    enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
+                    (numOfLotsText.toString().toIntOrNull() ?: 0).let {
+                        val balance = App.profile.fiatBalance
+                        when {
+                            it == 0 -> {
+                                "1"
+                            }
 
-                        (numOfLotsText.toString().toIntOrNull() ?: 0).let {
-                            val balance = App.profile.fiatBalance
-                            when {
-                                it == 0 -> {
-                                    ""
-                                }
+                            resultPrice(onFuture = true) <= balance -> {
+                                (it + 1).toString()
+                            }
 
-                                resultPrice(onFuture = true) <= balance -> {
-                                    (it + 1).toString()
-                                }
-
-                                else -> {
-                                    it.toString()
-                                }
+                            else -> {
+                                it.toString()
                             }
                         }
+                    }
 
-                    })
-                }
+                })
+
             }
             imageButtonMinusBuyDialog.setOnClickListener {
 
-                enteringNumberOfLotsBuyDialog.setText(
-                    enteringNumberOfLotsBuyDialog.text.let { text ->
+                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
 
-                        text.toString().toIntOrNull()?.let {
-                            when {
-                                it == 1 || it == 0 -> {
-                                    ""
-                                }
+                    text.toString().toIntOrNull()?.let {
+                        when {
+                            it == 1 || it == 0 -> {
+                                "0"
+                            }
 
-                                it > 1 -> {
-                                    (it - 1).toString()
-                                }
+                            it > 1 -> {
+                                (it - 1).toString()
+                            }
 
-                                else -> {
-                                    it.toString()
-                                }
+                            else -> {
+                                it.toString()
                             }
                         }
-                    })
+                    }
+                })
             }
 
             enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
@@ -120,6 +134,17 @@ class Buy(
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
+
+                    buttonBuyBuyDialog.isVisible = enteringNumberOfLotsBuyDialog.text.toString()
+                        .isNotEmpty() && enteringNumberOfLotsBuyDialog.text.toString()
+                        .toInt() > 0 && if (App.profile.tradingPasswordHash != null) {
+                        verifyTradingPassword(
+                            user = App.profile, password = binding.tradingPasswordTV.text.toString()
+                        )
+                    } else {
+                        true
+                    }
+
                 }
             })
 
@@ -133,10 +158,7 @@ class Buy(
                     }
 
                     override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
+                        s: CharSequence?, start: Int, before: Int, count: Int
                     ) {
 
                     }
@@ -149,6 +171,7 @@ class Buy(
                 true
 
             } else {
+
                 false
 
             }
@@ -160,6 +183,57 @@ class Buy(
         super.cancel()
         realTimeUpdateJob.cancel()
     }
+    private fun buy() {
+        val balance = App.profile.fiatBalance
+
+        val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
+
+        val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
+
+        if (balance > price * amountCurrent) {
+
+            // обновление баланса
+            App.profile = App.profile.copy(
+                fiatBalance = balance - price * amountCurrent,
+                assetBalance = App.profile.assetBalance + price * amountCurrent
+            )
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                App.mainDB.apply {
+
+                    // обновление истории
+                    transactionDao().insertAll(
+                        Transaction(
+                            name = name,
+                            symbol = symbol,
+                            coinPrice = price,
+                            dealPrice = price * amountCurrent,
+                            amount = amountCurrent,
+                            transactionType = TransactionsType.Buy
+                        )
+                    )
+
+                    if (haveAssetsOrNot) {
+                        assetInvestDao().update(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
+                        )
+                    } else {
+                        // обновление портфеля
+                        assetInvestDao().insertAll(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                amount = coin.amount + amountCurrent
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun getDialogView(): View {
         return binding.root
@@ -178,7 +252,7 @@ class Buy(
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
 
-            val price = priceText.substring(2, priceText.length).getFloatFromStringWithCurrency()
+            val price = priceText.getFloatFromStringWithCurrency()
             Log.e("error", "price  t= $price")
             val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
@@ -189,6 +263,24 @@ class Buy(
                 0
             })
         }
+    }
+
+
+    override fun show() {
+        super.show()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
+
+            if (coinMayBeInPortfolio != null) {
+                haveAssetsOrNot = true
+
+                coin = coinMayBeInPortfolio
+            }
+
+            Log.d("coin", "coin = $coin")
+        }
+
     }
 
     fun startRealTimeUpdate(): Job =
