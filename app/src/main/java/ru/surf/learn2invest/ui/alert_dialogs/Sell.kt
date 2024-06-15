@@ -51,11 +51,10 @@ class Sell(
 
             enteringNumberOfLotsSellDialog.setText("0")
 
-            lifecycleScope.launch {
-                balanceNumSellDialog.text =
-                    App.profile.fiatBalance.getWithCurrency()
-                realTimeUpdateJob = startRealTimeUpdate()
-            }
+            balanceNumSellDialog.text =
+                App.profile.fiatBalance.getWithCurrency()
+            realTimeUpdateJob = startRealTimeUpdate()
+
 
             buttonExitSellDialog.setOnClickListener {
                 cancel()
