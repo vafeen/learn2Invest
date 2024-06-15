@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -59,8 +60,17 @@ class PortfolioFragment : Fragment() {
         }
 
         viewModel.loadAssetsData()
-        adapter.assets = viewModel.assets
-        adapter.notifyDataSetChanged()
+        if(viewModel.assets.isNotEmpty()){
+            adapter.assets = viewModel.assets
+            adapter.notifyDataSetChanged()
+            binding.assets.isVisible = true
+            binding.chart.isVisible = true
+            binding.assetsAreEmpty.isVisible = false
+        } else {
+            binding.assets.isVisible = false
+            binding.chart.isVisible = false
+            binding.assetsAreEmpty.isVisible = true
+        }
 
         viewModel.priceChanges.observe(viewLifecycleOwner) { priceChanges ->
             adapter.priceChanges = priceChanges
