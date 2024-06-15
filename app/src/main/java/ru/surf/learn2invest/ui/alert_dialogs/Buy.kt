@@ -10,18 +10,23 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.network_components.NetworkRepository
+import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Buy(
-    context: Context, val lifecycleScope: LifecycleCoroutineScope
+    context: Context, val lifecycleScope: LifecycleCoroutineScope, val id: String
 ) : CustomAlertDialog(context = context) {
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
+    private lateinit var realTimeUpdateJob: Job
 
     override fun setCancelable(): Boolean {
         return true
@@ -36,18 +41,11 @@ class Buy(
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text =
-                    App.profile.fiatBalance.getWithCurrency() // TODO()Володь, Сюда также нужно
-                //            поставить нужный тип баланса
+                    App.profile.fiatBalance.getWithCurrency()
 
-//                while (true) {
-                val str = 777777f
-                priceNumberBuyDialog.text =
-                    str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
-                // которая приходит через ретрофит
+                realTimeUpdateJob = startRealTimeUpdate()
 
                 updateFields()
-                delay(2000)
-//                }
             }
 
             buttonExitBuyDialog.setOnClickListener {
@@ -160,6 +158,10 @@ class Buy(
         }
     }
 
+    override fun cancel() {
+        super.cancel()
+        realTimeUpdateJob.cancel()
+    }
 
     override fun getDialogView(): View {
         return binding.root
@@ -191,4 +193,22 @@ class Buy(
         }
     }
 
+    fun startRealTimeUpdate(): Job =
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                when (val result = NetworkRepository.getCoinReview(id)) {
+                    is ResponseWrapper.Success -> {
+                        withContext(Dispatchers.Main) {
+                            binding.priceNumberBuyDialog.text =
+                                result.value.data.priceUsd.getWithCurrency()
+                            updateFields()
+                        }
+                    }
+
+                    is ResponseWrapper.NetworkError -> {}
+                }
+
+                delay(5000)
+            }
+        }
 }
