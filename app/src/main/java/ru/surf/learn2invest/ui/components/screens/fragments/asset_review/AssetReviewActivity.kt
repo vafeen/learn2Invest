@@ -35,6 +35,7 @@ class AssetReviewActivity : AppCompatActivity() {
                 )
             )
         )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)

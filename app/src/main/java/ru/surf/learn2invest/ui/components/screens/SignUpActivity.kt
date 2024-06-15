@@ -47,6 +47,7 @@ class SignUpActivity : AppCompatActivity() {
                 )
             )
         )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)

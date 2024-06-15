@@ -53,6 +53,7 @@ class SignInActivity : AppCompatActivity() {
                 )
             )
         )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.main_background)
 
         binding = ActivitySigninBinding.inflate(layoutInflater)
 

@@ -52,6 +52,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 )
             )
         )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
 

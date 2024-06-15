@@ -22,6 +22,7 @@ class HostActivity : AppCompatActivity() {
                 )
             )
         )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.main_background)
 
         binding = ActivityHostBinding.inflate(layoutInflater)
         setContentView(binding.root)
