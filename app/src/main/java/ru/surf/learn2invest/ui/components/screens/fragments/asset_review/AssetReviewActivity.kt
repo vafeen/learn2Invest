@@ -1,7 +1,9 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.asset_review
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
@@ -23,6 +25,16 @@ class AssetReviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )
+            )
+        )
 
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)

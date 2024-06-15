@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
@@ -41,6 +42,16 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )
+            )
+        )
 
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
 
