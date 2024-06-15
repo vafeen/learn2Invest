@@ -37,8 +37,10 @@ class HistoryFragment : Fragment() {
             DatabaseRepository.getAllAsFlowTransaction().collect {
                 Loher.d(it.size.toString())
                 if (it.isEmpty()) {
-                    binding.historyRecyclerview.isVisible = false
-                    binding.noActionsTv.isVisible = true
+                    withContext(Dispatchers.Main) {
+                        binding.historyRecyclerview.isVisible = false
+                        binding.noActionsTv.isVisible = true
+                    }
                 } else {
                     data.addAll(it)
                     withContext(Dispatchers.Main) {
