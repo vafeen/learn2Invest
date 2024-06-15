@@ -1,18 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -30,8 +24,12 @@ class PortfolioViewModel : ViewModel() {
     private val profileDao: ProfileDao = App.mainDB.profileDao()
     private val networkRepository = NetworkRepository()
 
-    private val _chartData = MutableLiveData<List<Entry>>()
-    val chartData: LiveData<List<Entry>> get() = _chartData
+    val chartData: Flow<List<Entry>> =
+        assetBalanceHistoryDao.getAllAsFlow().map { balanceHistories ->
+            balanceHistories.mapIndexed { index, assetBalanceHistory ->
+                Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+            }
+        }
 
     val assetBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
         val profile = profiles[App.idOfProfile]
@@ -51,19 +49,6 @@ class PortfolioViewModel : ViewModel() {
 
     private val _portfolioChangePercentage = MutableStateFlow(0f)
     val portfolioChangePercentage: StateFlow<Float> get() = _portfolioChangePercentage
-
-    fun loadChartData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            assetBalanceHistoryDao.getAllAsFlow().collect { balanceHistories ->
-                val data = balanceHistories.mapIndexed { index, assetBalanceHistory ->
-                    Entry(index.toFloat(), assetBalanceHistory.assetBalance)
-                }
-                withContext(Dispatchers.Main) {
-                    _chartData.value = data
-                }
-            }
-        }
-    }
 
     private suspend fun loadPriceChanges(assets: List<AssetInvest>) {
         val priceChanges = mutableMapOf<String, Float>()

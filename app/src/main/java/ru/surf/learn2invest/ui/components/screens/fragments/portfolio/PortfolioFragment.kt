@@ -54,10 +54,11 @@ class PortfolioFragment : Fragment() {
         }
 
         chartHelper.setupChart(binding.chart)
-        viewModel.chartData.observe(viewLifecycleOwner) { data ->
-            chartHelper.updateData(data)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.chartData.collect { data ->
+                chartHelper.updateData(data)
+            }
         }
-        viewModel.loadChartData()
 
         binding.topUpBtn.setOnClickListener {
             RefillAccount(requireContext(), lifecycleScope).initDialog().show()
@@ -73,7 +74,6 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        // Подписка на изменения в priceChanges и обновление UI
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.priceChanges.collect { priceChanges ->
                 adapter.priceChanges = priceChanges
@@ -81,7 +81,6 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        // Подписка на изменения в portfolioChangePercentage и обновление UI
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.portfolioChangePercentage.collect { percentage ->
                 val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
