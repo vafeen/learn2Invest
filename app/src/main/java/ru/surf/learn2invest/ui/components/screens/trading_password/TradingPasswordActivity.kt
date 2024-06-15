@@ -25,6 +25,7 @@ import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 
 class TradingPasswordActivity : AppCompatActivity() {
@@ -108,10 +109,10 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             when (action) {
 
-                TradingPasswordActivityActions.CreateTradingPassword -> {
-                    textInputLayout1.isVisible = false
+				TradingPasswordActivityActions.CreateTradingPassword -> {
+					textInputLayout1.isVisible = false
 
-                    rulesTrpass5.isVisible = false
+					rulesTrpass5.isVisible = false
 
                     imageRule5.isVisible = false
                 }
@@ -483,7 +484,6 @@ class TradingPasswordActivity : AppCompatActivity() {
         return false
 
     }
-
 
 }
 

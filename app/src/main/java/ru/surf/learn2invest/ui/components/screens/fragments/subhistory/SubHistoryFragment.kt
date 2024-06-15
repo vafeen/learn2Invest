@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 
 class SubHistoryFragment : Fragment() {
@@ -31,10 +32,15 @@ class SubHistoryFragment : Fragment() {
         binding.assetHistory.adapter = adapter
         if (symbol.isNullOrBlank().not())
             lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.transactionDao().getFilteredBySymbol(symbol!!).collect {
-                    data.addAll(it)
-                    withContext(Dispatchers.Main) {
-                        adapter.notifyDataSetChanged()
+                DatabaseRepository.getFilteredBySymbolTransaction(symbol ?: "").collect {
+                    if (it.isEmpty()) {
+                        binding.assetHistory.isVisible = false
+                        binding.noActionsError.isVisible = true
+                    } else {
+                        data.addAll(it)
+                        withContext(Dispatchers.Main) {
+                            adapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }

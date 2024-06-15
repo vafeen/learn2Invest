@@ -1,28 +1,35 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
 
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyPIN
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 
 
@@ -79,6 +86,8 @@ class SignInActivity : AppCompatActivity() {
             title = "Вход в Learn2Invest"
         )
 
+        Log.d("action", "${intent.action}")
+
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
@@ -107,6 +116,14 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    private fun updateProfileData() {
+        if (userDataIsChanged) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                DatabaseRepository.updateProfile(profile)
+            }
+        }
+    }
+
     private fun startActivityWithMainLogic() {
         val intent = Intent(context, HostActivity::class.java)
         startActivity(intent)
@@ -128,133 +145,209 @@ class SignInActivity : AppCompatActivity() {
 
             SignINActivityActions.SignUP.action -> {
 
-//                fingerPrintManager.auth()
-//                    .invokeOnCompletion {
-
                 startActivityWithMainLogic()
 
-//                lifecycleScope.launch(Dispatchers.IO) {
-//                updateProfileData()
-//                }
-
-                //Loher.d("Activity stop")
-
                 this@SignInActivity.finish()
-//                }
             }
 
             SignINActivityActions.ChangingPIN.action -> {
-//                updateProfileData()
 
                 this@SignInActivity.finish()
             }
         }
 
-
+        updateProfileData()
     }
 
 
     private fun checkAuthenticationPin(): Boolean = verifyPIN(user = profile, pinCode)
 
-    private suspend fun showErrorPINCode() {
+    private fun animatePINCode(truth: Boolean, needReturn: Boolean = false): Job {
+        return lifecycleScope.launch(Dispatchers.Main) {
+            delay(100)
 
-        delay(300)
+            binding.apply {
+                dot1.gotoCenter(truePIN = truth, needReturn = needReturn)
+                dot2.gotoCenter(truePIN = truth, needReturn = needReturn)
+                dot3.gotoCenter(truePIN = truth, needReturn = needReturn)
+                dot4.gotoCenter(truePIN = truth, needReturn = needReturn)
+            }
 
-        paintDots(count = -1)
-
-        delay(300)
-
-        paintDots()
+            delay(800)
+        }
     }
 
-    private suspend fun showTruePINCode() {
+    private fun ImageView.gotoCenter(truePIN: Boolean, needReturn: Boolean) {
+        val home = (this.layoutParams as ConstraintLayout.LayoutParams).horizontalBias
 
-        delay(300)
+        val gotoCenter = ValueAnimator.ofFloat(
+            home,
+            0.5f
+        ).also {
+            it.duration = 300
 
-//        pinCode = ""
+            it.addUpdateListener { animator ->
+                val biasValue = animator.animatedValue as Float
 
-//        paintDots()
+                val params = this.layoutParams as ConstraintLayout.LayoutParams
 
-//        delay(300)
+                params.horizontalBias = biasValue
+
+                this.layoutParams = params
+            }
+
+            it.startDelay
+        }
+
+        val goPoDomam = ValueAnimator.ofFloat(
+            0.5f,
+            home
+        ).also {
+            it.duration = 300
+
+            it.addUpdateListener { animator ->
+                val biasValue = animator.animatedValue as Float
+
+                val params = this.layoutParams as ConstraintLayout.LayoutParams
+
+                params.horizontalBias = biasValue
+
+                this.layoutParams = params
+            }
+        }
+
+        goPoDomam.doOnEnd {
+            unBlockKeyBoard()
+        }
+
+        gotoCenter.start()
+
+        gotoCenter.doOnEnd {
+
+            lifecycleScope.launch(Dispatchers.Main) {
+                this@gotoCenter.drawable.setTint(
+                    if (truePIN) {
+                        Color.GREEN
+                    } else {
+                        Color.RED
+                    }
+                )
+
+                delay(800)
+
+                if (needReturn || !truePIN) {
+                    goPoDomam.doOnStart {
+                        this@gotoCenter.drawable.setTint(Color.WHITE)
+                    }
+
+                    goPoDomam.start()
+                }
+            }
+
+        }
     }
 
+    private fun TextView.tapOn() {
+        val rotating = ValueAnimator.ofFloat(0f, 360f).also {
+            it.duration = 500
+
+            it.addUpdateListener { animator ->
+                val rotateValue = animator.animatedValue as Float
+
+                this.rotation = rotateValue
+            }
+        }
+
+        val flexBackground = ValueAnimator.ofFloat(1f, 0f, 1f).also {
+            it.duration = 800
+
+            it.addUpdateListener { animator ->
+                val rotateValue = animator.animatedValue as Float
+
+                this.alpha = rotateValue
+            }
+        }
+
+        AnimatorSet().apply {
+            playTogether(rotating, flexBackground)
+        }.start()
+
+    }
+
+
+    private fun changeColorOfFourDots(
+        color1: Int,
+        color2: Int,
+        color3: Int,
+        color4: Int,
+    ) {
+        binding.dot1.drawable.setTint(color1)
+
+        binding.dot2.drawable.setTint(color2)
+
+        binding.dot3.drawable.setTint(color3)
+
+        binding.dot4.drawable.setTint(color4)
+    }
 
     private fun paintDots(count: Int = pinCode.length) {
         when (count) {
             1 -> {
-                binding.dot1.drawable.setTint(Color.BLACK)
-
-                binding.dot2.drawable.setTint(Color.WHITE)
-
-                binding.dot3.drawable.setTint(Color.WHITE)
-
-                binding.dot4.drawable.setTint(Color.WHITE)
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.WHITE,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE,
+                )
             }
 
             2 -> {
-                binding.dot1.drawable.setTint(Color.BLACK)
-
-                binding.dot2.drawable.setTint(Color.BLACK)
-
-                binding.dot3.drawable.setTint(Color.WHITE)
-
-                binding.dot4.drawable.setTint(Color.WHITE)
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE,
+                )
             }
 
             3 -> {
-                binding.dot1.drawable.setTint(Color.BLACK)
-
-                binding.dot2.drawable.setTint(Color.BLACK)
-
-                binding.dot3.drawable.setTint(Color.BLACK)
-
-                binding.dot4.drawable.setTint(Color.WHITE)
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.BLACK,
+                    color4 = Color.WHITE,
+                )
             }
 
             4 -> {
-                binding.dot1.drawable.setTint(Color.BLACK)
-
-                binding.dot2.drawable.setTint(Color.BLACK)
-
-                binding.dot3.drawable.setTint(Color.BLACK)
-
-                binding.dot4.drawable.setTint(Color.BLACK)
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.BLACK,
+                    color4 = Color.BLACK,
+                )
 
             }
 
             // error
             -1 -> {
-                binding.dot1.drawable.setTint(Color.RED)
-
-                binding.dot2.drawable.setTint(Color.RED)
-
-                binding.dot3.drawable.setTint(Color.RED)
-
-                binding.dot4.drawable.setTint(Color.RED)
+                changeColorOfFourDots(
+                    color1 = Color.RED,
+                    color2 = Color.RED,
+                    color3 = Color.RED,
+                    color4 = Color.RED,
+                )
             }
-
-            //true
-//            100 -> {
-//                binding.dot1.drawable.setTint(Color.GREEN)
-//
-//                binding.dot2.drawable.setTint(Color.GREEN)
-//
-//                binding.dot3.drawable.setTint(Color.GREEN)
-//
-//                binding.dot4.drawable.setTint(Color.GREEN)
-//            }
 
             else -> {
-                binding.dot1.drawable.setTint(Color.WHITE)
-
-                binding.dot2.drawable.setTint(Color.WHITE)
-
-                binding.dot3.drawable.setTint(Color.WHITE)
-
-                binding.dot4.drawable.setTint(Color.WHITE)
+                changeColorOfFourDots(
+                    color1 = Color.WHITE,
+                    color2 = Color.WHITE,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE
+                )
             }
         }
-
     }
 
     private fun blockKeyBoard() {
@@ -282,83 +375,62 @@ class SignInActivity : AppCompatActivity() {
                 when (intent.action) {
 
                     SignINActivityActions.SignIN.action -> {
-                        if (checkAuthenticationPin()) {
 
                             blockKeyBoard()
 
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                showTruePINCode()
-                            }.invokeOnCompletion {
+                        val isAuthSucceeded = checkAuthenticationPin()
 
+                        animatePINCode(isAuthSucceeded).invokeOnCompletion {
+
+                            if (isAuthSucceeded) {
                                 onAuthenticationSucceeded()
                             }
 
-                        } else {
-                            pinCode = ""
-
-                            blockKeyBoard()
-
-                            lifecycleScope.launch(Dispatchers.Main) {
-
-                                showErrorPINCode()
-
-                            }.invokeOnCompletion {
-
-                                unBlockKeyBoard()
-
-                            }
-
                         }
+
+                        pinCode = ""
                     }
 
                     SignINActivityActions.SignUP.action -> {
+                        blockKeyBoard()
+
                         when {
                             firstPin == "" -> {
+
                                 firstPin = pinCode
 
                                 pinCode = ""
 
-                                blockKeyBoard()
-
                                 lifecycleScope.launch(Dispatchers.Main) {
+
                                     delay(500)
 
                                     paintDots()
 
                                     binding.enterPinSignin.text = getString(R.string.repeat_pin)
-                                }.invokeOnCompletion {
 
                                     unBlockKeyBoard()
-
                                 }
                             }
 
                             firstPin == pinCode -> {
-                                //Loher.d("$pinCode == $firstPin")
-                                //Loher.d("user = $user")
-
-
-                                blockKeyBoard()
 
                                 lifecycleScope.launch(Dispatchers.Main) {
-                                    showTruePINCode()
 
-                                    App.mainDB.profileDao().update(
-                                        profile.copy(
-                                            hash = PasswordHasher(
-                                                firstName = profile.firstName,
-                                                lastName = profile.lastName
-                                            ).passwordToHash(pinCode)
-                                        )
+                                    profile = profile.copy(
+                                        hash = PasswordHasher(
+                                            firstName = profile.firstName,
+                                            lastName = profile.lastName
+                                        ).passwordToHash(pinCode)
                                     )
+
+                                    userDataIsChanged = true
 
                                     fingerPrintManager.auth()
 
-                                    onAuthenticationSucceeded()
-                                }.invokeOnCompletion {
-
-                                    unBlockKeyBoard()
-
+                                    animatePINCode(truth = true).invokeOnCompletion {
+                                        onAuthenticationSucceeded()
+                                    }
                                 }
 
                             }
@@ -367,15 +439,7 @@ class SignInActivity : AppCompatActivity() {
 
                                 pinCode = ""
 
-                                blockKeyBoard()
-
-                                lifecycleScope.launch(Dispatchers.Main) {
-                                    showErrorPINCode()
-                                }.invokeOnCompletion {
-
-                                    unBlockKeyBoard()
-
-                                }
+                                animatePINCode(truth = false)
                             }
                         }
 
@@ -383,34 +447,31 @@ class SignInActivity : AppCompatActivity() {
                     }
 
                     SignINActivityActions.ChangingPIN.action -> {
+                        blockKeyBoard()
+
                         when {
                             // вводит старый пароль
                             firstPin == "" && !isVerified -> {
+
                                 //если ввел верно
-                                if (checkAuthenticationPin()) {
-                                    isVerified = true
+                                isVerified = checkAuthenticationPin()
 
                                     pinCode = ""
 
-                                    blockKeyBoard()
+                                animatePINCode(
+                                    truth = isVerified,
+                                    needReturn = true
+                                ).invokeOnCompletion {
 
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        showTruePINCode()
-                                    }.invokeOnCompletion {
-                                        paintDots()
-
+                                    if (isVerified) {
                                         binding.enterPinSignin.text = "Введите новый пинкод"
-
-                                        unBlockKeyBoard()
                                     }
 
-                                } else {
-                                    pinCode = ""
+                                    paintDots()
 
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        showErrorPINCode()
-                                    }
+                                    unBlockKeyBoard()
                                 }
+
                             }
 
                             //вводит новый
@@ -421,46 +482,43 @@ class SignInActivity : AppCompatActivity() {
                                 pinCode = ""
 
                                 lifecycleScope.launch(Dispatchers.Main) {
+
                                     delay(500)
 
                                     paintDots()
+
                                 }.invokeOnCompletion {
                                     binding.enterPinSignin.text = "Повторите пинкод"
+
+                                    unBlockKeyBoard()
                                 }
 
                             }
 
                             // повторяет
                             firstPin != "" && isVerified -> {
-                                if (pinCode == firstPin) {
+                                val truth = pinCode == firstPin
+
+                                if (truth) {
 
                                     userDataIsChanged = true
 
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        withContext(Dispatchers.IO) {
-                                            App.mainDB.profileDao().update(
-                                                profile.copy(
-                                                    hash = PasswordHasher(
-                                                        firstName = profile.firstName,
-                                                        lastName = profile.lastName
-                                                    ).passwordToHash(pinCode)
-                                                )
-                                            )
-                                        }
+                                    profile = profile.copy(
+                                        hash = PasswordHasher(
+                                            firstName = profile.firstName,
+                                            lastName = profile.lastName
+                                        ).passwordToHash(pinCode)
+                                    )
+                                }
 
-                                        showTruePINCode()
-
-                                    }.invokeOnCompletion {
-                                        pinCode = ""
-
-                                        onAuthenticationSucceeded()
-                                    }
-
-                                } else {
+                                animatePINCode(
+                                    truth = truth,
+                                    needReturn = true
+                                ).invokeOnCompletion {
                                     pinCode = ""
 
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        showErrorPINCode()
+                                    if (truth) {
+                                        onAuthenticationSucceeded()
                                     }
                                 }
                             }
@@ -476,6 +534,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun backspace() {
         if (pinCode.isNotEmpty()) {
+
             pinCode = pinCode.substring(0, pinCode.lastIndex)
 
             paintDots(count = pinCode.length)
@@ -498,8 +557,11 @@ class SignInActivity : AppCompatActivity() {
             )
 
             for (index in 0..numberButtons.lastIndex) {
-                numberButtons[index].setOnClickListener {
+
+                numberButtons[index].setOnClickListener { it ->
                     updatePin("$index")
+
+                    numberButtons[index].tapOn()
                 }
             }
 
