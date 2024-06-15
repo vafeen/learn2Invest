@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
@@ -39,13 +42,15 @@ class PortfolioViewModel : ViewModel() {
         profiles[App.idOfProfile].fiatBalance
     }
 
-    val assets: MutableList<AssetInvest> = mutableListOf()
+    val assetsFlow: Flow<List<AssetInvest>> = assetInvestDao.getAllAsFlow().onEach { assets ->
+        loadPriceChanges(assets)
+    }
 
-    private val _priceChanges = MutableLiveData<Map<String, Float>>()
-    val priceChanges: LiveData<Map<String, Float>> get() = _priceChanges
+    private val _priceChanges = MutableStateFlow<Map<String, Float>>(emptyMap())
+    val priceChanges: StateFlow<Map<String, Float>> get() = _priceChanges
 
-    private val _portfolioChangePercentage = MutableLiveData<Float>()
-    val portfolioChangePercentage: LiveData<Float> get() = _portfolioChangePercentage
+    private val _portfolioChangePercentage = MutableStateFlow(0f)
+    val portfolioChangePercentage: StateFlow<Float> get() = _portfolioChangePercentage
 
     fun loadChartData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -60,41 +65,24 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
-    fun loadAssetsData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            assetInvestDao.getAllAsFlow().collect {
-                withContext(Dispatchers.Main) {
-                    assets.clear()
-                    assets.addAll(it)
-                    loadPriceChanges()
-                }
+    private suspend fun loadPriceChanges(assets: List<AssetInvest>) {
+        val priceChanges = mutableMapOf<String, Float>()
+        var totalCurrentValue = 0f
+        for (asset in assets) {
+            val response = networkRepository.getCoinReview(asset.assetID)
+            if (response is ResponseWrapper.Success) {
+                val currentPrice = response.value.data.priceUsd
+                Loher.d("current price $currentPrice")
+                val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
+                val roundedPriceChange =
+                    BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+                priceChanges[asset.symbol] = roundedPriceChange
+                totalCurrentValue += currentPrice * asset.amount
             }
         }
-    }
-
-    private fun loadPriceChanges() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val priceChanges = mutableMapOf<String, Float>()
-            var totalCurrentValue = 0f
-            for (asset in assets) {
-                val response = networkRepository.getCoinReview(asset.assetID)
-                if (response is ResponseWrapper.Success) {
-                    val currentPrice = response.value.data.priceUsd
-                    Loher.d("current price $currentPrice")
-                    val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
-                    val roundedPriceChange =
-                        BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP)
-                            .toFloat()
-                    priceChanges[asset.symbol] = roundedPriceChange
-                    totalCurrentValue += currentPrice * asset.amount
-                }
-            }
-            totalCurrentValue += App.profile.fiatBalance
-            withContext(Dispatchers.Main) {
-                _priceChanges.value = priceChanges
-                calculatePortfolioChangePercentage(totalCurrentValue)
-            }
-        }
+        totalCurrentValue += App.profile.fiatBalance
+        _priceChanges.value = priceChanges
+        calculatePortfolioChangePercentage(totalCurrentValue)
     }
 
     private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {

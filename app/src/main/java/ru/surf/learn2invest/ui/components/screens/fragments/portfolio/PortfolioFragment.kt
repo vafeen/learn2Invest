@@ -63,41 +63,44 @@ class PortfolioFragment : Fragment() {
             RefillAccount(requireContext(), lifecycleScope).initDialog().show()
         }
 
-        viewModel.loadAssetsData()
-        if(viewModel.assets.isNotEmpty()){
-            adapter.assets = viewModel.assets
-            adapter.notifyDataSetChanged()
-            binding.assets.isVisible = true
-            binding.chart.isVisible = true
-            binding.assetsAreEmpty.isVisible = false
-        } else {
-            binding.assets.isVisible = false
-            binding.chart.isVisible = false
-            binding.assetsAreEmpty.isVisible = true
-        }
-
-        viewModel.priceChanges.observe(viewLifecycleOwner) { priceChanges ->
-            adapter.priceChanges = priceChanges
-            adapter.notifyDataSetChanged()
-        }
-
-        viewModel.portfolioChangePercentage.observe(viewLifecycleOwner) { percentage ->
-            val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
-            binding.percent.text =
-                if (percentage >= 0) "+$formattedPercentage" else formattedPercentage
-
-            val background = if (percentage >= 0) {
-                AppCompatResources.getDrawable(
-                    requireContext(),
-                    R.drawable.percent_increase_background
-                )
-            } else {
-                AppCompatResources.getDrawable(
-                    requireContext(),
-                    R.drawable.percent_recession_background
-                )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.assetsFlow.collect { assets ->
+                adapter.assets = assets
+                adapter.notifyDataSetChanged()
+                binding.assets.isVisible = assets.isNotEmpty()
+                binding.chart.isVisible = assets.isNotEmpty()
+                binding.assetsAreEmpty.isVisible = assets.isEmpty()
             }
-            binding.percent.background = background
+        }
+
+        // Подписка на изменения в priceChanges и обновление UI
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.priceChanges.collect { priceChanges ->
+                adapter.priceChanges = priceChanges
+                adapter.notifyDataSetChanged()
+            }
+        }
+
+        // Подписка на изменения в portfolioChangePercentage и обновление UI
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.portfolioChangePercentage.collect { percentage ->
+                val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
+                binding.percent.text =
+                    if (percentage >= 0) "+$formattedPercentage" else formattedPercentage
+
+                val background = if (percentage >= 0) {
+                    AppCompatResources.getDrawable(
+                        requireContext(),
+                        R.drawable.percent_increase_background
+                    )
+                } else {
+                    AppCompatResources.getDrawable(
+                        requireContext(),
+                        R.drawable.percent_recession_background
+                    )
+                }
+                binding.percent.background = background
+            }
         }
 
         return binding.root
