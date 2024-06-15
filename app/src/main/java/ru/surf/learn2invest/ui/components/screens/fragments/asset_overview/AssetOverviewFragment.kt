@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
 import ru.surf.learn2invest.network_components.CoinAPIService
@@ -22,6 +24,8 @@ class AssetOverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 

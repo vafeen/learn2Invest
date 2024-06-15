@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
@@ -20,6 +22,9 @@ class PortfolioFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_background)
+
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
