@@ -32,7 +32,7 @@ class SubHistoryFragment : Fragment() {
         binding.assetHistory.adapter = adapter
         if (symbol.isNullOrBlank().not())
             lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.getFilteredBySymbolTransaction(symbol!!).collect {
+                DatabaseRepository.getFilteredBySymbolTransaction(symbol ?: "").collect {
                     if (it.isEmpty()) {
                         binding.assetHistory.isVisible = false
                         binding.noActionsError.isVisible = true
