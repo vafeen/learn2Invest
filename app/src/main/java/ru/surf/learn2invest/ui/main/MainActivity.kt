@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -98,7 +99,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun runAnimatedText() {
-        binding.splashTextView.text = "Здравствуй, ${profile.firstName}!"
+        binding.splashTextView.text =
+            "${ContextCompat.getString(context, R.string.hello)}, ${profile.firstName}!"
         binding.splashTextView.alpha = 0f
 
         val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)

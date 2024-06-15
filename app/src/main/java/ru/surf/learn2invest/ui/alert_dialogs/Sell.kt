@@ -6,27 +6,30 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
-    context: Context,
+    val context: Context,
     val lifecycleScope: LifecycleCoroutineScope,
     val id: String,
     val name: String,
     val symbol: String
+
 
 ) : CustomAlertDialog(context = context) {
 
@@ -227,7 +230,8 @@ class Sell(
     }
 
     private fun updateFields() {
-        binding.itogoSellDialog.text = "Итого: $ ${resultPrice()}"
+        binding.itogoSellDialog.text =
+            ContextCompat.getString(context, R.string.final_price) + "$ ${resultPrice()}"
     }
 
     private fun resultPrice(): Float {

@@ -12,8 +12,8 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 
 class HistoryAdapter(private val data: List<Transaction>) :

@@ -17,8 +17,8 @@ import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 

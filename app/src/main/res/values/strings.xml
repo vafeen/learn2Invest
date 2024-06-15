@@ -1,15 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Learn2Invest</string>
     <string name="refill">Пополнить</string>
     <string name="buy">Купить</string>
     <string name="sell">Продать</string>
-    <string name="add_price_alert">Добавить</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
     <string name="no">Нет</string>
     <string name="yes_exactly">Да, точно</string>
-    <string name="example_balance" translatable="false">$50,540.00</string>
-    <string name="example_price" translatable="false">$10000</string>
     <string name="price_name">Цена</string>
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
@@ -17,12 +14,12 @@
     <string name="comment">Комментарий</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
     <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
-    <string name="asking_to_delete_profile">Вы точно хотите удалить профиль?</string>
+    <string name="asking_to_delete_profile">Вы точно хотите \n удалить профиль?</string>
     <string name="account">Счет</string>
+    <string name="enter_sum">Введите сумму</string>
     <string name="refill_account">Пополнение счета</string>
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
-    <string name="price_alert_text" translatable="false">Price alert</string>
     <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
     <string name="account_funds">Средства на счете</string>
@@ -39,12 +36,12 @@
     <string name="market_review">Обзор рынка</string>
     <string name="search">Поиск</string>
     <string name="clear"><u>Очистить</u></string>
-    <string name="network_error">Проверьте подключение   к интернету</string>
+    <string name="network_error">Проверьте подключение \n к интернету</string>
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
-    <string name="no_actions">Вы не производили   никаких действий</string>
+    <string name="no_actions">Вы не производили \n никаких действий</string>
     <string name="profile">Профиль</string>
-    <string name="delete_profile"><u>Удалить  профиль</u></string>
+    <string name="delete_profile"><u>Удалить профиль</u></string>
     <string name="drop_statistics">Сброс статистики</string>
     <string name="settings">Настройки</string>
     <string name="biometry">Биометрия</string>
@@ -58,6 +55,35 @@
     <string name="no_interest_error">Вы не интересовались данным активом</string>
     <string name="repeat_pin">Повторите PIN-код</string>
     <string name="reset_stats">"    Вы точно хотите сбросить статистику?"</string>
-    <string name="create_trading_pass">Создать торговый пароль</string>
-    <string name="enter_sum">Введите сумму</string>
+    <string name="create_trading_password">Создать торговый пароль</string>
+    <string name="create_pin">Придумайте PIN-код</string>
+
+    <string name="example_balance" translatable="false">$50,540.00</string>
+    <string name="example_price" translatable="false">$10000</string>
+    <string name="price_alert_text" translatable="false">Price alert</string>
+    <string name="app_name" translatable="false">Learn2Invest</string>
+    <string name="enter_old_pin">Введите старый PIN-код</string>
+    <string name="min_len_trading_password">Пароль должен состоять минимум из 6 цифр</string>
+    <string name="not_more_than_2">Не более двух одинаковых цифр рядом</string>
+    <string name="no_seq_more_than_2">Нет последовательности более трех цифр</string>
+    <string name="pass_match">Пароли совпадают</string>
+    <string name="old_pas_correct">Cтарый пароль верен</string>
+    <string name="create_trpas">Создание торгового пароля</string>
+    <string name="create">Создать</string>
+    <string name="change_trpas">Изменение торгового пароля</string>
+    <string name="change">Изменить</string>
+    <string name="remove_trading_password">Удаление торгового пароля</string>
+    <string name="remove">Удалить</string>
+    <string name="sign_in_in_learn2invest">Вход в Learn2Invest</string>
+    <string name="cancel_caps">ОТМЕНА</string>
+    <string name="biometrics_dont_work">Биометрия не работает</string>
+    <string name="stat_reset">Стата сброшена</string>
+    <string name="final_price">Итого</string>
+    <string name="enter_new_pin">Введите новый PIN-код</string>
+    <string name="dont_touch_bitch">Не тыкай с#ка</string>
+    <string name="empty_error">Пустое поле</string>
+    <string name="contains_spaces">Contains spaces at the beginning or end</string>
+    <string name="limit_len_exceeded">Превышен лимит длины</string>
+    <string name="hello">Здравствуй</string>
+
 </resources>

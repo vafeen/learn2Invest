@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
 import java.util.concurrent.Executor
 
 /**
@@ -67,7 +68,7 @@ class FingerprintAuthenticator(
 
     fun setDesignBottomSheet(
         title: String,
-        cancelText: String = "ОТМЕНА"
+        cancelText: String = ContextCompat.getString(context, R.string.cancel_caps)
     ): FingerprintAuthenticator {
 //        promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle()
 //            .setNegativeButtonText("ОТМЕНА").build()
@@ -94,7 +95,7 @@ class FingerprintAuthenticator(
 
     // design bottom sheet
     private var titleText: String = "Example title"
-    private var cancelButtonText: String = "CANCEL"
+    private var cancelButtonText: String = ContextCompat.getString(context, R.string.cancel_caps)
 
     // for authentication
     private lateinit var executor: Executor
@@ -132,7 +133,7 @@ class FingerprintAuthenticator(
                         Log.d("finger", "error")
                         Toast.makeText(
                             context,
-                            "На устройстве выключена биометрия",
+                            ContextCompat.getString(context, R.string.biometrics_dont_work),
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -144,7 +145,7 @@ class FingerprintAuthenticator(
 
                         Log.d("finger", "failed")
 
-                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show()
 
                         failedCallBack()
                     }

@@ -71,7 +71,7 @@ class SignInActivity : AppCompatActivity() {
 
             onAuthenticationSucceeded()
         }.setDesignBottomSheet(
-            title = "Вход в Learn2Invest"
+            title = resources.getString(R.string.sign_in_in_learn2invest)
         )
 
         Log.d("action", "${intent.action}")
@@ -85,18 +85,18 @@ class SignInActivity : AppCompatActivity() {
 
             SignINActivityActions.SignUP.action -> {
 
-                binding.enterPinSignin.text = buildString {
-                    append("Придумайте PIN-код") // Просто, чтобы не захламлять strings.xml :)
-                }
+                binding.enterPinSignin.text =
+                    getString(R.string.create_pin)
+
 
                 binding.passButtonFingerprint.isVisible = false
             }
 
             SignINActivityActions.ChangingPIN.action -> {
 
-                binding.enterPinSignin.text = buildString {
-                    append("Введите старый PIN-код") // Просто, чтобы не захламлять strings.xml :)
-                }
+                binding.enterPinSignin.text =
+                    getString(R.string.enter_old_pin)
+
 
             }
 
@@ -452,7 +452,8 @@ class SignInActivity : AppCompatActivity() {
                                 ).invokeOnCompletion {
 
                                     if (isVerified) {
-                                        binding.enterPinSignin.text = "Введите новый пинкод"
+                                        binding.enterPinSignin.text =
+                                            ContextCompat.getString(context, R.string.enter_new_pin)
                                     }
 
                                     paintDots()
@@ -476,7 +477,8 @@ class SignInActivity : AppCompatActivity() {
                                     paintDots()
 
                                 }.invokeOnCompletion {
-                                    binding.enterPinSignin.text = "Повторите пинкод"
+                                    binding.enterPinSignin.text =
+                                        ContextCompat.getString(context, R.string.repeat_pin)
 
                                     unBlockKeyBoard()
                                 }
@@ -515,7 +517,11 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(context, "не тыкай с#ка", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                ContextCompat.getString(context, R.string.dont_touch_bitch),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

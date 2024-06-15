@@ -4,7 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
@@ -26,7 +28,11 @@ class ResetStats(
 
                 cancel()
 
-                Toast.makeText(context, "Стата сброшена", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    ContextCompat.getString(context, R.string.stat_reset),
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             noReetStatsResetStatsDialog.setOnClickListener {
