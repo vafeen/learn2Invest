@@ -40,17 +40,36 @@ class PortfolioFragment : Fragment() {
         initDrawer()
 
         binding.imageButton.setOnClickListener {
-            activity?.apply {
-                val drawer = binding.drawerLayout
-
-                if (!drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.openDrawer(GravityCompat.START)
-                }
-            }
-
+            openDrawer()
         }
 
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        closeDrawer()
+    }
+
+    private fun openDrawer() {
+        activity?.apply {
+            val drawer = binding.drawerLayout
+
+            if (!drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.openDrawer(GravityCompat.START)
+            }
+        }
+    }
+
+    private fun closeDrawer() {
+        activity?.apply {
+            val drawer = binding.drawerLayout
+
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START)
+            }
+        }
     }
 
     private fun initDrawer() {
