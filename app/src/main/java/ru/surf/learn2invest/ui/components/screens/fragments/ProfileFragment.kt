@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.reset_stats.ResetStats
@@ -46,7 +47,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.profileDao().insertAll(profile)
+          DatabaseRepository.insertAllProfile(profile)
         }
     }
 

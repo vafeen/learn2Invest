@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
@@ -84,7 +85,7 @@ class RefillAccount(
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         App.profile.also {
-                            App.mainDB.profileDao().insertAll(
+                            DatabaseRepository.insertAllProfile(
                                 it.copy(
                                     fiatBalance = it.fiatBalance + enteredBalance
                                 )

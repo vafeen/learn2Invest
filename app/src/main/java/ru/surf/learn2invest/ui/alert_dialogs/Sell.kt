@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
@@ -186,10 +187,10 @@ class Sell(
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.apply {
+            DatabaseRepository.apply {
 
                 // обновление истории
-                transactionDao().insertAll(
+                insertAllTransaction(
                     Transaction(
                         name = name,
                         symbol = symbol,
@@ -203,14 +204,14 @@ class Sell(
 
                 // обновление портфеля
                 if (amountCurrent < coin.amount) {
-                    assetInvestDao().insertAll(
+                    insertAllAssetInvest(
                         coin.copy(
                             coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
                             amount = coin.amount - amountCurrent
                         )
                     )
                 } else {
-                    assetInvestDao().delete(coin)
+                    deleteAssetInvest(coin)
                 }
 
 
@@ -247,7 +248,8 @@ class Sell(
         super.show()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
+            val coinMayBeInPortfolio = DatabaseRepository
+                .getBySymbolAssetInvest(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
                 coin = coinMayBeInPortfolio

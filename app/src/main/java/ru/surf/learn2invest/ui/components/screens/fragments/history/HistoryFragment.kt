@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.logs.Loher
 
@@ -33,7 +33,7 @@ class HistoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.transactionDao().getAllAsFlow().collect {
+            DatabaseRepository.getAllAsFlowTransaction().collect {
                 Loher.d(it.size.toString())
                 data.addAll(it)
                 withContext(Dispatchers.Main) {
