@@ -17,9 +17,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.app.App.Companion.mainDB
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     // Функция проверки, есть ли у нас зарегистрированный пользователь
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val profList = mainDB.profileDao().getAllAsFlow().first()
+            val profList = DatabaseRepository.getAllAsFlowProfile().first()
 
             val intent = if (profList.isNotEmpty()) {
                 profile = profList[App.idOfProfile]
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     assetBalance = 0f
                 )
 
-                mainDB.profileDao().insertAll(profile)
+                DatabaseRepository.insertAllProfile(profile)
 
                 Log.d("profile", "profile APP else  = $profile ")
 
