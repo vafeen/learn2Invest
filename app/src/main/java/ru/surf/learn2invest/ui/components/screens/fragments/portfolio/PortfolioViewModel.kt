@@ -20,10 +20,10 @@ class PortfolioViewModel : ViewModel() {
     private val networkRepository = NetworkRepository()
 
     val chartData: Flow<List<Entry>> = DatabaseRepository.getAllAssetBalanceHistory().map { balanceHistories ->
-            balanceHistories.mapIndexed { index, assetBalanceHistory ->
-                Entry(index.toFloat(), assetBalanceHistory.assetBalance)
-            }
+        balanceHistories.mapIndexed { index, assetBalanceHistory ->
+            Entry(index.toFloat(), assetBalanceHistory.assetBalance)
         }
+    }
 
     val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
         if (profiles.isNotEmpty()) {
@@ -54,7 +54,8 @@ class PortfolioViewModel : ViewModel() {
 
     private suspend fun loadPriceChanges(assets: List<AssetInvest>) {
         val priceChanges = mutableMapOf<String, Float>()
-        var totalCurrentValue = 0f
+        var totalCurrentValue = App.profile.fiatBalance
+        var initialInvestment = App.profile.fiatBalance
         for (asset in assets) {
             Loher.d("asset $asset")
             val response = networkRepository.getCoinReview(asset.assetID)
@@ -66,20 +67,18 @@ class PortfolioViewModel : ViewModel() {
                     BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
                 priceChanges[asset.symbol] = roundedPriceChange
                 totalCurrentValue += currentPrice * asset.amount
+                initialInvestment += asset.coinPrice * asset.amount
                 Loher.d("totalCurrentValue $totalCurrentValue")
+                Loher.d("initialInvestment $initialInvestment")
             }
         }
-        totalCurrentValue += App.profile.fiatBalance
-        Loher.d("totalCurrentValue $totalCurrentValue")
         _priceChanges.value = priceChanges
-        calculatePortfolioChangePercentage(totalCurrentValue)
+        calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
     }
 
-    private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {
-        val initialBalance = App.profile.assetBalance
-        Loher.d("App.profile.assetBalance ${App.profile.assetBalance}")
-        if (initialBalance != 0f) {
-            val changePercentage = ((totalCurrentValue - initialBalance) / initialBalance) * 100
+    private fun calculatePortfolioChangePercentage(totalCurrentValue: Float, initialInvestment: Float) {
+        if (initialInvestment != 0f) {
+            val changePercentage = ((totalCurrentValue - initialInvestment) / initialInvestment) * 100
             val roundedChangePercentage =
                 BigDecimal(changePercentage.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
             _portfolioChangePercentage.value = roundedChangePercentage
