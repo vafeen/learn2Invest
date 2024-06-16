@@ -7,14 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.isVisible
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
@@ -71,7 +77,17 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccount(requireContext(), lifecycleScope).initDialog().show()
+            var oldBalance = 0f
+            lifecycleScope.launch {
+                oldBalance = viewModel.fiatBalance.first()
+            }
+            val refillDialog = RefillAccount(requireContext(), lifecycleScope) { newBalance ->
+                lifecycleScope.launch {
+                    val refillAmount = newBalance - oldBalance
+                    viewModel.updateRefills(refillAmount)
+                }
+            }
+            refillDialog.initDialog().show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -237,4 +253,20 @@ class PortfolioFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
 
+}
+
+fun DialogFragment.observeDismissal(
+    lifecycleOwner: LifecycleOwner,
+    onDismiss: () -> Unit
+) {
+    lifecycleOwner.lifecycleScope.launch {
+        callbackFlow<Unit> {
+            dialog?.setOnDismissListener {
+                trySend(Unit).isSuccess
+            }
+            awaitClose()
+        }.collect {
+            onDismiss()
+        }
+    }
 }

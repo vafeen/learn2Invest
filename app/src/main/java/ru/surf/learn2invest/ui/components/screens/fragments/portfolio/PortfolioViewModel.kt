@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import ru.surf.learn2invest.app.App
@@ -18,12 +19,14 @@ import java.math.RoundingMode
 
 class PortfolioViewModel : ViewModel() {
     private val networkRepository = NetworkRepository()
+    private var oldBalance: Float = 0f
 
-    val chartData: Flow<List<Entry>> = DatabaseRepository.getAllAssetBalanceHistory().map { balanceHistories ->
-        balanceHistories.mapIndexed { index, assetBalanceHistory ->
-            Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+    val chartData: Flow<List<Entry>> =
+        DatabaseRepository.getAllAssetBalanceHistory().map { balanceHistories ->
+            balanceHistories.mapIndexed { index, assetBalanceHistory ->
+                Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+            }
         }
-    }
 
     val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
         if (profiles.isNotEmpty()) {
@@ -42,9 +45,10 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
-    val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest().onEach { assets ->
-        loadPriceChanges(assets)
-    }
+    val assetsFlow: Flow<List<AssetInvest>> =
+        DatabaseRepository.getAllAsFlowAssetInvest().onEach { assets ->
+            loadPriceChanges(assets)
+        }
 
     private val _priceChanges = MutableStateFlow<Map<String, Float>>(emptyMap())
     val priceChanges: StateFlow<Map<String, Float>> get() = _priceChanges
@@ -52,10 +56,43 @@ class PortfolioViewModel : ViewModel() {
     private val _portfolioChangePercentage = MutableStateFlow(0f)
     val portfolioChangePercentage: StateFlow<Float> get() = _portfolioChangePercentage
 
+    suspend fun updateRefills(newRefill: Float) {
+        val assets = DatabaseRepository.getAllAsFlowAssetInvest().first()
+        loadRefillAndPriceChanges(assets)
+    }
+
+    private suspend fun loadRefillAndPriceChanges(assets: List<AssetInvest>) {
+        val priceChanges = mutableMapOf<String, Float>()
+        var totalCurrentValue = oldBalance
+        var initialInvestment = App.profile.fiatBalance
+        oldBalance = App.profile.fiatBalance
+        for (asset in assets) {
+            Loher.d("asset $asset")
+            val response = networkRepository.getCoinReview(asset.assetID)
+            if (response is ResponseWrapper.Success) {
+                val currentPrice = response.value.data.priceUsd
+                Loher.d("current price $currentPrice")
+                val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
+                val roundedPriceChange =
+                    BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+                priceChanges[asset.symbol] = roundedPriceChange
+                totalCurrentValue += currentPrice * asset.amount
+                initialInvestment += asset.coinPrice * asset.amount
+                Loher.d("totalCurrentValue $totalCurrentValue")
+                Loher.d("initialInvestment $initialInvestment")
+            }
+        }
+        _priceChanges.value = priceChanges
+        Loher.d("totalCurrentValue $totalCurrentValue")
+        Loher.d("initialInvestment $initialInvestment")
+        calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
+    }
+
     private suspend fun loadPriceChanges(assets: List<AssetInvest>) {
         val priceChanges = mutableMapOf<String, Float>()
         var totalCurrentValue = App.profile.fiatBalance
         var initialInvestment = App.profile.fiatBalance
+        oldBalance = App.profile.fiatBalance
         for (asset in assets) {
             Loher.d("asset $asset")
             val response = networkRepository.getCoinReview(asset.assetID)
@@ -76,12 +113,21 @@ class PortfolioViewModel : ViewModel() {
         calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
     }
 
-    private fun calculatePortfolioChangePercentage(totalCurrentValue: Float, initialInvestment: Float) {
+    private fun calculatePortfolioChangePercentage(
+        totalCurrentValue: Float,
+        initialInvestment: Float
+    ) {
         if (initialInvestment != 0f) {
-            val changePercentage = ((totalCurrentValue - initialInvestment) / initialInvestment) * 100
-            val roundedChangePercentage =
-                BigDecimal(changePercentage.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
-            _portfolioChangePercentage.value = roundedChangePercentage
+            if (totalCurrentValue == 0f) {
+                _portfolioChangePercentage.value = 100f
+            } else {
+                val changePercentage =
+                    ((totalCurrentValue - initialInvestment) / initialInvestment) * 100
+                val roundedChangePercentage =
+                    BigDecimal(changePercentage.toString()).setScale(2, RoundingMode.HALF_UP)
+                        .toFloat()
+                _portfolioChangePercentage.value = roundedChangePercentage
+            }
         } else {
             _portfolioChangePercentage.value = 0f
         }

@@ -15,11 +15,12 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
-    val context: Context, private val lifecycleScope: LifecycleCoroutineScope
+    val context: Context, private val lifecycleScope: LifecycleCoroutineScope,
+    val giveMePrice: (Float) -> Unit
 ) : CustomAlertDialog(context = context) {
 
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
-
+    var enteredBalanceF: Float = 0f
     override fun setCancelable(): Boolean {
         return true
     }
@@ -82,6 +83,8 @@ class RefillAccount(
 
                 if (enteredBalance != 0f) {
 
+                    enteredBalanceF = enteredBalance
+
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         App.profile.also {
@@ -108,4 +111,9 @@ class RefillAccount(
         return binding.root
     }
 
+    override fun cancel() {
+        super.cancel()
+
+        giveMePrice(enteredBalanceF)
+    }
 }
