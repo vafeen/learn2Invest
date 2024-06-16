@@ -88,8 +88,7 @@ class RefillAccount(
 
                             DatabaseRepository.updateProfile(
                                 it.copy(
-                                    fiatBalance = it.fiatBalance + enteredBalance,
-                                    assetBalance = it.assetBalance + enteredBalance
+                                    fiatBalance = it.fiatBalance + enteredBalance
                                 )
                             )
                         }
