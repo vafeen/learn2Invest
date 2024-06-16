@@ -206,7 +206,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_horizontal_dev_str"
                     android:layout_marginTop="@dimen/margin_top_dev_str"
-                    android:background="@drawable/my_investments_background"
+                    android:background="@drawable/portfolio_background"
                     android:backgroundTint="@color/main_background"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:cardCornerRadius="10dp"

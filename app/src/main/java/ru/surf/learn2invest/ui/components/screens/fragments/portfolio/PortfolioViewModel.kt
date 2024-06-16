@@ -10,28 +10,22 @@ import kotlinx.coroutines.flow.onEach
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
-import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
-import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
-import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class PortfolioViewModel : ViewModel() {
-    private val assetBalanceHistoryDao: AssetBalanceHistoryDao = App.mainDB.assetBalanceHistoryDao()
-    private val assetInvestDao: AssetInvestDao = App.mainDB.assetInvestDao()
-    private val profileDao: ProfileDao = App.mainDB.profileDao()
     private val networkRepository = NetworkRepository()
 
-    val chartData: Flow<List<Entry>> =
-        assetBalanceHistoryDao.getAllAsFlow().map { balanceHistories ->
+    val chartData: Flow<List<Entry>> = DatabaseRepository.getAllAssetBalanceHistory().map { balanceHistories ->
             balanceHistories.mapIndexed { index, assetBalanceHistory ->
                 Entry(index.toFloat(), assetBalanceHistory.assetBalance)
             }
         }
 
-    val assetBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
+    val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
         if (profiles.isNotEmpty()) {
             val profile = profiles[App.idOfProfile]
             profile.assetBalance + profile.fiatBalance
@@ -40,7 +34,7 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
-    val fiatBalance: Flow<Float> = profileDao.getAllAsFlow().map { profiles ->
+    val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
         if (profiles.isNotEmpty()) {
             profiles[App.idOfProfile].fiatBalance
         } else {
@@ -48,7 +42,7 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
-    val assetsFlow: Flow<List<AssetInvest>> = assetInvestDao.getAllAsFlow().onEach { assets ->
+    val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest().onEach { assets ->
         loadPriceChanges(assets)
     }
 

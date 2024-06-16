@@ -10,7 +10,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +23,6 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 
 // Экран портфеля
