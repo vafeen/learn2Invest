@@ -13,7 +13,6 @@ import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -56,7 +55,7 @@ class PortfolioViewModel : ViewModel() {
     private val _portfolioChangePercentage = MutableStateFlow(0f)
     val portfolioChangePercentage: StateFlow<Float> get() = _portfolioChangePercentage
 
-    suspend fun updateRefills(newRefill: Float) {
+    suspend fun updateRefills() {
         val assets = DatabaseRepository.getAllAsFlowAssetInvest().first()
         loadRefillAndPriceChanges(assets)
     }
@@ -67,24 +66,18 @@ class PortfolioViewModel : ViewModel() {
         var initialInvestment = App.profile.fiatBalance
         oldBalance = App.profile.fiatBalance
         for (asset in assets) {
-            Loher.d("asset $asset")
             val response = networkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 val currentPrice = response.value.data.priceUsd
-                Loher.d("current price $currentPrice")
                 val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
                 val roundedPriceChange =
                     BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
                 priceChanges[asset.symbol] = roundedPriceChange
                 totalCurrentValue += currentPrice * asset.amount
                 initialInvestment += asset.coinPrice * asset.amount
-                Loher.d("totalCurrentValue $totalCurrentValue")
-                Loher.d("initialInvestment $initialInvestment")
             }
         }
         _priceChanges.value = priceChanges
-        Loher.d("totalCurrentValue $totalCurrentValue")
-        Loher.d("initialInvestment $initialInvestment")
         calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
     }
 
@@ -94,19 +87,15 @@ class PortfolioViewModel : ViewModel() {
         var initialInvestment = App.profile.fiatBalance
         oldBalance = App.profile.fiatBalance
         for (asset in assets) {
-            Loher.d("asset $asset")
             val response = networkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 val currentPrice = response.value.data.priceUsd
-                Loher.d("current price $currentPrice")
                 val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
                 val roundedPriceChange =
                     BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
                 priceChanges[asset.symbol] = roundedPriceChange
                 totalCurrentValue += currentPrice * asset.amount
                 initialInvestment += asset.coinPrice * asset.amount
-                Loher.d("totalCurrentValue $totalCurrentValue")
-                Loher.d("initialInvestment $initialInvestment")
             }
         }
         _priceChanges.value = priceChanges
@@ -128,8 +117,6 @@ class PortfolioViewModel : ViewModel() {
                         .toFloat()
                 _portfolioChangePercentage.value = roundedChangePercentage
             }
-        } else {
-            _portfolioChangePercentage.value = 0f
         }
     }
 }

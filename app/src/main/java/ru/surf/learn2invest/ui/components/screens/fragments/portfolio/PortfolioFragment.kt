@@ -18,9 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
@@ -77,17 +75,11 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            var oldBalance = 0f
-            lifecycleScope.launch {
-                oldBalance = viewModel.fiatBalance.first()
-            }
-            val refillDialog = RefillAccount(requireContext(), lifecycleScope) { newBalance ->
+            RefillAccount(requireContext(), lifecycleScope) {
                 lifecycleScope.launch {
-                    val refillAmount = newBalance - oldBalance
-                    viewModel.updateRefills(refillAmount)
+                    viewModel.updateRefills()
                 }
-            }
-            refillDialog.initDialog().show()
+            }.initDialog().show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
