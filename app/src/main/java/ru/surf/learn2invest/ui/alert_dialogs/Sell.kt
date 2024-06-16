@@ -181,14 +181,16 @@ class Sell(
 
         val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
 
-        // обновление баланса
-        App.profile = App.profile.copy(
-            fiatBalance = balance + price * amountCurrent,
-            assetBalance = App.profile.assetBalance - price * amountCurrent
-        )
+
 
         lifecycleScope.launch(Dispatchers.IO) {
             DatabaseRepository.apply {
+                // обновление баланса
+                updateProfile(
+                    App.profile.copy(
+                        fiatBalance = balance + price * amountCurrent,
+                    )
+                )
 
                 // обновление истории
                 insertAllTransaction(

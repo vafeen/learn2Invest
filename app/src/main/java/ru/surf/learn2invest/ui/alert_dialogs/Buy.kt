@@ -191,17 +191,18 @@ class Buy(
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
         val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
-
+        Log.d("amount", "amountCurrent = $amountCurrent")
         if (balance > price * amountCurrent) {
-
-            // обновление баланса
-            App.profile = App.profile.copy(
-                fiatBalance = balance - price * amountCurrent,
-                assetBalance = App.profile.assetBalance + price * amountCurrent
-            )
 
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.apply {
+
+                    // обновление баланса
+                    updateProfile(
+                        App.profile.copy(
+                            fiatBalance = balance - price * amountCurrent,
+                        )
+                    )
 
                     // обновление истории
                     insertAllTransaction(
@@ -226,15 +227,12 @@ class Buy(
                         )
 
                     } else {
-
                         insertAllAssetInvest(
                             coin.copy(
                                 coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
                                 amount = coin.amount + amountCurrent
                             )
-
                         )
-
                     }
                 }
             }

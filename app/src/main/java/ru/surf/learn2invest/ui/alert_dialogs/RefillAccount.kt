@@ -30,8 +30,8 @@ class RefillAccount(
                 EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
 
             buttonRefillRefillAccountDialog.isVisible =
-                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
-                    .toFloatOrNull()?.let {
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloatOrNull()
+                    ?.let {
                         it > 0
                     } ?: false
         }
@@ -85,9 +85,11 @@ class RefillAccount(
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         App.profile.also {
-                            DatabaseRepository.insertAllProfile(
+
+                            DatabaseRepository.updateProfile(
                                 it.copy(
-                                    fiatBalance = it.fiatBalance + enteredBalance
+                                    fiatBalance = it.fiatBalance + enteredBalance,
+                                    assetBalance = it.assetBalance + enteredBalance
                                 )
                             )
                         }
@@ -98,9 +100,7 @@ class RefillAccount(
                 cancel()
             }
 
-            balanceTextviewRefillAccountDialog.text =
-                App.profile.fiatBalance.getWithCurrency() // TODO(Володь, Какой тут баланс из профиля?)
-                    ?: "balance error"
+            balanceTextviewRefillAccountDialog.text = App.profile.fiatBalance.getWithCurrency()
 
         }
     }

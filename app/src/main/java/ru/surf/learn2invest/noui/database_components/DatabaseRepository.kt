@@ -1,6 +1,8 @@
 package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
+import android.util.Log
+
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +77,33 @@ object DatabaseRepository {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
                         App.profile = profList[App.idOfProfile]
+
+                        Log.d(
+                            "profile",
+                            "profile in DBRep = ${App.profile}, размер = ${profList.size}"
+                        )
+
+                    } else {
+                        App.profile = Profile(
+                            id = 0,
+                            firstName = "undefined",
+                            lastName = "undefined",
+                            biometry = false,
+                            fiatBalance = 0f,
+                            assetBalance = 0f
+                        )
+
+                        insertAllProfile(
+                            Profile(
+                                id = 0,
+                                firstName = "undefined",
+                                lastName = "undefined",
+                                biometry = false,
+                                fiatBalance = 0f,
+                                assetBalance = 0f
+                            )
+                        )
+                        Log.d("profile", "инсертим дефолтный")
                     }
                 }
             }
