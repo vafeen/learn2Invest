@@ -1,13 +1,12 @@
 package ru.surf.learn2invest.ui.alert_dialogs.parent
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
-import android.view.Window
+import androidx.appcompat.app.AlertDialog
 
 
 /**
@@ -57,7 +56,9 @@ import android.view.Window
  */
 abstract class CustomAlertDialog(context: Context) {
 
-    private var dialog: Dialog = Dialog(context)
+    private var builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+    private var dialog: AlertDialog? = null
 
     private var initialized: Boolean = false
 
@@ -80,15 +81,20 @@ abstract class CustomAlertDialog(context: Context) {
      * Функция инициализации всего функционала
      */
     open fun initDialog(): CustomAlertDialog {
+        builder.setView(getDialogView())
+
+        builder.setCancelable(setCancelable())
+
         initialized = true
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-
-        dialog.window?.setBackgroundDrawable(getBackground())
-
-        dialog.setCancelable(setCancelable())
-
-        dialog.setContentView(getDialogView())
+        dialog = builder.create()
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//
+//        dialog.window?.setBackgroundDrawable(getBackground())
+//
+//        dialog.setCancelable(setCancelable())
+//
+//        dialog.setContentView(getDialogView())
 
         initListeners()
 
@@ -104,7 +110,7 @@ abstract class CustomAlertDialog(context: Context) {
 
     open fun show() {
         if (initialized) {
-            dialog.show()
+            dialog?.show()
         } else {
             Log.e(
                 "CustomAlertDialog",
@@ -114,6 +120,6 @@ abstract class CustomAlertDialog(context: Context) {
     }
 
     open fun cancel() {
-        dialog.cancel()
+        dialog?.cancel()
     }
 }
