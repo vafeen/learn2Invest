@@ -29,9 +29,10 @@ class AssetOverviewFragment : Fragment() {
         viewModel = AssetViewModel()
         chartHelper.setupChart(binding.chart)
 
-        viewModel.loadChartData(id) { data, marketCap ->
+        viewModel.loadChartData(id) { data, marketCap, price ->
             chartHelper.updateData(data)
             binding.capitalisation.text = marketCap
+            binding.price.text = price
         }
 
         return binding.root
@@ -39,8 +40,10 @@ class AssetOverviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        realTimeUpdateJob = viewModel.startRealTimeUpdate(id) { data ->
+        realTimeUpdateJob = viewModel.startRealTimeUpdate(id) { data, marketCap, price ->
             chartHelper.updateData(data)
+            binding.capitalisation.text = marketCap
+            binding.price.text = price
         }
     }
 
