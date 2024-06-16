@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.history
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +18,14 @@ import ru.surf.learn2invest.databinding.FragmentHistoryBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
     private val data = mutableListOf<Transaction>()
-    private val adapter = HistoryAdapter(data)
+    private val adapter = HistoryAdapter(data) { transaction ->
+        startAssetReviewIntent(transaction)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +61,15 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    private fun startAssetReviewIntent(coin: Transaction) {
+        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("id", coin.coinID)
+        bundle.putString("name", coin.name)
+        bundle.putString("symbol", coin.symbol)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
     override fun onStop() {
         super.onStop()
         data.clear()

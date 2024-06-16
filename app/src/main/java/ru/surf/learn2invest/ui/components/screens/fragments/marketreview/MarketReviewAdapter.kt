@@ -44,7 +44,7 @@ class MarketReviewAdapter(
             else
                 data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = "\$${data[position].priceUsd.round()}"
+            coinTopNumericInfo.text = "${data[position].priceUsd.round()} \$"
             if (data[position].changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
@@ -70,7 +70,6 @@ class MarketReviewAdapter(
             disposable = imageLoader.enqueue(request)
 
             itemView.setOnClickListener {
-                //TODO Придумать место для констант всего приложения
                 clickListener.onCoinClick(data[position])
             }
         }

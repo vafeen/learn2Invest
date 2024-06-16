@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey
 @Entity
 open class Transaction(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    val coinID: String, //ID коина (нужен для запросов)
     val name: String, //Имя коина (Bitcoin)
     val symbol: String, //Абревиатура (BTC)
     val coinPrice: Float, //Закупочная цена одного

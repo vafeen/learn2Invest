@@ -35,7 +35,7 @@ import ru.surf.learn2invest.noui.logs.Loher
  * }
  * ```
  **/
-class NetworkRepository {
+object NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(
         CoinAPIService::class.java
     )
