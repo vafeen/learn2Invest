@@ -17,7 +17,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class PortfolioViewModel : ViewModel() {
-    private val networkRepository = NetworkRepository()
     private var oldBalance: Float = 0f
 
     val chartData: Flow<List<Entry>> =
@@ -66,7 +65,7 @@ class PortfolioViewModel : ViewModel() {
         var initialInvestment = App.profile.fiatBalance
         oldBalance = App.profile.fiatBalance
         for (asset in assets) {
-            val response = networkRepository.getCoinReview(asset.assetID)
+            val response = NetworkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 val currentPrice = response.value.data.priceUsd
                 val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
@@ -87,7 +86,7 @@ class PortfolioViewModel : ViewModel() {
         var initialInvestment = App.profile.fiatBalance
         oldBalance = App.profile.fiatBalance
         for (asset in assets) {
-            val response = networkRepository.getCoinReview(asset.assetID)
+            val response = NetworkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 val currentPrice = response.value.data.priceUsd
                 val priceChange = ((currentPrice - asset.coinPrice) / asset.coinPrice) * 100
