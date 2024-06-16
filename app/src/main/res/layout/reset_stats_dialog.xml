@@ -1,74 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dialog_background">
+    android:layout_width="350dp"
+    android:layout_height="140dp"
+    android:background="@color/white"
+    android:elevation="@dimen/alerts_elevation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.5">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="350dp"
-        android:layout_height="140dp"
-        android:background="@color/white"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/no_reet_stats_reset_stats_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:backgroundTint="@color/white"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/no"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Text.SemiBold.14"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ok_reset_stats_reset_stats_dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ok_reset_stats_reset_stats_dialog"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ok_reset_stats_reset_stats_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginTop="96dp"
+        android:backgroundTint="@color/white"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/yes_exactly"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Text.SemiBold.14"
+        android:textColor="@color/black"
+        app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.926"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintVertical_bias="0.0" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/no_reet_stats_reset_stats_dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:backgroundTint="@color/white"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:text="@string/no"
-            android:textAllCaps="true"
-            android:textAppearance="@style/Text.SemiBold.14"
-            android:textColor="#000000"
-            app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ok_reset_stats_reset_stats_dialog"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.415"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ok_reset_stats_reset_stats_dialog"
-            app:layout_constraintVertical_bias="1.0" />
+    <TextView
+        android:id="@+id/textView_reset_stats_dialog"
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/ok_reset_stats_reset_stats_dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:layout_marginTop="96dp"
-            android:backgroundTint="@color/white"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:text="@string/yes_exactly"
-            android:textAllCaps="true"
-            android:textAppearance="@style/Text.SemiBold.14"
-            android:textColor="@color/black"
-            app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.926"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView_reset_stats_dialog"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/reset_stats"
-            android:textAppearance="@style/Text.Regular.16"
-            app:layout_constraintBottom_toTopOf="@+id/no_reet_stats_reset_stats_dialog"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.42"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/reset_stats"
+        android:textAppearance="@style/Text.Regular.16"
+        app:layout_constraintBottom_toTopOf="@+id/no_reet_stats_reset_stats_dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
