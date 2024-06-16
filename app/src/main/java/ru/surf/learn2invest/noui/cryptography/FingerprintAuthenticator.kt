@@ -59,8 +59,8 @@ class FingerprintAuthenticator(
         return this
     }
 
-    fun setHardwareErrorCallback(function: () -> Unit): FingerprintAuthenticator {
-        this.hardwareErrorCallback = function
+    fun setCancelCallback(function: () -> Unit): FingerprintAuthenticator {
+        this.setCancelCallback = function
 
         return this
     }
@@ -69,9 +69,7 @@ class FingerprintAuthenticator(
         title: String,
         cancelText: String = "ОТМЕНА"
     ): FingerprintAuthenticator {
-//        promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle()
-//            .setNegativeButtonText("ОТМЕНА").build()
-//
+
         titleText = title
 
         cancelButtonText = cancelText
@@ -81,16 +79,18 @@ class FingerprintAuthenticator(
 
     fun auth(): Job {
         return lifecycleCoroutineScope.launch(Dispatchers.Main) {
-            initFingerPrintAuth()
+            if (isBiometricAvailable(context = context)) {
+                initFingerPrintAuth()
 
-            checkAuthenticationFingerprint()
+                checkAuthenticationFingerprint()
+            }
         }
     }
 
     // callbacks
     private var failedCallBack: () -> Unit = {}
     private var successCallBack: () -> Unit = {}
-    private var hardwareErrorCallback: () -> Unit = {}
+    private var setCancelCallback: () -> Unit = {}
 
     // design bottom sheet
     private var titleText: String = "Example title"
@@ -121,7 +121,6 @@ class FingerprintAuthenticator(
                         super.onAuthenticationSucceeded(result)
 
                         successCallBack()
-
                     }
 
                     override fun onAuthenticationError(
@@ -129,22 +128,15 @@ class FingerprintAuthenticator(
                     ) {
                         super.onAuthenticationError(errorCode, errString)
 
-                        Log.d("finger", "error")
-                        Toast.makeText(
-                            context,
-                            "На устройстве выключена биометрия",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Log.d("finger", "cancel")
 
-                        hardwareErrorCallback()
+                        setCancelCallback()
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
 
                         Log.d("finger", "failed")
-
-                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show()
 
                         failedCallBack()
                     }

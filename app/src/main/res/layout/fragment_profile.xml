@@ -100,6 +100,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
         app:srcCompat="@drawable/gear" />
+
     <LinearLayout
         android:id="@+id/biometry_Btn"
         android:layout_width="match_parent"
@@ -110,7 +111,8 @@
         android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_TV">
+        app:layout_constraintTop_toBottomOf="@+id/settings_TV"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,7 +136,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="37dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="22dp"
         android:weightSum="3"
         app:layout_constraintBottom_toTopOf="@id/change_trading_password_Btn"
@@ -171,7 +173,8 @@
         app:layout_constraintBottom_toTopOf="@id/change_PIN_Btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn">
+        app:layout_constraintTop_toBottomOf="@+id/confirm_deal_Btn"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
             android:layout_width="match_parent"
@@ -203,7 +206,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/change_trading_password_Btn"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
             android:layout_width="match_parent"
