@@ -61,4 +61,6 @@
     <string name="repeat_pin">Повторите PIN-код</string>
     <string name="reset_stats">    Вы точно хотите\nсбросить статистику?</string>
     <string name="create_trading_pass">Создать торговый пароль</string>
+    <string name="navigation_drawer_open">open\n</string>
+    <string name="navigation_drawer_close">close</string>
 </resources>

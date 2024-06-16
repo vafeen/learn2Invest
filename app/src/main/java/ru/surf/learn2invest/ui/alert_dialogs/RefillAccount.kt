@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
@@ -29,8 +30,8 @@ class RefillAccount(
                 EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
 
             buttonRefillRefillAccountDialog.isVisible =
-                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
-                    .toFloatOrNull()?.let {
+                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloatOrNull()
+                    ?.let {
                         it > 0
                     } ?: false
         }
@@ -84,9 +85,11 @@ class RefillAccount(
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         App.profile.also {
-                            App.mainDB.profileDao().insertAll(
+
+                            DatabaseRepository.updateProfile(
                                 it.copy(
-                                    fiatBalance = it.fiatBalance + enteredBalance
+                                    fiatBalance = it.fiatBalance + enteredBalance,
+                                    assetBalance = it.assetBalance + enteredBalance
                                 )
                             )
                         }
@@ -97,9 +100,7 @@ class RefillAccount(
                 cancel()
             }
 
-            balanceTextviewRefillAccountDialog.text =
-                App.profile.fiatBalance.getWithCurrency() // TODO(Володь, Какой тут баланс из профиля?)
-                    ?: "balance error"
+            balanceTextviewRefillAccountDialog.text = App.profile.fiatBalance.getWithCurrency()
 
         }
     }

@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
@@ -19,11 +20,11 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 
 class TradingPasswordActivity : AppCompatActivity() {
@@ -41,6 +42,17 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )
+            )
+        )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
 
@@ -96,10 +108,10 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             when (action) {
 
-                TradingPasswordActivityActions.CreateTradingPassword -> {
-                    textInputLayout1.isVisible = false
+				TradingPasswordActivityActions.CreateTradingPassword -> {
+					textInputLayout1.isVisible = false
 
-                    rulesTrpass5.isVisible = false
+					rulesTrpass5.isVisible = false
 
                     imageRule5.isVisible = false
                 }
@@ -415,7 +427,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
                 lifecycleScope.launch(Dispatchers.IO) {
 
-                    App.mainDB.profileDao().insertAll(
+                    DatabaseRepository.insertAllProfile(
                         profile.copy(
                             tradingPasswordHash = PasswordHasher(
                                 firstName = profile.firstName, lastName = profile.lastName
@@ -438,7 +450,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun updateProfile() {
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.profileDao().insertAll(profile)
+            DatabaseRepository.insertAllProfile(profile)
         }
     }
 
@@ -471,7 +483,6 @@ class TradingPasswordActivity : AppCompatActivity() {
         return false
 
     }
-
 
 }
 

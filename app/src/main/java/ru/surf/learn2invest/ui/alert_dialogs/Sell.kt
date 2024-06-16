@@ -18,6 +18,7 @@ import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
@@ -181,17 +182,19 @@ class Sell(
 
         val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
 
-        // обновление баланса
-        App.profile = App.profile.copy(
-            fiatBalance = balance + price * amountCurrent,
-            assetBalance = App.profile.assetBalance - price * amountCurrent
-        )
+
 
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.apply {
+            DatabaseRepository.apply {
+                // обновление баланса
+                updateProfile(
+                    App.profile.copy(
+                        fiatBalance = balance + price * amountCurrent,
+                    )
+                )
 
                 // обновление истории
-                transactionDao().insertAll(
+                insertAllTransaction(
                     Transaction(
                         coinID = id,
                         name = name,
@@ -206,14 +209,18 @@ class Sell(
 
                 // обновление портфеля
                 if (amountCurrent < coin.amount) {
-                    assetInvestDao().update(
+
+                    insertAllAssetInvest(
                         coin.copy(
                             coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
                             amount = coin.amount - amountCurrent
                         )
                     )
+
                 } else {
-                    assetInvestDao().delete(coin)
+
+                    deleteAssetInvest(coin)
+
                 }
 
 
@@ -250,7 +257,8 @@ class Sell(
         super.show()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
+            val coinMayBeInPortfolio = DatabaseRepository
+                .getBySymbolAssetInvest(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
                 coin = coinMayBeInPortfolio

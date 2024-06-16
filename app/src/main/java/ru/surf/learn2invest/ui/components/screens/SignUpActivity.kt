@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,20 +21,34 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivitySignupBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
-
-private const val EMPTY_ERROR = "Пустое поле"
-private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
-private const val LENGTH_ERROR = "Превышен лимит длины"
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private var name: String = ""
     private var lastname: String = ""
 
+    private companion object {
+        private const val EMPTY_ERROR = "Пустое поле"
+        private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
+        private const val LENGTH_ERROR = "Превышен лимит длины"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )
+            )
+        )
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -208,8 +223,8 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
             val prof = App.profile.copy(firstName = name, lastName = lastname)
-            App.mainDB.profileDao()
-                .update(prof)
+            DatabaseRepository
+                .updateProfile(prof)
             Log.d("profile", "sugnUp 213 = $prof")
         }.invokeOnCompletion {
             startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- drawer_items.xml -->
+    <item
+        android:id="@+id/nav_home"
+        android:title="Лицензия" />
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Пользовательское соглашение"/>
+
+</menu>

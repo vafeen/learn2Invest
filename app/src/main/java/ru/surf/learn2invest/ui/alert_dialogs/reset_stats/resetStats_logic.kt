@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 fun resetStats(lifecycleScope: LifecycleCoroutineScope) {
 //    AssetBalanceHistory::class,
@@ -12,14 +13,15 @@ fun resetStats(lifecycleScope: LifecycleCoroutineScope) {
 //    SearchedCoin::class,
 //    Transaction::class,
     val profile = App.profile.copy(
-        fiatBalance = 50000f
+        fiatBalance = 0f,
+        assetBalance = 0f
     )
 
     lifecycleScope.launch(Dispatchers.IO) {
-        App.mainDB.apply {
+        DatabaseRepository.apply {
             clearAllTables()
 
-            profileDao().insertAll(
+            insertAllProfile(
                 profile
             )
         }
