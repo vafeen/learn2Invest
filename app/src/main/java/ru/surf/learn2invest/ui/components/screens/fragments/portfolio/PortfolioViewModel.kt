@@ -56,6 +56,7 @@ class PortfolioViewModel : ViewModel() {
         val priceChanges = mutableMapOf<String, Float>()
         var totalCurrentValue = 0f
         for (asset in assets) {
+            Loher.d("asset $asset")
             val response = networkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 val currentPrice = response.value.data.priceUsd
@@ -65,15 +66,18 @@ class PortfolioViewModel : ViewModel() {
                     BigDecimal(priceChange.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
                 priceChanges[asset.symbol] = roundedPriceChange
                 totalCurrentValue += currentPrice * asset.amount
+                Loher.d("totalCurrentValue $totalCurrentValue")
             }
         }
         totalCurrentValue += App.profile.fiatBalance
+        Loher.d("totalCurrentValue $totalCurrentValue")
         _priceChanges.value = priceChanges
         calculatePortfolioChangePercentage(totalCurrentValue)
     }
 
     private fun calculatePortfolioChangePercentage(totalCurrentValue: Float) {
         val initialBalance = App.profile.assetBalance
+        Loher.d("App.profile.assetBalance ${App.profile.assetBalance}")
         if (initialBalance != 0f) {
             val changePercentage = ((totalCurrentValue - initialBalance) / initialBalance) * 100
             val roundedChangePercentage =
