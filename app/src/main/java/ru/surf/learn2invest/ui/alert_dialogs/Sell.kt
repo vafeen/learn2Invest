@@ -9,10 +9,14 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
+import ru.surf.learn2invest.network_components.NetworkRepository
+import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
@@ -31,6 +35,7 @@ class Sell(
 ) : CustomAlertDialog(context = context) {
 
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
+    private lateinit var realTimeUpdateJob: Job
 
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
@@ -48,19 +53,10 @@ class Sell(
 
             enteringNumberOfLotsSellDialog.setText("0")
 
-            lifecycleScope.launch {
-                balanceNumSellDialog.text = App.profile.fiatBalance.getWithCurrency()
+            balanceNumSellDialog.text =
+                App.profile.fiatBalance.getWithCurrency()
+            realTimeUpdateJob = startRealTimeUpdate()
 
-                while (true) {
-                    val str = 777f
-                    priceNumberSellDialog.text =
-                        str.getWithCurrency()  // TODO Сюда нужно будет кидать цену,
-                    // которая приходит через ретрофит
-
-                    updateFields()
-                    delay(2000)
-                }
-            }
 
             buttonExitSellDialog.setOnClickListener {
                 cancel()
@@ -175,6 +171,11 @@ class Sell(
         }
     }
 
+    override fun cancel() {
+        super.cancel()
+        realTimeUpdateJob.cancel()
+    }
+
     private fun sell() {
         val balance = App.profile.fiatBalance
 
@@ -196,6 +197,7 @@ class Sell(
                 // обновление истории
                 insertAllTransaction(
                     Transaction(
+                        coinID = id,
                         name = name,
                         symbol = symbol,
                         coinPrice = price,
@@ -268,4 +270,22 @@ class Sell(
 
     }
 
+    fun startRealTimeUpdate(): Job =
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                when (val result = NetworkRepository.getCoinReview(id)) {
+                    is ResponseWrapper.Success -> {
+                        withContext(Dispatchers.Main) {
+                            binding.priceNumberSellDialog.text =
+                                result.value.data.priceUsd.getWithCurrency()
+                            updateFields()
+                        }
+                    }
+
+                    is ResponseWrapper.NetworkError -> {}
+                }
+
+                delay(5000)
+            }
+        }
 }

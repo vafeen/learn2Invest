@@ -14,9 +14,11 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
-import ru.surf.learn2invest.noui.logs.Loher
 
-class HistoryAdapter(private val data: List<Transaction>) :
+class HistoryAdapter(
+    private val data: List<Transaction>,
+    private val clickListener: HistoryClickListener
+) :
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
@@ -69,11 +71,14 @@ class HistoryAdapter(private val data: List<Transaction>) :
                 .build()
             disposable = imageLoader.enqueue(request)
             itemView.setOnClickListener {
-                Loher.d(data[position].coinPrice.toString())
+                clickListener.onCoinClick(data[position])
             }
         }
     }
 
+    fun interface HistoryClickListener {
+        fun onCoinClick(coin: Transaction)
+    }
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
         holder.disposable.dispose()
