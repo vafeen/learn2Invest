@@ -11,12 +11,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -75,13 +74,17 @@ class SignInActivity : AppCompatActivity() {
         fingerPrintManager = FingerprintAuthenticator(
             context = this, lifecycleCoroutineScope = lifecycleScope
         ).setSuccessCallback {
+
             if (intent.action == SignINActivityActions.SignUP.action) {
                 profile = profile.copy(biometry = true)
 
                 userDataIsChanged = true
             }
 
-            onAuthenticationSucceeded()
+            animatePINCode(truth = true).invokeOnCompletion {
+                onAuthenticationSucceeded()
+            }
+
         }.setDesignBottomSheet(
             title = "Вход в Learn2Invest"
         )
@@ -110,6 +113,7 @@ class SignInActivity : AppCompatActivity() {
                     append("Введите старый PIN-код") // Просто, чтобы не захламлять strings.xml :)
                 }
 
+                binding.passButtonFingerprint.isVisible = false
             }
 
         }
@@ -134,9 +138,6 @@ class SignInActivity : AppCompatActivity() {
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
-                if (pinCode.length < 4) {
-                    paintDots(count = 4)
-                }
 
                 startActivityWithMainLogic()
 
@@ -376,7 +377,7 @@ class SignInActivity : AppCompatActivity() {
 
                     SignINActivityActions.SignIN.action -> {
 
-                            blockKeyBoard()
+                        blockKeyBoard()
 
                         val isAuthSucceeded = checkAuthenticationPin()
 
@@ -426,11 +427,22 @@ class SignInActivity : AppCompatActivity() {
 
                                     userDataIsChanged = true
 
-                                    fingerPrintManager.auth()
-
                                     animatePINCode(truth = true).invokeOnCompletion {
-                                        onAuthenticationSucceeded()
+
+                                        fingerPrintManager.setSuccessCallback {
+                                            onAuthenticationSucceeded()
+
+                                            profile = profile.copy(
+                                                biometry = true
+                                            )
+                                        }.setFailedCallback {
+                                            onAuthenticationSucceeded()
+                                        }.setHardwareErrorCallback {
+                                            onAuthenticationSucceeded()
+                                        }.auth()
                                     }
+
+
                                 }
 
                             }
@@ -456,7 +468,7 @@ class SignInActivity : AppCompatActivity() {
                                 //если ввел верно
                                 isVerified = checkAuthenticationPin()
 
-                                    pinCode = ""
+                                pinCode = ""
 
                                 animatePINCode(
                                     truth = isVerified,
@@ -526,8 +538,6 @@ class SignInActivity : AppCompatActivity() {
                     }
                 }
             }
-        } else {
-            Toast.makeText(context, "не тыкай с#ка", Toast.LENGTH_SHORT).show()
         }
     }
 
