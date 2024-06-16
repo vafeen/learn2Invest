@@ -19,4 +19,5 @@
     <color name="inactive_switch">#FFEEEEEE</color>
     <color name="cancel">#54E06060</color>
     <color name="transparent">#00000000</color>
+    <color name="dialog_background">#80000000</color>
 </resources>
