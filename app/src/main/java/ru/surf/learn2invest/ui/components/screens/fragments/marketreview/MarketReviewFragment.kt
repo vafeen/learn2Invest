@@ -9,6 +9,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -18,12 +19,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.network_components.responses.APIWrapper
 import ru.surf.learn2invest.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
@@ -45,6 +46,8 @@ class MarketReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+
         return binding.root
     }
 
@@ -130,7 +133,8 @@ class MarketReviewFragment : Fragment() {
 
             clearTv.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    App.mainDB.searchedCoinDao().deleteAll()
+
+                    DatabaseRepository.deleteAllSearchedCoin()
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         adapter.notifyDataSetChanged()
@@ -141,14 +145,11 @@ class MarketReviewFragment : Fragment() {
             searchEditText.setOnItemClickListener { parent, view, position, id ->
                 val searchedList = mutableListOf<String>()
                 lifecycleScope.launch(Dispatchers.IO) {
-                    App.mainDB
-                        .searchedCoinDao()
-                        .insertAll(
-                            SearchedCoin(coinID = searchEditText.text.toString())
-                        )
-                    App.mainDB
-                        .searchedCoinDao()
-                        .getAll().first().map { searchedList.add(it.coinID) }
+                    DatabaseRepository.insertAllSearchedCoin(
+                        SearchedCoin(coinID = searchEditText.text.toString())
+                    )
+                    DatabaseRepository.getAllAsFlowSearchedCoin()
+                        .first().map { searchedList.add(it.coinID) }
                     withContext(Dispatchers.Main) {
                         recyclerData.clear()
                         recyclerData.addAll(data.filter { searchedList.contains(it.name) })

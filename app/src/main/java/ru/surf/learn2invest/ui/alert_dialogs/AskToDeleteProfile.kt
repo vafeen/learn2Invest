@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.AskToDeleteProfileDialogBinding
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 import ru.surf.learn2invest.ui.main.MainActivity
 
@@ -31,7 +32,7 @@ class AskToDeleteProfile(
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                App.profile?.let { profile -> App.mainDB.profileDao().delete(profile) }
+                DatabaseRepository.deleteProfile(App.profile)
             }
 
             (context as Activity).finish()

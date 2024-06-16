@@ -7,14 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
 import ru.surf.learn2invest.ui.alert_dialogs.reset_stats.ResetStats
@@ -30,10 +33,11 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
-
         context = requireContext()
 
+        activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
+
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -46,7 +50,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
-            App.mainDB.profileDao().insertAll(profile)
+          DatabaseRepository.insertAllProfile(profile)
         }
     }
 

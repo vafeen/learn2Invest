@@ -17,10 +17,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.app.App.Companion.mainDB
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.database_components.entity.Profile
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
@@ -54,39 +53,43 @@ class MainActivity : AppCompatActivity() {
     // Функция проверки, есть ли у нас зарегистрированный пользователь
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val profList = mainDB.profileDao().getAllAsFlow().first()
+            val profList = DatabaseRepository.getAllAsFlowProfile().first()
 
-            val intent = if (profList.isNotEmpty()) {
-                profile = profList[App.idOfProfile]
+            val intent =
+                if (profList.isNotEmpty() &&
+                    profList[App.idOfProfile].lastName != "undefined" &&
+                    profList[App.idOfProfile].firstName != "undefined"
+                ) {
+                    profile = profList[App.idOfProfile]
 
-                Log.d("profile", "profile APP no else = $profile ")
+                    Log.d("profile", "profile APP no else = $profile ")
 
-                withContext(Dispatchers.Main) {
-                    runAnimatedText()
-                    delay(2000)
+                    withContext(Dispatchers.Main) {
+                        runAnimatedText()
+                        delay(2000)
+                    }
+
+                    Intent(this@MainActivity, SignInActivity::class.java).let {
+                        it.action = SignINActivityActions.SignIN.action
+
+                        it
+                    }
+                } else {
+//                profile = Profile(
+//                    id = 0,
+//                    firstName = "undefined",
+//                    lastName = "undefined",
+//                    biometry = false,
+//                    fiatBalance = 0f,
+//                    assetBalance = 0f
+//                )
+//
+//                DatabaseRepository.insertAllProfile(profile)
+//
+//                Log.d("profile", "profile APP else  = $profile ")
+
+                    Intent(this@MainActivity, SignUpActivity::class.java)
                 }
-
-                Intent(this@MainActivity, SignInActivity::class.java).let {
-                    it.action = SignINActivityActions.SignIN.action
-
-                    it
-                }
-            } else {
-                profile = Profile(
-                    id = 0,
-                    firstName = "undefined",
-                    lastName = "undefined",
-                    biometry = false,
-                    fiatBalance = 0f,
-                    assetBalance = 0f
-                )
-
-                mainDB.profileDao().insertAll(profile)
-
-                Log.d("profile", "profile APP else  = $profile ")
-
-                Intent(this@MainActivity, SignUpActivity::class.java)
-            }
 
             delay(1000)
 

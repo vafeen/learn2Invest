@@ -25,6 +25,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
+        create("debug1") {
+            isDebuggable = true
+        }
     }
 
     compileOptions {
@@ -67,5 +70,5 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     // for graphics
-    implementation (libs.mpandroidchart)
+    implementation(libs.mpandroidchart)
 }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
@@ -191,20 +192,21 @@ class Buy(
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
         val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
-
+        Log.d("amount", "amountCurrent = $amountCurrent")
         if (balance > price * amountCurrent) {
 
-            // обновление баланса
-            App.profile = App.profile.copy(
-                fiatBalance = balance - price * amountCurrent,
-                assetBalance = App.profile.assetBalance + price * amountCurrent
-            )
-
             lifecycleScope.launch(Dispatchers.IO) {
-                App.mainDB.apply {
+                DatabaseRepository.apply {
+
+                    // обновление баланса
+                    updateProfile(
+                        App.profile.copy(
+                            fiatBalance = balance - price * amountCurrent,
+                        )
+                    )
 
                     // обновление истории
-                    transactionDao().insertAll(
+                    insertAllTransaction(
                         Transaction(
                             name = name,
                             symbol = symbol,
@@ -215,16 +217,18 @@ class Buy(
                         )
                     )
 
+                    // обновление портфеля
                     if (haveAssetsOrNot) {
-                        assetInvestDao().update(
+
+                        updateAssetInvest(
                             coin.copy(
                                 coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
                                 amount = coin.amount + amountCurrent
                             )
                         )
+
                     } else {
-                        // обновление портфеля
-                        assetInvestDao().insertAll(
+                        insertAllAssetInvest(
                             coin.copy(
                                 coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
                                 amount = coin.amount + amountCurrent
@@ -272,7 +276,7 @@ class Buy(
         super.show()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = App.mainDB.assetInvestDao().getBySymbol(symbol = symbol)
+            val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
                 haveAssetsOrNot = true
