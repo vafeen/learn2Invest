@@ -67,10 +67,10 @@
             android:text="@string/drop_statistics"
             android:textAppearance="@style/Text.Medium.16" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/reset_stats_Btn_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="24dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             android:clickable="false"
@@ -100,6 +100,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_stats_Btn"
         app:srcCompat="@drawable/gear" />
+
     <LinearLayout
         android:id="@+id/biometry_Btn"
         android:layout_width="match_parent"
@@ -181,10 +182,10 @@
             android:text="Смена торгового пароля"
             android:textAppearance="@style/Text.Medium.16" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/change_trading_password_Btn_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="24dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             android:clickable="false"
@@ -213,10 +214,10 @@
             android:text="@string/change_PIN"
             android:textAppearance="@style/Text.Medium.16" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/change_PIN_Btn_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             android:clickable="false"
