@@ -69,9 +69,6 @@ class FingerprintAuthenticator(
         title: String,
         cancelText: String = "ОТМЕНА"
     ): FingerprintAuthenticator {
-//        promptInfo = BiometricPrompt.PromptInfo.Builder().setTitle()
-//            .setNegativeButtonText("ОТМЕНА").build()
-//
         titleText = title
 
         cancelButtonText = cancelText
@@ -130,11 +127,6 @@ class FingerprintAuthenticator(
                         super.onAuthenticationError(errorCode, errString)
 
                         Log.d("finger", "error")
-                        Toast.makeText(
-                            context,
-                            "На устройстве выключена биометрия",
-                            Toast.LENGTH_SHORT
-                        ).show()
 
                         hardwareErrorCallback()
                     }
@@ -143,8 +135,6 @@ class FingerprintAuthenticator(
                         super.onAuthenticationFailed()
 
                         Log.d("finger", "failed")
-
-                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show()
 
                         failedCallBack()
                     }

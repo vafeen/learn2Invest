@@ -8,4 +8,6 @@
 
     <dimen name="margin_horizontal_dev_str">20dp</dimen>
     <dimen name="margin_top_dev_str">40dp</dimen>
+
+    <dimen name="alerts_elevation">100dp</dimen>
 </resources>
