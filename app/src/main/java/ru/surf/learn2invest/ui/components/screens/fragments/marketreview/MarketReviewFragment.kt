@@ -42,7 +42,7 @@ class MarketReviewFragment : Fragment() {
     }
     private var filterByPriceFLag = false
     private var filterByPriceIsFirstActive = true
-    private lateinit var realTimeUpdateJob: Job
+    private var realTimeUpdateJob: Job? = null
     private var realTimeUpdateSemaphore = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -206,7 +206,7 @@ class MarketReviewFragment : Fragment() {
         super.onStop()
         data.clear()
         recyclerData.clear()
-        realTimeUpdateJob.cancel()
+        realTimeUpdateJob?.cancel()
     }
 
     private fun startAssetReviewIntent(coin: CoinReviewDto) {
