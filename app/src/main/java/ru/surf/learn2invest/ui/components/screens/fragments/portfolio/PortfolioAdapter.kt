@@ -51,9 +51,10 @@ class PortfolioAdapter(
         fun bind(asset: AssetInvest, priceChange: Float) {
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
-            coinTopNumericInfo.text = asset.coinPrice.toString()
-            val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChange)
-            coinBottomNumericInfo.text = if (priceChange >= 0) "+$formattedChange" else formattedChange
+            coinTopNumericInfo.text = priceChange.toString() + "$"
+            val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
+            val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
+            coinBottomNumericInfo.text = if (priceChangePercent >= 0) "+$formattedChange" else formattedChange
 
             val color = if (priceChange >= 0) {
                 itemView.context.getColor(R.color.increase)
