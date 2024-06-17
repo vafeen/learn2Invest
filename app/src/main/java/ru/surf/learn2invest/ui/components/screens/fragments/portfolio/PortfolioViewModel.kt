@@ -13,6 +13,7 @@ import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
 import java.math.RoundingMode
 

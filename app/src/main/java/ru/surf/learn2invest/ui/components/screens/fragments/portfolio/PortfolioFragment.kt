@@ -11,14 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
@@ -245,20 +241,4 @@ class PortfolioFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
 
-}
-
-fun DialogFragment.observeDismissal(
-    lifecycleOwner: LifecycleOwner,
-    onDismiss: () -> Unit
-) {
-    lifecycleOwner.lifecycleScope.launch {
-        callbackFlow<Unit> {
-            dialog?.setOnDismissListener {
-                trySend(Unit).isSuccess
-            }
-            awaitClose()
-        }.collect {
-            onDismiss()
-        }
-    }
 }
