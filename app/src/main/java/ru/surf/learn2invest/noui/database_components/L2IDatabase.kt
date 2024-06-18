@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
@@ -24,11 +25,11 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
         Transaction::class,
     ], version = 1
 )
+
+@TypeConverters(Converters::class)
 abstract class L2IDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "learn2investDatabase.db"
-
-
         /**
          * создание объекта базы данных
          */
@@ -39,16 +40,9 @@ abstract class L2IDatabase : RoomDatabase() {
         }
     }
 
-
     abstract fun assetBalanceHistoryDao(): AssetBalanceHistoryDao
-
     abstract fun assetInvestDao(): AssetInvestDao
-
     abstract fun profileDao(): ProfileDao
-
     abstract fun searchedCoinDao(): SearchedCoinDao
-
     abstract fun transactionDao(): TransactionDao
-
-
 }
