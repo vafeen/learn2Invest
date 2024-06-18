@@ -12,10 +12,8 @@
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
             android:id="@+id/balance_card_sell_dialog"
@@ -23,12 +21,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_od_dialog_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/name_od_dialog_sell_dialog" />
 
         <View
             android:id="@+id/price_card_sell_dialog"
@@ -36,12 +31,9 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
+            app:layout_constraintStart_toStartOf="@+id/balance_card_sell_dialog"
+            app:layout_constraintTop_toBottomOf="@+id/balance_card_sell_dialog" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_exit_sell_dialog"
@@ -60,22 +52,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/name_od_dialog_sell_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
             android:text="@string/sell_security_paper"
             android:textAppearance="@style/Text.Regular.16"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.022" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <View
@@ -84,12 +73,10 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/price_card_sell_dialog" />
 
         <TextView
             android:id="@+id/number_textview_sell_dialog"
@@ -99,12 +86,8 @@
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/number"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog" />
 
         <EditText
             android:id="@+id/entering_number_of_lots_sell_dialog"
@@ -116,12 +99,8 @@
             android:hint="@string/number_lots"
             android:inputType="number"
             android:textAppearance="@style/Text.Regular.12"
-            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog" />
 
         <View
             android:id="@+id/icon_of_balance_view_sell_dialog"
@@ -130,11 +109,8 @@
             android:layout_margin="@dimen/margin_dialogs_card_content_start"
             android:background="@drawable/briefcase"
             app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog" />
 
 
         <TextView
@@ -144,13 +120,8 @@
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintBottom_toBottomOf="@+id/price_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/price_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/price_card_sell_dialog"
-
             app:layout_constraintTop_toTopOf="@+id/price_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="@string/example_price" />
 
         <ImageButton
@@ -160,7 +131,6 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/view_background"
             android:src="@drawable/circle_minus"
-
             app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
             app:layout_constraintHeight="28dp"
             app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots_sell_dialog"
@@ -174,7 +144,6 @@
             android:backgroundTint="@color/view_background"
             android:src="@drawable/circle_plus"
             app:layout_constraintBottom_toBottomOf="@+id/imageButtonMinus_sell_dialog"
-
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
             app:layout_constraintHeight="28dp"
             app:layout_constraintStart_toEndOf="@+id/imageButtonMinus_sell_dialog"
@@ -189,12 +158,8 @@
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/price_name"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintBottom_toBottomOf="@+id/price_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/price_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/price_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/price_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/price_card_sell_dialog" />
 
         <TextView
             android:id="@+id/balance_num_sell_dialog"
@@ -202,14 +167,9 @@
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:text="@string/example_balance"
-
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.114"
             app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.076" />
+            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog" />
 
 
         <TextView
@@ -220,12 +180,8 @@
             android:text="@string/balance"
             android:textAppearance="@style/Text.Medium.14"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/balance_num_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_sell_sell_dialog"
@@ -245,9 +201,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <!--       TODO: Надь, поправь тут пожалуйста шрифт, как выберешь нужный) -->
@@ -259,10 +213,7 @@
             android:text="Итого: $ 0"
             app:layout_constraintBottom_toTopOf="@+id/trading_password"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/trading_password"
@@ -272,8 +223,6 @@
             app:layout_constraintBottom_toTopOf="@+id/button_exit_sell_dialog"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintVertical_bias="1.0"
             app:passwordToggleEnabled="true">
 
             <!-- Здесь наличие глазика контролируется -->
