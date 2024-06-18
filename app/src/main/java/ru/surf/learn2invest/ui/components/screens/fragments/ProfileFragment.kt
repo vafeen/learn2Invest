@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
-          DatabaseRepository.insertAllProfile(profile)
+            DatabaseRepository.insertAllProfile(profile)
         }
     }
 
@@ -71,8 +71,9 @@ class ProfileFragment : Fragment() {
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfile(
-                        context = context, lifecycleScope = lifecycleScope
-                    ).initDialog().show()
+                        dialogContext = context, lifecycleScope = lifecycleScope,
+                        supportFragmentManager = parentFragmentManager
+                    ).show()
 
                 }
 
@@ -80,8 +81,10 @@ class ProfileFragment : Fragment() {
                 fr.resetStatsBtn.setOnClickListener {
 
                     ResetStats(
-                        context = context, lifecycleScope = lifecycleScope
-                    ).initDialog().show()
+                        dialogContext = context,
+                        lifecycleScope = lifecycleScope,
+                        supportFragmentManager = parentFragmentManager
+                    ).show()
                 }
 
 
