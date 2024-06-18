@@ -1,12 +1,11 @@
 package ru.surf.learn2invest.ui.alert_dialogs.parent
 
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.util.Log
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 
 
 /**
@@ -22,9 +21,9 @@ import androidx.appcompat.app.AlertDialog
  *     private var binding =
  *         AskToDeleteProfileDialogBinding.inflate(layoutInflater)
  *
- *     override fun setCancelable(): Boolean {
- *         return true
- *     }
+ *     override val dialogTag: String = "exampleTag"
+ *
+ *     override fun setCancelable(): Boolean = false
  *
  *     override fun initListeners() {
  *         binding.noDelete.setOnClickListener {
@@ -36,17 +35,18 @@ import androidx.appcompat.app.AlertDialog
  *         }
  *     }
  *
- *     override fun getDialogView(): View {
- *         return binding.root
- *     }
+ *     override fun getDialogView(): View = binding.root
  *
  * }
  * ```
  *
  * Использование:
  * ```
- * val dialog =
- *             AskToDeleteProfile(context = this, layoutInflater = layoutInflater).initDialog()
+ * val dialog = AskToDeleteProfile(
+ *                  val dialogContext: Context,
+ *                  supportFragmentManager: FragmentManager
+ *                  context = this,
+ *                  supportFragmentManager = supportFragmentManager)
  *
  *         dialog.show()
  *
@@ -54,72 +54,44 @@ import androidx.appcompat.app.AlertDialog
  *```
  *
  */
-abstract class CustomAlertDialog(context: Context) {
+abstract class CustomAlertDialog(private val supportFragmentManager: FragmentManager) :
+    DialogFragment() {
 
-    private var builder: AlertDialog.Builder = AlertDialog.Builder(context)
+    abstract val dialogTag: String
 
-    private var dialog: AlertDialog? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        initListeners()
 
-    private var initialized: Boolean = false
+        this.isCancelable = setCancelable()
+
+        return getDialogView()
+    }
 
     /**
      * Отменяется ли диалог при нажатии на свободную часть экрана
      */
-    abstract fun setCancelable(): Boolean
+    protected open fun setCancelable(): Boolean = true
 
     /**
      * Инициализация всех Listeners
      */
-    abstract fun initListeners()
+    protected abstract fun initListeners()
 
     /**
      * XML ресурс экрана
      */
-    abstract fun getDialogView(): View
+    protected abstract fun getDialogView(): View
 
-    /**
-     * Функция инициализации всего функционала
-     */
-    open fun initDialog(): CustomAlertDialog {
-        builder.setView(getDialogView())
-
-        builder.setCancelable(setCancelable())
-
-        initialized = true
-
-        dialog = builder.create()
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//
-//        dialog.window?.setBackgroundDrawable(getBackground())
-//
-//        dialog.setCancelable(setCancelable())
-//
-//        dialog.setContentView(getDialogView())
-
-        initListeners()
-
-        return this
-    }
-
-    /**
-     * Смена background'a. По умолчанию - TRANSPARENT
-     */
-    open fun getBackground(): Drawable {
-        return ColorDrawable(Color.TRANSPARENT)
-    }
 
     open fun show() {
-        if (initialized) {
-            dialog?.show()
-        } else {
-            Log.e(
-                "CustomAlertDialog",
-                "Dialog is not initialized. Please call fun initDialog before calling fun show()"
-            )
-        }
+        this.show(supportFragmentManager, dialogTag)
     }
 
     open fun cancel() {
-        dialog?.cancel()
+        this.dismiss()
     }
 }
