@@ -11,13 +11,13 @@ import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import java.text.NumberFormat
 import java.util.Locale
 
 class AssetViewModel(
 ) : ViewModel() {
     private var marketCap = 0.0
-    private var price = 0.0
     private var data = mutableListOf<Entry>()
     private lateinit var formattedMarketCap: String
     private lateinit var formattedPrice: String
@@ -35,10 +35,7 @@ class AssetViewModel(
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            price = coinResponse.value.data.priceUsd.toDouble()
-                            formattedPrice = NumberFormat.getInstance(Locale.US).apply {
-                                maximumFractionDigits = 2
-                            }.format(price) + " $"
+                            formattedPrice = coinResponse.value.data.priceUsd.getWithCurrency()
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
@@ -67,16 +64,14 @@ class AssetViewModel(
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            price = result.value.data.priceUsd.toDouble()
-                            formattedPrice = NumberFormat.getInstance(Locale.US).apply {
-                                maximumFractionDigits = 2
-                            }.format(price) + " $"
+                            formattedPrice = result.value.data.priceUsd.getWithCurrency()
                             Loher.d("$data")
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
                         }
                     }
+
                     is ResponseWrapper.NetworkError -> {}
                 }
             }
