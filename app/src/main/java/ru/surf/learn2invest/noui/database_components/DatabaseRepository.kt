@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
-import android.util.Log
 
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +17,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 
 /**
