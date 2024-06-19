@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,15 +19,15 @@ import ru.surf.learn2invest.ui.main.MainActivity
 
 class AskToDeleteProfile(
     private val lifecycleScope: LifecycleCoroutineScope,
-    val context: Context,
-) : CustomAlertDialog(context = context) {
+    val dialogContext: Context,
+    supportFragmentManager: FragmentManager
+) : CustomAlertDialog(supportFragmentManager) {
+
+    override val dialogTag: String = "askToDeleteProfile"
+
 
     private var binding =
-        AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(context))
-
-    override fun setCancelable(): Boolean {
-        return true
-    }
+        AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(dialogContext))
 
     override fun initListeners() {
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
@@ -35,14 +36,14 @@ class AskToDeleteProfile(
                 DatabaseRepository.deleteProfile(App.profile)
             }
 
-            (context as Activity).finish()
+            (dialogContext as Activity).finish()
 
             cancel()
 
-            context.startActivity(Intent(context, MainActivity::class.java))
+            dialogContext.startActivity(Intent(dialogContext, MainActivity::class.java))
         }
 
-        binding.noDeleteAskToDeleteProfileDialog.setOnClickListener {
+        binding.noAskToDeleteProfileDialog.setOnClickListener {
             cancel()
         }
 

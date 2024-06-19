@@ -4,19 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class ResetStats(
-    val context: Context,
-    val lifecycleScope: LifecycleCoroutineScope
-) : CustomAlertDialog(context = context) {
+    val dialogContext: Context,
+    val lifecycleScope: LifecycleCoroutineScope,
+    supportFragmentManager: FragmentManager,
+) : CustomAlertDialog(supportFragmentManager) {
 
     private var binding: ResetStatsDialogBinding =
-        ResetStatsDialogBinding.inflate(LayoutInflater.from(context))
+        ResetStatsDialogBinding.inflate(LayoutInflater.from(dialogContext))
 
-    override fun setCancelable(): Boolean = true
+    override val dialogTag: String = "restStats"
 
     override fun initListeners() {
         binding.apply {
@@ -26,7 +28,7 @@ class ResetStats(
 
                 cancel()
 
-                Toast.makeText(context, "Стата сброшена", Toast.LENGTH_LONG).show()
+                Toast.makeText(dialogContext, "Стата сброшена", Toast.LENGTH_LONG).show()
             }
 
             noReetStatsResetStatsDialog.setOnClickListener {

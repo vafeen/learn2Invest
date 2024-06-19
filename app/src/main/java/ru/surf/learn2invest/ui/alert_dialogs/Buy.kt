@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,9 +32,10 @@ class Buy(
     val lifecycleScope: LifecycleCoroutineScope,
     val id: String,
     val name: String,
-    val symbol: String
-
-) : CustomAlertDialog(context = context) {
+    val symbol: String,
+    supportFragmentManager: FragmentManager
+) : CustomAlertDialog(supportFragmentManager) {
+    override val dialogTag: String = "buy"
 
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
     private lateinit var realTimeUpdateJob: Job
@@ -45,9 +47,7 @@ class Buy(
         assetID = id
     )
 
-    override fun setCancelable(): Boolean {
-        return true
-    }
+    override fun setCancelable(): Boolean = false
 
     @SuppressLint("SuspiciousIndentation")
     override fun initListeners() {
@@ -185,6 +185,7 @@ class Buy(
         super.cancel()
         realTimeUpdateJob.cancel()
     }
+
     private fun buy() {
         val fiatBalance = App.profile.fiatBalance
         val assetBalance = App.profile.assetBalance
@@ -291,7 +292,7 @@ class Buy(
 
     }
 
-    fun startRealTimeUpdate(): Job =
+    private fun startRealTimeUpdate(): Job =
         lifecycleScope.launch(Dispatchers.IO) {
             while (true) {
                 when (val result = NetworkRepository.getCoinReview(id)) {

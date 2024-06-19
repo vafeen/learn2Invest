@@ -89,17 +89,19 @@ class AssetReviewActivity : AppCompatActivity() {
                 id = id,
                 name = name,
                 symbol = symbol,
-            ).initDialog().show()
+                supportFragmentManager = supportFragmentManager
+            ).show()
         }
 
         binding.sellAssetBtn.setOnClickListener {
             Sell(
-                context = this,
+               dialogContext = this,
                 lifecycleScope = lifecycleScope,
                 id = id,
                 name = name,
                 symbol = symbol,
-            ).initDialog().show()
+                supportFragmentManager = supportFragmentManager
+            ).show()
         }
     }
 
