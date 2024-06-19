@@ -72,7 +72,7 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccount(requireContext(), lifecycleScope).initDialog().show()
+            RefillAccount(requireContext(), lifecycleScope, parentFragmentManager).show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
