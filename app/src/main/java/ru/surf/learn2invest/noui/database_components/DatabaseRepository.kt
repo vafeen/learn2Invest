@@ -137,24 +137,6 @@ object DatabaseRepository {
     suspend fun deleteAssetBalanceHistory(entity: AssetBalanceHistory) =
         assetBalanceHistoryDao.delete(entity)
 
-    suspend fun insertOrUpdateAssetBalanceHistory(assetBalance: Float) {
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.time
-
-        val existingEntry = assetBalanceHistoryDao.getByDate(today)
-        if (existingEntry != null) {
-            val updatedEntry = existingEntry.copy(assetBalance = assetBalance)
-            assetBalanceHistoryDao.update(updatedEntry)
-        } else {
-            val newEntry = AssetBalanceHistory(assetBalance = assetBalance, date = today)
-            assetBalanceHistoryDao.insertAll(newEntry)
-        }
-    }
-
 
     // AssetInvest
     fun getAllAsFlowAssetInvest(): Flow<List<AssetInvest>> =

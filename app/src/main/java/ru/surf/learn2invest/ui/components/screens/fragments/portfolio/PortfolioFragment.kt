@@ -52,7 +52,7 @@ class PortfolioFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
 
         lifecycleScope.launch {
-            viewModel.assetBalance.collect { balance ->
+            viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"
             }
         }

@@ -6,8 +6,8 @@ import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -46,6 +46,11 @@ class PortfolioViewModel : ViewModel() {
         }
     }
 
+    val totalBalance: Flow<Float> =
+        combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
+            assetBalance + fiatBalance
+        }
+
     val assetsFlow: Flow<List<AssetInvest>> =
         DatabaseRepository.getAllAsFlowAssetInvest().onEach { assets ->
             loadPriceChanges(assets)
@@ -74,17 +79,15 @@ class PortfolioViewModel : ViewModel() {
             historyDateStart == todayStart
         }
 
-        val assetBalance = DatabaseRepository.getAllAsFlowProfile().firstOrNull()?.firstOrNull()?.assetBalance ?: 0f
+        val totalBalance = assetBalance.first() + fiatBalance.first()
 
         if (todayBalanceHistory != null) {
-            // Update today's balance
             DatabaseRepository.updateAssetBalanceHistory(
-                todayBalanceHistory.copy(assetBalance = assetBalance)
+                todayBalanceHistory.copy(assetBalance = totalBalance)
             )
         } else {
-            // Insert new balance history for today
             DatabaseRepository.insertAllAssetBalanceHistory(
-                AssetBalanceHistory(assetBalance = assetBalance, date = todayDate)
+                AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }
     }
@@ -103,6 +106,15 @@ class PortfolioViewModel : ViewModel() {
                 initialInvestment += asset.coinPrice * asset.amount
             }
         }
+
+        App.profile.also {
+            DatabaseRepository.updateProfile(
+                it.copy(
+                    assetBalance = totalCurrentValue
+                )
+            )
+        }
+
         _priceChanges.value = priceChanges
         calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
     }
