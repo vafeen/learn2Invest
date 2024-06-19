@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.alert_dialogs
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -23,7 +22,6 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class SellDialog(
@@ -165,7 +163,6 @@ class SellDialog(
                 false
 
             }
-            Loher.e("вернулось ${tradingPassword.isVisible}")
         }
     }
 
@@ -246,8 +243,6 @@ class SellDialog(
 
             val number = enteringNumberOfLotsSellDialog.text.toString().toIntOrNull() ?: 0
 
-            Log.e("error", "number = $number")
-
             return price * number
         }
     }
@@ -261,10 +256,7 @@ class SellDialog(
             if (coinMayBeInPortfolio != null) {
                 coin = coinMayBeInPortfolio
             }
-
-            Log.d("coin", "coin = $coin")
         }
-
     }
 
     private fun startRealTimeUpdate(): Job = lifecycleScope.launch(Dispatchers.IO) {

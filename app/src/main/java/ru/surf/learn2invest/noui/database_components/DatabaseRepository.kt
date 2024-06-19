@@ -78,11 +78,6 @@ object DatabaseRepository {
                     if (profList.isNotEmpty()) {
                         App.profile = profList[App.idOfProfile]
 
-                        Log.d(
-                            "profile",
-                            "profile in DBRep = ${App.profile}, размер = ${profList.size}"
-                        )
-
                     } else {
                         App.profile = Profile(
                             id = 0,
@@ -103,7 +98,6 @@ object DatabaseRepository {
                                 assetBalance = 0f
                             )
                         )
-                        Log.d("profile", "инсертим дефолтный")
                     }
                 }
             }

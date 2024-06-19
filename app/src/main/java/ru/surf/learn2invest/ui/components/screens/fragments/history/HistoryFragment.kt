@@ -17,7 +17,6 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 class HistoryFragment : Fragment() {
@@ -45,7 +44,6 @@ class HistoryFragment : Fragment() {
         super.onStart()
         lifecycleScope.launch(Dispatchers.IO) {
             DatabaseRepository.getAllAsFlowTransaction().collect {
-                Loher.d(it.size.toString())
                 if (it.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         binding.historyRecyclerview.isVisible = false

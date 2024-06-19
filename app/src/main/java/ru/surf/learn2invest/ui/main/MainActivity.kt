@@ -62,8 +62,6 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     profile = profList[App.idOfProfile]
 
-                    Log.d("profile", "profile APP no else = $profile ")
-
                     withContext(Dispatchers.Main) {
                         runAnimatedText()
                         delay(2000)
@@ -85,8 +83,6 @@ class MainActivity : AppCompatActivity() {
 //                )
 //
 //                DatabaseRepository.insertAllProfile(profile)
-//
-//                Log.d("profile", "profile APP else  = $profile ")
 
                     Intent(this@MainActivity, SignUpActivity::class.java)
                 }

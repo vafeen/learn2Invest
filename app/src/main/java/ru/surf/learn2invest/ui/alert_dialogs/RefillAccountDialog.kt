@@ -65,8 +65,6 @@ class RefillAccountDialog(
 
                 override fun afterTextChanged(s: Editable?) {
                     if (EditTextEnteringSumOfBalanceRefillAccountDialog.hasFocus()) {
-                        //Loher.d("entering sum")
-
                         changeVisibilityElements()
                     }
                 }

@@ -29,7 +29,6 @@ import ru.surf.learn2invest.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 
@@ -104,7 +103,6 @@ class MarketReviewFragment : Fragment() {
                     filterByPriceFLag = filterByPriceFLag.not()
                 if (filterByPriceFLag) {
                     recyclerData.sortByDescending { it.priceUsd }
-                    Loher.d(recyclerData.find { it.symbol == "CJ" }.toString())
                     filterByPrice.setIconResource(R.drawable.arrow_bottom_red)
                     filterByPrice.setIconTintResource(R.color.recession)
                 } else {
@@ -173,7 +171,6 @@ class MarketReviewFragment : Fragment() {
                         recyclerData.addAll(data.filter { searchedList.contains(it.name) })
                         recyclerData.reverse()
                         adapter.notifyDataSetChanged()
-                        Loher.d(searchedList.toString())
                         realTimeUpdateSemaphore = false
                     }
                 }
@@ -191,7 +188,6 @@ class MarketReviewFragment : Fragment() {
                         data.removeIf { it.marketCapUsd == 0.0f }
                         data.sortByDescending { it.marketCapUsd }
                         recyclerData.addAll(data)
-                        Loher.d(data.find { it.priceUsd == 0.0f }.toString())
                         setRecycler()
                         realTimeUpdateJob = startRealtimeUpdate()
                     }

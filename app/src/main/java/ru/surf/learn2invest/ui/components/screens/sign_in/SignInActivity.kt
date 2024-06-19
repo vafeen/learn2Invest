@@ -90,8 +90,6 @@ class SignInActivity : AppCompatActivity() {
             title = "Вход в Learn2Invest"
         )
 
-        Log.d("action", "${intent.action}")
-
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
@@ -354,12 +352,10 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun blockKeyBoard() {
-        Log.d("block", "blocked")
         keyBoardIsWork = false
     }
 
     private fun unBlockKeyBoard() {
-        Log.d("block", "un blocked")
         keyBoardIsWork = true
     }
 
@@ -368,9 +364,6 @@ class SignInActivity : AppCompatActivity() {
             if (pinCode.length < 4) {
                 pinCode += num
             }
-
-            Log.d("pin", "last = $firstPin")
-            Log.d("pin", "pin = $pinCode")
 
             paintDots()
 

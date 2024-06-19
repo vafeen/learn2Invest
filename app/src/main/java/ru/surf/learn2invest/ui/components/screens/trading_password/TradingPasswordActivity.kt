@@ -75,8 +75,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                 // finish if action is not defined
                 this@TradingPasswordActivity.finish()
 
-                Log.e("TradingPasswordActivity", "FATAL: Intent.action is not defined ")
-
                 TradingPasswordActivityActions.CreateTradingPassword
             }
         }
@@ -201,8 +199,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                         val x = verifyTradingPassword(
                             user = profile, password = "${passwordLast.text}"
                         )
-
-                        Log.d("password", "verify? - $x")
 
                         x
                     }) {
@@ -437,7 +433,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                         )
                     )
                 }.invokeOnCompletion {
-                    Log.d("app", "finish")
                     this@TradingPasswordActivity.finish()
                 }
 
@@ -455,17 +450,15 @@ class TradingPasswordActivity : AppCompatActivity() {
     }
 
     private fun String.isThisContains3NumbersOfEmpty(): Boolean {
-
-        Log.d("empty", ifEmpty { "empty" })
         if (this == "") {
             return true
         }
+
         for (number in 0..9) {
             if (contains("$number".repeat(3))) {
                 return true
             }
         }
-        Log.d("et", this)
 
         return false
     }

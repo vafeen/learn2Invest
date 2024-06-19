@@ -126,15 +126,11 @@ class FingerprintAuthenticator(
                     ) {
                         super.onAuthenticationError(errorCode, errString)
 
-                        Log.d("finger", "error")
-
                         setCancelCallback()
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-
-                        Log.d("finger", "failed")
 
                         failedCallBack()
                     }

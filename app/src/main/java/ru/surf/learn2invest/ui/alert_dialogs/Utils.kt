@@ -18,7 +18,5 @@ fun Float.getWithCurrency(): String = "$this$"
 fun String.getFloatFromStringWithCurrency(): Float {
     val result = this.substring(0, this.lastIndex).toFloat()
 
-    Log.d("float", "result = $result")
-
     return result
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -24,7 +23,6 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class BuyDialog(
@@ -176,7 +174,6 @@ class BuyDialog(
                 false
 
             }
-            Loher.e("вернулось ${tradingPassword.isVisible}")
         }
     }
 
@@ -191,7 +188,7 @@ class BuyDialog(
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
         val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
-        Log.d("amount", "amountCurrent = $amountCurrent")
+
         if (balance > price * amountCurrent) {
 
             lifecycleScope.launch(Dispatchers.IO) {
@@ -259,10 +256,9 @@ class BuyDialog(
             val priceText = priceNumberBuyDialog.text.toString()
 
             val price = priceText.getFloatFromStringWithCurrency()
-            Log.e("error", "price  t= $price")
+
             val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
 
-            Log.e("error", "number = $number")
             return price * (number + if (onFuture) {
                 1
             } else {
@@ -283,10 +279,7 @@ class BuyDialog(
 
                 coin = coinMayBeInPortfolio
             }
-
-            Log.d("coin", "coin = $coin")
         }
-
     }
 
     private fun startRealTimeUpdate(): Job =
