@@ -13,6 +13,8 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Locale
 
 class PortfolioAdapter(
@@ -51,15 +53,20 @@ class PortfolioAdapter(
         fun bind(asset: AssetInvest, priceChange: Float) {
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
-            coinTopNumericInfo.text = priceChange.toString() + "$"
+            coinTopNumericInfo.text = "$priceChange$"
             val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
+            val roundedPercent = BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
             val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
-            coinBottomNumericInfo.text = if (priceChangePercent >= 0) "+$formattedChange" else formattedChange
-
-            val color = if (priceChange >= 0) {
-                itemView.context.getColor(R.color.increase)
+            val color: Int
+            if (roundedPercent > 0) {
+                coinBottomNumericInfo.text = "+$formattedChange"
+                color = itemView.context.getColor(R.color.increase)
+            } else if (roundedPercent < 0) {
+                coinBottomNumericInfo.text = formattedChange
+                color = itemView.context.getColor(R.color.recession)
             } else {
-                itemView.context.getColor(R.color.recession)
+                coinBottomNumericInfo.text = formattedChange
+                color = itemView.context.getColor(R.color.black)
             }
             coinBottomNumericInfo.setTextColor(color)
 
