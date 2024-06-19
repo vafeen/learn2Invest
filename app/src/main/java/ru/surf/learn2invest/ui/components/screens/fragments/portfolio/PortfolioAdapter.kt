@@ -57,18 +57,24 @@ class PortfolioAdapter(
             val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
             val roundedPercent = BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
             val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
-            val color: Int
-            if (roundedPercent > 0) {
-                coinBottomNumericInfo.text = "+$formattedChange"
-                color = itemView.context.getColor(R.color.increase)
-            } else if (roundedPercent < 0) {
-                coinBottomNumericInfo.text = formattedChange
-                color = itemView.context.getColor(R.color.recession)
-            } else {
-                coinBottomNumericInfo.text = formattedChange
-                color = itemView.context.getColor(R.color.black)
-            }
-            coinBottomNumericInfo.setTextColor(color)
+            coinBottomNumericInfo.setTextColor(
+                when {
+                    roundedPercent > 0 -> {
+                        coinBottomNumericInfo.text = "+$formattedChange"
+                        itemView.context.getColor(R.color.increase)
+                    }
+
+                    roundedPercent < 0 -> {
+                        coinBottomNumericInfo.text = formattedChange
+                        itemView.context.getColor(R.color.recession)
+                    }
+
+                    else -> {
+                        coinBottomNumericInfo.text = formattedChange
+                        itemView.context.getColor(R.color.black)
+                    }
+                }
+            )
 
             val imageLoader = ImageLoader.Builder(coinIcon.context)
                 .components {

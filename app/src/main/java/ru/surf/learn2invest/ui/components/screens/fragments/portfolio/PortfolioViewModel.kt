@@ -37,7 +37,7 @@ class PortfolioViewModel : ViewModel() {
     val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                profiles[App.idOfProfile].assetBalance
+                App.profile.assetBalance
             } else {
                 0f
             }
@@ -47,7 +47,7 @@ class PortfolioViewModel : ViewModel() {
     val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                profiles[App.idOfProfile].fiatBalance
+                App.profile.fiatBalance
             } else {
                 0f
             }

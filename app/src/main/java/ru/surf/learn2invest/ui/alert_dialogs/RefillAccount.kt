@@ -109,8 +109,4 @@ class RefillAccount(
     override fun getDialogView(): View {
         return binding.root
     }
-
-    override fun cancel() {
-        super.cancel()
-    }
 }
