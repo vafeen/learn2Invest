@@ -25,17 +25,17 @@ class AssetViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = NetworkRepository.getCoinHistory(id)) {
                 is ResponseWrapper.Success -> {
-                    data = response.value.data.mapIndexed { index, coinPriceResponse ->
+                    data = response.value.mapIndexed { index, coinPriceResponse ->
                         Entry(index.toFloat(), coinPriceResponse.priceUsd)
                     }.toMutableList()
                     when (val coinResponse = NetworkRepository.getCoinReview(id)) {
                         is ResponseWrapper.Success -> {
-                            data.add(Entry(data.size.toFloat(), coinResponse.value.data.priceUsd))
-                            marketCap = coinResponse.value.data.marketCapUsd.toDouble()
+                            data.add(Entry(data.size.toFloat(), coinResponse.value.priceUsd))
+                            marketCap = coinResponse.value.marketCapUsd.toDouble()
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            formattedPrice = coinResponse.value.data.priceUsd.getWithCurrency()
+                            formattedPrice = coinResponse.value.priceUsd.getWithCurrency()
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
@@ -57,14 +57,14 @@ class AssetViewModel(
                 when (val result = NetworkRepository.getCoinReview(id)) {
                     is ResponseWrapper.Success -> {
                         if (data.size != 0) {
-                            Loher.d("${result.value.data.priceUsd}")
+                            Loher.d("${result.value.priceUsd}")
                             data.removeLast()
-                            data.add(Entry(data.size.toFloat(), result.value.data.priceUsd))
-                            marketCap = result.value.data.marketCapUsd.toDouble()
+                            data.add(Entry(data.size.toFloat(), result.value.priceUsd))
+                            marketCap = result.value.marketCapUsd.toDouble()
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            formattedPrice = result.value.data.priceUsd.getWithCurrency()
+                            formattedPrice = result.value.priceUsd.getWithCurrency()
                             Loher.d("$data")
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)

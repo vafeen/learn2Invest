@@ -276,7 +276,7 @@ class Sell(
                     is ResponseWrapper.Success -> {
                         withContext(Dispatchers.Main) {
                             binding.priceNumberSellDialog.text =
-                                result.value.data.priceUsd.getWithCurrency()
+                                result.value.priceUsd.getWithCurrency()
                             updateFields()
                         }
                     }

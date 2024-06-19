@@ -182,12 +182,12 @@ class MarketReviewFragment : Fragment() {
         setLoading()
 
         this.lifecycleScope.launch(Dispatchers.IO) {
-            val result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
+            val result: ResponseWrapper<List<CoinReviewDto>> =
                 NetworkRepository.getMarketReview()
             withContext(Dispatchers.Main) {
                 when (result) {
                     is ResponseWrapper.Success -> {
-                        data.addAll(result.value.data)
+                        data.addAll(result.value)
                         data.removeIf { it.marketCapUsd == 0.0f }
                         data.sortByDescending { it.marketCapUsd }
                         recyclerData.addAll(data)
@@ -258,8 +258,8 @@ class MarketReviewFragment : Fragment() {
                         when (val result =
                             NetworkRepository.getCoinReview(recyclerData[i].id)) {
                             is ResponseWrapper.Success -> {
-                                data[i] = result.value.data.toCoinReviewDto()
-                                recyclerData[i] = result.value.data.toCoinReviewDto()
+                                data[i] = result.value.toCoinReviewDto()
+                                recyclerData[i] = result.value.toCoinReviewDto()
                                 withContext(Dispatchers.Main) {
                                     adapter.notifyItemChanged(i)
                                 }

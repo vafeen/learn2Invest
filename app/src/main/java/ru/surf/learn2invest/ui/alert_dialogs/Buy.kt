@@ -295,7 +295,7 @@ class Buy(
                     is ResponseWrapper.Success -> {
                         withContext(Dispatchers.Main) {
                             binding.priceNumberBuyDialog.text =
-                                result.value.data.priceUsd.getWithCurrency()
+                                result.value.priceUsd.getWithCurrency()
                             updateFields()
                         }
                     }
