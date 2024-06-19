@@ -103,7 +103,11 @@ class PortfolioViewModel : ViewModel() {
                 currentPrice = response.value.data.priceUsd
                 priceChanges[asset.symbol] = currentPrice
                 totalCurrentValue += currentPrice * asset.amount
-                initialInvestment += asset.coinPrice * asset.amount
+
+                val investAsset = DatabaseRepository.getBySymbolAssetInvest(asset.symbol)
+                if (investAsset != null) {
+                    initialInvestment += investAsset.coinPrice * asset.amount
+                }
             }
         }
 
@@ -119,19 +123,19 @@ class PortfolioViewModel : ViewModel() {
         calculatePortfolioChangePercentage(totalCurrentValue, initialInvestment)
     }
 
-    private fun calculatePortfolioChangePercentage(
+    private suspend fun calculatePortfolioChangePercentage(
         totalCurrentValue: Float,
         initialInvestment: Float
     ) {
         if (initialInvestment != 0f) {
-            val changePercentage =
-                ((totalCurrentValue - initialInvestment) / initialInvestment) * 100
-            val roundedChangePercentage =
-                BigDecimal(changePercentage.toString()).setScale(2, RoundingMode.HALF_UP)
-                    .toFloat()
-            _portfolioChangePercentage.value = roundedChangePercentage
+            val portfolioChangePercentage =
+                ((totalCurrentValue + assetBalance.first()) / (initialInvestment + assetBalance.first()) - 1) * 100
+            val roundedPercentage = BigDecimal(portfolioChangePercentage.toDouble())
+                .setScale(2, RoundingMode.HALF_UP)
+                .toFloat()
+            _portfolioChangePercentage.value = roundedPercentage
         } else {
-            _portfolioChangePercentage.value
+            _portfolioChangePercentage.value = 0f
         }
     }
 }
