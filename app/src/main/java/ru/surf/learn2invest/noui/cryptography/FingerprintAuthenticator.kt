@@ -2,7 +2,6 @@ package ru.surf.learn2invest.noui.cryptography
 
 import android.app.Activity
 import android.util.Log
-import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -59,8 +58,8 @@ class FingerprintAuthenticator(
         return this
     }
 
-    fun setHardwareErrorCallback(function: () -> Unit): FingerprintAuthenticator {
-        this.hardwareErrorCallback = function
+    fun setCancelCallback(function: () -> Unit): FingerprintAuthenticator {
+        this.setCancelCallback = function
 
         return this
     }
@@ -78,16 +77,18 @@ class FingerprintAuthenticator(
 
     fun auth(): Job {
         return lifecycleCoroutineScope.launch(Dispatchers.Main) {
-            initFingerPrintAuth()
+            if (isBiometricAvailable(context = context)) {
+                initFingerPrintAuth()
 
-            checkAuthenticationFingerprint()
+                checkAuthenticationFingerprint()
+            }
         }
     }
 
     // callbacks
     private var failedCallBack: () -> Unit = {}
     private var successCallBack: () -> Unit = {}
-    private var hardwareErrorCallback: () -> Unit = {}
+    private var setCancelCallback: () -> Unit = {}
 
     // design bottom sheet
     private var titleText: String = "Example title"
@@ -118,7 +119,6 @@ class FingerprintAuthenticator(
                         super.onAuthenticationSucceeded(result)
 
                         successCallBack()
-
                     }
 
                     override fun onAuthenticationError(
@@ -128,7 +128,7 @@ class FingerprintAuthenticator(
 
                         Log.d("finger", "error")
 
-                        hardwareErrorCallback()
+                        setCancelCallback()
                     }
 
                     override fun onAuthenticationFailed() {

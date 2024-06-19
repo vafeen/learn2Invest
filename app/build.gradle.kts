@@ -46,7 +46,6 @@ android {
 }
 
 dependencies {
-    // for firngerprint callback
     implementation(libs.androidx.activity.v160alpha05)
     implementation(libs.androidx.room.runtime)
     implementation(libs.retrofit)
@@ -55,6 +54,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     // got using fingerprint
     implementation(libs.androidx.biometric)
+    implementation(libs.biometric)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
