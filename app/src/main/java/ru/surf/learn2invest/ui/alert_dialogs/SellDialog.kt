@@ -26,7 +26,7 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
-class Sell(
+class SellDialog(
     val dialogContext: Context,
     val lifecycleScope: LifecycleCoroutineScope,
     val id: String,

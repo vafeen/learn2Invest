@@ -17,7 +17,7 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 import ru.surf.learn2invest.ui.main.MainActivity
 
 
-class AskToDeleteProfile(
+class AskToDeleteProfileDialog(
     private val lifecycleScope: LifecycleCoroutineScope,
     val dialogContext: Context,
     supportFragmentManager: FragmentManager

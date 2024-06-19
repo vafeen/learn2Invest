@@ -20,8 +20,8 @@ import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
-import ru.surf.learn2invest.ui.alert_dialogs.ResetStats
+import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfileDialog
+import ru.surf.learn2invest.ui.alert_dialogs.ResetStatsDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
@@ -73,7 +73,7 @@ class ProfileFragment : Fragment() {
 
                 fr.deleteProfileTV.setOnClickListener {
 
-                    AskToDeleteProfile(
+                    AskToDeleteProfileDialog(
                         dialogContext = context, lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager
                     ).show()
@@ -83,7 +83,7 @@ class ProfileFragment : Fragment() {
 
                 fr.resetStatsBtn.setOnClickListener {
 
-                    ResetStats(
+                    ResetStatsDialog(
                         dialogContext = context,
                         lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager

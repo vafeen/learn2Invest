@@ -13,7 +13,7 @@ import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
-class ResetStats(
+class ResetStatsDialog(
     val dialogContext: Context,
     val lifecycleScope: LifecycleCoroutineScope,
     supportFragmentManager: FragmentManager,

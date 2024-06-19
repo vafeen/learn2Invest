@@ -225,7 +225,6 @@ class SignUpActivity : AppCompatActivity() {
             val prof = App.profile.copy(firstName = name, lastName = lastname)
             DatabaseRepository
                 .updateProfile(prof)
-            Log.d("profile", "sugnUp 213 = $prof")
         }.invokeOnCompletion {
             startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
                 it.action = SignINActivityActions.SignUP.action

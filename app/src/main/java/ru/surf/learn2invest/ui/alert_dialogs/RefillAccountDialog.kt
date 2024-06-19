@@ -15,7 +15,7 @@ import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
-class RefillAccount(
+class RefillAccountDialog(
     context: Context, private val lifecycleScope: LifecycleCoroutineScope,
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
