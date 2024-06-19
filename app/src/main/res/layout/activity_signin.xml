@@ -12,12 +12,9 @@
         android:layout_marginTop="130dp"
         android:text="@string/enter_pin_str"
         android:textAppearance="@style/Text.Bold.20"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/dot1"
@@ -91,7 +88,6 @@
         android:textAppearance="@style/Text.Bold.30"
         app:layout_constraintBottom_toTopOf="@id/pass_button_8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -106,7 +102,6 @@
         android:textAppearance="@style/Text.Bold.30"
         app:layout_constraintBottom_toTopOf="@id/pass_button_0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -121,10 +116,7 @@
         android:textAppearance="@style/Text.Bold.30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pass_button_2"
@@ -138,7 +130,6 @@
         android:textAppearance="@style/Text.Bold.30"
         app:layout_constraintBottom_toTopOf="@id/pass_button_5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -186,7 +177,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pass_button_8" />
 
-    <!--    to replace this on ImageView with image delete-->
     <ImageView
         android:id="@+id/pass_button_backspace"
         android:layout_width="30dp"
