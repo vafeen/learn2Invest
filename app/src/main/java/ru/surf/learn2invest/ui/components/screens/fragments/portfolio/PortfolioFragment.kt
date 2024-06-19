@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,7 +25,7 @@ class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
     private lateinit var viewModel: PortfolioViewModel
-
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +52,11 @@ class PortfolioFragment : Fragment() {
 
         binding.imageButton.setOnClickListener {
             openDrawer()
+        }
+
+        binding.drawerLayout.setOnTouchListener { _, _ ->
+            closeDrawer()
+            false
         }
 
         return binding.root
@@ -84,9 +90,7 @@ class PortfolioFragment : Fragment() {
 
     private fun initDrawer() {
         activity?.apply {
-            val drawerLayout: DrawerLayout = binding.drawerLayout
-
-            drawerLayout.addDrawerListener(
+            binding.drawerLayout.addDrawerListener(
                 object : DrawerLayout.DrawerListener {
                     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                         // Вызывается при перемещении Drawer
@@ -137,8 +141,6 @@ class PortfolioFragment : Fragment() {
             }
 
             versionCode.text = getVersionName()
-
-
         }
     }
 
