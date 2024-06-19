@@ -14,8 +14,8 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class ResetStatsDialog(
-    val dialogContext: Context,
-    val lifecycleScope: LifecycleCoroutineScope,
+    private val dialogContext: Context,
+    private val lifecycleScope: LifecycleCoroutineScope,
     supportFragmentManager: FragmentManager,
 ) : CustomAlertDialog(supportFragmentManager) {
 

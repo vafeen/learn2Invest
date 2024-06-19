@@ -19,7 +19,7 @@ import ru.surf.learn2invest.ui.main.MainActivity
 
 class AskToDeleteProfileDialog(
     private val lifecycleScope: LifecycleCoroutineScope,
-    val dialogContext: Context,
+    private val dialogContext: Context,
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
 

@@ -27,10 +27,10 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class BuyDialog(
     context: Context,
-    val lifecycleScope: LifecycleCoroutineScope,
-    val id: String,
-    val name: String,
-    val symbol: String,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val id: String,
+    private val name: String,
+    private val symbol: String,
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "buy"

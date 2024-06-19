@@ -57,7 +57,7 @@ import androidx.fragment.app.FragmentManager
 abstract class CustomAlertDialog(private val supportFragmentManager: FragmentManager) :
     DialogFragment() {
 
-    abstract val dialogTag: String
+    protected abstract val dialogTag: String
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -25,11 +25,11 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class SellDialog(
-    val dialogContext: Context,
-    val lifecycleScope: LifecycleCoroutineScope,
-    val id: String,
-    val name: String,
-    val symbol: String,
+    dialogContext: Context,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val id: String,
+    private val name: String,
+    private val symbol: String,
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "sell"
