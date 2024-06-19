@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,24 +27,23 @@ import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class Sell(
-    context: Context,
+    val dialogContext: Context,
     val lifecycleScope: LifecycleCoroutineScope,
     val id: String,
     val name: String,
-    val symbol: String
+    val symbol: String,
+    supportFragmentManager: FragmentManager
+) : CustomAlertDialog(supportFragmentManager) {
+    override val dialogTag: String = "sell"
 
-) : CustomAlertDialog(context = context) {
-
-    private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
+    private var binding = SellDialogBinding.inflate(LayoutInflater.from(dialogContext))
     private lateinit var realTimeUpdateJob: Job
 
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
 
-    override fun setCancelable(): Boolean {
-        return true
-    }
+    override fun setCancelable(): Boolean = false
 
     override fun initListeners() {
 
@@ -52,8 +52,7 @@ class Sell(
 
             enteringNumberOfLotsSellDialog.setText("0")
 
-            balanceNumSellDialog.text =
-                App.profile.fiatBalance.getWithCurrency()
+            balanceNumSellDialog.text = App.profile.fiatBalance.getWithCurrency()
             realTimeUpdateJob = startRealTimeUpdate()
 
 
@@ -257,8 +256,7 @@ class Sell(
         super.show()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = DatabaseRepository
-                .getBySymbolAssetInvest(symbol = symbol)
+            val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
 
             if (coinMayBeInPortfolio != null) {
                 coin = coinMayBeInPortfolio
@@ -269,22 +267,21 @@ class Sell(
 
     }
 
-    fun startRealTimeUpdate(): Job =
-        lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                when (val result = NetworkRepository.getCoinReview(id)) {
-                    is ResponseWrapper.Success -> {
-                        withContext(Dispatchers.Main) {
-                            binding.priceNumberSellDialog.text =
-                                result.value.priceUsd.getWithCurrency()
-                            updateFields()
-                        }
+    private fun startRealTimeUpdate(): Job = lifecycleScope.launch(Dispatchers.IO) {
+        while (true) {
+            when (val result = NetworkRepository.getCoinReview(id)) {
+                is ResponseWrapper.Success -> {
+                    withContext(Dispatchers.Main) {
+                        binding.priceNumberSellDialog.text =
+                            result.value.priceUsd.getWithCurrency()
+                        updateFields()
                     }
-
-                    is ResponseWrapper.NetworkError -> {}
                 }
 
-                delay(5000)
+                is ResponseWrapper.NetworkError -> {}
             }
+
+            delay(5000)
         }
+    }
 }

@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,14 +16,11 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
-    val context: Context, private val lifecycleScope: LifecycleCoroutineScope
-) : CustomAlertDialog(context = context) {
-
+    context: Context, private val lifecycleScope: LifecycleCoroutineScope,
+    supportFragmentManager: FragmentManager
+) : CustomAlertDialog(supportFragmentManager) {
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
-
-    override fun setCancelable(): Boolean {
-        return true
-    }
+    override val dialogTag: String = "refillAccount"
 
     private fun changeVisibilityElements() {
         binding.apply {

@@ -12,122 +12,103 @@
         android:layout_marginTop="130dp"
         android:text="@string/enter_pin_str"
         android:textAppearance="@style/Text.Bold.20"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/dot1"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="195dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/pindotstyle"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/enter_pin_signin" />
 
     <ImageView
         android:id="@+id/dot2"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="195dp"
         android:src="@drawable/pindotstyle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dot1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/dot1" />
 
     <ImageView
         android:id="@+id/dot3"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="195dp"
         android:src="@drawable/pindotstyle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dot1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/dot1" />
 
     <ImageView
         android:id="@+id/dot4"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="195dp"
         android:src="@drawable/pindotstyle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/dot1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/dot1" />
 
 
     <TextView
         android:id="@+id/pass_button_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="347dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="1"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pass_button_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_2" />
 
     <TextView
         android:id="@+id/pass_button_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="432dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="5"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/pass_button_8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pass_button_8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="517dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="8"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/pass_button_0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pass_button_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="602dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
@@ -135,80 +116,67 @@
         android:textAppearance="@style/Text.Bold.30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pass_button_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="347dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="2"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/pass_button_5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/pass_button_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="347dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="3"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pass_button_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_2" />
 
     <TextView
         android:id="@+id/pass_button_6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="432dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="6"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pass_button_5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_5" />
 
     <TextView
         android:id="@+id/pass_button_9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="517dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="9"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pass_button_8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_8" />
 
-    <!--    to replace this on ImageView with image delete-->
     <ImageView
         android:id="@+id/pass_button_backspace"
         android:layout_width="30dp"
@@ -223,42 +191,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.73"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/pass_button_0"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_0" />
 
     <TextView
         android:id="@+id/pass_button_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="432dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="4"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pass_button_5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_5" />
 
     <TextView
         android:id="@+id/pass_button_7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="517dp"
         android:background="@drawable/pindotstyle"
         android:backgroundTint="@color/transparent"
         android:padding="20dp"
         android:text="7"
         android:textAppearance="@style/Text.Bold.30"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/pass_button_8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/pass_button_8" />
 
     <TextView
         android:id="@+id/pass_button_fingerprint"
@@ -271,7 +234,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/pass_button_0"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="@+id/pass_button_0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

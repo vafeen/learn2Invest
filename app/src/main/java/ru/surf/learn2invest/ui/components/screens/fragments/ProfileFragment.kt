@@ -17,6 +17,7 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
+import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfile
@@ -50,7 +51,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
-          DatabaseRepository.insertAllProfile(profile)
+            DatabaseRepository.insertAllProfile(profile)
         }
     }
 
@@ -62,6 +63,8 @@ class ProfileFragment : Fragment() {
                     "${pr.firstName}\n${pr.lastName}"
                 }
 
+                fr.biometryBtn.isVisible = isBiometricAvailable(context = context)
+
                 fr.biometryBtnSwitcher.isChecked = appProfile.biometry
 
                 fr.confirmDealBtnSwitcher.isChecked = appProfile.tradingPasswordHash != null
@@ -71,8 +74,9 @@ class ProfileFragment : Fragment() {
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfile(
-                        context = context, lifecycleScope = lifecycleScope
-                    ).initDialog().show()
+                        dialogContext = context, lifecycleScope = lifecycleScope,
+                        supportFragmentManager = parentFragmentManager
+                    ).show()
 
                 }
 
@@ -80,8 +84,10 @@ class ProfileFragment : Fragment() {
                 fr.resetStatsBtn.setOnClickListener {
 
                     ResetStats(
-                        context = context, lifecycleScope = lifecycleScope
-                    ).initDialog().show()
+                        dialogContext = context,
+                        lifecycleScope = lifecycleScope,
+                        supportFragmentManager = parentFragmentManager
+                    ).show()
                 }
 
 
