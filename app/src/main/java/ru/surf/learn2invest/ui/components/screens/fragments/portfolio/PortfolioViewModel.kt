@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -31,7 +29,7 @@ class PortfolioViewModel : ViewModel() {
             .map { balanceHistories ->
                 balanceHistories.mapIndexed { index, assetBalanceHistory ->
                     Loher.d("assetBalanceHistory $assetBalanceHistory")
-                    Entry(6 - index.toFloat(), assetBalanceHistory.assetBalance)
+                    Entry(index.toFloat(), assetBalanceHistory.assetBalance)
                 }
             }
             .flowOn(Dispatchers.IO)
@@ -74,10 +72,10 @@ class PortfolioViewModel : ViewModel() {
     private val _portfolioChangePercentage = MutableStateFlow(0f)
     val portfolioChangePercentage: StateFlow<Float> get() = _portfolioChangePercentage
 
-    init {
-        viewModelScope.launch {
-            checkAndUpdateBalanceHistory()
-        }
+    suspend fun refreshData() {
+        checkAndUpdateBalanceHistory()
+        val assets = DatabaseRepository.getAllAsFlowAssetInvest().first()
+        loadPriceChanges(assets)
     }
 
     private suspend fun checkAndUpdateBalanceHistory() {

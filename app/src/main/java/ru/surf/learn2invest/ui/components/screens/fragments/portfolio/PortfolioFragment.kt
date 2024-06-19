@@ -64,6 +64,10 @@ class PortfolioFragment : Fragment() {
             }
         }
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.refreshData()
+        }
+
         chartHelper.setupChart(binding.chart)
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.chartData.collect { data ->
