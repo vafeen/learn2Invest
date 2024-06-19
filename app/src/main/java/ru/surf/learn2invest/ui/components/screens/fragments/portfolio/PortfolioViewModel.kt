@@ -3,11 +3,13 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,27 +26,33 @@ import java.util.Date
 class PortfolioViewModel : ViewModel() {
 
     val chartData: Flow<List<Entry>> =
-        DatabaseRepository.getAllAssetBalanceHistory().map { balanceHistories ->
-            balanceHistories.mapIndexed { index, assetBalanceHistory ->
-                Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+        DatabaseRepository.getAllAssetBalanceHistory()
+            .map { balanceHistories ->
+                balanceHistories.mapIndexed { index, assetBalanceHistory ->
+                    Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+                }
+            }
+            .flowOn(Dispatchers.IO)
+
+    val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
+        .map { profiles ->
+            if (profiles.isNotEmpty()) {
+                profiles[App.idOfProfile].assetBalance
+            } else {
+                0f
             }
         }
+        .flowOn(Dispatchers.IO)
 
-    val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
-        if (profiles.isNotEmpty()) {
-            profiles[App.idOfProfile].assetBalance
-        } else {
-            0f
+    val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
+        .map { profiles ->
+            if (profiles.isNotEmpty()) {
+                profiles[App.idOfProfile].fiatBalance
+            } else {
+                0f
+            }
         }
-    }
-
-    val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile().map { profiles ->
-        if (profiles.isNotEmpty()) {
-            profiles[App.idOfProfile].fiatBalance
-        } else {
-            0f
-        }
-    }
+        .flowOn(Dispatchers.IO)
 
     val totalBalance: Flow<Float> =
         combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
@@ -52,9 +60,11 @@ class PortfolioViewModel : ViewModel() {
         }
 
     val assetsFlow: Flow<List<AssetInvest>> =
-        DatabaseRepository.getAllAsFlowAssetInvest().onEach { assets ->
-            loadPriceChanges(assets)
-        }
+        DatabaseRepository.getAllAsFlowAssetInvest()
+            .flowOn(Dispatchers.IO)
+            .onEach { assets ->
+                loadPriceChanges(assets)
+            }
 
     private val _priceChanges = MutableStateFlow<Map<String, Float>>(emptyMap())
     val priceChanges: StateFlow<Map<String, Float>> get() = _priceChanges

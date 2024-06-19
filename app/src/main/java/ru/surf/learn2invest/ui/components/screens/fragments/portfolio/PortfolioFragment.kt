@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
@@ -51,20 +52,20 @@ class PortfolioFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"
             }
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             viewModel.fiatBalance.collect { balance ->
                 binding.accountFunds.text = "${balance}$"
             }
         }
 
         chartHelper.setupChart(binding.chart)
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.chartData.collect { data ->
                 chartHelper.updateData(data)
             }
@@ -74,7 +75,7 @@ class PortfolioFragment : Fragment() {
             RefillAccount(requireContext(), lifecycleScope).initDialog().show()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->
                 adapter.assets = assets
                 adapter.notifyDataSetChanged()
@@ -84,14 +85,14 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.priceChanges.collect { priceChanges ->
                 adapter.priceChanges = priceChanges
                 adapter.notifyDataSetChanged()
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.portfolioChangePercentage.collect { percentage ->
                 val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
                 binding.percent.text =
