@@ -66,6 +66,10 @@ class SellDialog(
                 cancel()
             }
 
+            imageButtonPlusSellDialog.isVisible = coin.amount != 0f
+            imageButtonMinusSellDialog.isVisible = coin.amount != 0f
+            enteringNumberOfLotsSellDialog.isEnabled = coin.amount != 0f
+
             imageButtonPlusSellDialog.setOnClickListener {
 
                 enteringNumberOfLotsSellDialog.setText(enteringNumberOfLotsSellDialog.text.let { text ->

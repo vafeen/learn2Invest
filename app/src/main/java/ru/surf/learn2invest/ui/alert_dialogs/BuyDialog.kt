@@ -74,6 +74,10 @@ class BuyDialog(
                 cancel()
             }
 
+            imageButtonPlusBuyDialog.isVisible = App.profile.fiatBalance != 0f
+            imageButtonMinusBuyDialog.isVisible = App.profile.fiatBalance != 0f
+            enteringNumberOfLotsBuyDialog.isEnabled = App.profile.fiatBalance != 0f
+
             imageButtonPlusBuyDialog.setOnClickListener {
 
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
