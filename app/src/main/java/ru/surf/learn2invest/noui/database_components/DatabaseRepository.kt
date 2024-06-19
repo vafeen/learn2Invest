@@ -2,7 +2,6 @@ package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
 import android.util.Log
-
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,6 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import java.util.Calendar
 
 
 /**
@@ -128,8 +126,8 @@ object DatabaseRepository {
     fun getAllAssetBalanceHistory(): Flow<List<AssetBalanceHistory>> =
         assetBalanceHistoryDao.getAllAsFlow()
 
-    suspend fun insertAllAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
-        assetBalanceHistoryDao.insertAll(entities = entities)
+    suspend fun insertAllAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
+        assetBalanceHistoryDao.insertByLimit(limit = limit, entities = entities)
 
     suspend fun updateAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.update(entities = entities)

@@ -19,9 +19,10 @@ import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Date
+import java.util.Calendar
 
 class PortfolioViewModel : ViewModel() {
 
@@ -29,7 +30,8 @@ class PortfolioViewModel : ViewModel() {
         DatabaseRepository.getAllAssetBalanceHistory()
             .map { balanceHistories ->
                 balanceHistories.mapIndexed { index, assetBalanceHistory ->
-                    Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+                    Loher.d("assetBalanceHistory $assetBalanceHistory")
+                    Entry(6 - index.toFloat(), assetBalanceHistory.assetBalance)
                 }
             }
             .flowOn(Dispatchers.IO)
@@ -79,14 +81,23 @@ class PortfolioViewModel : ViewModel() {
     }
 
     private suspend fun checkAndUpdateBalanceHistory() {
-        val balanceHistories = DatabaseRepository.getAllAssetBalanceHistory().first()
-        val today = Date()
-        val todayStart = today.time - (today.time % (24 * 60 * 60 * 1000))
-        val todayDate = Date(todayStart)
+        val today = Calendar.getInstance()
+        today.set(Calendar.HOUR_OF_DAY, 0)
+        today.set(Calendar.MINUTE, 0)
+        today.set(Calendar.SECOND, 0)
+        today.set(Calendar.MILLISECOND, 0)
 
-        val todayBalanceHistory = balanceHistories.find {
-            val historyDateStart = it.date.time - (it.date.time % (24 * 60 * 60 * 1000))
-            historyDateStart == todayStart
+        val todayDate = today.time
+
+        val todayBalanceHistory = DatabaseRepository.getAllAssetBalanceHistory().first().find {
+            val historyDate = Calendar.getInstance()
+            historyDate.time = it.date
+            historyDate.set(Calendar.HOUR_OF_DAY, 0)
+            historyDate.set(Calendar.MINUTE, 0)
+            historyDate.set(Calendar.SECOND, 0)
+            historyDate.set(Calendar.MILLISECOND, 0)
+
+            historyDate.time == todayDate
         }
 
         val totalBalance = assetBalance.first() + fiatBalance.first()
@@ -97,7 +108,7 @@ class PortfolioViewModel : ViewModel() {
             )
         } else {
             DatabaseRepository.insertAllAssetBalanceHistory(
-                AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
+                7, AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }
     }

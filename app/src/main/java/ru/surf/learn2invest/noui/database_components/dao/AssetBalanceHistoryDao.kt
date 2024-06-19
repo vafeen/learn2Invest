@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.noui.database_components.dao.parent.FlowGetAllImplementation
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
@@ -33,4 +34,16 @@ interface AssetBalanceHistoryDao : DataAccessObject<AssetBalanceHistory>,
 
     @Query("SELECT * FROM AssetBalanceHistory WHERE date = :date LIMIT 1")
     suspend fun getByDate(date: Date): AssetBalanceHistory?
+
+    suspend fun insertByLimit(limit: Int, vararg entities: AssetBalanceHistory) {
+        val coinsInDB = getAllAsFlow().first()
+        val resultSize = coinsInDB.size + entities.size
+        if (resultSize > limit) {
+            val countToDel = coinsInDB.size + entities.size - limit
+            for (index in coinsInDB.size - countToDel..<coinsInDB.size) {
+                delete(coinsInDB[index])
+            }
+        }
+        insertAll(*entities)
+    }
 }
