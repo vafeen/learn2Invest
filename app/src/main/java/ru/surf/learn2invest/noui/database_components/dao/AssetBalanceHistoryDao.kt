@@ -40,7 +40,7 @@ interface AssetBalanceHistoryDao : DataAccessObject<AssetBalanceHistory>,
         val resultSize = coinsInDB.size + entities.size
         if (resultSize > limit) {
             val countToDel = coinsInDB.size + entities.size - limit
-            for (index in coinsInDB.size - countToDel..<coinsInDB.size) {
+            for (index in 0..<countToDel) {
                 delete(coinsInDB[index])
             }
         }
