@@ -31,6 +31,7 @@ import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
+import ru.surf.learn2invest.ui.tapOn
 
 
 class SignInActivity : AppCompatActivity() {
@@ -246,33 +247,6 @@ class SignInActivity : AppCompatActivity() {
             }
 
         }
-    }
-
-    private fun TextView.tapOn() {
-        val rotating = ValueAnimator.ofFloat(0f, 360f).also {
-            it.duration = 500
-
-            it.addUpdateListener { animator ->
-                val rotateValue = animator.animatedValue as Float
-
-                this.rotation = rotateValue
-            }
-        }
-
-        val flexBackground = ValueAnimator.ofFloat(1f, 0f, 1f).also {
-            it.duration = 800
-
-            it.addUpdateListener { animator ->
-                val rotateValue = animator.animatedValue as Float
-
-                this.alpha = rotateValue
-            }
-        }
-
-        AnimatorSet().apply {
-            playTogether(rotating, flexBackground)
-        }.start()
-
     }
 
 
