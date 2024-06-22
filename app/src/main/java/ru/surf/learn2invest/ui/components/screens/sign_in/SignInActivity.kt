@@ -1,17 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +23,7 @@ import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
+import ru.surf.learn2invest.ui.gotoCenter
 import ru.surf.learn2invest.ui.tapOn
 
 
@@ -145,83 +141,30 @@ class SignInActivity : AppCompatActivity() {
             delay(100)
 
             binding.apply {
-                dot1.gotoCenter(truePIN = truth, needReturn = needReturn)
-                dot2.gotoCenter(truePIN = truth, needReturn = needReturn)
-                dot3.gotoCenter(truePIN = truth, needReturn = needReturn)
-                dot4.gotoCenter(truePIN = truth, needReturn = needReturn)
+                dot1.gotoCenter(
+                    truePIN = truth,
+                    needReturn = needReturn,
+                    lifecycleScope = lifecycleScope,
+                    doAfter = ::unBlockKeyBoard
+                )
+                dot2.gotoCenter(
+                    truePIN = truth,
+                    needReturn = needReturn,
+                    lifecycleScope = lifecycleScope
+                )
+                dot3.gotoCenter(
+                    truePIN = truth,
+                    needReturn = needReturn,
+                    lifecycleScope = lifecycleScope
+                )
+                dot4.gotoCenter(
+                    truePIN = truth,
+                    needReturn = needReturn,
+                    lifecycleScope = lifecycleScope
+                )
             }
 
             delay(800)
-        }
-    }
-
-    private fun ImageView.gotoCenter(truePIN: Boolean, needReturn: Boolean) {
-        val home = (this.layoutParams as ConstraintLayout.LayoutParams).horizontalBias
-
-        val gotoCenter = ValueAnimator.ofFloat(
-            home,
-            0.5f
-        ).also {
-            it.duration = 300
-
-            it.addUpdateListener { animator ->
-                val biasValue = animator.animatedValue as Float
-
-                val params = this.layoutParams as ConstraintLayout.LayoutParams
-
-                params.horizontalBias = biasValue
-
-                this.layoutParams = params
-            }
-
-            it.startDelay
-        }
-
-        val goPoDomam = ValueAnimator.ofFloat(
-            0.5f,
-            home
-        ).also {
-            it.duration = 300
-
-            it.addUpdateListener { animator ->
-                val biasValue = animator.animatedValue as Float
-
-                val params = this.layoutParams as ConstraintLayout.LayoutParams
-
-                params.horizontalBias = biasValue
-
-                this.layoutParams = params
-            }
-        }
-
-        goPoDomam.doOnEnd {
-            unBlockKeyBoard()
-        }
-
-        gotoCenter.start()
-
-        gotoCenter.doOnEnd {
-
-            lifecycleScope.launch(Dispatchers.Main) {
-                this@gotoCenter.drawable.setTint(
-                    if (truePIN) {
-                        Color.GREEN
-                    } else {
-                        Color.RED
-                    }
-                )
-
-                delay(800)
-
-                if (needReturn || !truePIN) {
-                    goPoDomam.doOnStart {
-                        this@gotoCenter.drawable.setTint(Color.WHITE)
-                    }
-
-                    goPoDomam.start()
-                }
-            }
-
         }
     }
 

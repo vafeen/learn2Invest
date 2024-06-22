@@ -2,7 +2,16 @@ package ru.surf.learn2invest.ui
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.graphics.Color
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun TextView.tapOn() {
     val rotating = ValueAnimator.ofFloat(0f, 360f).also {
@@ -29,4 +38,79 @@ fun TextView.tapOn() {
         playTogether(rotating, flexBackground)
     }.start()
 
+}
+
+fun ImageView.gotoCenter(
+    truePIN: Boolean,
+    needReturn: Boolean,
+    lifecycleScope: LifecycleCoroutineScope,
+    doAfter: () -> Unit = {}
+) {
+    val home = (this.layoutParams as ConstraintLayout.LayoutParams).horizontalBias
+
+    val gotoCenter = ValueAnimator.ofFloat(
+        home,
+        0.5f
+    ).also {
+        it.duration = 300
+
+        it.addUpdateListener { animator ->
+            val biasValue = animator.animatedValue as Float
+
+            val params = this.layoutParams as ConstraintLayout.LayoutParams
+
+            params.horizontalBias = biasValue
+
+            this.layoutParams = params
+        }
+
+        it.startDelay
+    }
+
+    val goPoDomam = ValueAnimator.ofFloat(
+        0.5f,
+        home
+    ).also {
+        it.duration = 300
+
+        it.addUpdateListener { animator ->
+            val biasValue = animator.animatedValue as Float
+
+            val params = this.layoutParams as ConstraintLayout.LayoutParams
+
+            params.horizontalBias = biasValue
+
+            this.layoutParams = params
+        }
+    }
+
+    goPoDomam.doOnEnd {
+        doAfter()
+    }
+
+    gotoCenter.start()
+
+    gotoCenter.doOnEnd {
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            this@gotoCenter.drawable.setTint(
+                if (truePIN) {
+                    Color.GREEN
+                } else {
+                    Color.RED
+                }
+            )
+
+            delay(800)
+
+            if (needReturn || !truePIN) {
+                goPoDomam.doOnStart {
+                    this@gotoCenter.drawable.setTint(Color.WHITE)
+                }
+
+                goPoDomam.start()
+            }
+        }
+
+    }
 }
