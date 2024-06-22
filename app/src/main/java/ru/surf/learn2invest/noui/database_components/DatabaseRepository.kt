@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
-
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -174,7 +173,7 @@ object DatabaseRepository {
     suspend fun deleteSearchedCoin(entity: SearchedCoin) =
         searchedCoinDao.delete(entity)
 
-    suspend fun deleteAllSearchedCoin() = searchedCoinDao.deleteAll()
+    suspend fun deleteAllSearchedCoin() = searchedCoinDao.clearTable()
 
     suspend fun insertByLimitSearchedCoin(limit: Int, vararg entities: SearchedCoin) =
         searchedCoinDao.insertByLimit(limit = limit, entities = entities)
