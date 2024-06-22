@@ -1,8 +1,9 @@
-package ru.surf.learn2invest.ui
+package ru.surf.learn2invest.utils
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -12,6 +13,13 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+
+var ok: Drawable? = null
+
+var no: Drawable? = null
+
+fun ImageView.isOk(): Boolean = this.drawable == ok
 
 fun TextView.tapOn() {
     val rotating = ValueAnimator.ofFloat(0f, 360f).also {
@@ -114,3 +122,4 @@ fun ImageView.gotoCenter(
 
     }
 }
+
