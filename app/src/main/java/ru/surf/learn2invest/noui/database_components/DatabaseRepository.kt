@@ -6,7 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
@@ -43,22 +42,18 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
  */
 object DatabaseRepository {
 
-
+    private var idOfProfile = 0
+    lateinit var profile: Profile
     lateinit var mainDB: L2IDatabase
         private set
-
     lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
         private set
-
     lateinit var assetInvestDao: AssetInvestDao
         private set
-
     lateinit var profileDao: ProfileDao
         private set
-
     lateinit var searchedCoinDao: SearchedCoinDao
         private set
-
     lateinit var transactionDao: TransactionDao
         private set
 
@@ -74,10 +69,10 @@ object DatabaseRepository {
             lifecycleScope.launch(Dispatchers.IO) {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
-                        App.profile = profList[App.idOfProfile]
+                        profile = profList[idOfProfile]
 
                     } else {
-                        App.profile = Profile(
+                        profile = Profile(
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",

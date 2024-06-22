@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -20,11 +19,11 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 
 
 class TradingPasswordActivity : AppCompatActivity() {
@@ -106,10 +105,10 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             when (action) {
 
-				TradingPasswordActivityActions.CreateTradingPassword -> {
-					textInputLayout1.isVisible = false
+                TradingPasswordActivityActions.CreateTradingPassword -> {
+                    textInputLayout1.isVisible = false
 
-					rulesTrpass5.isVisible = false
+                    rulesTrpass5.isVisible = false
 
                     imageRule5.isVisible = false
                 }

@@ -13,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -50,7 +49,7 @@ class SellDialog(
 
             enteringNumberOfLotsSellDialog.setText("0")
 
-            balanceNumSellDialog.text = App.profile.fiatBalance.getWithCurrency()
+            balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             realTimeUpdateJob = startRealTimeUpdate()
 
 
@@ -129,9 +128,10 @@ class SellDialog(
 
                     buttonSellSellDialog.isVisible = enteringNumberOfLotsSellDialog.text.toString()
                         .isNotEmpty() && enteringNumberOfLotsSellDialog.text.toString()
-                        .toInt() > 0 && coin.amount > 0 && if (App.profile.tradingPasswordHash != null) {
+                        .toInt() > 0 && coin.amount > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
                         verifyTradingPassword(
-                            user = App.profile, password = binding.tradingPasswordTV.text.toString()
+                            user = DatabaseRepository.profile,
+                            password = binding.tradingPasswordTV.text.toString()
                         )
                     } else {
                         true
@@ -140,33 +140,34 @@ class SellDialog(
                 }
             })
 
-            tradingPassword.isVisible = if (App.profile.tradingPasswordHash != null) {
+            tradingPassword.isVisible =
+                if (DatabaseRepository.profile.tradingPasswordHash != null) {
 
-                tradingPasswordTV.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int, after: Int
-                    ) {
+                    tradingPasswordTV.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?, start: Int, count: Int, after: Int
+                        ) {
 
-                    }
+                        }
 
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int, count: Int
-                    ) {
+                        override fun onTextChanged(
+                            s: CharSequence?, start: Int, before: Int, count: Int
+                        ) {
 
-                    }
+                        }
 
-                    override fun afterTextChanged(s: Editable?) {
-                        buttonSellSellDialog.isVisible = s?.isTrueTradingPassword() ?: false
-                    }
-                })
+                        override fun afterTextChanged(s: Editable?) {
+                            buttonSellSellDialog.isVisible = s?.isTrueTradingPassword() ?: false
+                        }
+                    })
 
-                true
+                    true
 
-            } else {
+                } else {
 
-                false
+                    false
 
-            }
+                }
         }
     }
 
@@ -176,7 +177,7 @@ class SellDialog(
     }
 
     private fun sell() {
-        val balance = App.profile.fiatBalance
+        val balance = DatabaseRepository.profile.fiatBalance
 
         val price = binding.priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
 
@@ -188,7 +189,7 @@ class SellDialog(
             DatabaseRepository.apply {
                 // обновление баланса
                 updateProfile(
-                    App.profile.copy(
+                    DatabaseRepository.profile.copy(
                         fiatBalance = balance + price * amountCurrent,
                     )
                 )

@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
@@ -28,7 +27,7 @@ class ResetStatsDialog(
         binding.apply {
             okResetStatsResetStatsDialog.setOnClickListener {
 
-                val profile = App.profile.copy(
+                val profile = DatabaseRepository.profile.copy(
                     fiatBalance = 0f,
                     assetBalance = 0f
                 )

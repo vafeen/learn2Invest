@@ -14,7 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -57,7 +56,7 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text =
-                    App.profile.fiatBalance.getWithCurrency()
+                    DatabaseRepository.profile.fiatBalance.getWithCurrency()
 
                 realTimeUpdateJob = startRealTimeUpdate()
             }
@@ -74,16 +73,16 @@ class BuyDialog(
                 cancel()
             }
 
-            imageButtonPlusBuyDialog.isVisible = App.profile.fiatBalance != 0f
-            imageButtonMinusBuyDialog.isVisible = App.profile.fiatBalance != 0f
-            enteringNumberOfLotsBuyDialog.isEnabled = App.profile.fiatBalance != 0f
+            imageButtonPlusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
+            imageButtonMinusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
+            enteringNumberOfLotsBuyDialog.isEnabled = DatabaseRepository.profile.fiatBalance != 0f
 
             imageButtonPlusBuyDialog.setOnClickListener {
 
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
 
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
-                        val balance = App.profile.fiatBalance
+                        val balance = DatabaseRepository.profile.fiatBalance
                         when {
                             it == 0 -> {
                                 "1"
@@ -140,9 +139,10 @@ class BuyDialog(
 
                     buttonBuyBuyDialog.isVisible = enteringNumberOfLotsBuyDialog.text.toString()
                         .isNotEmpty() && enteringNumberOfLotsBuyDialog.text.toString()
-                        .toInt() > 0 && if (App.profile.tradingPasswordHash != null) {
+                        .toInt() > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
                         verifyTradingPassword(
-                            user = App.profile, password = binding.tradingPasswordTV.text.toString()
+                            user = DatabaseRepository.profile,
+                            password = binding.tradingPasswordTV.text.toString()
                         )
                     } else {
                         true
@@ -151,33 +151,34 @@ class BuyDialog(
                 }
             })
 
-            tradingPassword.isVisible = if (App.profile.tradingPasswordHash != null) {
+            tradingPassword.isVisible =
+                if (DatabaseRepository.profile.tradingPasswordHash != null) {
 
-                tradingPasswordTV.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int, after: Int
-                    ) {
+                    tradingPasswordTV.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?, start: Int, count: Int, after: Int
+                        ) {
 
-                    }
+                        }
 
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int, count: Int
-                    ) {
+                        override fun onTextChanged(
+                            s: CharSequence?, start: Int, before: Int, count: Int
+                        ) {
 
-                    }
+                        }
 
-                    override fun afterTextChanged(s: Editable?) {
-                        buttonBuyBuyDialog.isVisible = s?.isTrueTradingPassword() ?: false
-                    }
-                })
+                        override fun afterTextChanged(s: Editable?) {
+                            buttonBuyBuyDialog.isVisible = s?.isTrueTradingPassword() ?: false
+                        }
+                    })
 
-                true
+                    true
 
-            } else {
+                } else {
 
-                false
+                    false
 
-            }
+                }
         }
     }
 
@@ -187,7 +188,7 @@ class BuyDialog(
     }
 
     private fun buy() {
-        val balance = App.profile.fiatBalance
+        val balance = DatabaseRepository.profile.fiatBalance
 
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
@@ -200,7 +201,7 @@ class BuyDialog(
 
                     // обновление баланса
                     updateProfile(
-                        App.profile.copy(
+                        DatabaseRepository.profile.copy(
                             fiatBalance = balance - price * amountCurrent,
                         )
                     )

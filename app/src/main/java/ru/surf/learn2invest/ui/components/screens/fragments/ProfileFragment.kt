@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
@@ -56,20 +55,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
-        App.profile.let { appProfile ->
+        DatabaseRepository.profile.let { profile ->
             binding.also { fr ->
 
-                fr.firstNameLastNameTV.text = appProfile.let { pr ->
+                fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
 
                 fr.biometryBtn.isVisible = isBiometricAvailable(context = context)
 
-                fr.biometryBtnSwitcher.isChecked = appProfile.biometry
+                fr.biometryBtnSwitcher.isChecked = profile.biometry
 
-                fr.confirmDealBtnSwitcher.isChecked = appProfile.tradingPasswordHash != null
-
-
+                fr.confirmDealBtnSwitcher.isChecked = profile.tradingPasswordHash != null
 
                 fr.deleteProfileTV.setOnClickListener {
 
@@ -80,7 +77,6 @@ class ProfileFragment : Fragment() {
 
                 }
 
-
                 fr.resetStatsBtn.setOnClickListener {
 
                     ResetStatsDialog(
@@ -90,11 +86,10 @@ class ProfileFragment : Fragment() {
                     ).show()
                 }
 
-
                 fr.biometryBtn.setOnClickListener {
 
                     if (fr.biometryBtnSwitcher.isChecked) {
-                        updateProfile(appProfile.copy(biometry = false))
+                        updateProfile(profile.copy(biometry = false))
 
                         fr.biometryBtnSwitcher.isChecked = false
                     } else {
@@ -103,7 +98,7 @@ class ProfileFragment : Fragment() {
                             context = requireContext() as Activity,
                             lifecycleCoroutineScope = lifecycleScope
                         ).setSuccessCallback {
-                            updateProfile(appProfile.copy(biometry = true))
+                            updateProfile(profile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
                         }
@@ -120,7 +115,7 @@ class ProfileFragment : Fragment() {
                     })
                 }
 
-                fr.changeTradingPasswordBtn.isVisible = appProfile.tradingPasswordHash != null
+                fr.changeTradingPasswordBtn.isVisible = profile.tradingPasswordHash != null
 
 
                 val intentFoxTradingPasswordActivityByConditions =
@@ -156,12 +151,6 @@ class ProfileFragment : Fragment() {
                     startActivity(intentFoxTradingPasswordActivityByConditions)
 
                 }
-
-
-
-
-
-
 
                 fr.changePINBtn.setOnClickListener {
                     startActivity(Intent(context, SignInActivity::class.java).let {

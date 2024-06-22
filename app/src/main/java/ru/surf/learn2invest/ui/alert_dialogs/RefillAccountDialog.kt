@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
@@ -80,7 +79,7 @@ class RefillAccountDialog(
 
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        App.profile.also {
+                        DatabaseRepository.profile.also {
 
                             DatabaseRepository.updateProfile(
                                 it.copy(
@@ -96,7 +95,8 @@ class RefillAccountDialog(
                 cancel()
             }
 
-            balanceTextviewRefillAccountDialog.text = App.profile.fiatBalance.getWithCurrency()
+            balanceTextviewRefillAccountDialog.text =
+                DatabaseRepository.profile.fiatBalance.getWithCurrency()
 
         }
     }

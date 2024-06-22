@@ -1,16 +1,13 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
 
-import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
@@ -23,13 +20,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import ru.surf.learn2invest.ui.tapOn
 
@@ -121,14 +118,6 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
-    private fun updateProfileData() {
-        if (userDataIsChanged) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.updateProfile(profile)
-            }
-        }
-    }
-
     private fun startActivityWithMainLogic() {
         val intent = Intent(context, HostActivity::class.java)
         startActivity(intent)
@@ -136,29 +125,16 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun onAuthenticationSucceeded() {
-        when (intent.action) {
+        if (intent.action != SignINActivityActions.ChangingPIN.action)
+            startActivityWithMainLogic()
 
-            SignINActivityActions.SignIN.action -> {
+        this@SignInActivity.finish()
 
-                startActivityWithMainLogic()
-
-                this@SignInActivity.finish()
+        if (userDataIsChanged)
+            lifecycleScope.launch(Dispatchers.IO) {
+                DatabaseRepository.updateProfile(profile)
             }
 
-            SignINActivityActions.SignUP.action -> {
-
-                startActivityWithMainLogic()
-
-                this@SignInActivity.finish()
-            }
-
-            SignINActivityActions.ChangingPIN.action -> {
-
-                this@SignInActivity.finish()
-            }
-        }
-
-        updateProfileData()
     }
 
 
@@ -342,28 +318,21 @@ class SignInActivity : AppCompatActivity() {
             paintDots()
 
             if (pinCode.length == 4) {
+                blockKeyBoard()
                 when (intent.action) {
 
                     SignINActivityActions.SignIN.action -> {
 
-                        blockKeyBoard()
-
                         val isAuthSucceeded = checkAuthenticationPin()
 
                         animatePINCode(isAuthSucceeded).invokeOnCompletion {
-
-                            if (isAuthSucceeded) {
-                                onAuthenticationSucceeded()
-                            }
-
+                            if (isAuthSucceeded) onAuthenticationSucceeded()
                         }
 
                         pinCode = ""
                     }
 
                     SignINActivityActions.SignUP.action -> {
-                        blockKeyBoard()
-
                         when {
                             firstPin == "" -> {
 
@@ -384,8 +353,6 @@ class SignInActivity : AppCompatActivity() {
                             }
 
                             firstPin == pinCode -> {
-
-
                                 profile = profile.copy(
                                     hash = PasswordHasher(
                                         firstName = profile.firstName,
@@ -427,8 +394,6 @@ class SignInActivity : AppCompatActivity() {
                     }
 
                     SignINActivityActions.ChangingPIN.action -> {
-                        blockKeyBoard()
-
                         when {
                             // вводит старый пароль
                             firstPin == "" && !isVerified -> {

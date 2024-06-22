@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.AskToDeleteProfileDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
@@ -33,7 +32,7 @@ class AskToDeleteProfileDialog(
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
 
             lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.deleteProfile(App.profile)
+                DatabaseRepository.deleteProfile(DatabaseRepository.profile)
             }
 
             (dialogContext as Activity).finish()

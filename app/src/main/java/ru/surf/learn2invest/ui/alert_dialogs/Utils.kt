@@ -1,16 +1,15 @@
 package ru.surf.learn2invest.ui.alert_dialogs
 
 import android.text.Editable
-import android.util.Log
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 
 fun Editable.isTrueTradingPassword(): Boolean = PasswordHasher(
-    firstName = App.profile.firstName,
-    lastName = App.profile.lastName
+    firstName = DatabaseRepository.profile.firstName,
+    lastName = DatabaseRepository.profile.lastName
 ).passwordToHash(
     this.toString()
-) == App.profile.tradingPasswordHash
+) == DatabaseRepository.profile.tradingPasswordHash
 
 
 fun Float.getWithCurrency(): String = "$this$"
