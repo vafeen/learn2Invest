@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.noui.database_components.dao.parent
+package ru.surf.learn2invest.noui.database_components.dao.implementation
 
 import kotlinx.coroutines.flow.Flow
 

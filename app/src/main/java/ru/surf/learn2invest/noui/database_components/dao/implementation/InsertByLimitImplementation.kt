@@ -1,6 +1,7 @@
-package ru.surf.learn2invest.noui.database_components.dao.parent
+package ru.surf.learn2invest.noui.database_components.dao.implementation
 
 import kotlinx.coroutines.flow.first
+import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 
 
 interface InsertByLimitImplementation<T> : DataAccessObject<T>,
