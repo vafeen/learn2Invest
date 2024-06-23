@@ -26,7 +26,7 @@ class LineChartHelper(private val context: Context) {
         this.chart = lineChart
         lineChart.apply {
 
-            setExtraOffsets(0f, 0f, 0f, 10f)
+            setExtraOffsets(30f, 0f, 30f, 10f)
 
             axisRight.isEnabled = false
 
@@ -64,19 +64,33 @@ class LineChartHelper(private val context: Context) {
         val lineData = LineData(lineDataSet)
         styleLineDataSet(lineDataSet)
 
-        val minY = data.minByOrNull { it.y }?.y ?: 0f
-        val maxY = data.maxByOrNull { it.y }?.y ?: 0f
-
         chart.apply {
-            axisLeft.axisMinimum = minY - (0.1f * (maxY - minY)) // Небольшой отступ снизу
-            axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY)) // Небольшой отступ сверху
+            if (data.size > 1) {
+                xAxis.axisMinimum = 0f
+                xAxis.axisMaximum = (data.size - 1).toFloat()
+
+                val minY = data.minByOrNull { it.y }?.y ?: 0f
+                val maxY = data.maxByOrNull { it.y }?.y ?: 0f
+
+                axisLeft.axisMinimum = minY - (0.1f * (maxY - minY))
+                axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY))
+            } else {
+                xAxis.axisMinimum = -0.5f
+                xAxis.axisMaximum = 0.5f
+
+                val singleValue = data.firstOrNull()?.y ?: 0f
+
+                axisLeft.axisMinimum = 0f
+                axisLeft.axisMaximum = singleValue + (0.1f * singleValue) // Небольшой отступ сверху
+            }
+
             this.data = lineData
             invalidate()
         }
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = ContextCompat.getColor(context, R.color.graphic)
+        color = ContextCompat.getColor(context, R.color.main_background)
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true
@@ -90,11 +104,16 @@ class LineChartHelper(private val context: Context) {
         fillDrawable = ContextCompat.getDrawable(context, R.drawable.line_chart_style)
     }
 
-    private class DateValueFormatter : ValueFormatter() {
+    private inner class DateValueFormatter : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
+            val daysAgo = chart.data?.xMax?.toInt()?.let { maxIndex ->
+                maxIndex - value.toInt()
+            } ?: 0
+
             val calendar = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -(6 - value.toInt()))
+                add(Calendar.DAY_OF_YEAR, -daysAgo)
             }
+
             return dateFormatter.format(calendar.time)
         }
     }

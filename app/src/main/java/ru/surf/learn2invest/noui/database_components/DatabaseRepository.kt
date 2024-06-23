@@ -2,7 +2,6 @@ package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
 import android.util.Log
-
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -129,6 +128,9 @@ object DatabaseRepository {
 
     suspend fun insertAllAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.insertAll(entities = entities)
+
+    suspend fun insertByLimitAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
+        assetBalanceHistoryDao.insertByLimit(limit = limit, entities = entities)
 
     suspend fun updateAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.update(entities = entities)

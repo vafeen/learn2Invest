@@ -69,7 +69,7 @@ class AssetReviewActivity : AppCompatActivity() {
             }
             .build()
         val request = ImageRequest.Builder(binding.coinIcon.context)
-            .data("${Const.API_ICON}${symbol?.lowercase()}.svg")
+            .data("${Const.API_ICON}${symbol.lowercase()}.svg")
             .target(onSuccess = {
                 binding.coinIcon.setImageDrawable(it)
             },

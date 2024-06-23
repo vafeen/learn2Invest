@@ -43,7 +43,8 @@ class Buy(
     private var haveAssetsOrNot = false
 
     private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+        assetID = id
     )
 
     override fun setCancelable(): Boolean = false
@@ -186,13 +187,14 @@ class Buy(
     }
 
     private fun buy() {
-        val balance = App.profile.fiatBalance
+        val fiatBalance = App.profile.fiatBalance
+        val assetBalance = App.profile.assetBalance
 
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
 
         val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
         Log.d("amount", "amountCurrent = $amountCurrent")
-        if (balance > price * amountCurrent) {
+        if (fiatBalance > price * amountCurrent) {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.apply {
@@ -200,7 +202,8 @@ class Buy(
                     // обновление баланса
                     updateProfile(
                         App.profile.copy(
-                            fiatBalance = balance - price * amountCurrent,
+                            fiatBalance = fiatBalance - price * amountCurrent,
+                            assetBalance = assetBalance + price * amountCurrent
                         )
                     )
 

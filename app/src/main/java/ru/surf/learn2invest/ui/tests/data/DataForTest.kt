@@ -6,7 +6,6 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 
 val testProfile = Profile(
@@ -25,26 +24,8 @@ val testProfile = Profile(
 //        tradingPasswordHash = PasswordHasher(user = it).passwordToHash("1235789"))
 )
 
-
-val testPortfolioChart = listOf(
-    AssetBalanceHistory(assetBalance = 5f),
-    AssetBalanceHistory(assetBalance = 4f),
-    AssetBalanceHistory(assetBalance = 7f),
-    AssetBalanceHistory(assetBalance = 8f),
-    AssetBalanceHistory(assetBalance = 10f),
-    AssetBalanceHistory(assetBalance = 7f),
-    AssetBalanceHistory(assetBalance = 3f)
-)
-
 fun insertProfileInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
     lifecycleScope.launch(Dispatchers.IO) {
         DatabaseRepository.insertAllProfile(testProfile)
-    }
-}
-
-
-fun insertPortfolioChartInCoroutineScope(lifecycleScope: LifecycleCoroutineScope) {
-    lifecycleScope.launch(Dispatchers.IO) {
-        DatabaseRepository.insertAllAssetBalanceHistory(*testPortfolioChart.toTypedArray())
     }
 }

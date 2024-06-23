@@ -40,7 +40,8 @@ class Sell(
     private lateinit var realTimeUpdateJob: Job
 
     private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+        assetID = id
     )
 
     override fun setCancelable(): Boolean = false
