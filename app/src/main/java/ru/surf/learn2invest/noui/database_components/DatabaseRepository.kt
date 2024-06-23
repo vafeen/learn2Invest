@@ -89,7 +89,7 @@ object DatabaseRepository {
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 0f,
+                            fiatBalance = 100000000f,
                             assetBalance = 0f
                         )
 
@@ -99,7 +99,7 @@ object DatabaseRepository {
                                 firstName = "undefined",
                                 lastName = "undefined",
                                 biometry = false,
-                                fiatBalance = 0f,
+                                fiatBalance = 100000000f,
                                 assetBalance = 0f
                             )
                         )

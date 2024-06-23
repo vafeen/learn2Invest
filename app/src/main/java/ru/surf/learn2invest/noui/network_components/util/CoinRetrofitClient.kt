@@ -1,10 +1,10 @@
-package ru.surf.learn2invest.network_components.util
+package ru.surf.learn2invest.noui.network_components.util
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.surf.learn2invest.network_components.util.Const.BASE_URL
+import ru.surf.learn2invest.noui.network_components.util.Const.BASE_URL
 
 object CoinRetrofitClient {
     val client: Retrofit = getRetrofitClient()

@@ -22,12 +22,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
-import ru.surf.learn2invest.network_components.responses.APIWrapper
-import ru.surf.learn2invest.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.NetworkRepository
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.network_components.responses.toCoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
@@ -117,6 +116,7 @@ class MarketReviewFragment : Fragment() {
                 filterByPriceIsFirstActive = false
                 realTimeUpdateSemaphore = false
             }
+
             textInputLayout.setEndIconOnClickListener {
                 realTimeUpdateSemaphore = true
                 textView2.isVisible = false
@@ -248,7 +248,6 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             while (true) {
                 delay(5000)
-                //  if (recyclerData.size != 0 && realTimeUpdateSemaphore.not()) {
                 val firstElement =
                     (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                 val lastElement =
@@ -269,7 +268,6 @@ class MarketReviewFragment : Fragment() {
                         }
                     }
                 }
-                //}
             }
         }
 
