@@ -13,15 +13,16 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.network_components.util.Const
+import ru.surf.learn2invest.noui.network_components.util.Const
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
 
 class HistoryAdapter(
-    private val data: List<Transaction>,
     private val clickListener: HistoryClickListener
 ) :
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+
+    var data: List<Transaction> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)

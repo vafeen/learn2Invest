@@ -22,8 +22,8 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private val data = mutableListOf<Transaction>()
-    private val adapter = HistoryAdapter(data) { transaction ->
+    private val viewModel = HistoryViewModel()
+    private val adapter = HistoryAdapter { transaction ->
         startAssetReviewIntent(transaction)
     }
     override fun onCreateView(
@@ -44,16 +44,15 @@ class HistoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch(Dispatchers.IO) {
-            DatabaseRepository.getAllAsFlowTransaction().collect {
-                Loher.d(it.size.toString())
+            viewModel.data.collect {
                 if (it.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         binding.historyRecyclerview.isVisible = false
                         binding.noActionsTv.isVisible = true
                     }
                 } else {
-                    data.addAll(it)
                     withContext(Dispatchers.Main) {
+                        adapter.data = it
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -69,9 +68,5 @@ class HistoryFragment : Fragment() {
         bundle.putString("symbol", coin.symbol)
         intent.putExtras(bundle)
         startActivity(intent)
-    }
-    override fun onStop() {
-        super.onStop()
-        data.clear()
     }
 }
