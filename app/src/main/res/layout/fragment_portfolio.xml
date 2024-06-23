@@ -7,11 +7,11 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:background="@color/transparent"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_margin="23dp"
+        android:background="@color/transparent"
         android:src="@drawable/material_list"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/view"
@@ -73,6 +73,7 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="4dp"
         android:textColor="@color/black"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/portfolio_text"
         app:layout_constraintTop_toBottomOf="@id/balance"
@@ -86,6 +87,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="14dp"
         android:background="@drawable/chart_background"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <TextView
@@ -131,9 +133,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="19dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_funds"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/coin_item" />
 
     <TextView

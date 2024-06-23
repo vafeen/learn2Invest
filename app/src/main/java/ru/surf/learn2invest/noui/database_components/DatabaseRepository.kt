@@ -126,7 +126,10 @@ object DatabaseRepository {
     fun getAllAssetBalanceHistory(): Flow<List<AssetBalanceHistory>> =
         assetBalanceHistoryDao.getAllAsFlow()
 
-    suspend fun insertAllAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
+    suspend fun insertAllAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
+        assetBalanceHistoryDao.insertAll(entities = entities)
+
+    suspend fun insertByLimitAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.insertByLimit(limit = limit, entities = entities)
 
     suspend fun updateAssetBalanceHistory(vararg entities: AssetBalanceHistory) =

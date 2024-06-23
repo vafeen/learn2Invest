@@ -25,7 +25,6 @@ import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
 
-
 // Экран портфеля
 class PortfolioFragment : Fragment() {
 
@@ -45,16 +44,18 @@ class PortfolioFragment : Fragment() {
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
 
+        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
 
-        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
-
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"
+                val isBalanceNonZero = balance != 0f
+                binding.chart.isVisible = isBalanceNonZero
+                binding.percent.isVisible = isBalanceNonZero
             }
         }
 
@@ -84,7 +85,6 @@ class PortfolioFragment : Fragment() {
                 adapter.assets = assets
                 adapter.notifyDataSetChanged()
                 binding.assets.isVisible = assets.isNotEmpty()
-                binding.chart.isVisible = assets.isNotEmpty()
                 binding.assetsAreEmpty.isVisible = assets.isEmpty()
             }
         }
@@ -98,22 +98,27 @@ class PortfolioFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.portfolioChangePercentage.collect { percentage ->
-                val formattedPercentage = String.format(Locale.getDefault(), "%.2f%%", percentage)
-                binding.percent.text =
-                    if (percentage >= 0) "+$formattedPercentage" else formattedPercentage
+                binding.percent.apply {
+                    text = if (percentage == 0f) "%.2f%%".format(Locale.getDefault(), percentage)
+                    else "%+.2f%%".format(Locale.getDefault(), percentage)
 
-                val background = if (percentage >= 0) {
-                    AppCompatResources.getDrawable(
-                        requireContext(),
-                        R.drawable.percent_increase_background
-                    )
-                } else {
-                    AppCompatResources.getDrawable(
-                        requireContext(),
-                        R.drawable.percent_recession_background
-                    )
+                    background = when {
+                        percentage > 0 -> AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.percent_increase_background
+                        )
+
+                        percentage < 0 -> AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.percent_recession_background
+                        )
+
+                        else -> AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.percent_zero_background
+                        )
+                    }
                 }
-                binding.percent.background = background
             }
         }
 
@@ -127,13 +132,13 @@ class PortfolioFragment : Fragment() {
     }
 
     private fun startAssetReviewIntent(asset: AssetInvest) {
-        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("id", asset.assetID)
-        bundle.putString("name", asset.name)
-        bundle.putString("symbol", asset.symbol)
-        intent.putExtras(bundle)
-        startActivity(intent)
+        startActivity(Intent(requireContext(), AssetReviewActivity::class.java).apply {
+            putExtras(Bundle().apply {
+                putString(AssetConstants.ID.key, asset.assetID)
+                putString(AssetConstants.NAME.key, asset.name)
+                putString(AssetConstants.SYMBOL.key, asset.symbol)
+            })
+        })
     }
 
     private fun setupAssetsRecyclerView() {

@@ -105,7 +105,7 @@ class PortfolioViewModel : ViewModel() {
                 todayBalanceHistory.copy(assetBalance = totalBalance)
             )
         } else {
-            DatabaseRepository.insertAllAssetBalanceHistory(
+            DatabaseRepository.insertByLimitAssetBalanceHistory(
                 7, AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }

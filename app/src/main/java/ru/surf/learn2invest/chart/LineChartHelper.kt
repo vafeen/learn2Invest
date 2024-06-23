@@ -72,8 +72,8 @@ class LineChartHelper(private val context: Context) {
                 val minY = data.minByOrNull { it.y }?.y ?: 0f
                 val maxY = data.maxByOrNull { it.y }?.y ?: 0f
 
-                axisLeft.axisMinimum = minY - (0.1f * (maxY - minY)) // Небольшой отступ снизу
-                axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY)) // Небольшой отступ сверху
+                axisLeft.axisMinimum = minY - (0.1f * (maxY - minY))
+                axisLeft.axisMaximum = maxY + (0.1f * (maxY - minY))
             } else {
                 xAxis.axisMinimum = -0.5f
                 xAxis.axisMaximum = 0.5f
@@ -90,7 +90,7 @@ class LineChartHelper(private val context: Context) {
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = ContextCompat.getColor(context, R.color.graphic)
+        color = ContextCompat.getColor(context, R.color.main_background)
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true
