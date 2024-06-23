@@ -27,6 +27,7 @@ import ru.surf.learn2invest.app.App.Companion.profile
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
+import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
@@ -94,8 +95,9 @@ class SignInActivity : AppCompatActivity() {
         when (intent.action) {
 
             SignINActivityActions.SignIN.action -> {
-
-                fingerPrintManager.auth()
+                if (profile.biometry) {
+                    fingerPrintManager.auth()
+                }
             }
 
             SignINActivityActions.SignUP.action -> {
@@ -416,35 +418,34 @@ class SignInActivity : AppCompatActivity() {
 
                             firstPin == pinCode -> {
 
-                                lifecycleScope.launch(Dispatchers.Main) {
 
-                                    profile = profile.copy(
-                                        hash = PasswordHasher(
-                                            firstName = profile.firstName,
-                                            lastName = profile.lastName
-                                        ).passwordToHash(pinCode)
-                                    )
+                                profile = profile.copy(
+                                    hash = PasswordHasher(
+                                        firstName = profile.firstName,
+                                        lastName = profile.lastName
+                                    ).passwordToHash(pinCode)
+                                )
 
-                                    userDataIsChanged = true
+                                userDataIsChanged = true
 
-                                    animatePINCode(truth = true).invokeOnCompletion {
+                                animatePINCode(truth = true).invokeOnCompletion {
 
+                                    if (isBiometricAvailable(context = context)) {
                                         fingerPrintManager.setSuccessCallback {
-                                            onAuthenticationSucceeded()
-
                                             profile = profile.copy(
                                                 biometry = true
                                             )
-                                        }.setFailedCallback {
+
                                             onAuthenticationSucceeded()
-                                        }.setHardwareErrorCallback {
+                                        }.setCancelCallback {
                                             onAuthenticationSucceeded()
                                         }.auth()
+                                    } else {
+                                        onAuthenticationSucceeded()
                                     }
 
 
                                 }
-
                             }
 
                             firstPin != pinCode -> {
@@ -579,8 +580,14 @@ class SignInActivity : AppCompatActivity() {
                 backspace()
             }
 
-            passButtonFingerprint.setOnClickListener {
-                fingerPrintManager.auth()
+            passButtonFingerprint.isVisible = if (isBiometricAvailable(context = context)) {
+                passButtonFingerprint.setOnClickListener {
+                    fingerPrintManager.auth()
+                }
+
+                true
+            } else {
+                false
             }
         }
     }
