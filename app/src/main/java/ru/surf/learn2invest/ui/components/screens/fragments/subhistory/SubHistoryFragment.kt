@@ -17,9 +17,8 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
 
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding
-    private val data = mutableListOf<Transaction>()
-    private var symbol: String? = null
-    private val adapter = SubHistoryAdapter(data)
+    private lateinit var viewModel: SubHistoryViewModel
+    private val adapter = SubHistoryAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,24 +26,27 @@ class SubHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
-        symbol = requireArguments().getString("symbol") //TODO Определиться где будут все константы
+        val symbol =
+            requireArguments().getString("symbol") ?: ""
+        viewModel = SubHistoryViewModel(symbol)
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
-        if (symbol.isNullOrBlank().not())
-            lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.getFilteredBySymbolTransaction(symbol ?: "").collect {
-                    if (it.isEmpty()) {
-                        binding.assetHistory.isVisible = false
-                        binding.noActionsError.isVisible = true
-                    } else {
-                        data.addAll(it)
-                        withContext(Dispatchers.Main) {
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.data.collect {
+                if (it.isEmpty()) {
+                    binding.assetHistory.isVisible = false
+                    binding.noActionsError.isVisible = true
+                } else {
+                    adapter.data = it
+                    adapter.notifyDataSetChanged()
                 }
             }
-        return binding.root
+        }
     }
 
     companion object {
