@@ -24,15 +24,8 @@ import java.util.Calendar
 
 class PortfolioViewModel : ViewModel() {
 
-    val chartData: Flow<List<Entry>> =
-        DatabaseRepository.getAllAssetBalanceHistory()
-            .map { balanceHistories ->
-                balanceHistories.mapIndexed { index, assetBalanceHistory ->
-                    Loher.d("assetBalanceHistory $assetBalanceHistory")
-                    Entry(index.toFloat(), assetBalanceHistory.assetBalance)
-                }
-            }
-            .flowOn(Dispatchers.IO)
+    private val _chartData = MutableStateFlow<List<Entry>>(emptyList())
+    val chartData: StateFlow<List<Entry>> = _chartData
 
     val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
@@ -74,8 +67,16 @@ class PortfolioViewModel : ViewModel() {
 
     suspend fun refreshData() {
         checkAndUpdateBalanceHistory()
-        val assets = DatabaseRepository.getAllAsFlowAssetInvest().first()
-        loadPriceChanges(assets)
+        loadPriceChanges(DatabaseRepository.getAllAsFlowAssetInvest().first())
+        refreshChartData()
+    }
+
+    private suspend fun refreshChartData() {
+        _chartData.value = DatabaseRepository.getAllAssetBalanceHistory().first()
+            .mapIndexed { index, assetBalanceHistory ->
+                Loher.d("assetBalanceHistory $assetBalanceHistory")
+                Entry(index.toFloat(), assetBalanceHistory.assetBalance)
+            }
     }
 
     private suspend fun checkAndUpdateBalanceHistory() {

@@ -50,7 +50,7 @@ class PortfolioFragment : Fragment() {
 
         setupAssetsRecyclerView()
 
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"
                 val isBalanceNonZero = balance != 0f
@@ -59,13 +59,13 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.fiatBalance.collect { balance ->
                 binding.accountFunds.text = "${balance}$"
             }
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             viewModel.refreshData()
         }
 
@@ -77,7 +77,11 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccount(requireContext(), lifecycleScope, parentFragmentManager).show()
+            RefillAccount(requireContext(), lifecycleScope, parentFragmentManager) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    viewModel.refreshData()
+                }
+            }.show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {

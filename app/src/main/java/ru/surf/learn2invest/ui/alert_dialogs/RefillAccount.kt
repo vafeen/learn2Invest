@@ -17,11 +17,13 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccount(
     context: Context, private val lifecycleScope: LifecycleCoroutineScope,
-    supportFragmentManager: FragmentManager
+    supportFragmentManager: FragmentManager,
+    private val onCloseCallback: () -> Unit
 ) : CustomAlertDialog(supportFragmentManager) {
+
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
     override val dialogTag: String = "refillAccount"
-    var enteredBalanceF: Float = 0f
+    private var enteredBalanceF: Float = 0f
 
     private fun changeVisibilityElements() {
         binding.apply {
@@ -44,6 +46,7 @@ class RefillAccount(
             changeVisibilityElements()
 
             buttonExitRefillAccountDialog.setOnClickListener {
+                onCloseCallback()
                 cancel()
             }
 
@@ -61,7 +64,6 @@ class RefillAccount(
                 override fun onTextChanged(
                     s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
-
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -97,11 +99,11 @@ class RefillAccount(
 
                 }
 
+                onCloseCallback()
                 cancel()
             }
 
             balanceTextviewRefillAccountDialog.text = App.profile.fiatBalance.getWithCurrency()
-
         }
     }
 
