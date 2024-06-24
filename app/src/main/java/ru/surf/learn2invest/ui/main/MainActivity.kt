@@ -22,28 +22,20 @@ import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         context = this
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         skipSplash()
-
     }
 
     // Функция проверки, есть ли у нас зарегистрированный пользователь
@@ -62,11 +54,8 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Intent(this@MainActivity, SignUpActivity::class.java)
                 }
-
             delay(1000)
-
             startActivity(intent)
-
             this@MainActivity.finish()
         }
     }
@@ -74,7 +63,6 @@ class MainActivity : AppCompatActivity() {
     private fun runAnimatedText() {
         binding.splashTextView.text = "Здравствуй, ${profile.firstName}!"
         binding.splashTextView.alpha = 0f
-
         val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)
         animator.duration = 2000 // Длительность анимации в миллисекундах
         animator.start()

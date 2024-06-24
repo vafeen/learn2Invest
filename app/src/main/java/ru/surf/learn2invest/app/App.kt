@@ -6,8 +6,6 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-
         DatabaseRepository.initDatabase(context = this)
-
     }
 }

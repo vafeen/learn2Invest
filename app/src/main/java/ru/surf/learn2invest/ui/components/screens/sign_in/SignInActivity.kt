@@ -118,11 +118,8 @@ class SignInActivity : AppCompatActivity() {
         color4: Int,
     ) {
         binding.dot1.drawable.setTint(color1)
-
         binding.dot2.drawable.setTint(color2)
-
         binding.dot3.drawable.setTint(color3)
-
         binding.dot4.drawable.setTint(color4)
     }
 
@@ -267,11 +264,9 @@ class SignInActivity : AppCompatActivity() {
                                 ).invokeOnCompletion {
                                     if (isVerified) binding.enterPinSignin.text =
                                         "Введите новый пинкод"
-
                                     paintDots()
                                     unBlockKeyBoard()
                                 }
-
                             }
 
                             //вводит новый
@@ -347,7 +342,6 @@ class SignInActivity : AppCompatActivity() {
             for (index in 0..numberButtons.lastIndex) {
                 numberButtons[index].setOnClickListener { it ->
                     updatePin("$index")
-
                     (it as TextView).tapOn()
                 }
             }

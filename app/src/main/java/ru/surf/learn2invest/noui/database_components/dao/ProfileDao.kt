@@ -12,13 +12,11 @@ import ru.surf.learn2invest.noui.database_components.entity.Profile
 interface ProfileDao : DataAccessObject<Profile>,
     FlowGetAllImplementation<Profile> {
 
-
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */
 
     @Query("select * from profile")
     override fun getAllAsFlow(): Flow<List<Profile>>
-
 }
 

@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 
 var ok: Drawable? = null
-
 var no: Drawable? = null
 
 fun ImageView.isOk(): Boolean = this.drawable == ok
@@ -24,20 +23,16 @@ fun ImageView.isOk(): Boolean = this.drawable == ok
 fun TextView.tapOn() {
     val rotating = ValueAnimator.ofFloat(0f, 360f).also {
         it.duration = 500
-
         it.addUpdateListener { animator ->
             val rotateValue = animator.animatedValue as Float
-
             this.rotation = rotateValue
         }
     }
 
     val flexBackground = ValueAnimator.ofFloat(1f, 0f, 1f).also {
         it.duration = 800
-
         it.addUpdateListener { animator ->
             val rotateValue = animator.animatedValue as Float
-
             this.alpha = rotateValue
         }
     }
@@ -45,7 +40,6 @@ fun TextView.tapOn() {
     AnimatorSet().apply {
         playTogether(rotating, flexBackground)
     }.start()
-
 }
 
 fun ImageView.gotoCenter(
@@ -55,23 +49,17 @@ fun ImageView.gotoCenter(
     doAfter: () -> Unit = {}
 ) {
     val home = (this.layoutParams as ConstraintLayout.LayoutParams).horizontalBias
-
     val gotoCenter = ValueAnimator.ofFloat(
         home,
         0.5f
     ).also {
         it.duration = 300
-
         it.addUpdateListener { animator ->
             val biasValue = animator.animatedValue as Float
-
             val params = this.layoutParams as ConstraintLayout.LayoutParams
-
             params.horizontalBias = biasValue
-
             this.layoutParams = params
         }
-
         it.startDelay
     }
 
@@ -80,14 +68,10 @@ fun ImageView.gotoCenter(
         home
     ).also {
         it.duration = 300
-
         it.addUpdateListener { animator ->
             val biasValue = animator.animatedValue as Float
-
             val params = this.layoutParams as ConstraintLayout.LayoutParams
-
             params.horizontalBias = biasValue
-
             this.layoutParams = params
         }
     }
@@ -99,7 +83,6 @@ fun ImageView.gotoCenter(
     gotoCenter.start()
 
     gotoCenter.doOnEnd {
-
         lifecycleScope.launch(Dispatchers.Main) {
             this@gotoCenter.drawable.setTint(
                 if (truePIN) {
@@ -108,14 +91,11 @@ fun ImageView.gotoCenter(
                     Color.RED
                 }
             )
-
             delay(800)
-
             if (needReturn || !truePIN) {
                 goPoDomam.doOnStart {
                     this@gotoCenter.drawable.setTint(Color.WHITE)
                 }
-
                 goPoDomam.start()
             }
         }

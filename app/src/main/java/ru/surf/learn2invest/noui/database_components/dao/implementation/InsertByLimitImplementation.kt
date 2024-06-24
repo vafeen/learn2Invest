@@ -13,17 +13,13 @@ interface InsertByLimitImplementation<T> : DataAccessObject<T>,
      */
     suspend fun insertByLimit(limit: Int, vararg entities: T) {
         val coinsInDB = getAllAsFlow().first()
-
         val resultSize = coinsInDB.size + entities.size
-
         if (resultSize > limit) {
             val countToDel = coinsInDB.size + entities.size - limit
-
             for (index in coinsInDB.size - countToDel..<coinsInDB.size) {
                 delete(coinsInDB[index])
             }
         }
-
         insertAll(*entities)
     }
 

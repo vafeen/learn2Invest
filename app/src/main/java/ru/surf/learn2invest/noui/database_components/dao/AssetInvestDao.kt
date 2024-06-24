@@ -12,7 +12,6 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 interface AssetInvestDao : DataAccessObject<AssetInvest>,
     FlowGetAllImplementation<AssetInvest> {
 
-
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */

@@ -69,9 +69,7 @@ class FingerprintAuthenticator(
         cancelText: String = "ОТМЕНА"
     ): FingerprintAuthenticator {
         titleText = title
-
         cancelButtonText = cancelText
-
         return this
     }
 
@@ -79,7 +77,6 @@ class FingerprintAuthenticator(
         return lifecycleCoroutineScope.launch(Dispatchers.Main) {
             if (isBiometricAvailable(context = context)) {
                 initFingerPrintAuth()
-
                 checkAuthenticationFingerprint()
             }
         }
@@ -106,7 +103,6 @@ class FingerprintAuthenticator(
 
     private fun initFingerPrintAuth(): FingerprintAuthenticator {
         executor = ContextCompat.getMainExecutor(context)
-
         biometricPrompt =
             BiometricPrompt(
                 context as FragmentActivity,
@@ -117,7 +113,6 @@ class FingerprintAuthenticator(
                         result: BiometricPrompt.AuthenticationResult
                     ) {
                         super.onAuthenticationSucceeded(result)
-
                         successCallBack()
                     }
 
@@ -125,13 +120,11 @@ class FingerprintAuthenticator(
                         errorCode: Int, errString: CharSequence
                     ) {
                         super.onAuthenticationError(errorCode, errString)
-
                         setCancelCallback()
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-
                         failedCallBack()
                     }
                 })

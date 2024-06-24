@@ -25,18 +25,14 @@ class LineChartHelper(private val context: Context) {
     fun setupChart(lineChart: LineChart) {
         this.chart = lineChart
         lineChart.apply {
-
             setExtraOffsets(30f, 0f, 30f, 10f)
-
             axisRight.isEnabled = false
-
             axisLeft.apply {
                 isEnabled = false
                 axisMinimum = 0f
                 textSize = 12f
                 setDrawGridLines(false)
             }
-
             xAxis.apply {
                 axisMinimum = -0.3f
                 axisMaximum = 6.3f
@@ -77,9 +73,7 @@ class LineChartHelper(private val context: Context) {
             } else {
                 xAxis.axisMinimum = -0.5f
                 xAxis.axisMaximum = 0.5f
-
                 val singleValue = data.firstOrNull()?.y ?: 0f
-
                 axisLeft.axisMinimum = 0f
                 axisLeft.axisMaximum = singleValue + (0.1f * singleValue) // Небольшой отступ сверху
             }
@@ -99,7 +93,6 @@ class LineChartHelper(private val context: Context) {
         setDrawCircles(false)
         setDrawHighlightIndicators(false)
         mode = LineDataSet.Mode.CUBIC_BEZIER
-
         setDrawFilled(true)
         fillDrawable = ContextCompat.getDrawable(context, R.drawable.line_chart_style)
     }

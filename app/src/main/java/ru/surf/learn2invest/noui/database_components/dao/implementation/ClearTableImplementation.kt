@@ -4,7 +4,5 @@ import androidx.room.Dao
 
 @Dao
 interface ClearTableImplementation {
-
     suspend fun clearTable()
-
 }

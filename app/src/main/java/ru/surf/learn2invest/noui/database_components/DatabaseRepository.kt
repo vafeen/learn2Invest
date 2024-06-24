@@ -44,27 +44,18 @@ object DatabaseRepository {
 
     private var idOfProfile = 0
     lateinit var profile: Profile
-    lateinit var mainDB: L2IDatabase
-        private set
-    lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
-        private set
-    lateinit var assetInvestDao: AssetInvestDao
-        private set
-    lateinit var profileDao: ProfileDao
-        private set
-    lateinit var searchedCoinDao: SearchedCoinDao
-        private set
-    lateinit var transactionDao: TransactionDao
-        private set
+    private lateinit var mainDB: L2IDatabase
+    private lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
+    private lateinit var assetInvestDao: AssetInvestDao
+    private lateinit var profileDao: ProfileDao
+    private lateinit var searchedCoinDao: SearchedCoinDao
+    private lateinit var transactionDao: TransactionDao
 
 
     fun initDatabase(context: Context) {
         mainDB = L2IDatabase.buildDatabase(context = context)
-
         initDAOs()
-
         val profileFlow: Flow<List<Profile>> = profileDao.getAllAsFlow()
-
         with(ProcessLifecycleOwner.get()) {
             lifecycleScope.launch(Dispatchers.IO) {
                 profileFlow.collect { profList ->
@@ -88,13 +79,9 @@ object DatabaseRepository {
 
     private fun initDAOs() {
         assetBalanceHistoryDao = mainDB.assetBalanceHistoryDao()
-
         assetInvestDao = mainDB.assetInvestDao()
-
         profileDao = mainDB.profileDao()
-
         searchedCoinDao = mainDB.searchedCoinDao()
-
         transactionDao = mainDB.transactionDao()
     }
 
@@ -115,7 +102,6 @@ object DatabaseRepository {
     suspend fun deleteAssetBalanceHistory(entity: AssetBalanceHistory) =
         assetBalanceHistoryDao.delete(entity)
 
-
     // AssetInvest
     fun getAllAsFlowAssetInvest(): Flow<List<AssetInvest>> =
         assetInvestDao.getAllAsFlow()
@@ -132,7 +118,6 @@ object DatabaseRepository {
     suspend fun getBySymbolAssetInvest(symbol: String) =
         assetInvestDao.getBySymbol(symbol)
 
-
     // profile
     fun getAllAsFlowProfile(): Flow<List<Profile>> =
         profileDao.getAllAsFlow()
@@ -145,7 +130,6 @@ object DatabaseRepository {
 
     suspend fun deleteProfile(entity: Profile) =
         profileDao.delete(entity)
-
 
     // searchedCoin
     fun getAllAsFlowSearchedCoin(): Flow<List<SearchedCoin>> =
@@ -180,7 +164,6 @@ object DatabaseRepository {
 
     fun getFilteredBySymbolTransaction(filterSymbol: String): Flow<List<Transaction>> =
         transactionDao.getFilteredBySymbol(filterSymbol = filterSymbol)
-
 
     // ALL
     fun clearAllTables() = mainDB.clearAllTables()

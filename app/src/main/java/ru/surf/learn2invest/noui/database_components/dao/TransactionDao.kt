@@ -15,10 +15,8 @@ interface TransactionDao : DataAccessObject<Transaction>,
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
      */
-
     @Query("select * from `transaction`")
     override fun getAllAsFlow(): Flow<List<Transaction>>
-
 
     /**
      * Получение списка всех имеющихся объектов этого типа из базы данных
