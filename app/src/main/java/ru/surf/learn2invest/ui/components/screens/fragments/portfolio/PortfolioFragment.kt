@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,7 +22,8 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.alert_dialogs.RefillAccount
+import ru.surf.learn2invest.ui.alert_dialogs.RefillAccountDialog
+
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
 
@@ -36,9 +38,7 @@ class PortfolioFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         activity?.window?.statusBarColor =
@@ -77,7 +77,7 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccount(requireContext(), lifecycleScope, parentFragmentManager) {
+            RefillAccountDialog(requireContext(), lifecycleScope, parentFragmentManager) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     viewModel.refreshData()
                 }
@@ -132,6 +132,11 @@ class PortfolioFragment : Fragment() {
             openDrawer()
         }
 
+        binding.drawerLayout.setOnTouchListener { _, _ ->
+            closeDrawer()
+            false
+        }
+
         return binding.root
     }
 
@@ -179,33 +184,29 @@ class PortfolioFragment : Fragment() {
 
     private fun initDrawer() {
         activity?.apply {
-            val drawerLayout: DrawerLayout = binding.drawerLayout
-
-            drawerLayout.addDrawerListener(
-                object : DrawerLayout.DrawerListener {
-                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                        // Вызывается при перемещении Drawer
-                        if (slideOffset > 0) {
-                            binding.imageButton.isVisible = false
-                        } else {
-                            binding.imageButton.isVisible = true
-                        }
+            binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                    // Вызывается при перемещении Drawer
+                    if (slideOffset > 0) {
+                        binding.imageButton.isVisible = false
+                    } else {
+                        binding.imageButton.isVisible = true
                     }
-
-                    override fun onDrawerOpened(drawerView: View) {
-                        // Вызывается, когда Drawer открыт
-                    }
-
-                    override fun onDrawerClosed(drawerView: View) {
-                        // Вызывается, когда Drawer закрыт
-                    }
-
-                    override fun onDrawerStateChanged(newState: Int) {
-                        // Вызывается при изменении состояния Drawer
-                    }
-
                 }
-            )
+
+                override fun onDrawerOpened(drawerView: View) {
+                    // Вызывается, когда Drawer открыт
+                }
+
+                override fun onDrawerClosed(drawerView: View) {
+                    // Вызывается, когда Drawer закрыт
+                }
+
+                override fun onDrawerStateChanged(newState: Int) {
+                    // Вызывается при изменении состояния Drawer
+                }
+
+            })
 
             initDrawerListeners()
         }
@@ -232,8 +233,6 @@ class PortfolioFragment : Fragment() {
             }
 
             versionCode.text = getVersionName()
-
-
         }
     }
 

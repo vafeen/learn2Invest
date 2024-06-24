@@ -1,13 +1,11 @@
 package ru.surf.learn2invest.noui.database_components
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
@@ -17,7 +15,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 
 /**
@@ -44,22 +42,18 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
  */
 object DatabaseRepository {
 
-
+    private var idOfProfile = 0
+    lateinit var profile: Profile
     lateinit var mainDB: L2IDatabase
         private set
-
     lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
         private set
-
     lateinit var assetInvestDao: AssetInvestDao
         private set
-
     lateinit var profileDao: ProfileDao
         private set
-
     lateinit var searchedCoinDao: SearchedCoinDao
         private set
-
     lateinit var transactionDao: TransactionDao
         private set
 
@@ -75,34 +69,17 @@ object DatabaseRepository {
             lifecycleScope.launch(Dispatchers.IO) {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
-                        App.profile = profList[App.idOfProfile]
-
-                        Log.d(
-                            "profile",
-                            "profile in DBRep = ${App.profile}, размер = ${profList.size}"
-                        )
-
+                        profile = profList[idOfProfile]
                     } else {
-                        App.profile = Profile(
+                        profile = Profile(
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 0f,
+                            fiatBalance = 10000f,
                             assetBalance = 0f
                         )
-
-                        insertAllProfile(
-                            Profile(
-                                id = 0,
-                                firstName = "undefined",
-                                lastName = "undefined",
-                                biometry = false,
-                                fiatBalance = 0f,
-                                assetBalance = 0f
-                            )
-                        )
-                        Log.d("profile", "инсертим дефолтный")
+                        insertAllProfile(profile)
                     }
                 }
             }
@@ -183,7 +160,7 @@ object DatabaseRepository {
     suspend fun deleteSearchedCoin(entity: SearchedCoin) =
         searchedCoinDao.delete(entity)
 
-    suspend fun deleteAllSearchedCoin() = searchedCoinDao.deleteAll()
+    suspend fun deleteAllSearchedCoin() = searchedCoinDao.clearTable()
 
     suspend fun insertByLimitSearchedCoin(limit: Int, vararg entities: SearchedCoin) =
         searchedCoinDao.insertByLimit(limit = limit, entities = entities)

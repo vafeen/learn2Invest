@@ -13,8 +13,8 @@ import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
 import ru.surf.learn2invest.network_components.util.Const
-import ru.surf.learn2invest.ui.alert_dialogs.Buy
-import ru.surf.learn2invest.ui.alert_dialogs.Sell
+import ru.surf.learn2invest.ui.alert_dialogs.BuyDialog
+import ru.surf.learn2invest.ui.alert_dialogs.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 
@@ -83,7 +83,7 @@ class AssetReviewActivity : AppCompatActivity() {
         disposable = imageLoader.enqueue(request)
 
         binding.buyAssetBtn.setOnClickListener {
-            Buy(
+            BuyDialog(
                 context = this,
                 lifecycleScope = lifecycleScope,
                 id = id,
@@ -94,7 +94,7 @@ class AssetReviewActivity : AppCompatActivity() {
         }
 
         binding.sellAssetBtn.setOnClickListener {
-            Sell(
+            SellDialog(
                dialogContext = this,
                 lifecycleScope = lifecycleScope,
                 id = id,

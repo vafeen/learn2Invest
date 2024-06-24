@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.ActivitySignupBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -222,10 +220,9 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val prof = App.profile.copy(firstName = name, lastName = lastname)
+            val prof = DatabaseRepository.profile.copy(firstName = name, lastName = lastname)
             DatabaseRepository
                 .updateProfile(prof)
-            Log.d("profile", "sugnUp 213 = $prof")
         }.invokeOnCompletion {
             startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
                 it.action = SignINActivityActions.SignUP.action

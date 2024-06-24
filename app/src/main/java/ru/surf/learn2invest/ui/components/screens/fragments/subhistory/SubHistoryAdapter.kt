@@ -12,9 +12,8 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.network_components.util.Const
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
-import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 
 class SubHistoryAdapter(private val data: List<Transaction>) :
     RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
@@ -70,7 +69,7 @@ class SubHistoryAdapter(private val data: List<Transaction>) :
                 .build()
             disposable = imageLoader.enqueue(request)
             itemView.setOnClickListener {
-                Loher.d(data[position].coinPrice.toString())
+
             }
         }
     }

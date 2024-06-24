@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import ru.surf.learn2invest.app.App
+
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.logs.Loher
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
@@ -26,11 +26,10 @@ class PortfolioViewModel : ViewModel() {
 
     private val _chartData = MutableStateFlow<List<Entry>>(emptyList())
     val chartData: StateFlow<List<Entry>> = _chartData
-
     val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                App.profile.assetBalance
+                DatabaseRepository.profile.assetBalance
             } else {
                 0f
             }
@@ -40,7 +39,7 @@ class PortfolioViewModel : ViewModel() {
     val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                App.profile.fiatBalance
+                DatabaseRepository.profile.fiatBalance
             } else {
                 0f
             }
@@ -51,13 +50,11 @@ class PortfolioViewModel : ViewModel() {
         combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
             assetBalance + fiatBalance
         }
-
-    val assetsFlow: Flow<List<AssetInvest>> =
-        DatabaseRepository.getAllAsFlowAssetInvest()
-            .flowOn(Dispatchers.IO)
-            .onEach { assets ->
-                loadPriceChanges(assets)
-            }
+    val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest()
+        .flowOn(Dispatchers.IO)
+        .onEach { assets ->
+            loadPriceChanges(assets)
+        }
 
     private val _priceChanges = MutableStateFlow<Map<String, Float>>(emptyMap())
     val priceChanges: StateFlow<Map<String, Float>> get() = _priceChanges
@@ -74,7 +71,6 @@ class PortfolioViewModel : ViewModel() {
     private suspend fun refreshChartData() {
         _chartData.value = DatabaseRepository.getAllAssetBalanceHistory().first()
             .mapIndexed { index, assetBalanceHistory ->
-                Loher.d("assetBalanceHistory $assetBalanceHistory")
                 Entry(index.toFloat(), assetBalanceHistory.assetBalance)
             }
     }
@@ -131,7 +127,8 @@ class PortfolioViewModel : ViewModel() {
             }
         }
 
-        App.profile.also {
+        DatabaseRepository.profile.also {
+
             DatabaseRepository.updateProfile(
                 it.copy(
                     assetBalance = totalCurrentValue

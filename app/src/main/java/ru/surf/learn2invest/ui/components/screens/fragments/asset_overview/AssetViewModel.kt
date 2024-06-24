@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
-import ru.surf.learn2invest.noui.logs.Loher
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -60,7 +59,6 @@ class AssetViewModel(
                 when (val result = NetworkRepository.getCoinReview(id)) {
                     is ResponseWrapper.Success -> {
                         if (data.size != 0) {
-                            Loher.d("${result.value.data.priceUsd}")
                             data.removeLast()
                             data.add(Entry(data.size.toFloat(), result.value.data.priceUsd))
                             marketCap = result.value.data.marketCapUsd.toDouble()
@@ -71,7 +69,6 @@ class AssetViewModel(
                             formattedPrice = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 2
                             }.format(price) + " $"
-                            Loher.d("$data")
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }

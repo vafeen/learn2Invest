@@ -8,7 +8,6 @@ import ru.surf.learn2invest.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.network_components.util.Const
-import ru.surf.learn2invest.noui.logs.Loher
 
 /**
  * Пример использования (Вариант для запуска из Activity):
@@ -87,11 +86,9 @@ object NetworkRepository {
             return ResponseWrapper.Success(response)
         } catch (e: HttpException) {
             Log.d("RETROFIT", "HTTP Error: ${e.code()}")
-            Loher.d(e.toString())
             return ResponseWrapper.NetworkError
         } catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
-            Loher.d(e.toString())
             return ResponseWrapper.NetworkError
         }
     }
