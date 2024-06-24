@@ -34,11 +34,8 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         context = requireContext()
-
         activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
-
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -57,21 +54,18 @@ class ProfileFragment : Fragment() {
     private fun initListeners() {
         DatabaseRepository.profile.let { profile ->
             binding.also { fr ->
-
                 fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
 
                 fr.biometryBtn.isVisible = isBiometricAvailable(context = context)
-
                 fr.biometryBtnSwitcher.isChecked = profile.biometry
-
                 fr.confirmDealBtnSwitcher.isChecked = profile.tradingPasswordHash != null
-
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfileDialog(
-                        dialogContext = context, lifecycleScope = lifecycleScope,
+                        dialogContext = context,
+                        lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager
                     ).show()
 
@@ -101,10 +95,9 @@ class ProfileFragment : Fragment() {
                             updateProfile(profile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
-                        }
-                            .setDesignBottomSheet(
-                                title = "Биометрия"
-                            ).auth()
+                        }.setDesignBottomSheet(
+                            title = "Биометрия"
+                        ).auth()
 
                     }
                 }
@@ -119,37 +112,27 @@ class ProfileFragment : Fragment() {
 
 
                 val intentFoxTradingPasswordActivityByConditions =
+                    Intent(context, TradingPasswordActivity::class.java).apply {
+                        action = when {
+                            !fr.confirmDealBtnSwitcher.isChecked -> {
+                                TradingPasswordActivityActions.CreateTradingPassword.action
+                            }
 
-                    Intent(context, TradingPasswordActivity::class.java)
-                        .apply {
-                            action = when {
-
-                                !fr.confirmDealBtnSwitcher.isChecked -> {
-                                    TradingPasswordActivityActions.CreateTradingPassword.action
-                                }
-
-                                else -> {
-                                    TradingPasswordActivityActions.RemoveTradingPassword.action
-                                }
-
+                            else -> {
+                                TradingPasswordActivityActions.RemoveTradingPassword.action
                             }
                         }
+                    }
 
                 fr.confirmDealBtn.setOnClickListener {
-
                     fr.confirmDealBtnSwitcher.isChecked = !fr.confirmDealBtnSwitcher.isChecked
-
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-
                     startActivity(intentFoxTradingPasswordActivityByConditions)
                 }
 
                 fr.confirmDealBtnSwitcher.setOnClickListener {
-
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-
                     startActivity(intentFoxTradingPasswordActivityByConditions)
-
                 }
 
                 fr.changePINBtn.setOnClickListener {
@@ -163,5 +146,4 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
 }
