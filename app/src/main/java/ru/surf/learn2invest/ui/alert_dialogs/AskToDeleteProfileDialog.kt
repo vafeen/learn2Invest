@@ -28,10 +28,10 @@ class AskToDeleteProfileDialog(
     override fun initListeners() {
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.deleteProfile(DatabaseRepository.profile)
+                DatabaseRepository.clearAllTables()
             }
-            (dialogContext as Activity).finish()
             cancel()
+            (dialogContext as Activity).finish()
             dialogContext.startActivity(Intent(dialogContext, MainActivity::class.java))
         }
 
