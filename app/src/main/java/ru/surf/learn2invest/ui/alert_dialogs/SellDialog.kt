@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -43,12 +44,7 @@ class SellDialog(
     override fun setCancelable(): Boolean = false
 
     override fun initListeners() {
-
-
         binding.apply {
-
-            enteringNumberOfLotsSellDialog.setText("0")
-
             balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             realTimeUpdateJob = startRealTimeUpdate()
 
@@ -97,7 +93,7 @@ class SellDialog(
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
-                                "0"
+                                ""
                             }
 
                             it > 1 -> {
@@ -126,16 +122,16 @@ class SellDialog(
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
 
-                    buttonSellSellDialog.isVisible = enteringNumberOfLotsSellDialog.text.toString()
-                        .isNotEmpty() && enteringNumberOfLotsSellDialog.text.toString()
-                        .toInt() > 0 && coin.amount > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
-                        verifyTradingPassword(
-                            user = DatabaseRepository.profile,
-                            password = binding.tradingPasswordTV.text.toString()
-                        )
-                    } else {
-                        true
-                    }
+//                    buttonSellSellDialog.isVisible = enteringNumberOfLotsSellDialog.text.toString()
+//                        .isNotEmpty() && enteringNumberOfLotsSellDialog.text.toString()
+//                        .toInt() > 0 && coin.amount > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
+//                        verifyTradingPassword(
+//                            user = DatabaseRepository.profile,
+//                            password = binding.tradingPasswordTV.text.toString()
+//                        )
+//                    } else {
+//                        true
+//                    }
 
                 }
             })
@@ -157,6 +153,7 @@ class SellDialog(
                         }
 
                         override fun afterTextChanged(s: Editable?) {
+                            updateFields()
                             buttonSellSellDialog.isVisible = s?.isTrueTradingPassword() ?: false
                         }
                     })
@@ -237,7 +234,31 @@ class SellDialog(
     }
 
     private fun updateFields() {
-        binding.itogoSellDialog.text = "Итого: $ ${resultPrice()}"
+        when {
+            coin.amount == 0f -> {
+                binding.buttonSellSellDialog.isVisible = false
+                binding.itogoSellDialog.text = "Нет активов для продажи"
+            }
+
+            coin.amount > 0
+                    && binding.enteringNumberOfLotsSellDialog.text.toString()
+                .toFloatOrNull().let {
+                    it != null && it in 1f.. coin.amount
+                }
+                    && if (DatabaseRepository.profile.tradingPasswordHash != null) verifyTradingPassword(
+                user = DatabaseRepository.profile,
+                password = binding.tradingPasswordTV.text.toString()
+            ) else true
+            -> {
+                binding.buttonSellSellDialog.isVisible = true
+                binding.itogoSellDialog.text = "Итого: ${resultPrice().getWithCurrency()}"
+            }
+
+            else -> {
+                binding.buttonSellSellDialog.isVisible = false
+                binding.itogoSellDialog.text = ""
+            }
+        }
     }
 
     private fun resultPrice(): Float {
