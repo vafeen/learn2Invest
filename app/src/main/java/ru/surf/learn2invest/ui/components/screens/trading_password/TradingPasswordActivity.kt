@@ -75,13 +75,17 @@ class TradingPasswordActivity : AppCompatActivity() {
                 R.string.min_len_trading_password
             )
             rulesTrpass2.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.not_more_than_2)
+                ContextCompat
+                    .getString(this@TradingPasswordActivity, R.string.not_more_than_2)
             rulesTrpass3.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
+                ContextCompat
+                    .getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
             rulesTrpass4.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.pass_match)
+                ContextCompat
+                    .getString(this@TradingPasswordActivity, R.string.pass_match)
             rulesTrpass5.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.old_pas_correct)
+                ContextCompat
+                    .getString(this@TradingPasswordActivity, R.string.old_pas_correct)
             when (action) {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {
