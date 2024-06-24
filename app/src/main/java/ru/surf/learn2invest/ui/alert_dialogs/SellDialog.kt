@@ -101,7 +101,7 @@ class SellDialog(
                             }
 
                             else -> {
-                                it.toString()
+                               text
                             }
                         }
                     }

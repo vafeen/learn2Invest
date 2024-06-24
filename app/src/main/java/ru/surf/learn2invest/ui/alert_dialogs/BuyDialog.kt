@@ -51,8 +51,6 @@ class BuyDialog(
 
         binding.apply {
 
-            enteringNumberOfLotsBuyDialog.setText("0")
-
             lifecycleScope.launch(Dispatchers.Main) {
 
                 balanceNumBuyDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
@@ -99,7 +97,7 @@ class BuyDialog(
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
-                                "0"
+                                ""
                             }
 
                             it > 1 -> {
@@ -107,7 +105,7 @@ class BuyDialog(
                             }
 
                             else -> {
-                                it.toString()
+                               text
                             }
                         }
                     }
