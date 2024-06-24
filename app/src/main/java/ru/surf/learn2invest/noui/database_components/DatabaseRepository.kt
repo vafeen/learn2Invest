@@ -67,7 +67,7 @@ object DatabaseRepository {
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 10000f,
+                            fiatBalance = 0f,
                             assetBalance = 0f
                         )
                         insertAllProfile(profile)
