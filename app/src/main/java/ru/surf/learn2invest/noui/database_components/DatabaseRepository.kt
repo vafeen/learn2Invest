@@ -70,27 +70,16 @@ object DatabaseRepository {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
                         profile = profList[idOfProfile]
-
                     } else {
                         profile = Profile(
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 0f,
+                            fiatBalance = 10000f,
                             assetBalance = 0f
                         )
-
-                        insertAllProfile(
-                            Profile(
-                                id = 0,
-                                firstName = "undefined",
-                                lastName = "undefined",
-                                biometry = false,
-                                fiatBalance = 0f,
-                                assetBalance = 0f
-                            )
-                        )
+                        insertAllProfile(profile)
                     }
                 }
             }
