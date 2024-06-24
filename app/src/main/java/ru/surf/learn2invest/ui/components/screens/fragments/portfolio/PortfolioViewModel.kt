@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import ru.surf.learn2invest.app.App
+
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
@@ -48,7 +50,6 @@ class PortfolioViewModel : ViewModel() {
         combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
             assetBalance + fiatBalance
         }
-
     val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest()
         .flowOn(Dispatchers.IO)
         .onEach { assets ->
@@ -127,6 +128,7 @@ class PortfolioViewModel : ViewModel() {
         }
 
         DatabaseRepository.profile.also {
+
             DatabaseRepository.updateProfile(
                 it.copy(
                     assetBalance = totalCurrentValue

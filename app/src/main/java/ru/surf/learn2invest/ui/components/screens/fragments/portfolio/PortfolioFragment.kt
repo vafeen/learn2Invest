@@ -108,15 +108,18 @@ class PortfolioFragment : Fragment() {
 
                     background = when {
                         percentage > 0 -> AppCompatResources.getDrawable(
-                            requireContext(), R.drawable.percent_increase_background
+                            requireContext(),
+                            R.drawable.percent_increase_background
                         )
 
                         percentage < 0 -> AppCompatResources.getDrawable(
-                            requireContext(), R.drawable.percent_recession_background
+                            requireContext(),
+                            R.drawable.percent_recession_background
                         )
 
                         else -> AppCompatResources.getDrawable(
-                            requireContext(), R.drawable.percent_zero_background
+                            requireContext(),
+                            R.drawable.percent_zero_background
                         )
                     }
                 }

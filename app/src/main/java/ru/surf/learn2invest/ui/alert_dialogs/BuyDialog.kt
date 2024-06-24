@@ -147,7 +147,6 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.apply {
                     // обновление баланса
-
                     updateProfile(profile.copy(fiatBalance = balance - price * amountCurrent))
 
                     // обновление истории
