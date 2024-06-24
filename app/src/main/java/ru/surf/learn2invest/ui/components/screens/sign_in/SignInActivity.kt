@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import ru.surf.learn2invest.utils.gotoCenter
 import ru.surf.learn2invest.utils.tapOn
+import ru.surf.learn2invest.utils.updateProfile
 
 
 class SignInActivity : AppCompatActivity() {
@@ -103,6 +105,7 @@ class SignInActivity : AppCompatActivity() {
             Intent(context, HostActivity::class.java)
         )
         pinCode = ""
+        if (userDataIsChanged) updateProfile(lifecycleCoroutineScope = lifecycleScope)
         this@SignInActivity.finish()
     }
 
@@ -221,6 +224,7 @@ class SignInActivity : AppCompatActivity() {
         if (keyBoardIsWork) {
             if (pinCode.length < 4) {
                 pinCode += num
+                Log.d("pin", "pin = $pinCode")
             }
 
             paintDots()
@@ -235,9 +239,10 @@ class SignInActivity : AppCompatActivity() {
 
                         animatePINCode(isAuthSucceeded).invokeOnCompletion {
                             if (isAuthSucceeded) onAuthenticationSucceeded()
+                            else pinCode = ""
                         }
 
-                        pinCode = ""
+
                     }
 
                     SignINActivityActions.SignUP.action -> {
