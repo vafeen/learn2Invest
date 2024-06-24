@@ -40,6 +40,7 @@ class RefillAccountDialog(
     override fun initListeners() {
         binding.apply {
             changeVisibilityElements()
+            balanceTextviewRefillAccountDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             buttonExitRefillAccountDialog.setOnClickListener {
                 onCloseCallback()
                 cancel()
