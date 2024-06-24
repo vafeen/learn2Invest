@@ -55,8 +55,7 @@ class BuyDialog(
 
             lifecycleScope.launch(Dispatchers.Main) {
 
-                balanceNumBuyDialog.text =
-                    DatabaseRepository.profile.fiatBalance.getWithCurrency()
+                balanceNumBuyDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
 
                 realTimeUpdateJob = startRealTimeUpdate()
             }
@@ -80,14 +79,9 @@ class BuyDialog(
             imageButtonPlusBuyDialog.setOnClickListener {
 
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
-
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
                         val balance = DatabaseRepository.profile.fiatBalance
                         when {
-                            it == 0 -> {
-                                "1"
-                            }
-
                             resultPrice(onFuture = true) <= balance -> {
                                 (it + 1).toString()
                             }
@@ -97,14 +91,11 @@ class BuyDialog(
                             }
                         }
                     }
-
                 })
-
             }
+
             imageButtonMinusBuyDialog.setOnClickListener {
-
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
-
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
@@ -136,18 +127,6 @@ class BuyDialog(
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
-
-                    buttonBuyBuyDialog.isVisible = enteringNumberOfLotsBuyDialog.text.toString()
-                        .isNotEmpty() && enteringNumberOfLotsBuyDialog.text.toString()
-                        .toInt() > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
-                        verifyTradingPassword(
-                            user = DatabaseRepository.profile,
-                            password = binding.tradingPasswordTV.text.toString()
-                        )
-                    } else {
-                        true
-                    }
-
                 }
             })
 
@@ -168,7 +147,7 @@ class BuyDialog(
                         }
 
                         override fun afterTextChanged(s: Editable?) {
-                            buttonBuyBuyDialog.isVisible = s?.isTrueTradingPassword() ?: false
+                            updateFields()
                         }
                     })
 
@@ -201,7 +180,7 @@ class BuyDialog(
 
                     // обновление баланса
                     updateProfile(
-                        DatabaseRepository.profile.copy(
+                        profile.copy(
                             fiatBalance = balance - price * amountCurrent,
                         )
                     )
@@ -248,8 +227,26 @@ class BuyDialog(
     }
 
     private fun updateFields() {
-        "Итого: ${resultPrice(onFuture = false).getWithCurrency()}".also {
-            binding.itogoBuyDialog.text = it
+        val willPrice = resultPrice(onFuture = false)
+        val fiatBalance = DatabaseRepository.profile.fiatBalance
+        when {
+            binding.enteringNumberOfLotsBuyDialog.text.toString()
+                .toIntOrNull().let {
+                    it != null && it > 0
+                } && fiatBalance != 0f && willPrice <= fiatBalance -> {
+                binding.buttonBuyBuyDialog.isVisible = true
+                binding.itogoBuyDialog.text = "Итого: ${willPrice.getWithCurrency()}"
+            }
+
+            willPrice > fiatBalance || fiatBalance == 0f -> {
+                binding.buttonBuyBuyDialog.isVisible = false
+                binding.itogoBuyDialog.text = "Недостаточно средств"
+            }
+
+            else -> {
+                binding.buttonBuyBuyDialog.isVisible = false
+                binding.itogoBuyDialog.text = ""
+            }
         }
     }
 
@@ -287,22 +284,21 @@ class BuyDialog(
         }
     }
 
-    private fun startRealTimeUpdate(): Job =
-        lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                when (val result = NetworkRepository.getCoinReview(id)) {
-                    is ResponseWrapper.Success -> {
-                        withContext(Dispatchers.Main) {
-                            binding.priceNumberBuyDialog.text =
-                                result.value.data.priceUsd.getWithCurrency()
-                            updateFields()
-                        }
+    private fun startRealTimeUpdate(): Job = lifecycleScope.launch(Dispatchers.IO) {
+        while (true) {
+            when (val result = NetworkRepository.getCoinReview(id)) {
+                is ResponseWrapper.Success -> {
+                    withContext(Dispatchers.Main) {
+                        binding.priceNumberBuyDialog.text =
+                            result.value.data.priceUsd.getWithCurrency()
+                        updateFields()
                     }
-
-                    is ResponseWrapper.NetworkError -> {}
                 }
 
-                delay(5000)
+                is ResponseWrapper.NetworkError -> {}
             }
+
+            delay(5000)
         }
+    }
 }
