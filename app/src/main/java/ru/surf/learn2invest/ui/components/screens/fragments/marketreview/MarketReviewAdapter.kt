@@ -19,10 +19,10 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class MarketReviewAdapter(
-    private val data: List<CoinReviewDto>,
     private val clickListener: CoinClickListener
 ) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
+        var data: List<CoinReviewDto> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
