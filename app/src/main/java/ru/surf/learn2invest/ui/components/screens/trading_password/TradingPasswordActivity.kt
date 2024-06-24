@@ -70,11 +70,18 @@ class TradingPasswordActivity : AppCompatActivity() {
         binding.apply {
             headerTradingPasswordActivity.text = action.actionName
             buttonDoTrading.text = action.mainButtonAction
-            rulesTrpass1.text = "Пароль должен состоять минимум из 6 цифр"
-            rulesTrpass2.text = "Не более двух одинаковых цифр рядом"
-            rulesTrpass3.text = "Нет последовательности более трех цифр"
-            rulesTrpass4.text = "Пароли совпадают"
-            rulesTrpass5.text = "Старый пароль верен"
+            rulesTrpass1.text = ContextCompat.getString(
+                this@TradingPasswordActivity,
+                R.string.min_len_trading_password
+            )
+            rulesTrpass2.text =
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.not_more_than_2)
+            rulesTrpass3.text =
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
+            rulesTrpass4.text =
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.pass_match)
+            rulesTrpass5.text =
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.old_pas_correct)
             when (action) {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {

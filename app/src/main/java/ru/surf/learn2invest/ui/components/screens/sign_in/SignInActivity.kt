@@ -59,17 +59,14 @@ class SignInActivity : AppCompatActivity() {
             }
 
             SignINActivityActions.SignUP.action -> {
-                binding.enterPinSignin.text = buildString {
-                    append("Придумайте PIN-код") // Просто, чтобы не захламлять strings.xml :)
-                }
+                binding.enterPinSignin.text = ContextCompat.getString(context, R.string.create_pin)
 
                 binding.passButtonFingerprint.isVisible = false
             }
 
             SignINActivityActions.ChangingPIN.action -> {
-                binding.enterPinSignin.text = buildString {
-                    append("Введите старый PIN-код") // Просто, чтобы не захламлять strings.xml :)
-                }
+                binding.enterPinSignin.text =
+                    ContextCompat.getString(context, R.string.enter_old_pin)
 
                 binding.passButtonFingerprint.isVisible = false
             }
@@ -263,7 +260,7 @@ class SignInActivity : AppCompatActivity() {
                                     truth = isVerified, needReturn = true
                                 ).invokeOnCompletion {
                                     if (isVerified) binding.enterPinSignin.text =
-                                        "Введите новый пинкод"
+                                        ContextCompat.getString(context, R.string.enter_new_pin)
                                     paintDots()
                                     unBlockKeyBoard()
                                 }
@@ -277,7 +274,8 @@ class SignInActivity : AppCompatActivity() {
                                     delay(500)
                                     paintDots()
                                 }.invokeOnCompletion {
-                                    binding.enterPinSignin.text = "Повторите пинкод"
+                                    binding.enterPinSignin.text =
+                                        ContextCompat.getString(context, R.string.repeat_pin)
                                     unBlockKeyBoard()
                                 }
 
@@ -322,7 +320,7 @@ class SignInActivity : AppCompatActivity() {
                 onAuthenticationSucceeded()
             }
         }.setDesignBottomSheet(
-            title = "Вход в Learn2Invest"
+            title = ContextCompat.getString(context, R.string.sign_in_in_learn2invest)
         )
 
         binding.apply {

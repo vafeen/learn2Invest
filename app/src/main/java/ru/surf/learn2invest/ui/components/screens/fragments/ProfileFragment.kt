@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
 
                             fr.biometryBtnSwitcher.isChecked = true
                         }.setDesignBottomSheet(
-                            title = "Биометрия"
+                            title = ContextCompat.getString(context, R.string.biometry)
                         ).auth()
 
                     }

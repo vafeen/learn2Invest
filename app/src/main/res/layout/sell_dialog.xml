@@ -210,7 +210,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:text="Итого: $ 0"
+            android:text="@string/itog"
             app:layout_constraintBottom_toTopOf="@+id/trading_password"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
             app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog" />
@@ -225,12 +225,11 @@
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
             app:passwordToggleEnabled="true">
 
-            <!-- Здесь наличие глазика контролируется -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/trading_password_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Торговый пароль"
+                android:hint="@string/trading_password"
                 android:inputType="numberPassword"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>

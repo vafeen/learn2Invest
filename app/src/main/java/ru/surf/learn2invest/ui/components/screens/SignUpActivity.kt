@@ -28,12 +28,6 @@ class SignUpActivity : AppCompatActivity() {
     private var name: String = ""
     private var lastname: String = ""
 
-    private companion object {
-        private const val EMPTY_ERROR = "Пустое поле"
-        private const val SPACE_ERROR = "Содержит пробелы в начале или конце"
-        private const val LENGTH_ERROR = "Превышен лимит длины"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,7 +87,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.inputNameEditText.text.clear()
         binding.inputNameEditText.showKeyboard()
         binding.inputNameEditText.requestFocus()
-        binding.nameErrorTextView.text = EMPTY_ERROR
+        binding.nameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
         binding.nameErrorTextView.isVisible = true
     }
 
@@ -101,7 +95,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.inputLastnameEditText.text.clear()
         binding.inputLastnameEditText.showKeyboard()
         binding.inputLastnameEditText.requestFocus()
-        binding.lastnameErrorTextView.text = EMPTY_ERROR
+        binding.lastnameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
         binding.lastnameErrorTextView.isVisible = true
     }
 
@@ -153,13 +147,15 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             name.trim() != name -> {
-                binding.nameErrorTextView.text = SPACE_ERROR
+                binding.nameErrorTextView.text =
+                    ContextCompat.getString(this, R.string.contains_spaces)
                 binding.nameErrorTextView.isVisible = true
                 false
             }
 
             name.length > 24 -> {
-                binding.nameErrorTextView.text = LENGTH_ERROR
+                binding.nameErrorTextView.text =
+                    ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.nameErrorTextView.isVisible = true
                 false
             }
@@ -178,13 +174,15 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             lastname.trim() != lastname -> {
-                binding.lastnameErrorTextView.text = SPACE_ERROR
+                binding.lastnameErrorTextView.text =
+                    ContextCompat.getString(this, R.string.contains_spaces)
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
 
             lastname.length > 24 -> {
-                binding.lastnameErrorTextView.text = LENGTH_ERROR
+                binding.lastnameErrorTextView.text =
+                    ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
@@ -198,7 +196,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun onNextClicked(): Boolean {
         if (name.isEmpty()) {
-            binding.nameErrorTextView.text = EMPTY_ERROR
+            binding.nameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
             binding.nameErrorTextView.isVisible = true
             return true
         }
@@ -208,7 +206,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun onDoneClicked(): Boolean {
         if (lastname.isEmpty()) {
-            binding.lastnameErrorTextView.text = EMPTY_ERROR
+            binding.lastnameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
             binding.lastnameErrorTextView.isVisible = true
             return true
         } else {

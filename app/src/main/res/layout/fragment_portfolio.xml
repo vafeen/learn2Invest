@@ -115,6 +115,7 @@
     <Button
         android:id="@+id/top_up_btn"
         android:layout_width="wrap_content"
+        android:textAllCaps="true"
         android:layout_height="wrap_content"
         android:layout_marginEnd="35dp"
         android:background="@drawable/top_up_btn_background"

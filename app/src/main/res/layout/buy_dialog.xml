@@ -223,7 +223,7 @@
                 android:id="@+id/trading_password_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Торговый пароль"
+                android:hint="@string/trading_password"
                 android:inputType="numberPassword"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
