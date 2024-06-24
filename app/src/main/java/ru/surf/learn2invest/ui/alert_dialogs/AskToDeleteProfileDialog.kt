@@ -21,31 +21,23 @@ class AskToDeleteProfileDialog(
     private val dialogContext: Context,
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
-
     override val dialogTag: String = "askToDeleteProfile"
-
-
     private var binding =
         AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(dialogContext))
 
     override fun initListeners() {
         binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
-
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.deleteProfile(DatabaseRepository.profile)
             }
-
             (dialogContext as Activity).finish()
-
             cancel()
-
             dialogContext.startActivity(Intent(dialogContext, MainActivity::class.java))
         }
 
         binding.noAskToDeleteProfileDialog.setOnClickListener {
             cancel()
         }
-
     }
 
     override fun getDialogView(): View {

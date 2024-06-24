@@ -17,7 +17,6 @@ import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
-import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
@@ -33,12 +32,9 @@ class BuyDialog(
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "buy"
-
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
     private lateinit var realTimeUpdateJob: Job
-
     private var haveAssetsOrNot = false
-
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
@@ -47,14 +43,9 @@ class BuyDialog(
 
     @SuppressLint("SuspiciousIndentation")
     override fun initListeners() {
-
-
         binding.apply {
-
             lifecycleScope.launch(Dispatchers.Main) {
-
                 balanceNumBuyDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
-
                 realTimeUpdateJob = startRealTimeUpdate()
             }
 
@@ -63,19 +54,14 @@ class BuyDialog(
             }
 
             buttonBuyBuyDialog.isVisible = false
-
             buttonBuyBuyDialog.setOnClickListener {
                 buy()
-
                 cancel()
             }
-
             imageButtonPlusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
             imageButtonMinusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
             enteringNumberOfLotsBuyDialog.isEnabled = DatabaseRepository.profile.fiatBalance != 0f
-
             imageButtonPlusBuyDialog.setOnClickListener {
-
                 enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
                         val balance = DatabaseRepository.profile.fiatBalance
@@ -105,7 +91,7 @@ class BuyDialog(
                             }
 
                             else -> {
-                               text
+                                text
                             }
                         }
                     }
@@ -116,12 +102,9 @@ class BuyDialog(
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
-
                 }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
@@ -130,32 +113,23 @@ class BuyDialog(
 
             tradingPassword.isVisible =
                 if (DatabaseRepository.profile.tradingPasswordHash != null) {
-
                     tradingPasswordTV.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?, start: Int, count: Int, after: Int
                         ) {
-
                         }
 
                         override fun onTextChanged(
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
-
                         }
 
                         override fun afterTextChanged(s: Editable?) {
                             updateFields()
                         }
                     })
-
                     true
-
-                } else {
-
-                    false
-
-                }
+                } else false
         }
     }
 
@@ -166,22 +140,13 @@ class BuyDialog(
 
     private fun buy() {
         val balance = DatabaseRepository.profile.fiatBalance
-
         val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
-
         val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
-
         if (balance > price * amountCurrent) {
-
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.apply {
-
                     // обновление баланса
-                    updateProfile(
-                        profile.copy(
-                            fiatBalance = balance - price * amountCurrent,
-                        )
-                    )
+                    updateProfile(profile.copy(fiatBalance = balance - price * amountCurrent))
 
                     // обновление истории
                     insertAllTransaction(
@@ -198,10 +163,10 @@ class BuyDialog(
 
                     // обновление портфеля
                     if (haveAssetsOrNot) {
-
                         updateAssetInvest(
                             coin.copy(
-                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
+                                        / (coin.amount + amountCurrent),
                                 amount = coin.amount + amountCurrent
                             )
                         )
@@ -209,7 +174,8 @@ class BuyDialog(
                     } else {
                         insertAllAssetInvest(
                             coin.copy(
-                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price) / (coin.amount + amountCurrent),
+                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
+                                        / (coin.amount + amountCurrent),
                                 amount = coin.amount + amountCurrent
                             )
                         )
@@ -254,16 +220,9 @@ class BuyDialog(
     ): Float {
         binding.apply {
             val priceText = priceNumberBuyDialog.text.toString()
-
             val price = priceText.getFloatFromStringWithCurrency()
-
             val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
-
-            return price * (number + if (onFuture) {
-                1
-            } else {
-                0
-            })
+            return price * (number + if (onFuture) 1 else 0)
         }
     }
 
@@ -273,10 +232,8 @@ class BuyDialog(
 
         lifecycleScope.launch(Dispatchers.IO) {
             val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
-
             if (coinMayBeInPortfolio != null) {
                 haveAssetsOrNot = true
-
                 coin = coinMayBeInPortfolio
             }
         }
@@ -295,7 +252,6 @@ class BuyDialog(
 
                 is ResponseWrapper.NetworkError -> {}
             }
-
             delay(5000)
         }
     }

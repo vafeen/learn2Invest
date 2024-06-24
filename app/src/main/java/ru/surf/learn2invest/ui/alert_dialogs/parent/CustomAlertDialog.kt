@@ -56,18 +56,12 @@ import androidx.fragment.app.FragmentManager
  */
 abstract class CustomAlertDialog(private val supportFragmentManager: FragmentManager) :
     DialogFragment() {
-
     protected abstract val dialogTag: String
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         initListeners()
-
         this.isCancelable = setCancelable()
-
         return getDialogView()
     }
 
@@ -85,7 +79,6 @@ abstract class CustomAlertDialog(private val supportFragmentManager: FragmentMan
      * XML ресурс экрана
      */
     protected abstract fun getDialogView(): View
-
 
     open fun show() {
         this.show(supportFragmentManager, dialogTag)

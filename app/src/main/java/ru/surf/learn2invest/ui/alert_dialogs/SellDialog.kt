@@ -13,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -33,10 +32,8 @@ class SellDialog(
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "sell"
-
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(dialogContext))
     private lateinit var realTimeUpdateJob: Job
-
     private var coin: AssetInvest = AssetInvest(
         name = name, symbol = symbol, coinPrice = 0f, amount = 0f
     )
@@ -47,48 +44,31 @@ class SellDialog(
         binding.apply {
             balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             realTimeUpdateJob = startRealTimeUpdate()
-
-
             buttonExitSellDialog.setOnClickListener {
                 cancel()
             }
-
             buttonSellSellDialog.isVisible = false
-
             buttonSellSellDialog.setOnClickListener {
                 sell()
-
                 cancel()
             }
-
             imageButtonPlusSellDialog.isVisible = coin.amount != 0f
             imageButtonMinusSellDialog.isVisible = coin.amount != 0f
             enteringNumberOfLotsSellDialog.isEnabled = coin.amount != 0f
-
             imageButtonPlusSellDialog.setOnClickListener {
-
                 enteringNumberOfLotsSellDialog.setText(enteringNumberOfLotsSellDialog.text.let { text ->
-
                     val newNumberOfLots = if (text.isNotEmpty()) {
                         text.toString().toIntOrNull()?.let {
                             if (enteringNumberOfLotsSellDialog.text.toString()
                                     .toFloat() < coin.amount
-                            ) {
-                                it + 1
-                            } else {
-                                it
-                            }
+                            ) it + 1 else it
                         } ?: 0
-                    } else {
-                        1
-                    }
+                    } else 1
 
                     "$newNumberOfLots"
                 })
             }
-
             imageButtonMinusSellDialog.setOnClickListener {
-
                 enteringNumberOfLotsSellDialog.setText(enteringNumberOfLotsSellDialog.text.let { text ->
                     text.toString().toIntOrNull()?.let {
                         when {
@@ -101,7 +81,7 @@ class SellDialog(
                             }
 
                             else -> {
-                               text
+                                text
                             }
                         }
                     }
@@ -112,44 +92,27 @@ class SellDialog(
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
-
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     updateFields()
-
-//                    buttonSellSellDialog.isVisible = enteringNumberOfLotsSellDialog.text.toString()
-//                        .isNotEmpty() && enteringNumberOfLotsSellDialog.text.toString()
-//                        .toInt() > 0 && coin.amount > 0 && if (DatabaseRepository.profile.tradingPasswordHash != null) {
-//                        verifyTradingPassword(
-//                            user = DatabaseRepository.profile,
-//                            password = binding.tradingPasswordTV.text.toString()
-//                        )
-//                    } else {
-//                        true
-//                    }
-
                 }
             })
 
             tradingPassword.isVisible =
                 if (DatabaseRepository.profile.tradingPasswordHash != null) {
-
                     tradingPasswordTV.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?, start: Int, count: Int, after: Int
                         ) {
-
                         }
 
                         override fun onTextChanged(
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
-
                         }
 
                         override fun afterTextChanged(s: Editable?) {
@@ -157,14 +120,8 @@ class SellDialog(
                             buttonSellSellDialog.isVisible = s?.isTrueTradingPassword() ?: false
                         }
                     })
-
                     true
-
-                } else {
-
-                    false
-
-                }
+                } else false
         }
     }
 
@@ -175,18 +132,13 @@ class SellDialog(
 
     private fun sell() {
         val balance = DatabaseRepository.profile.fiatBalance
-
         val price = binding.priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
-
         val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
-
-
-
         lifecycleScope.launch(Dispatchers.IO) {
             DatabaseRepository.apply {
                 // обновление баланса
                 updateProfile(
-                    DatabaseRepository.profile.copy(
+                    profile.copy(
                         fiatBalance = balance + price * amountCurrent,
                     )
                 )
@@ -204,28 +156,17 @@ class SellDialog(
                     )
                 )
 
-
                 // обновление портфеля
                 if (amountCurrent < coin.amount) {
-
                     insertAllAssetInvest(
                         coin.copy(
                             coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
                             amount = coin.amount - amountCurrent
                         )
                     )
-
-                } else {
-
-                    deleteAssetInvest(coin)
-
-                }
-
-
+                } else deleteAssetInvest(coin)
             }
         }
-
-
     }
 
 
@@ -243,7 +184,7 @@ class SellDialog(
             coin.amount > 0
                     && binding.enteringNumberOfLotsSellDialog.text.toString()
                 .toFloatOrNull().let {
-                    it != null && it in 1f.. coin.amount
+                    it != null && it in 1f..coin.amount
                 }
                     && if (DatabaseRepository.profile.tradingPasswordHash != null) verifyTradingPassword(
                 user = DatabaseRepository.profile,
@@ -263,22 +204,16 @@ class SellDialog(
 
     private fun resultPrice(): Float {
         binding.apply {
-            val priceText = priceNumberSellDialog.text.toString()
-
-            val price = priceText.getFloatFromStringWithCurrency()
-
+            val price = priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
             val number = enteringNumberOfLotsSellDialog.text.toString().toIntOrNull() ?: 0
-
             return price * number
         }
     }
 
     override fun show() {
         super.show()
-
         lifecycleScope.launch(Dispatchers.IO) {
             val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
-
             if (coinMayBeInPortfolio != null) {
                 coin = coinMayBeInPortfolio
             }

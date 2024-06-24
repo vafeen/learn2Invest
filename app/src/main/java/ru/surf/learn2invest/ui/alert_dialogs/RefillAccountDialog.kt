@@ -25,7 +25,6 @@ class RefillAccountDialog(
         binding.apply {
             balanceClearRefillAccountDialog.isVisible =
                 EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
-
             buttonRefillRefillAccountDialog.isVisible =
                 EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloatOrNull()
                     ?.let {
@@ -36,19 +35,14 @@ class RefillAccountDialog(
     }
 
     override fun initListeners() {
-
         binding.apply {
-
             changeVisibilityElements()
-
             buttonExitRefillAccountDialog.setOnClickListener {
                 cancel()
             }
-
             balanceClearRefillAccountDialog.setOnClickListener {
                 EditTextEnteringSumOfBalanceRefillAccountDialog.setText("")
             }
-
             EditTextEnteringSumOfBalanceRefillAccountDialog.addTextChangedListener(object :
                 TextWatcher {
                 override fun beforeTextChanged(
@@ -59,7 +53,6 @@ class RefillAccountDialog(
                 override fun onTextChanged(
                     s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
-
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -70,17 +63,12 @@ class RefillAccountDialog(
             })
 
             buttonRefillRefillAccountDialog.setOnClickListener {
-
                 val enteredBalance =
                     binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
                         .toFloat()
-
                 if (enteredBalance != 0f) {
-
                     lifecycleScope.launch(Dispatchers.IO) {
-
                         DatabaseRepository.profile.also {
-
                             DatabaseRepository.updateProfile(
                                 it.copy(
                                     fiatBalance = it.fiatBalance + enteredBalance,
@@ -89,9 +77,7 @@ class RefillAccountDialog(
                             )
                         }
                     }
-
                 }
-
                 cancel()
             }
 

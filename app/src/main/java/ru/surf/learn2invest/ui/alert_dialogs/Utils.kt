@@ -11,11 +11,6 @@ fun Editable.isTrueTradingPassword(): Boolean = PasswordHasher(
     this.toString()
 ) == DatabaseRepository.profile.tradingPasswordHash
 
-
 fun Float.getWithCurrency(): String = "$this$"
 
-fun String.getFloatFromStringWithCurrency(): Float {
-    val result = this.substring(0, this.lastIndex).toFloat()
-
-    return result
-}
+fun String.getFloatFromStringWithCurrency(): Float = this.substring(0, this.lastIndex).toFloat()
