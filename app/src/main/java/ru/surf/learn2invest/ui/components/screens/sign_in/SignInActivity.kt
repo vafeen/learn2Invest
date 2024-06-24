@@ -111,15 +111,78 @@ class SignInActivity : AppCompatActivity() {
     }
 
 
+    private fun changeColorOfFourDots(
+        color1: Int,
+        color2: Int,
+        color3: Int,
+        color4: Int,
+    ) {
+        binding.dot1.drawable.setTint(color1)
+
+        binding.dot2.drawable.setTint(color2)
+
+        binding.dot3.drawable.setTint(color3)
+
+        binding.dot4.drawable.setTint(color4)
+    }
+
     private fun paintDots(count: Int = pinCode.length) {
-        val dots = listOf(
-            binding.dot1.drawable,
-            binding.dot2.drawable,
-            binding.dot3.drawable,
-            binding.dot4.drawable,
-        )
-        for (index in 0..<count) {
-            dots[index].setTint(Color.BLACK)
+        when (count) {
+            1 -> {
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.WHITE,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE,
+                )
+            }
+
+            2 -> {
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE,
+                )
+            }
+
+            3 -> {
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.BLACK,
+                    color4 = Color.WHITE,
+                )
+            }
+
+            4 -> {
+                changeColorOfFourDots(
+                    color1 = Color.BLACK,
+                    color2 = Color.BLACK,
+                    color3 = Color.BLACK,
+                    color4 = Color.BLACK,
+                )
+
+            }
+
+            // error
+            -1 -> {
+                changeColorOfFourDots(
+                    color1 = Color.RED,
+                    color2 = Color.RED,
+                    color3 = Color.RED,
+                    color4 = Color.RED,
+                )
+            }
+
+            else -> {
+                changeColorOfFourDots(
+                    color1 = Color.WHITE,
+                    color2 = Color.WHITE,
+                    color3 = Color.WHITE,
+                    color4 = Color.WHITE
+                )
+            }
         }
     }
 

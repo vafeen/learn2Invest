@@ -16,10 +16,13 @@ import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccountDialog(
     context: Context, private val lifecycleScope: LifecycleCoroutineScope,
-    supportFragmentManager: FragmentManager
+    supportFragmentManager: FragmentManager,
+    private val onCloseCallback: () -> Unit
 ) : CustomAlertDialog(supportFragmentManager) {
+
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
     override val dialogTag: String = "refillAccount"
+    private var enteredBalanceF: Float = 0f
 
     private fun changeVisibilityElements() {
         binding.apply {
@@ -38,6 +41,7 @@ class RefillAccountDialog(
         binding.apply {
             changeVisibilityElements()
             buttonExitRefillAccountDialog.setOnClickListener {
+                onCloseCallback()
                 cancel()
             }
             balanceClearRefillAccountDialog.setOnClickListener {
@@ -67,28 +71,26 @@ class RefillAccountDialog(
                     binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
                         .toFloat()
                 if (enteredBalance != 0f) {
+                    enteredBalanceF = enteredBalance
                     lifecycleScope.launch(Dispatchers.IO) {
                         DatabaseRepository.profile.also {
                             DatabaseRepository.updateProfile(
                                 it.copy(
-                                    fiatBalance = it.fiatBalance + enteredBalance,
-                                    assetBalance = it.assetBalance + enteredBalance
+                                    fiatBalance = it.fiatBalance + enteredBalance
                                 )
                             )
                         }
                     }
                 }
+                balanceTextviewRefillAccountDialog.text =
+                    DatabaseRepository.profile.fiatBalance.getWithCurrency()
+                onCloseCallback()
                 cancel()
             }
-
-            balanceTextviewRefillAccountDialog.text =
-                DatabaseRepository.profile.fiatBalance.getWithCurrency()
-
         }
     }
 
     override fun getDialogView(): View {
         return binding.root
     }
-
 }

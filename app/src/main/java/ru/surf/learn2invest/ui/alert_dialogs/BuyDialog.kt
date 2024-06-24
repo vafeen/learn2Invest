@@ -36,7 +36,8 @@ class BuyDialog(
     private lateinit var realTimeUpdateJob: Job
     private var haveAssetsOrNot = false
     private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f
+        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+        assetID = id
     )
 
     override fun setCancelable(): Boolean = false
@@ -146,6 +147,7 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.apply {
                     // обновление баланса
+
                     updateProfile(profile.copy(fiatBalance = balance - price * amountCurrent))
 
                     // обновление истории

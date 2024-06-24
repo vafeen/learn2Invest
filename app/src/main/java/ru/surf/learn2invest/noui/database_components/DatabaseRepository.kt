@@ -106,6 +106,9 @@ object DatabaseRepository {
     suspend fun insertAllAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.insertAll(entities = entities)
 
+    suspend fun insertByLimitAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
+        assetBalanceHistoryDao.insertByLimit(limit = limit, entities = entities)
+
     suspend fun updateAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.update(entities = entities)
 
