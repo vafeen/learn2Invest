@@ -182,7 +182,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
-            android:text="Смена торгового пароля"
+            android:text="@string/change_trading_password"
             android:textAppearance="@style/Text.Medium.16" />
 
         <ImageView
