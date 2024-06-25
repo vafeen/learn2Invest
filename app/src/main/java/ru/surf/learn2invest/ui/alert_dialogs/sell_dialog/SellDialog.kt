@@ -1,18 +1,22 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.alert_dialogs.sell_dialog
 
+import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -21,6 +25,9 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.ui.alert_dialogs.isTrueTradingPassword
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class SellDialog(
@@ -33,18 +40,21 @@ class SellDialog(
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "sell"
     private var binding = SellDialogBinding.inflate(LayoutInflater.from(dialogContext))
-    private lateinit var realTimeUpdateJob: Job
-    private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
-        assetID = id
-    )
+    private lateinit var viewModel: SellDialogViewModel
 
     override fun setCancelable(): Boolean = false
 
     override fun initListeners() {
+        viewModel = ViewModelProvider(this)[SellDialogViewModel::class.java]
+        viewModel.apply {
+            coin = AssetInvest(
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+                assetID = id
+            )
+        }
         binding.apply {
             balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
-            realTimeUpdateJob = startRealTimeUpdate()
+            viewModel.realTimeUpdateJob = startRealTimeUpdate()
             buttonExitSellDialog.setOnClickListener {
                 cancel()
             }
@@ -53,6 +63,7 @@ class SellDialog(
                 sell()
                 cancel()
             }
+            val coin = viewModel.coin
             imageButtonPlusSellDialog.isVisible = coin.amount != 0f
             imageButtonMinusSellDialog.isVisible = coin.amount != 0f
             enteringNumberOfLotsSellDialog.isEnabled = coin.amount != 0f
@@ -128,7 +139,7 @@ class SellDialog(
 
     override fun cancel() {
         super.cancel()
-        realTimeUpdateJob.cancel()
+        viewModel.realTimeUpdateJob.cancel()
     }
 
     private fun sell() {
@@ -156,16 +167,17 @@ class SellDialog(
                         transactionType = TransactionsType.Sell
                     )
                 )
-
-                // обновление портфеля
-                if (amountCurrent < coin.amount) {
-                    insertAllAssetInvest(
-                        coin.copy(
-                            coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
-                            amount = coin.amount - amountCurrent
+                viewModel.apply {
+                    // обновление портфеля
+                    if (amountCurrent < coin.amount) {
+                        insertAllAssetInvest(
+                            coin.copy(
+                                coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
+                                amount = coin.amount - amountCurrent
+                            )
                         )
-                    )
-                } else deleteAssetInvest(coin)
+                    } else deleteAssetInvest(coin)
+                }
             }
         }
     }
@@ -176,6 +188,7 @@ class SellDialog(
     }
 
     private fun updateFields() {
+        val coin = viewModel.coin
         when {
             coin.amount == 0f -> {
                 binding.buttonSellSellDialog.isVisible = false
@@ -193,7 +206,15 @@ class SellDialog(
             ) else true
             -> {
                 binding.buttonSellSellDialog.isVisible = true
-                binding.itogoSellDialog.text = "Итого: ${resultPrice().getWithCurrency()}"
+                binding.itogoSellDialog.text = buildString {
+                    append(
+                        ContextCompat.getString(
+                            requireContext(),
+                            R.string.itog
+                        )
+                    )
+                    append(resultPrice().getWithCurrency())
+                }
             }
 
             else -> {
@@ -216,7 +237,7 @@ class SellDialog(
         lifecycleScope.launch(Dispatchers.IO) {
             val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
             if (coinMayBeInPortfolio != null) {
-                coin = coinMayBeInPortfolio
+                viewModel.coin = coinMayBeInPortfolio
             }
         }
     }
