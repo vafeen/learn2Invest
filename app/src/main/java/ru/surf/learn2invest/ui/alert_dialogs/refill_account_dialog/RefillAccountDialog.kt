@@ -9,8 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
@@ -71,23 +69,10 @@ class RefillAccountDialog(
             })
 
             buttonRefillRefillAccountDialog.setOnClickListener {
-                val enteredBalance =
+                viewModel.enteredBalanceF =
                     binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
                         .toFloat()
-                if (enteredBalance != 0f) {
-                    viewModel.enteredBalanceF = enteredBalance
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        DatabaseRepository.profile.also {
-                            DatabaseRepository.updateProfile(
-                                it.copy(
-                                    fiatBalance = it.fiatBalance + enteredBalance
-                                )
-                            )
-                        }
-                    }
-                }
-                balanceTextviewRefillAccountDialog.text =
-                    DatabaseRepository.profile.fiatBalance.getWithCurrency()
+                if (viewModel.enteredBalanceF != 0f) viewModel.refill()
                 onCloseCallback()
                 cancel()
             }

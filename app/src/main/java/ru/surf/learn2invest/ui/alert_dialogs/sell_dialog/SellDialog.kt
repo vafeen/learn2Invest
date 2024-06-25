@@ -11,19 +11,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.isTrueTradingPassword
@@ -53,7 +46,12 @@ class SellDialog(
         }
         binding.apply {
             balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
-            viewModel.realTimeUpdateJob = startRealTimeUpdate()
+            viewModel.realTimeUpdateJob = viewModel.startRealTimeUpdate {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    binding.priceNumberSellDialog.text = it
+                    updateFields()
+                }
+            }
             buttonExitSellDialog.setOnClickListener {
                 cancel()
             }
@@ -142,43 +140,9 @@ class SellDialog(
     }
 
     private fun sell() {
-        val balance = DatabaseRepository.profile.fiatBalance
         val price = binding.priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
         val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
-        lifecycleScope.launch(Dispatchers.IO) {
-            DatabaseRepository.apply {
-                // обновление баланса
-                updateProfile(
-                    profile.copy(
-                        fiatBalance = balance + price * amountCurrent,
-                    )
-                )
-
-                // обновление истории
-                insertAllTransaction(
-                    Transaction(
-                        coinID = id,
-                        name = name,
-                        symbol = symbol,
-                        coinPrice = price,
-                        dealPrice = price * amountCurrent,
-                        amount = amountCurrent,
-                        transactionType = TransactionsType.Sell
-                    )
-                )
-                viewModel.apply {
-                    // обновление портфеля
-                    if (amountCurrent < coin.amount) {
-                        insertAllAssetInvest(
-                            coin.copy(
-                                coinPrice = (coin.coinPrice * coin.amount - amountCurrent * price) / (coin.amount - amountCurrent),
-                                amount = coin.amount - amountCurrent
-                            )
-                        )
-                    } else deleteAssetInvest(coin)
-                }
-            }
-        }
+        viewModel.sell(price, amountCurrent)
     }
 
 
@@ -235,28 +199,11 @@ class SellDialog(
     override fun show() {
         super.show()
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
-            if (coinMayBeInPortfolio != null) {
-                viewModel.coin = coinMayBeInPortfolio
+            DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
+                viewModel.coin = it
             }
         }
     }
 
-    private fun startRealTimeUpdate(): Job = lifecycleScope.launch(Dispatchers.IO) {
-        while (true) {
-            when (val result = NetworkRepository.getCoinReview(id)) {
-                is ResponseWrapper.Success -> {
-                    withContext(Dispatchers.Main) {
-                        binding.priceNumberSellDialog.text =
-                            result.value.data.priceUsd.getWithCurrency()
-                        updateFields()
-                    }
-                }
 
-                is ResponseWrapper.NetworkError -> {}
-            }
-
-            delay(5000)
-        }
-    }
 }
