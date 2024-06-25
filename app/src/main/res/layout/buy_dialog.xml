@@ -172,11 +172,11 @@
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
-            android:text="@string/example_balance"
             android:textAppearance="@style/Text.Medium.14"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/balance_textview_buy_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_buy_dialog" />
+            app:layout_constraintTop_toTopOf="@+id/balance_card_buy_dialog"
+            tools:text="@string/example_balance" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_buy_buy_dialog"
@@ -203,10 +203,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:text="Итого: $ 0"
             app:layout_constraintBottom_toTopOf="@+id/trading_password"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_buy_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_buy_dialog" />
+            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_buy_dialog"
+            tools:text="@string/itog" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/trading_password"
