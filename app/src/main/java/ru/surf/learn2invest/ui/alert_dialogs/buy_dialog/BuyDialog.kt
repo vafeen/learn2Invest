@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.network_components.NetworkRepository
 import ru.surf.learn2invest.network_components.ResponseWrapper
@@ -206,12 +208,21 @@ class BuyDialog(
                     it != null && it > 0
                 } && fiatBalance != 0f && willPrice <= fiatBalance -> {
                 binding.buttonBuyBuyDialog.isVisible = true
-                binding.itogoBuyDialog.text = "Итого: ${willPrice.getWithCurrency()}"
+                binding.itogoBuyDialog.text = buildString {
+                    append(
+                        ContextCompat.getString(
+                            requireContext(),
+                            R.string.itog
+                        )
+                    )
+                    append(willPrice.getWithCurrency())
+                }
             }
 
             willPrice > fiatBalance || fiatBalance == 0f -> {
                 binding.buttonBuyBuyDialog.isVisible = false
-                binding.itogoBuyDialog.text = "Недостаточно средств"
+                binding.itogoBuyDialog.text =
+                    ContextCompat.getString(requireContext(), R.string.not_enough_money_for_buy)
             }
 
             else -> {
