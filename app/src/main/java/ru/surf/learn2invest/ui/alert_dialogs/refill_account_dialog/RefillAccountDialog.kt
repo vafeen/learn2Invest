@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.ui.alert_dialogs.buy_dialog.BuyDialogViewModel
 import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 

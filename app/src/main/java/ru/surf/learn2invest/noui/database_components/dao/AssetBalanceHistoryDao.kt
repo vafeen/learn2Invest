@@ -6,10 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.noui.database_components.dao.implementation.FlowGetAllImplementation
 import ru.surf.learn2invest.noui.database_components.dao.implementation.InsertByLimitImplementation
+import ru.surf.learn2invest.noui.database_components.dao.parent.DataAccessObject
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import java.util.Date
 

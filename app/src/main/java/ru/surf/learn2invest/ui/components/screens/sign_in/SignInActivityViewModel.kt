@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 

@@ -337,7 +337,7 @@ class SignInActivity : AppCompatActivity() {
             )
 
             for (index in 0..numberButtons.lastIndex) {
-                numberButtons[index].setOnClickListener { it ->
+                numberButtons[index].setOnClickListener {
                     updatePin("$index")
                     (it as TextView).tapOn()
                 }

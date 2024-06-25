@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.alert_dialogs.sell_dialog
 
-import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
