@@ -43,8 +43,8 @@
     <string name="biometry">Биометрия</string>
     <string name="confirm_deal">Подтверждение сделок</string>
     <string name="change_PIN">Смена PIN-кода</string>
-    <string name="change_trading_password">Смена Торгового пароля</string>
-    <string name="add_trading_password">Добавление Торгового пароля</string>
+    <string name="change_trading_password">Смена торгового пароля</string>
+    <string name="add_trading_password">Добавление торгового пароля</string>
     <string name="enter_pin_str">Введите PIN-код</string>
     <string name="capitalisation">Капитализация:</string>
     <string name="review_text">Обзор</string>

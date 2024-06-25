@@ -43,8 +43,8 @@
     <string name="biometry">Biometrics</string>
     <string name="confirm_deal">Transaction confirmation</string>
     <string name="change_PIN">Change PIN-code</string>
-    <string name="change_trading_password">Changing the Trading Password</string>
-    <string name="add_trading_password">Adding a Trading Password</string>
+    <string name="change_trading_password">Changing the trading password</string>
+    <string name="add_trading_password">Adding a trading password</string>
     <string name="enter_pin_str">Enter your PIN-code</string>
     <string name="capitalisation">Capitalization:</string>
     <string name="review_text">Review</string>
