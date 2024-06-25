@@ -27,7 +27,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private var name: String = ""
     private var lastname: String = ""
-
+    private val lengthLimit = 24
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,14 +47,6 @@ class SignUpActivity : AppCompatActivity() {
 
         setupNameEditText()
         setupLastnameEditText()
-
-        binding.nameClear.setOnClickListener {
-            nameClearIconClick()
-        }
-
-        binding.lastnameClear.setOnClickListener {
-            lastnameClearIconClick()
-        }
 
         binding.inputNameEditText.addTextChangedListener {
             validateFields()
@@ -83,33 +75,20 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun nameClearIconClick() {
-        binding.inputNameEditText.text.clear()
-        binding.inputNameEditText.showKeyboard()
-        binding.inputNameEditText.requestFocus()
-        binding.nameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
-        binding.nameErrorTextView.isVisible = true
-    }
-
-    private fun lastnameClearIconClick() {
-        binding.inputLastnameEditText.text.clear()
-        binding.inputLastnameEditText.showKeyboard()
-        binding.inputLastnameEditText.requestFocus()
-        binding.lastnameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
-        binding.lastnameErrorTextView.isVisible = true
-    }
-
     private fun setupNameEditText() {
         binding.inputNameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.nameClear.isVisible = !s.isNullOrEmpty()
                 name = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
+        with(binding.inputNameEditText) {
+            requestFocus()
+            showKeyboard()
+        }
     }
 
     private fun setupLastnameEditText() {
@@ -117,7 +96,6 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.lastnameClear.isVisible = !s.isNullOrEmpty()
                 lastname = s.toString()
             }
 
@@ -126,10 +104,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        val nameValid = validateName()
-        val lastnameValid = validateLastname()
-
-        if (nameValid && lastnameValid) {
+        if (validateName() && validateLastname()) {
             binding.signupBtn.isEnabled = true
             binding.signupBtn.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.main_background)
@@ -153,7 +128,7 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            name.length > 24 -> {
+            name.length > lengthLimit -> {
                 binding.nameErrorTextView.text =
                     ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.nameErrorTextView.isVisible = true
@@ -180,7 +155,7 @@ class SignUpActivity : AppCompatActivity() {
                 false
             }
 
-            lastname.length > 24 -> {
+            lastname.length > lengthLimit -> {
                 binding.lastnameErrorTextView.text =
                     ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.lastnameErrorTextView.isVisible = true
