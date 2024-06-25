@@ -4,22 +4,16 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
-import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
@@ -44,6 +38,8 @@ class TradingPasswordActivity : AppCompatActivity() {
                 )
             )
         )
+        if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
+            this.finish()
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[TradingPasswordActivityViewModel::class.java]
@@ -51,49 +47,6 @@ class TradingPasswordActivity : AppCompatActivity() {
         // TODO (Найдите пж норм иконки галочки и крестика
         ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
         no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
-        viewModel.action = when (intent.action.toString()) {
-            TradingPasswordActivityActions.CreateTradingPassword.action -> {
-                viewModel.apply {
-                    actionName = ContextCompat.getString(
-                        this@TradingPasswordActivity,
-                        R.string.create_trading_password
-                    )
-                    mainButtonAction =
-                        ContextCompat.getString(this@TradingPasswordActivity, R.string.create)
-                }
-                TradingPasswordActivityActions.CreateTradingPassword
-            }
-
-            TradingPasswordActivityActions.ChangeTradingPassword.action -> {
-                viewModel.apply {
-                    actionName = ContextCompat.getString(
-                        this@TradingPasswordActivity,
-                        R.string.change_trading_password
-                    )
-                    mainButtonAction =
-                        ContextCompat.getString(this@TradingPasswordActivity, R.string.change)
-                }
-                TradingPasswordActivityActions.ChangeTradingPassword
-            }
-
-            TradingPasswordActivityActions.RemoveTradingPassword.action -> {
-                viewModel.apply {
-                    actionName = ContextCompat.getString(
-                        this@TradingPasswordActivity,
-                        R.string.remove_trading_password
-                    )
-                    mainButtonAction =
-                        ContextCompat.getString(this@TradingPasswordActivity, R.string.remove)
-                }
-                TradingPasswordActivityActions.RemoveTradingPassword
-            }
-
-            else -> {
-                // finish if action is not defined
-                this@TradingPasswordActivity.finish()
-                TradingPasswordActivityActions.CreateTradingPassword
-            }
-        }
         configureVisibilities()
         initListeners()
         checkPassword()
@@ -160,10 +113,6 @@ class TradingPasswordActivity : AppCompatActivity() {
     private fun checkPassword() {
 
         binding.apply {
-            Log.d(
-                "passwords",
-                "\\${passwordLast.text}\\, \\${passwordEdit.text}\\, \\${passwordConfirm.text}\\"
-            )
             imageRule1.setImageDrawable(
                 if ((passwordEdit.text?.length ?: 0) >= 6) ok else no
             )
@@ -192,17 +141,12 @@ class TradingPasswordActivity : AppCompatActivity() {
                     }
 
                     TradingPasswordActivityActions.CreateTradingPassword -> {
-                        Log.d(
-                            "pass",
-                            "edit == |${passwordEdit.text}|, confirm == |${passwordConfirm.text}| "
-                        )
                         if (("${passwordEdit.text}" == "${passwordConfirm.text}")
                             && passwordEdit.text?.isNotEmpty() == true
                         ) ok else no
                     }
                 }
             )
-
 
             imageRule5.setImageDrawable(
                 if (verifyTradingPassword(
@@ -212,22 +156,6 @@ class TradingPasswordActivity : AppCompatActivity() {
             )
 
             buttonDoTrading.isVisible = mainButtonIsVisible()
-
-            buttonDoTrading.setOnClickListener {
-                profile =
-                    if (viewModel.action == TradingPasswordActivityActions.CreateTradingPassword || viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword) {
-                        profile.copy(
-                            tradingPasswordHash = PasswordHasher(
-                                firstName = profile.firstName, lastName = profile.lastName
-                            ).passwordToHash(
-                                password = "${passwordConfirm.text}"
-                            )
-                        )
-                    } else profile.copy(tradingPasswordHash = null)
-                updateProfile(lifecycleCoroutineScope = lifecycleScope)
-                this@TradingPasswordActivity.finish()
-            }
-
         }
     }
 
@@ -246,15 +174,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                     it.imageRule4.isOk()
                 }
             }
-        }
-    }
-
-    private fun EditText.changeHintVisibility() {
-        apply {
-            hint = if (text?.isEmpty() != true) ContextCompat.getString(
-                this@TradingPasswordActivity,
-                R.string.enter_last_trading_password
-            ) else ""
         }
     }
 
@@ -371,28 +290,9 @@ class TradingPasswordActivity : AppCompatActivity() {
             })
 
             buttonDoTrading.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    DatabaseRepository.updateProfile(
-                        profile.copy(
-                            tradingPasswordHash = when {
-                                viewModel.action == TradingPasswordActivityActions.CreateTradingPassword ||
-                                        viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword -> {
-                                    PasswordHasher(
-                                        firstName = profile.firstName, lastName = profile.lastName
-                                    ).passwordToHash(
-                                        passwordConfirm.text.toString()
-                                    )
-                                }
-
-                                else -> {
-                                    null
-                                }
-                            }
-                        )
-                    )
-                }.invokeOnCompletion {
-                    this@TradingPasswordActivity.finish()
-                }
+                viewModel.saveTradingPassword(password = "${passwordConfirm.text}")
+                updateProfile(lifecycleCoroutineScope = lifecycleScope)
+                this@TradingPasswordActivity.finish()
             }
         }
     }
