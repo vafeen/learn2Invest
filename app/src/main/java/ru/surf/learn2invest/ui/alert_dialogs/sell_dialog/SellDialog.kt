@@ -192,7 +192,8 @@ class SellDialog(
         when {
             coin.amount == 0f -> {
                 binding.buttonSellSellDialog.isVisible = false
-                binding.itogoSellDialog.text = "Нет активов для продажи"
+                binding.itogoSellDialog.text =
+                    ContextCompat.getString(requireContext(), R.string.no_asset_for_sale)
             }
 
             coin.amount > 0
