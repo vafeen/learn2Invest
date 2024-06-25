@@ -22,7 +22,6 @@ interface DataAccessObject<T> {
     @Update
     suspend fun update(vararg entities: T)
 
-
     /**
      * Удаление из базы данных одного объекта
      */

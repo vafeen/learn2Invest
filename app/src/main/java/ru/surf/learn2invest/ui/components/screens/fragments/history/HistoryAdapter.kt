@@ -13,9 +13,9 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.noui.network_components.util.Const
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 
 class HistoryAdapter(
     private val clickListener: HistoryClickListener
@@ -55,7 +55,7 @@ class HistoryAdapter(
             coinBottomNumericInfo.text = "${data[position].dealPrice}$"
 
             coinIcon.load(
-                data = "${Const.API_ICON}${data[position].symbol.lowercase()}.svg",
+                data = "${API_ICON}${data[position].symbol.lowercase()}.svg",
                 imageLoader = App.imageLoader
             )
             itemView.setOnClickListener {

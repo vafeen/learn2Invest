@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -14,23 +13,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.noui.network_components.NetworkRepository
-import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.noui.network_components.responses.toCoinReviewDto
-import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 
@@ -118,6 +105,7 @@ class MarketReviewFragment : Fragment() {
                                 android.R.layout.simple_expandable_list_item_1,
                                 it.map { element -> element.name })
                         )
+                        Log.d("data.collect", "startRealtimeUpdate")
                         startRealtimeUpdate()
                     }
                 }
@@ -212,7 +200,7 @@ class MarketReviewFragment : Fragment() {
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
         while (true) {
-            delay(5000)
+            delay(10000)
             val firstElement =
                 (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val lastElement =

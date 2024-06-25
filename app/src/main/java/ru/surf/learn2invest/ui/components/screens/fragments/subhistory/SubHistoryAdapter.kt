@@ -11,10 +11,9 @@ import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.noui.network_components.util.Const
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.TransactionsType
-import ru.surf.learn2invest.noui.logs.Loher
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 
 class SubHistoryAdapter() :
     RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
@@ -58,7 +57,7 @@ class SubHistoryAdapter() :
                 }
                 .build()
             val request = ImageRequest.Builder(coinIcon.context)
-                .data("${Const.API_ICON}${data[position].symbol.lowercase()}.svg")
+                .data("${API_ICON}${data[position].symbol.lowercase()}.svg")
                 .target(onSuccess = {
                     coinIcon.setImageDrawable(it)
                 },
@@ -70,9 +69,6 @@ class SubHistoryAdapter() :
                     })
                 .build()
             disposable = imageLoader.enqueue(request)
-            itemView.setOnClickListener {
-                Loher.d(data[position].coinPrice.toString())
-            }
         }
     }
 

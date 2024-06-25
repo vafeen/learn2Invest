@@ -6,7 +6,6 @@ import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.noui.network_components.util.Const
-import ru.surf.learn2invest.noui.logs.Loher
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 
 object NetworkRepository {
@@ -54,7 +53,6 @@ object NetworkRepository {
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
             Log.d("RETROFIT", "Error: ${e.message}")
-            Loher.d(e.toString())
             ResponseWrapper.NetworkError
         }
 

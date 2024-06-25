@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.noui.cryptography
 
-import android.util.Log
 import java.security.MessageDigest
 
 
@@ -28,9 +27,6 @@ class PasswordHasher(
     /**
      * Функция получения hash'а пароля
      */
-    fun passwordToHash(password: String): String {
-        Log.d("pasword", "password:${password} = ${password.addSaltToMessage().getSHA256Hash()}")
-        return password.addSaltToMessage().getSHA256Hash()
-    }
+    fun passwordToHash(password: String): String = password.addSaltToMessage().getSHA256Hash()
 }
 

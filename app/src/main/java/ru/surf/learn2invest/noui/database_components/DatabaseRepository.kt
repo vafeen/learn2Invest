@@ -18,7 +18,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 
 /**
@@ -45,65 +45,35 @@ import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transact
  */
 object DatabaseRepository {
 
-
-    lateinit var mainDB: L2IDatabase
-        private set
-
-    lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
-        private set
-
-    lateinit var assetInvestDao: AssetInvestDao
-        private set
-
-    lateinit var profileDao: ProfileDao
-        private set
-
-    lateinit var searchedCoinDao: SearchedCoinDao
-        private set
-
-    lateinit var transactionDao: TransactionDao
-        private set
+    private var idOfProfile = 0
+    lateinit var profile: Profile
+    private lateinit var mainDB: L2IDatabase
+    private lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
+    private lateinit var assetInvestDao: AssetInvestDao
+    private lateinit var profileDao: ProfileDao
+    private lateinit var searchedCoinDao: SearchedCoinDao
+    private lateinit var transactionDao: TransactionDao
 
 
     fun initDatabase(context: Context) {
         mainDB = L2IDatabase.buildDatabase(context = context)
-
         initDAOs()
-
         val profileFlow: Flow<List<Profile>> = profileDao.getAllAsFlow()
-
         with(ProcessLifecycleOwner.get()) {
             lifecycleScope.launch(Dispatchers.IO) {
                 profileFlow.collect { profList ->
                     if (profList.isNotEmpty()) {
-                        App.profile = profList[App.idOfProfile]
-
-                        Log.d(
-                            "profile",
-                            "profile in DBRep = ${App.profile}, размер = ${profList.size}"
-                        )
-
+                        profile = profList[idOfProfile]
                     } else {
-                        App.profile = Profile(
+                        profile = Profile(
                             id = 0,
                             firstName = "undefined",
                             lastName = "undefined",
                             biometry = false,
-                            fiatBalance = 100000000f,
+                            fiatBalance = 10000f,
                             assetBalance = 0f
                         )
-
-                        insertAllProfile(
-                            Profile(
-                                id = 0,
-                                firstName = "undefined",
-                                lastName = "undefined",
-                                biometry = false,
-                                fiatBalance = 100000000f,
-                                assetBalance = 0f
-                            )
-                        )
-                        Log.d("profile", "инсертим дефолтный")
+                        insertAllProfile(profile)
                     }
                 }
             }
@@ -112,13 +82,9 @@ object DatabaseRepository {
 
     private fun initDAOs() {
         assetBalanceHistoryDao = mainDB.assetBalanceHistoryDao()
-
         assetInvestDao = mainDB.assetInvestDao()
-
         profileDao = mainDB.profileDao()
-
         searchedCoinDao = mainDB.searchedCoinDao()
-
         transactionDao = mainDB.transactionDao()
     }
 
@@ -130,12 +96,14 @@ object DatabaseRepository {
     suspend fun insertAllAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.insertAll(entities = entities)
 
+    suspend fun insertByLimitAssetBalanceHistory(limit: Int, vararg entities: AssetBalanceHistory) =
+        assetBalanceHistoryDao.insertByLimit(limit = limit, entities = entities)
+
     suspend fun updateAssetBalanceHistory(vararg entities: AssetBalanceHistory) =
         assetBalanceHistoryDao.update(entities = entities)
 
     suspend fun deleteAssetBalanceHistory(entity: AssetBalanceHistory) =
         assetBalanceHistoryDao.delete(entity)
-
 
     // AssetInvest
     fun getAllAsFlowAssetInvest(): Flow<List<AssetInvest>> =
@@ -153,7 +121,6 @@ object DatabaseRepository {
     suspend fun getBySymbolAssetInvest(symbol: String) =
         assetInvestDao.getBySymbol(symbol)
 
-
     // profile
     fun getAllAsFlowProfile(): Flow<List<Profile>> =
         profileDao.getAllAsFlow()
@@ -166,7 +133,6 @@ object DatabaseRepository {
 
     suspend fun deleteProfile(entity: Profile) =
         profileDao.delete(entity)
-
 
     // searchedCoin
     fun getAllAsFlowSearchedCoin(): Flow<List<SearchedCoin>> =
@@ -181,7 +147,7 @@ object DatabaseRepository {
     suspend fun deleteSearchedCoin(entity: SearchedCoin) =
         searchedCoinDao.delete(entity)
 
-    suspend fun deleteAllSearchedCoin() = searchedCoinDao.deleteAll()
+    suspend fun deleteAllSearchedCoin() = searchedCoinDao.clearTable()
 
     suspend fun insertByLimitSearchedCoin(limit: Int, vararg entities: SearchedCoin) =
         searchedCoinDao.insertByLimit(limit = limit, entities = entities)
@@ -201,7 +167,6 @@ object DatabaseRepository {
 
     fun getFilteredBySymbolTransaction(filterSymbol: String): Flow<List<Transaction>> =
         transactionDao.getFilteredBySymbol(filterSymbol = filterSymbol)
-
 
     // ALL
     fun clearAllTables() = mainDB.clearAllTables()

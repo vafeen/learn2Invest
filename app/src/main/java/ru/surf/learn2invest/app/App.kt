@@ -13,15 +13,11 @@ import ru.surf.learn2invest.noui.database_components.entity.Profile
 
 class App : Application() {
 	companion object {
-		var idOfProfile = 0
-
-		lateinit var profile: Profile
 		lateinit var imageLoader: ImageLoader
 	}
 
 	override fun onCreate() {
 		super.onCreate()
-
 		DatabaseRepository.initDatabase(context = this)
 		imageLoader = ImageLoader.Builder(this)
 			.components {

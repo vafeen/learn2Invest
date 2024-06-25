@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.noui.database_components.entity.Transaction.Transaction
+import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 class HistoryViewModel: ViewModel() {
     val data: Flow<List<Transaction>> = DatabaseRepository.getAllAsFlowTransaction().map { it.reversed() }
