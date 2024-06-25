@@ -13,7 +13,7 @@
     <string name="changing_price">Price change in %</string>
     <string name="comment">Comment</string>
     <string name="no_asset_for_sale">No asset for sale</string>
-    <string name="not_enough_money_for_buy">Not enough money \nto buy</string>
+    <string name="not_enough_money_for_buy">Not enough money</string>
     <string name="asking_to_delete_profile">Are you sure you want\nto delete your profile?</string>
     <string name="account">Account</string>
     <string name="enter_sum">Enter amount</string>
