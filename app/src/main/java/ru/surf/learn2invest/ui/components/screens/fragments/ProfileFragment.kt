@@ -36,13 +36,8 @@ class ProfileFragment : Fragment() {
         context = requireContext()
         activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
         initListeners()
+        return binding.root
     }
 
     private fun updateProfile(profile: Profile) {
