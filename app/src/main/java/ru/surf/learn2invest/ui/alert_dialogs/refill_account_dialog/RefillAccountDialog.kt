@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.alert_dialogs.refill_account_dialog
 
 import android.content.Context
 import android.text.Editable
@@ -8,10 +8,13 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.ui.alert_dialogs.buy_dialog.BuyDialogViewModel
+import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccountDialog(
@@ -22,9 +25,9 @@ class RefillAccountDialog(
 
     private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(context))
     override val dialogTag: String = "refillAccount"
-    private var enteredBalanceF: Float = 0f
-
+    private lateinit var viewModel: RefillAccountDialogViewModel
     private fun changeVisibilityElements() {
+        viewModel = ViewModelProvider(this)[RefillAccountDialogViewModel::class.java]
         binding.apply {
             balanceClearRefillAccountDialog.isVisible =
                 EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
@@ -40,7 +43,8 @@ class RefillAccountDialog(
     override fun initListeners() {
         binding.apply {
             changeVisibilityElements()
-            balanceTextviewRefillAccountDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
+            balanceTextviewRefillAccountDialog.text =
+                DatabaseRepository.profile.fiatBalance.getWithCurrency()
             buttonExitRefillAccountDialog.setOnClickListener {
                 onCloseCallback()
                 cancel()
@@ -72,7 +76,7 @@ class RefillAccountDialog(
                     binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
                         .toFloat()
                 if (enteredBalance != 0f) {
-                    enteredBalanceF = enteredBalance
+                    viewModel.enteredBalanceF = enteredBalance
                     lifecycleScope.launch(Dispatchers.IO) {
                         DatabaseRepository.profile.also {
                             DatabaseRepository.updateProfile(

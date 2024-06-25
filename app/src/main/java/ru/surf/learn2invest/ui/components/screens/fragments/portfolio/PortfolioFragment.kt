@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +21,7 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.alert_dialogs.RefillAccountDialog
+import ru.surf.learn2invest.ui.alert_dialogs.refill_account_dialog.RefillAccountDialog
 
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
