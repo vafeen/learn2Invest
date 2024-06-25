@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.alert_dialogs.buy_dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -21,6 +22,8 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class BuyDialog(
@@ -33,21 +36,24 @@ class BuyDialog(
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "buy"
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(context))
-    private lateinit var realTimeUpdateJob: Job
-    private var haveAssetsOrNot = false
-    private var coin: AssetInvest = AssetInvest(
-        name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
-        assetID = id
-    )
+    private lateinit var viewModel: BuyDialogViewModel
+
 
     override fun setCancelable(): Boolean = false
 
     @SuppressLint("SuspiciousIndentation")
     override fun initListeners() {
+        viewModel = ViewModelProvider(this)[BuyDialogViewModel::class.java]
+        viewModel.apply {
+            coin = AssetInvest(
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
+                assetID = id
+            )
+            realTimeUpdateJob = startRealTimeUpdate()
+        }
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNumBuyDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
-                realTimeUpdateJob = startRealTimeUpdate()
             }
 
             buttonExitBuyDialog.setOnClickListener {
@@ -136,7 +142,7 @@ class BuyDialog(
 
     override fun cancel() {
         super.cancel()
-        realTimeUpdateJob.cancel()
+        viewModel.realTimeUpdateJob.cancel()
     }
 
     private fun buy() {
@@ -161,25 +167,25 @@ class BuyDialog(
                             transactionType = TransactionsType.Buy
                         )
                     )
-
-                    // обновление портфеля
-                    if (haveAssetsOrNot) {
-                        updateAssetInvest(
-                            coin.copy(
-                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
-                                        / (coin.amount + amountCurrent),
-                                amount = coin.amount + amountCurrent
+                    viewModel.apply {
+                        // обновление портфеля
+                        if (viewModel.haveAssetsOrNot) {
+                            updateAssetInvest(
+                                coin.copy(
+                                    coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
+                                            / (coin.amount + amountCurrent),
+                                    amount = coin.amount + amountCurrent
+                                )
                             )
-                        )
-
-                    } else {
-                        insertAllAssetInvest(
-                            coin.copy(
-                                coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
-                                        / (coin.amount + amountCurrent),
-                                amount = coin.amount + amountCurrent
+                        } else {
+                            insertAllAssetInvest(
+                                coin.copy(
+                                    coinPrice = (coin.coinPrice * coin.amount + amountCurrent * price)
+                                            / (coin.amount + amountCurrent),
+                                    amount = coin.amount + amountCurrent
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -232,10 +238,13 @@ class BuyDialog(
         super.show()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val coinMayBeInPortfolio = DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
+            val coinMayBeInPortfolio =
+                DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)
             if (coinMayBeInPortfolio != null) {
-                haveAssetsOrNot = true
-                coin = coinMayBeInPortfolio
+                viewModel.apply {
+                    haveAssetsOrNot = true
+                    coin = coinMayBeInPortfolio
+                }
             }
         }
     }
