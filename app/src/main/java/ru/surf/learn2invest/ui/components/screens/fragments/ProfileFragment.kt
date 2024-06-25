@@ -44,8 +44,11 @@ class ProfileFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         DatabaseRepository.profile.apply {
-            binding.biometryBtnSwitcher.isChecked = biometry
-            binding.confirmDealBtnSwitcher.isChecked = tradingPasswordHash != null
+            binding.apply {
+                biometryBtnSwitcher.isChecked = biometry
+                confirmDealBtnSwitcher.isChecked = tradingPasswordHash != null
+                changeTradingPasswordBtn.isVisible = tradingPasswordHash != null
+            }
         }
     }
 
@@ -122,8 +125,6 @@ class ProfileFragment : Fragment() {
                         action = TradingPasswordActivityActions.ChangeTradingPassword.action
                     })
                 }
-
-                fr.changeTradingPasswordBtn.isVisible = profile.tradingPasswordHash != null
 
                 fr.confirmDealBtn.setOnClickListener {
                     fr.confirmDealBtnSwitcher.isChecked = !fr.confirmDealBtnSwitcher.isChecked
