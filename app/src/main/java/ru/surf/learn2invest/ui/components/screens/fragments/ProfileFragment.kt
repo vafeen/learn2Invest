@@ -37,8 +37,31 @@ class ProfileFragment : Fragment() {
         activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         initListeners()
+
         return binding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        DatabaseRepository.profile.apply {
+            binding.biometryBtnSwitcher.isChecked = biometry
+            binding.confirmDealBtnSwitcher.isChecked = tradingPasswordHash != null
+        }
+    }
+
+    private fun intentFoxTradingPasswordActivityByConditions(): Intent =
+        Intent(context, TradingPasswordActivity::class.java).apply {
+            action = when {
+                binding.confirmDealBtnSwitcher.isChecked -> {
+                    TradingPasswordActivityActions.CreateTradingPassword.action
+                }
+
+                else -> {
+                    TradingPasswordActivityActions.RemoveTradingPassword.action
+                }
+            }
+        }
+
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -52,10 +75,7 @@ class ProfileFragment : Fragment() {
                 fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
-
-                fr.biometryBtn.isVisible = isBiometricAvailable(context = context)
-                fr.biometryBtnSwitcher.isChecked = profile.biometry
-                fr.confirmDealBtnSwitcher.isChecked = profile.tradingPasswordHash != null
+                binding.biometryBtn.isVisible = isBiometricAvailable(context = context)
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfileDialog(
@@ -105,29 +125,15 @@ class ProfileFragment : Fragment() {
 
                 fr.changeTradingPasswordBtn.isVisible = profile.tradingPasswordHash != null
 
-
-                val intentFoxTradingPasswordActivityByConditions =
-                    Intent(context, TradingPasswordActivity::class.java).apply {
-                        action = when {
-                            !fr.confirmDealBtnSwitcher.isChecked -> {
-                                TradingPasswordActivityActions.CreateTradingPassword.action
-                            }
-
-                            else -> {
-                                TradingPasswordActivityActions.RemoveTradingPassword.action
-                            }
-                        }
-                    }
-
                 fr.confirmDealBtn.setOnClickListener {
                     fr.confirmDealBtnSwitcher.isChecked = !fr.confirmDealBtnSwitcher.isChecked
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-                    startActivity(intentFoxTradingPasswordActivityByConditions)
+                    startActivity(intentFoxTradingPasswordActivityByConditions())
                 }
 
                 fr.confirmDealBtnSwitcher.setOnClickListener {
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-                    startActivity(intentFoxTradingPasswordActivityByConditions)
+                    startActivity(intentFoxTradingPasswordActivityByConditions())
                 }
 
                 fr.changePINBtn.setOnClickListener {
