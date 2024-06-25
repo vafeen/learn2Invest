@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
+import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivityViewModel
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
@@ -30,7 +32,7 @@ import ru.surf.learn2invest.utils.updateProfile
 
 class TradingPasswordActivity : AppCompatActivity() {
     private lateinit var binding: TradingPasswordActivityBinding
-    private lateinit var action: TradingPasswordActivityActions
+    private lateinit var viewModel: TradingPasswordActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.white)
@@ -44,11 +46,12 @@ class TradingPasswordActivity : AppCompatActivity() {
         )
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[TradingPasswordActivityViewModel::class.java]
         setContentView(binding.root)
         // TODO (Найдите пж норм иконки галочки и крестика
         ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
         no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
-        action = when (intent.action.toString()) {
+        viewModel.action = when (intent.action.toString()) {
             TradingPasswordActivityActions.ChangeTradingPassword.action -> TradingPasswordActivityActions.ChangeTradingPassword
 
             TradingPasswordActivityActions.CreateTradingPassword.action -> TradingPasswordActivityActions.CreateTradingPassword
@@ -68,8 +71,8 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun configureVisibilities() {
         binding.apply {
-            headerTradingPasswordActivity.text = action.actionName
-            buttonDoTrading.text = action.mainButtonAction
+            headerTradingPasswordActivity.text = viewModel.action.actionName
+            buttonDoTrading.text = viewModel.action.mainButtonAction
             rulesTrpass1.text = ContextCompat.getString(
                 this@TradingPasswordActivity,
                 R.string.min_len_trading_password
@@ -86,7 +89,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             rulesTrpass5.text =
                 ContextCompat
                     .getString(this@TradingPasswordActivity, R.string.old_pas_correct)
-            when (action) {
+            when (viewModel.action) {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {
                     textInputLayout1.isVisible = false
@@ -131,7 +134,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             )
 
             imageRule4.setImageDrawable(
-                if (action != TradingPasswordActivityActions.RemoveTradingPassword) {
+                if (viewModel.action != TradingPasswordActivityActions.RemoveTradingPassword) {
                     if (passwordEdit.text == passwordConfirm.text
                         && passwordEdit.text?.isNotEmpty() == true
                     ) ok else no
@@ -155,17 +158,18 @@ class TradingPasswordActivity : AppCompatActivity() {
             buttonDoTrading.isVisible = mainButtonIsVisible()
 
             buttonDoTrading.setOnClickListener {
-                profile = if (action == TradingPasswordActivityActions.CreateTradingPassword
-                    || action == TradingPasswordActivityActions.ChangeTradingPassword
-                ) {
-                    profile.copy(
-                        tradingPasswordHash = PasswordHasher(
-                            firstName = profile.firstName, lastName = profile.lastName
-                        ).passwordToHash(
-                            password = "${passwordConfirm.text}"
+                profile =
+                    if (viewModel.action == TradingPasswordActivityActions.CreateTradingPassword
+                        || viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword
+                    ) {
+                        profile.copy(
+                            tradingPasswordHash = PasswordHasher(
+                                firstName = profile.firstName, lastName = profile.lastName
+                            ).passwordToHash(
+                                password = "${passwordConfirm.text}"
+                            )
                         )
-                    )
-                } else profile.copy(tradingPasswordHash = null)
+                    } else profile.copy(tradingPasswordHash = null)
                 updateProfile(lifecycleCoroutineScope = lifecycleScope)
                 this@TradingPasswordActivity.finish()
             }
@@ -176,7 +180,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun mainButtonIsVisible(): Boolean {
         binding.let {
-            return when (action) {
+            return when (viewModel.action) {
                 TradingPasswordActivityActions.CreateTradingPassword -> {
                     it.imageRule1.isOk() && it.imageRule2.isOk() && it.imageRule3.isOk() && it.imageRule4.isOk()
                 }
@@ -195,7 +199,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.apply {
-            when (action) {
+            when (viewModel.action) {
                 TradingPasswordActivityActions.CreateTradingPassword -> {
                     passwordEdit
                 }
