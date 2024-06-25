@@ -8,9 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.load
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
@@ -24,7 +26,6 @@ class SubHistoryAdapter() :
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
-        lateinit var disposable: Disposable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,30 +51,12 @@ class SubHistoryAdapter() :
                 coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
             }
             coinBottomNumericInfo.text = "${data[position].dealPrice}$"
+            coinIcon.load(
+                data = "${API_ICON}${data[position].symbol.lowercase()}.svg",
+                imageLoader = App.imageLoader
+            )
 
-            val imageLoader = ImageLoader.Builder(coinIcon.context)
-                .components {
-                    add(SvgDecoder.Factory())
-                }
-                .build()
-            val request = ImageRequest.Builder(coinIcon.context)
-                .data("${API_ICON}${data[position].symbol.lowercase()}.svg")
-                .target(onSuccess = {
-                    coinIcon.setImageDrawable(it)
-                },
-                    onError = {
-                        coinIcon.setImageResource(R.drawable.coin_placeholder)
-                    },
-                    onStart = {
-                        coinIcon.setImageResource(R.drawable.placeholder)
-                    })
-                .build()
-            disposable = imageLoader.enqueue(request)
         }
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-        holder.disposable.dispose()
-    }
 }
