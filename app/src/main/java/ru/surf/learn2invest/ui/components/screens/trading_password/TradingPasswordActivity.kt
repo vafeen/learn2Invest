@@ -15,12 +15,12 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
+import ru.surf.learn2invest.utils.Icons.no
+import ru.surf.learn2invest.utils.Icons.ok
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
 import ru.surf.learn2invest.utils.isThisContainsSequenceOrEmpty
-import ru.surf.learn2invest.utils.no
-import ru.surf.learn2invest.utils.ok
 import ru.surf.learn2invest.utils.showKeyboard
 import ru.surf.learn2invest.utils.updateProfile
 
