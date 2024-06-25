@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
@@ -14,195 +13,200 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
-import ru.surf.learn2invest.network_components.responses.APIWrapper
-import ru.surf.learn2invest.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.network_components.responses.toCoinReviewDto
-import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private var recyclerData = mutableListOf<CoinReviewDto>()
-    private var data = mutableListOf<CoinReviewDto>()
-    private val adapter = MarketReviewAdapter(recyclerData) { coin ->
+    private val viewModel = MarketReviewViewModel()
+    private val adapter = MarketReviewAdapter() { coin ->
         startAssetReviewIntent(coin)
     }
-    private var filterByPriceFLag = false
-    private var filterByPriceIsFirstActive = true
-    private var realTimeUpdateJob: Job? = null
-    private var realTimeUpdateSemaphore = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
+        binding.marketReviewRecyclerview.adapter = adapter
 
-        return binding.root
-    }
+        lifecycleScope.launch {
+            viewModel.filterOrder.collect {
+                binding.apply {
+                    if (it) {
+                        filterByPrice.setIconResource(R.drawable.arrow_top_green)
+                        filterByPrice.setIconTintResource(R.color.label)
+                    } else {
+                        filterByPrice.setIconResource(R.drawable.arrow_bottom_red)
+                        filterByPrice.setIconTintResource(R.color.recession)
+                    }
+                }
+            }
+        }
 
-    override fun onStart() {
-        super.onStart()
+        lifecycleScope.launch {
+            viewModel.isLoading.collect {
+                binding.apply {
+                    marketReviewRecyclerview.isVisible = it.not()
+                    binding.progressBar.isVisible = it
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isError.collect {
+                binding.apply {
+                    marketReviewRecyclerview.isVisible = it.not()
+                    networkErrorTv.isVisible = it
+                    networkErrorIv.isVisible = it
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.searchedData.collect {
+                if (adapter.data.size != it.size) {
+                    adapter.data = it
+                    adapter.notifyDataSetChanged()
+                } else {
+                    adapter.data = it
+                    if (viewModel.isRealtimeUpdate) {
+                        adapter.notifyItemRangeChanged(
+                            viewModel.firstUpdateElement,
+                            viewModel.amountUpdateElement
+                        )
+                    } else {
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.data.collect {
+                if (it.isNotEmpty()) {
+                    adapter.data = it
+                    if (viewModel.isRealtimeUpdate) {
+                        adapter.notifyItemRangeChanged(
+                            viewModel.firstUpdateElement,
+                            viewModel.amountUpdateElement
+                        )
+                    } else {
+                        adapter.notifyDataSetChanged()
+                        binding.searchEditText.setAdapter(
+                            ArrayAdapter(this@MarketReviewFragment.requireContext(),
+                                android.R.layout.simple_expandable_list_item_1,
+                                it.map { element -> element.name })
+                        )
+                        Log.d("data.collect", "startRealtimeUpdate")
+                        startRealtimeUpdate()
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.filterState.collect {
+                binding.apply {
+                    filterByMarketcap.backgroundTintList =
+                        ColorStateList.valueOf(
+                            resources.getColor(
+                                if (it[FILTER_BY_MARKETCAP] == true)
+                                    R.color.main_background
+                                else
+                                    R.color.view_background
+                            )
+                        )
+                    filterByChangePercent24Hr.backgroundTintList =
+                        ColorStateList.valueOf(
+                            resources.getColor(
+                                if (it[FILTER_BY_PERCENT] == true)
+                                    R.color.main_background
+                                else R.color.view_background
+                            )
+                        )
+                    filterByPrice.backgroundTintList =
+                        ColorStateList.valueOf(
+                            resources.getColor(
+                                if (it[FILTER_BY_PRICE] == true)
+                                    R.color.main_background
+                                else
+                                    R.color.view_background
+                            )
+                        )
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isSearch.collect {
+                binding.apply {
+                    textView2.isVisible = it
+                    clearTv.isVisible = it
+                    filterByPrice.isVisible = it.not()
+                    filterByMarketcap.isVisible = it.not()
+                    filterByChangePercent24Hr.isVisible = it.not()
+                    searchEditText.text.clear()
+                    if (it) searchEditText.hint = ""
+                    if (it.not()) {
+                        adapter.data = viewModel.data.value
+                    }
+                    else adapter.data = viewModel.data.value
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        }
+
         binding.apply {
-            filterByMarketcap.backgroundTintList =
-                ColorStateList.valueOf(resources.getColor(R.color.main_background))
-            filterByChangePercent24Hr.backgroundTintList =
-                ColorStateList.valueOf(resources.getColor(R.color.view_background))
-            filterByPrice.backgroundTintList =
-                ColorStateList.valueOf(resources.getColor(R.color.view_background))
-
             filterByMarketcap.setOnClickListener {
-                realTimeUpdateSemaphore = true
-                filterByPriceIsFirstActive = true
-                filterByMarketcap.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByChangePercent24Hr.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                recyclerData.sortByDescending { it.marketCapUsd }
-                adapter.notifyDataSetChanged()
-                realTimeUpdateSemaphore = false
+                viewModel.filterByMarketcap()
             }
 
             filterByChangePercent24Hr.setOnClickListener {
-                realTimeUpdateSemaphore = true
-                filterByPriceIsFirstActive = true
-                filterByMarketcap.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByChangePercent24Hr.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByPrice.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                recyclerData.sortByDescending { it.changePercent24Hr }
-                adapter.notifyDataSetChanged()
-                realTimeUpdateSemaphore = false
+                viewModel.filterByPercent()
             }
 
             filterByPrice.setOnClickListener {
-                realTimeUpdateSemaphore = true
-                filterByMarketcap.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByChangePercent24Hr.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                if (filterByPriceIsFirstActive.not())
-                    filterByPriceFLag = filterByPriceFLag.not()
-                if (filterByPriceFLag) {
-                    recyclerData.sortByDescending { it.priceUsd }
-                    filterByPrice.setIconResource(R.drawable.arrow_bottom_red)
-                    filterByPrice.setIconTintResource(R.color.recession)
-                } else {
-                    recyclerData.sortBy { it.priceUsd }
-                    filterByPrice.setIconResource(R.drawable.arrow_top_green)
-                    filterByPrice.setIconTintResource(R.color.label)
-                }
-                adapter.notifyDataSetChanged()
-
-                filterByPriceIsFirstActive = false
-                realTimeUpdateSemaphore = false
+                viewModel.filterByPrice()
             }
+
             textInputLayout.setEndIconOnClickListener {
-                realTimeUpdateSemaphore = true
-                textView2.isVisible = false
-                clearTv.isVisible = false
-                filterByPrice.isVisible = true
-                filterByMarketcap.isVisible = true
-                filterByChangePercent24Hr.isVisible = true
-                searchEditText.text.clear()
-                recyclerData.clear()
-                recyclerData.addAll(data.sortedByDescending { it.marketCapUsd })
-                adapter.notifyDataSetChanged()
-                filterByMarketcap.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.main_background))
-                filterByChangePercent24Hr.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                filterByPrice.backgroundTintList =
-                    ColorStateList.valueOf(resources.getColor(R.color.view_background))
-                realTimeUpdateSemaphore = false
+                viewModel.setSearchState(false)
+                searchEditText.clearFocus()
             }
 
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
-                realTimeUpdateSemaphore = true
-                textView2.isVisible = true
-                clearTv.isVisible = true
-                filterByPrice.visibility = INVISIBLE
-                filterByMarketcap.visibility = INVISIBLE
-                filterByChangePercent24Hr.visibility = INVISIBLE
-                searchEditText.hint = ""
-            }
-
-            clearTv.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    realTimeUpdateSemaphore = true
-                    DatabaseRepository.deleteAllSearchedCoin()
-                    withContext(Dispatchers.Main) {
-                        recyclerData.clear()
-                        adapter.notifyDataSetChanged()
-                    }
-                    realTimeUpdateSemaphore = false
-                }
+                if (hasFocus) viewModel.setSearchState(true)
             }
 
             searchEditText.setOnItemClickListener { parent, view, position, id ->
-                val searchedList = mutableListOf<String>()
-                lifecycleScope.launch(Dispatchers.IO) {
-                    realTimeUpdateSemaphore = true
-                    DatabaseRepository.insertAllSearchedCoin(
-                        SearchedCoin(coinID = searchEditText.text.toString())
-                    )
-                    DatabaseRepository.getAllAsFlowSearchedCoin()
-                        .first().map { searchedList.add(it.coinID) }
-                    withContext(Dispatchers.Main) {
-                        recyclerData.clear()
-                        recyclerData.addAll(data.filter { searchedList.contains(it.name) })
-                        recyclerData.reverse()
-                        adapter.notifyDataSetChanged()
-                        realTimeUpdateSemaphore = false
-                    }
-                }
+                viewModel.setSearchState(true, searchEditText.text.toString())
             }
-        }
-        setLoading()
 
-        this.lifecycleScope.launch(Dispatchers.IO) {
-            val result: ResponseWrapper<APIWrapper<List<CoinReviewDto>>> =
-                NetworkRepository.getMarketReview()
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is ResponseWrapper.Success -> {
-                        data.addAll(result.value.data)
-                        data.removeIf { it.marketCapUsd == 0.0f }
-                        data.sortByDescending { it.marketCapUsd }
-                        recyclerData.addAll(data)
-                        setRecycler()
-                        realTimeUpdateJob = startRealtimeUpdate()
-                    }
-
-                    is ResponseWrapper.NetworkError -> setError()
-                }
+            clearTv.setOnClickListener {
+                viewModel.clearSearchData()
             }
+
         }
+        return binding.root
     }
 
-    override fun onStop() {
-        super.onStop()
-        data.clear()
-        recyclerData.clear()
-        realTimeUpdateJob?.cancel()
+    private fun startRealtimeUpdate() = lifecycleScope.launch {
+        while (true) {
+            delay(10000)
+            val firstElement =
+                (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            val lastElement =
+                (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+            viewModel.updateData(firstElement, lastElement)
+        }
     }
 
     private fun startAssetReviewIntent(coin: CoinReviewDto) {
@@ -215,58 +219,9 @@ class MarketReviewFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun setLoading() {
-        binding.marketReviewRecyclerview.isVisible = false
-        binding.progressBar.isVisible = true
+    companion object {
+        const val FILTER_BY_MARKETCAP = 0
+        const val FILTER_BY_PERCENT = 1
+        const val FILTER_BY_PRICE = 2
     }
-
-    private fun setError() {
-        binding.marketReviewRecyclerview.isVisible = false
-        binding.progressBar.isVisible = false
-        binding.networkErrorTv.isVisible = true
-        binding.networkErrorIv.isVisible = true
-    }
-
-    private fun setRecycler() {
-        Log.d("SUCCES", "Грузим данные")
-        binding.searchEditText.setAdapter(
-            ArrayAdapter(this.requireContext(),
-                android.R.layout.simple_expandable_list_item_1,
-                recyclerData.map { it.name })
-        )
-        binding.marketReviewRecyclerview.isVisible = true
-        binding.progressBar.isVisible = false
-        binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
-        binding.marketReviewRecyclerview.adapter = adapter
-    }
-
-    private fun startRealtimeUpdate(): Job =
-        lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                delay(5000)
-                //  if (recyclerData.size != 0 && realTimeUpdateSemaphore.not()) {
-                val firstElement =
-                    (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                val lastElement =
-                    (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                for (i in firstElement..lastElement) {
-                    if (recyclerData.size != 0 && realTimeUpdateSemaphore.not()) {
-                        when (val result =
-                            NetworkRepository.getCoinReview(recyclerData[i].id)) {
-                            is ResponseWrapper.Success -> {
-                                data[i] = result.value.data.toCoinReviewDto()
-                                recyclerData[i] = result.value.data.toCoinReviewDto()
-                                withContext(Dispatchers.Main) {
-                                    adapter.notifyItemChanged(i)
-                                }
-                            }
-
-                            is ResponseWrapper.NetworkError -> setError()
-                        }
-                    }
-                }
-                //}
-            }
-        }
-
 }

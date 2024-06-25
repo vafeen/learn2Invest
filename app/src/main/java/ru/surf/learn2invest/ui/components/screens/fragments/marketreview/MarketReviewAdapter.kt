@@ -8,25 +8,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.load
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.network_components.util.Const.API_ICON
-import ru.surf.learn2invest.network_components.util.round
+import ru.surf.learn2invest.app.App
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
+import java.text.NumberFormat
+import java.util.Locale
 
 class MarketReviewAdapter(
-    private val data: List<CoinReviewDto>,
     private val clickListener: CoinClickListener
 ) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
+        var data: List<CoinReviewDto> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
         val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
         val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
         val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
-        lateinit var disposable: Disposable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,31 +46,25 @@ class MarketReviewAdapter(
             else
                 data[position].name
             coinBottomTextInfo.text = data[position].symbol
-            coinTopNumericInfo.text = "${data[position].priceUsd.round()} \$"
+            coinTopNumericInfo.text =
+                NumberFormat.getInstance(Locale.US).apply {
+                    maximumFractionDigits = 4
+                }.format(data[position].priceUsd) + " $"
             if (data[position].changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
-            coinBottomNumericInfo.text = "${data[position].changePercent24Hr.round() ?: 0}%"
-
-            val imageLoader = ImageLoader.Builder(coinIcon.context)
-                .components {
-                    add(SvgDecoder.Factory())
-                }
-                .build()
-            val request = ImageRequest.Builder(coinIcon.context)
-                .data("$API_ICON${data[position].symbol.lowercase()}.svg")
-                .target(onSuccess = {
-                    coinIcon.setImageDrawable(it)
-                },
-                    onError = {
-                        coinIcon.setImageResource(R.drawable.coin_placeholder)
-                    },
-                    onStart = {
-                        coinIcon.setImageResource(R.drawable.placeholder)
-                    })
-                .build()
-            disposable = imageLoader.enqueue(request)
-
+            coinBottomNumericInfo.text =
+                NumberFormat.getInstance(Locale.US).apply {
+                    maximumFractionDigits = 2
+                }.format(data[position].changePercent24Hr) + " %"
+            coinIcon.load(
+                data = "$API_ICON${data[position].symbol.lowercase()}.svg",
+                imageLoader = App.imageLoader
+            )
+            {
+                placeholder(R.drawable.placeholder)
+                error(R.drawable.coin_placeholder)
+            }
             itemView.setOnClickListener {
                 clickListener.onCoinClick(data[position])
             }
@@ -79,8 +75,4 @@ class MarketReviewAdapter(
         fun onCoinClick(coin: CoinReviewDto)
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-        holder.disposable.dispose()
-    }
 }

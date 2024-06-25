@@ -11,12 +11,13 @@ import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.network_components.util.Const
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 
-class SubHistoryAdapter(private val data: List<Transaction>) :
+class SubHistoryAdapter() :
     RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
+    var data: List<Transaction> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
@@ -56,7 +57,7 @@ class SubHistoryAdapter(private val data: List<Transaction>) :
                 }
                 .build()
             val request = ImageRequest.Builder(coinIcon.context)
-                .data("${Const.API_ICON}${data[position].symbol.lowercase()}.svg")
+                .data("${API_ICON}${data[position].symbol.lowercase()}.svg")
                 .target(onSuccess = {
                     coinIcon.setImageDrawable(it)
                 },
@@ -68,9 +69,6 @@ class SubHistoryAdapter(private val data: List<Transaction>) :
                     })
                 .build()
             disposable = imageLoader.enqueue(request)
-            itemView.setOnClickListener {
-
-            }
         }
     }
 

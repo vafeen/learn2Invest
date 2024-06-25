@@ -8,8 +8,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
+import ru.surf.learn2invest.noui.network_components.NetworkRepository
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
+import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -24,20 +25,17 @@ class AssetViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = NetworkRepository.getCoinHistory(id)) {
                 is ResponseWrapper.Success -> {
-                    data = response.value.data.mapIndexed { index, coinPriceResponse ->
+                    data = response.value.mapIndexed { index, coinPriceResponse ->
                         Entry(index.toFloat(), coinPriceResponse.priceUsd)
                     }.toMutableList()
                     when (val coinResponse = NetworkRepository.getCoinReview(id)) {
                         is ResponseWrapper.Success -> {
-                            data.add(Entry(data.size.toFloat(), coinResponse.value.data.priceUsd))
-                            marketCap = coinResponse.value.data.marketCapUsd.toDouble()
+                            data.add(Entry(data.size.toFloat(), coinResponse.value.priceUsd))
+                            marketCap = coinResponse.value.marketCapUsd.toDouble()
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            price = coinResponse.value.data.priceUsd.toDouble()
-                            formattedPrice = NumberFormat.getInstance(Locale.US).apply {
-                                maximumFractionDigits = 2
-                            }.format(price) + " $"
+                            formattedPrice = coinResponse.value.priceUsd.getWithCurrency()
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
@@ -60,20 +58,18 @@ class AssetViewModel(
                     is ResponseWrapper.Success -> {
                         if (data.size != 0) {
                             data.removeLast()
-                            data.add(Entry(data.size.toFloat(), result.value.data.priceUsd))
-                            marketCap = result.value.data.marketCapUsd.toDouble()
+                            data.add(Entry(data.size.toFloat(), result.value.priceUsd))
+                            marketCap = result.value.marketCapUsd.toDouble()
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            price = result.value.data.priceUsd.toDouble()
-                            formattedPrice = NumberFormat.getInstance(Locale.US).apply {
-                                maximumFractionDigits = 2
-                            }.format(price) + " $"
+                            formattedPrice = result.value.priceUsd.getWithCurrency()
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
                         }
                     }
+
                     is ResponseWrapper.NetworkError -> {}
                 }
             }

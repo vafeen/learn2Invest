@@ -11,8 +11,8 @@ import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale
@@ -55,7 +55,9 @@ class PortfolioAdapter(
             coinSymbol.text = asset.symbol
             coinTopNumericInfo.text = "$priceChange$"
             val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
-            val roundedPercent = BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+            val roundedPercent =
+                BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP)
+                    .toFloat()
             val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
             coinBottomNumericInfo.setTextColor(
                 when {

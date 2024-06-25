@@ -15,12 +15,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.databinding.BuyDialogBinding
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.noui.network_components.NetworkRepository
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class BuyDialog(
@@ -241,15 +241,15 @@ class BuyDialog(
     }
 
     private fun startRealTimeUpdate(): Job = lifecycleScope.launch(Dispatchers.IO) {
-        while (true) {
-            when (val result = NetworkRepository.getCoinReview(id)) {
-                is ResponseWrapper.Success -> {
-                    withContext(Dispatchers.Main) {
-                        binding.priceNumberBuyDialog.text =
-                            result.value.data.priceUsd.getWithCurrency()
-                        updateFields()
+            while (true) {
+                when (val result = NetworkRepository.getCoinReview(id)) {
+                    is ResponseWrapper.Success -> {
+                        withContext(Dispatchers.Main) {
+                            binding.priceNumberBuyDialog.text =
+                                result.value.priceUsd.getWithCurrency()
+                            updateFields()
+                        }
                     }
-                }
 
                 is ResponseWrapper.NetworkError -> {}
             }

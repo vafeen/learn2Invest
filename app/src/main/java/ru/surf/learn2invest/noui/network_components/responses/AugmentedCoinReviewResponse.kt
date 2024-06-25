@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.network_components.responses
+package ru.surf.learn2invest.noui.network_components.responses
 
 data class AugmentedCoinReviewResponse(
     val id: String, //название (типа id)
