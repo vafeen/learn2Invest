@@ -26,7 +26,7 @@ class AskToDeleteProfileDialog(
         AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(dialogContext))
 
     override fun initListeners() {
-        binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
+        binding.ok.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 DatabaseRepository.clearAllTables()
             }
@@ -35,7 +35,7 @@ class AskToDeleteProfileDialog(
             dialogContext.startActivity(Intent(dialogContext, MainActivity::class.java))
         }
 
-        binding.noAskToDeleteProfileDialog.setOnClickListener {
+        binding.no.setOnClickListener {
             cancel()
         }
     }

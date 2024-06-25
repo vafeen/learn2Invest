@@ -54,17 +54,17 @@ class SignInActivity : AppCompatActivity() {
             }
 
             SignINActivityActions.SignUP.action -> {
-                binding.enterPinSignin.text =
+                binding.enterPin.text =
                     ContextCompat.getString(this@SignInActivity, R.string.create_pin)
 
-                binding.passButtonFingerprint.isVisible = false
+                binding.fingerprint.isVisible = false
             }
 
             SignINActivityActions.ChangingPIN.action -> {
-                binding.enterPinSignin.text =
+                binding.enterPin.text =
                     ContextCompat.getString(this@SignInActivity, R.string.enter_old_pin)
 
-                binding.passButtonFingerprint.isVisible = false
+                binding.fingerprint.isVisible = false
             }
         }
     }
@@ -200,7 +200,7 @@ class SignInActivity : AppCompatActivity() {
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     delay(500)
                                     paintDots()
-                                    binding.enterPinSignin.text = getString(R.string.repeat_pin)
+                                    binding.enterPin.text = getString(R.string.repeat_pin)
                                     viewModel.unBlockKeyBoard()
                                 }
                             }
@@ -249,7 +249,7 @@ class SignInActivity : AppCompatActivity() {
                                 animatePINCode(
                                     truth = viewModel.isVerified, needReturn = true
                                 ).invokeOnCompletion {
-                                    if (viewModel.isVerified) binding.enterPinSignin.text =
+                                    if (viewModel.isVerified) binding.enterPin.text =
                                         ContextCompat.getString(
                                             this@SignInActivity,
                                             R.string.enter_new_pin
@@ -267,7 +267,7 @@ class SignInActivity : AppCompatActivity() {
                                     delay(500)
                                     paintDots()
                                 }.invokeOnCompletion {
-                                    binding.enterPinSignin.text =
+                                    binding.enterPin.text =
                                         ContextCompat.getString(
                                             this@SignInActivity,
                                             R.string.repeat_pin
@@ -324,16 +324,16 @@ class SignInActivity : AppCompatActivity() {
 
         binding.apply {
             val numberButtons = listOf(
-                passButton0,
-                passButton1,
-                passButton2,
-                passButton3,
-                passButton4,
-                passButton5,
-                passButton6,
-                passButton7,
-                passButton8,
-                passButton9,
+                button0,
+                button1,
+                button2,
+                button3,
+                button4,
+                button5,
+                button6,
+                button7,
+                button8,
+                button9,
             )
 
             for (index in 0..numberButtons.lastIndex) {
@@ -343,16 +343,16 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
 
-            passButtonBackspace.setOnClickListener {
+            backspace.setOnClickListener {
                 if (viewModel.pinCode.isNotEmpty()) {
                     viewModel.pinCode = viewModel.pinCode.substring(0, viewModel.pinCode.lastIndex)
                     paintDots(count = viewModel.pinCode.length)
                 }
             }
 
-            passButtonFingerprint.isVisible =
+            fingerprint.isVisible =
                 if (isBiometricAvailable(context = this@SignInActivity)) {
-                    passButtonFingerprint.setOnClickListener {
+                    fingerprint.setOnClickListener {
                         viewModel.fingerPrintManager.auth()
                     }
                     true

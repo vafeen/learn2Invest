@@ -45,30 +45,30 @@ class SellDialog(
             )
         }
         binding.apply {
-            balanceNumSellDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
+            balanceNum.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             viewModel.realTimeUpdateJob = viewModel.startRealTimeUpdate {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    binding.priceNumberSellDialog.text = it
+                    binding.priceNumber.text = it
                     updateFields()
                 }
             }
-            buttonExitSellDialog.setOnClickListener {
+            buttonExit.setOnClickListener {
                 cancel()
             }
-            buttonSellSellDialog.isVisible = false
-            buttonSellSellDialog.setOnClickListener {
+            buttonSell.isVisible = false
+            buttonSell.setOnClickListener {
                 sell()
                 cancel()
             }
             val coin = viewModel.coin
-            imageButtonPlusSellDialog.isVisible = coin.amount != 0f
-            imageButtonMinusSellDialog.isVisible = coin.amount != 0f
-            enteringNumberOfLotsSellDialog.isEnabled = coin.amount != 0f
-            imageButtonPlusSellDialog.setOnClickListener {
-                enteringNumberOfLotsSellDialog.setText(enteringNumberOfLotsSellDialog.text.let { text ->
+            imageButtonPlus.isVisible = coin.amount != 0f
+            imageButtonMinus.isVisible = coin.amount != 0f
+            enteringNumberOfLots.isEnabled = coin.amount != 0f
+            imageButtonPlus.setOnClickListener {
+                enteringNumberOfLots.setText(enteringNumberOfLots.text.let { text ->
                     val newNumberOfLots = if (text.isNotEmpty()) {
                         text.toString().toIntOrNull()?.let {
-                            if (enteringNumberOfLotsSellDialog.text.toString()
+                            if (enteringNumberOfLots.text.toString()
                                     .toFloat() < coin.amount
                             ) it + 1 else it
                         } ?: 0
@@ -77,8 +77,8 @@ class SellDialog(
                     "$newNumberOfLots"
                 })
             }
-            imageButtonMinusSellDialog.setOnClickListener {
-                enteringNumberOfLotsSellDialog.setText(enteringNumberOfLotsSellDialog.text.let { text ->
+            imageButtonMinus.setOnClickListener {
+                enteringNumberOfLots.setText(enteringNumberOfLots.text.let { text ->
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
@@ -97,7 +97,7 @@ class SellDialog(
                 })
             }
 
-            enteringNumberOfLotsSellDialog.addTextChangedListener(object : TextWatcher {
+            enteringNumberOfLots.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
@@ -126,7 +126,7 @@ class SellDialog(
 
                         override fun afterTextChanged(s: Editable?) {
                             updateFields()
-                            buttonSellSellDialog.isVisible = s?.isTrueTradingPassword() ?: false
+                            buttonSell.isVisible = s?.isTrueTradingPassword() ?: false
                         }
                     })
                     true
@@ -140,8 +140,8 @@ class SellDialog(
     }
 
     private fun sell() {
-        val price = binding.priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
-        val amountCurrent = binding.enteringNumberOfLotsSellDialog.text.toString().toInt().toFloat()
+        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency()
+        val amountCurrent = binding.enteringNumberOfLots.text.toString().toInt().toFloat()
         viewModel.sell(price, amountCurrent)
     }
 
@@ -154,13 +154,13 @@ class SellDialog(
         val coin = viewModel.coin
         when {
             coin.amount == 0f -> {
-                binding.buttonSellSellDialog.isVisible = false
-                binding.itogoSellDialog.text =
+                binding.buttonSell.isVisible = false
+                binding.result.text =
                     ContextCompat.getString(requireContext(), R.string.no_asset_for_sale)
             }
 
             coin.amount > 0
-                    && binding.enteringNumberOfLotsSellDialog.text.toString()
+                    && binding.enteringNumberOfLots.text.toString()
                 .toFloatOrNull().let {
                     it != null && it in 1f..coin.amount
                 }
@@ -169,8 +169,8 @@ class SellDialog(
                 password = binding.tradingPasswordTV.text.toString()
             ) else true
             -> {
-                binding.buttonSellSellDialog.isVisible = true
-                binding.itogoSellDialog.text = buildString {
+                binding.buttonSell.isVisible = true
+                binding.result.text = buildString {
                     append(
                         ContextCompat.getString(
                             requireContext(),
@@ -182,16 +182,16 @@ class SellDialog(
             }
 
             else -> {
-                binding.buttonSellSellDialog.isVisible = false
-                binding.itogoSellDialog.text = ""
+                binding.buttonSell.isVisible = false
+                binding.result.text = ""
             }
         }
     }
 
     private fun resultPrice(): Float {
         binding.apply {
-            val price = priceNumberSellDialog.text.toString().getFloatFromStringWithCurrency()
-            val number = enteringNumberOfLotsSellDialog.text.toString().toIntOrNull() ?: 0
+            val price = priceNumber.text.toString().getFloatFromStringWithCurrency()
+            val number = enteringNumberOfLots.text.toString().toIntOrNull() ?: 0
             return price * number
         }
     }

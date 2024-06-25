@@ -10,33 +10,30 @@
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:ignore="MissingConstraints">
 
         <View
-            android:id="@+id/balance_card_sell_dialog"
+            android:id="@+id/balance_card"
             android:layout_width="238dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_od_dialog_sell_dialog" />
+            app:layout_constraintTop_toBottomOf="@+id/name_od_dialog" />
 
         <View
-            android:id="@+id/price_card_sell_dialog"
+            android:id="@+id/price_card"
             android:layout_width="238dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
-            app:layout_constraintEnd_toEndOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintStart_toStartOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/balance_card_sell_dialog" />
+            app:layout_constraintEnd_toEndOf="@+id/balance_card"
+            app:layout_constraintStart_toStartOf="@+id/balance_card"
+            app:layout_constraintTop_toBottomOf="@+id/balance_card" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_exit_sell_dialog"
+            android:id="@+id/button_exit"
             android:layout_width="105dp"
             android:layout_height="42dp"
             android:layout_marginHorizontal="10dp"
@@ -55,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/name_od_dialog_sell_dialog"
+            android:id="@+id/name_od_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
@@ -68,7 +65,7 @@
 
 
         <View
-            android:id="@+id/entering_sum_of_balance_card_sell_dialog"
+            android:id="@+id/entering_sum_of_balance_card"
             android:layout_width="238dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
@@ -76,21 +73,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price_card_sell_dialog" />
+            app:layout_constraintTop_toBottomOf="@+id/price_card" />
 
         <TextView
-            android:id="@+id/number_textview_sell_dialog"
+            android:id="@+id/number_textview"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/number"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog" />
+            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card" />
 
         <EditText
-            android:id="@+id/entering_number_of_lots_sell_dialog"
+            android:id="@+id/entering_number_of_lots"
             android:layout_width="144dp"
             android:layout_height="20dp"
             android:layout_marginStart="@dimen/margin_dialogs_card_content_start"
@@ -99,92 +96,92 @@
             android:hint="@string/number_lots"
             android:inputType="number"
             android:textAppearance="@style/Text.Regular.12"
-            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog" />
+            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card" />
 
         <View
-            android:id="@+id/icon_of_balance_view_sell_dialog"
+            android:id="@+id/icon_of_balance_view"
             android:layout_width="35dp"
             android:layout_height="25dp"
             android:layout_margin="@dimen/margin_dialogs_card_content_start"
             android:background="@drawable/briefcase"
-            app:layout_constraintBottom_toBottomOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintStart_toStartOf="@+id/balance_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog" />
+            app:layout_constraintBottom_toBottomOf="@+id/balance_card"
+            app:layout_constraintStart_toStartOf="@+id/balance_card"
+            app:layout_constraintTop_toTopOf="@+id/balance_card" />
 
 
         <TextView
-            android:id="@+id/price_number_sell_dialog"
+            android:id="@+id/price_number"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toStartOf="@+id/price_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/price_card_sell_dialog"
+            app:layout_constraintStart_toStartOf="@+id/price_card"
+            app:layout_constraintTop_toTopOf="@+id/price_card"
             tools:text="@string/example_price" />
 
         <ImageButton
-            android:id="@+id/imageButtonMinus_sell_dialog"
+            android:id="@+id/imageButtonMinus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/view_background"
             android:src="@drawable/circle_minus"
-            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintHeight="28dp"
-            app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots"
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintWidth="28dp" />
 
         <ImageButton
-            android:id="@+id/imageButtonPlus_sell_dialog"
+            android:id="@+id/imageButtonPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/view_background"
             android:src="@drawable/circle_plus"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButtonMinus_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintBottom_toBottomOf="@+id/imageButtonMinus"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintHeight="28dp"
-            app:layout_constraintStart_toEndOf="@+id/imageButtonMinus_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/imageButtonMinus_sell_dialog"
+            app:layout_constraintStart_toEndOf="@+id/imageButtonMinus"
+            app:layout_constraintTop_toTopOf="@+id/imageButtonMinus"
             app:layout_constraintWidth="28dp" />
 
         <TextView
-            android:id="@+id/price_textview_sell_dialog"
+            android:id="@+id/price_textview"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/price_name"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toStartOf="@+id/price_card_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/price_card_sell_dialog" />
+            app:layout_constraintStart_toStartOf="@+id/price_card"
+            app:layout_constraintTop_toTopOf="@+id/price_card" />
 
         <TextView
-            android:id="@+id/balance_num_sell_dialog"
+            android:id="@+id/balance_num"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog"
+            app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
+            app:layout_constraintTop_toTopOf="@+id/balance_card"
             tools:text="@string/example_balance" />
 
 
         <TextView
-            android:id="@+id/balance_textview_sell_dialog"
+            android:id="@+id/balance_textview"
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/balance"
             android:textAppearance="@style/Text.Medium.14"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/balance_num_sell_dialog"
-            app:layout_constraintTop_toTopOf="@+id/balance_card_sell_dialog" />
+            app:layout_constraintStart_toStartOf="@+id/balance_num"
+            app:layout_constraintTop_toTopOf="@+id/balance_card" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_sell_sell_dialog"
+            android:id="@+id/button_sell"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_marginHorizontal="10dp"
@@ -206,13 +203,13 @@
 
         <!--       TODO: Надь, поправь тут пожалуйста шрифт, как выберешь нужный) -->
         <TextView
-            android:id="@+id/itogo_sell_dialog"
+            android:id="@+id/result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             app:layout_constraintBottom_toTopOf="@+id/trading_password"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card"
             tools:text="@string/itog" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -220,9 +217,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/button_exit_sell_dialog"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card_sell_dialog"
-            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card_sell_dialog"
+            app:layout_constraintBottom_toTopOf="@+id/button_exit"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText

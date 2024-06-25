@@ -38,11 +38,11 @@ class TradingPasswordActivity : AppCompatActivity() {
                 )
             )
         )
-        if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
-            this.finish()
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[TradingPasswordActivityViewModel::class.java]
+        if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
+            this.finish()
         setContentView(binding.root)
         // TODO (Найдите пж норм иконки галочки и крестика
         ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
@@ -54,29 +54,29 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun configureVisibilities() {
         binding.apply {
-            headerTradingPasswordActivity.text = viewModel.actionName
+            header.text = viewModel.actionName
             buttonDoTrading.text = viewModel.mainButtonAction
-            rulesTrpass1.text =
+            rules1.text =
                 ContextCompat.getString(
                     this@TradingPasswordActivity,
                     R.string.min_len_trading_password
                 )
-            rulesTrpass2.text =
+            rules2.text =
                 ContextCompat.getString(
                     this@TradingPasswordActivity,
                     R.string.not_more_than_2
                 )
-            rulesTrpass3.text =
+            rules3.text =
                 ContextCompat.getString(
                     this@TradingPasswordActivity,
                     R.string.no_seq_more_than_2
                 )
-            rulesTrpass4.text =
+            rules4.text =
                 ContextCompat.getString(
                     this@TradingPasswordActivity,
                     R.string.pass_match
                 )
-            rulesTrpass5.text =
+            rules5.text =
                 ContextCompat.getString(
                     this@TradingPasswordActivity,
                     R.string.old_pas_correct
@@ -85,25 +85,25 @@ class TradingPasswordActivity : AppCompatActivity() {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {
                     textInputLayout1.isVisible = false
-                    rulesTrpass5.isVisible = false
+                    rules5.isVisible = false
                     imageRule5.isVisible = false
                 }
 
                 TradingPasswordActivityActions.ChangeTradingPassword -> {
                     textInputLayout1.isVisible = true
-                    rulesTrpass5.isVisible = true
+                    rules5.isVisible = true
                     imageRule5.isVisible = true
                 }
 
                 TradingPasswordActivityActions.RemoveTradingPassword -> {
                     textInputLayout1.isVisible = false
-                    rulesTrpass1.isVisible = false
+                    rules1.isVisible = false
                     imageRule1.isVisible = false
-                    rulesTrpass2.isVisible = false
+                    rules2.isVisible = false
                     imageRule2.isVisible = false
-                    rulesTrpass3.isVisible = false
+                    rules3.isVisible = false
                     imageRule3.isVisible = false
-                    rulesTrpass5.isVisible = false
+                    rules5.isVisible = false
                     imageRule5.isVisible = false
                 }
             }
@@ -196,7 +196,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 showKeyboard()
             }
 
-            arrowBackTpactivity.setOnClickListener {
+            arrowBack.setOnClickListener {
                 this@TradingPasswordActivity.finish()
             }
 

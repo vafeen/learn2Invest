@@ -26,10 +26,10 @@ class RefillAccountDialog(
     private fun changeVisibilityElements() {
         viewModel = ViewModelProvider(this)[RefillAccountDialogViewModel::class.java]
         binding.apply {
-            balanceClearRefillAccountDialog.isVisible =
-                EditTextEnteringSumOfBalanceRefillAccountDialog.text.isNotEmpty()
-            buttonRefillRefillAccountDialog.isVisible =
-                EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString().toFloatOrNull()
+            balanceClear.isVisible =
+                EditTextEnteringSumOfBalance.text.isNotEmpty()
+            buttonRefill.isVisible =
+                EditTextEnteringSumOfBalance.text.toString().toFloatOrNull()
                     ?.let {
                         it > 0
                     } ?: false
@@ -40,16 +40,16 @@ class RefillAccountDialog(
     override fun initListeners() {
         binding.apply {
             changeVisibilityElements()
-            balanceTextviewRefillAccountDialog.text =
+            balanceTextview.text =
                 DatabaseRepository.profile.fiatBalance.getWithCurrency()
-            buttonExitRefillAccountDialog.setOnClickListener {
+            buttonExit.setOnClickListener {
                 onCloseCallback()
                 cancel()
             }
-            balanceClearRefillAccountDialog.setOnClickListener {
-                EditTextEnteringSumOfBalanceRefillAccountDialog.setText("")
+            balanceClear.setOnClickListener {
+                EditTextEnteringSumOfBalance.setText("")
             }
-            EditTextEnteringSumOfBalanceRefillAccountDialog.addTextChangedListener(object :
+            EditTextEnteringSumOfBalance.addTextChangedListener(object :
                 TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -62,15 +62,15 @@ class RefillAccountDialog(
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    if (EditTextEnteringSumOfBalanceRefillAccountDialog.hasFocus()) {
+                    if (EditTextEnteringSumOfBalance.hasFocus()) {
                         changeVisibilityElements()
                     }
                 }
             })
 
-            buttonRefillRefillAccountDialog.setOnClickListener {
+            buttonRefill.setOnClickListener {
                 viewModel.enteredBalanceF =
-                    binding.EditTextEnteringSumOfBalanceRefillAccountDialog.text.toString()
+                    binding.EditTextEnteringSumOfBalance.text.toString()
                         .toFloat()
                 if (viewModel.enteredBalanceF != 0f) viewModel.refill()
                 onCloseCallback()

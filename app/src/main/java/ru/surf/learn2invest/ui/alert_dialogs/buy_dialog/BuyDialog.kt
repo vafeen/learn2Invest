@@ -46,30 +46,30 @@ class BuyDialog(
             )
             realTimeUpdateJob = startRealTimeUpdate {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    binding.priceNumberBuyDialog.text = it
+                    binding.priceNumber.text = it
                     updateFields()
                 }
             }
         }
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
-                balanceNumBuyDialog.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
+                balanceNum.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
             }
 
-            buttonExitBuyDialog.setOnClickListener {
+            buttonExit.setOnClickListener {
                 cancel()
             }
 
-            buttonBuyBuyDialog.isVisible = false
-            buttonBuyBuyDialog.setOnClickListener {
+            buttonBuy.isVisible = false
+            buttonBuy.setOnClickListener {
                 buy()
                 cancel()
             }
-            imageButtonPlusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
-            imageButtonMinusBuyDialog.isVisible = DatabaseRepository.profile.fiatBalance != 0f
-            enteringNumberOfLotsBuyDialog.isEnabled = DatabaseRepository.profile.fiatBalance != 0f
-            imageButtonPlusBuyDialog.setOnClickListener {
-                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { numOfLotsText ->
+            imageButtonPlus.isVisible = DatabaseRepository.profile.fiatBalance != 0f
+            imageButtonMinus.isVisible = DatabaseRepository.profile.fiatBalance != 0f
+            enteringNumberOfLots.isEnabled = DatabaseRepository.profile.fiatBalance != 0f
+            imageButtonPlus.setOnClickListener {
+                enteringNumberOfLots.setText(enteringNumberOfLots.text.let { numOfLotsText ->
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
                         val balance = DatabaseRepository.profile.fiatBalance
                         when {
@@ -85,8 +85,8 @@ class BuyDialog(
                 })
             }
 
-            imageButtonMinusBuyDialog.setOnClickListener {
-                enteringNumberOfLotsBuyDialog.setText(enteringNumberOfLotsBuyDialog.text.let { text ->
+            imageButtonMinus.setOnClickListener {
+                enteringNumberOfLots.setText(enteringNumberOfLots.text.let { text ->
                     text.toString().toIntOrNull()?.let {
                         when {
                             it == 1 || it == 0 -> {
@@ -105,7 +105,7 @@ class BuyDialog(
                 })
             }
 
-            enteringNumberOfLotsBuyDialog.addTextChangedListener(object : TextWatcher {
+            enteringNumberOfLots.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
@@ -146,8 +146,8 @@ class BuyDialog(
     }
 
     private fun buy() {
-        val price = binding.priceNumberBuyDialog.text.toString().getFloatFromStringWithCurrency()
-        val amountCurrent = binding.enteringNumberOfLotsBuyDialog.text.toString().toInt().toFloat()
+        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency()
+        val amountCurrent = binding.enteringNumberOfLots.text.toString().toInt().toFloat()
         viewModel.buy(amountCurrent = amountCurrent, price = price)
     }
 
@@ -160,12 +160,12 @@ class BuyDialog(
         val willPrice = resultPrice(onFuture = false)
         val fiatBalance = DatabaseRepository.profile.fiatBalance
         when {
-            binding.enteringNumberOfLotsBuyDialog.text.toString()
+            binding.enteringNumberOfLots.text.toString()
                 .toIntOrNull().let {
                     it != null && it > 0
                 } && fiatBalance != 0f && willPrice <= fiatBalance -> {
-                binding.buttonBuyBuyDialog.isVisible = true
-                binding.itogoBuyDialog.text = buildString {
+                binding.buttonBuy.isVisible = true
+                binding.result.text = buildString {
                     append(
                         ContextCompat.getString(
                             requireContext(),
@@ -177,14 +177,14 @@ class BuyDialog(
             }
 
             willPrice > fiatBalance || fiatBalance == 0f -> {
-                binding.buttonBuyBuyDialog.isVisible = false
-                binding.itogoBuyDialog.text =
+                binding.buttonBuy.isVisible = false
+                binding.result.text =
                     ContextCompat.getString(requireContext(), R.string.not_enough_money_for_buy)
             }
 
             else -> {
-                binding.buttonBuyBuyDialog.isVisible = false
-                binding.itogoBuyDialog.text = ""
+                binding.buttonBuy.isVisible = false
+                binding.result.text = ""
             }
         }
     }
@@ -194,9 +194,9 @@ class BuyDialog(
         onFuture: Boolean
     ): Float {
         binding.apply {
-            val priceText = priceNumberBuyDialog.text.toString()
+            val priceText = priceNumber.text.toString()
             val price = priceText.getFloatFromStringWithCurrency()
-            val number = enteringNumberOfLotsBuyDialog.text.toString().toIntOrNull() ?: 0
+            val number = enteringNumberOfLots.text.toString().toIntOrNull() ?: 0
             return price * (number + if (onFuture) 1 else 0)
         }
     }

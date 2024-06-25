@@ -23,7 +23,7 @@ class ResetStatsDialog(
 
     override fun initListeners() {
         binding.apply {
-            okResetStatsResetStatsDialog.setOnClickListener {
+            ok.setOnClickListener {
                 val profile = DatabaseRepository.profile.copy(
                     fiatBalance = 0f,
                     assetBalance = 0f
@@ -40,7 +40,7 @@ class ResetStatsDialog(
                 Toast.makeText(dialogContext, "Стата сброшена", Toast.LENGTH_LONG).show()
             }
 
-            noReetStatsResetStatsDialog.setOnClickListener {
+            no.setOnClickListener {
                 cancel()
             }
         }
