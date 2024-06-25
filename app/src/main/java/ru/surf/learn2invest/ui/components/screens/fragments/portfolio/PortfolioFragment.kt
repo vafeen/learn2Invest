@@ -10,7 +10,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +21,6 @@ import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.alert_dialogs.refill_account_dialog.RefillAccountDialog
-
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
 
@@ -125,7 +123,7 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        initDrawer()
+        initDrawerListeners()
 
         binding.imageButton.setOnClickListener {
             openDrawer()
@@ -178,36 +176,6 @@ class PortfolioFragment : Fragment() {
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START)
             }
-        }
-    }
-
-    private fun initDrawer() {
-        activity?.apply {
-            binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                    // Вызывается при перемещении Drawer
-                    if (slideOffset > 0) {
-                        binding.imageButton.isVisible = false
-                    } else {
-                        binding.imageButton.isVisible = true
-                    }
-                }
-
-                override fun onDrawerOpened(drawerView: View) {
-                    // Вызывается, когда Drawer открыт
-                }
-
-                override fun onDrawerClosed(drawerView: View) {
-                    // Вызывается, когда Drawer закрыт
-                }
-
-                override fun onDrawerStateChanged(newState: Int) {
-                    // Вызывается при изменении состояния Drawer
-                }
-
-            })
-
-            initDrawerListeners()
         }
     }
 

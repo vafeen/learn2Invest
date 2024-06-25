@@ -1,362 +1,380 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="visible"
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_margin="23dp"
-        android:background="@color/transparent"
-        android:src="@drawable/material_list"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0"
-        app:tint="@color/black" />
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHeight_default="spread"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <View
-        android:id="@+id/view"
+    <!-- Your main content goes here -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="149dp"
-        android:background="@drawable/portfolio_background"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/portfolio_text"
-        style="@style/Text.Bold.20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="@string/portfolio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/imageButton"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="23dp"
+            android:background="@color/transparent"
+            android:src="@drawable/material_list"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/view"
+            app:layout_constraintVertical_bias="0"
+            app:tint="@color/black" />
 
-    <TextView
-        android:id="@+id/balance"
-        style="@style/Text.Medium.16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/balance"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/portfolio_text" />
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="149dp"
+            android:background="@drawable/portfolio_background"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/balance_text"
-        style="@style/Text.SemiBold.30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/balance"
-        tools:text="$50,540.00" />
-
-    <TextView
-        android:id="@+id/percent"
-        style="@style/Text.Medium.15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/percent_increase_background"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="4dp"
-        android:textColor="@color/black"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/portfolio_text"
-        app:layout_constraintTop_toBottomOf="@id/balance"
-        tools:text="+5.21%" />
-
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
-        android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/chart_background"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
-
-    <TextView
-        android:id="@+id/account_funds_text"
-        style="@style/Text.SemiBold.15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/account_funds"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chart" />
-
-    <TextView
-        android:id="@+id/account_funds"
-        style="@style/Text.SemiBold.15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_funds_text"
-        tools:text="0$" />
-
-    <Button
-        android:id="@+id/top_up_btn"
-        android:layout_width="wrap_content"
-        android:textAllCaps="true"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="35dp"
-        android:background="@drawable/top_up_btn_background"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:text="@string/top_up"
-        android:textAppearance="@style/Text.Medium.14"
-        android:textColor="@color/black"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/account_funds"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/account_funds_text" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assets"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="19dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_funds"
-        tools:listitem="@layout/coin_item" />
-
-    <TextView
-        android:id="@+id/assets_are_empty"
-        style="@style/Text.SemiBold.17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:text="@string/assets_are_empty"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_funds" />
-
-    <TextView
-        android:id="@+id/network_error_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/network_error"
-        android:textAlignment="center"
-        android:textAppearance="@style/Text.SemiBold.17"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_funds" />
-
-    <ImageView
-        android:id="@+id/network_error_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/network_error_tv"
-        app:srcCompat="@drawable/world_wide_web" />
-
-
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Your main content goes here -->
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
+        <TextView
+            android:id="@+id/portfolio_text"
+            style="@style/Text.Bold.20"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:text="@string/portfolio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/balance"
+            style="@style/Text.Medium.16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/balance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/portfolio_text" />
+
+        <TextView
+            android:id="@+id/balance_text"
+            style="@style/Text.SemiBold.30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/balance"
+            tools:text="$50,540.00" />
+
+        <TextView
+            android:id="@+id/percent"
+            style="@style/Text.Medium.15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/percent_increase_background"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/portfolio_text"
+            app:layout_constraintTop_toBottomOf="@id/balance"
+            tools:text="+5.21%" />
+
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/chart_background"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        <TextView
+            android:id="@+id/account_funds_text"
+            style="@style/Text.SemiBold.15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/account_funds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart" />
+
+        <TextView
+            android:id="@+id/account_funds"
+            style="@style/Text.SemiBold.15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/account_funds_text"
+            tools:text="0$" />
+
+        <Button
+            android:id="@+id/top_up_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
+            android:background="@drawable/top_up_btn_background"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="@string/top_up"
+            android:textAllCaps="true"
+            android:textAppearance="@style/Text.Medium.14"
+            android:textColor="@color/black"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/account_funds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/account_funds_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assets"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="19dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/account_funds"
+            tools:listitem="@layout/coin_item" />
+
+        <TextView
+            android:id="@+id/assets_are_empty"
+            style="@style/Text.SemiBold.17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="@string/assets_are_empty"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/account_funds" />
+
+        <TextView
+            android:id="@+id/network_error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/network_error"
+            android:textAlignment="center"
+            android:textAppearance="@style/Text.SemiBold.17"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_funds" />
+
+        <ImageView
+            android:id="@+id/network_error_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/network_error_tv"
+            app:srcCompat="@drawable/world_wide_web" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        android:clickable="false"
+        app:layout_constraintHeight_default="spread">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/white"
-            android:clickable="false"
-            app:layout_constraintHeight_default="spread">
+            android:choiceMode="none">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:choiceMode="none">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/learn2investCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_horizontal_dev_str"
+                android:layout_marginTop="@dimen/margin_top_dev_str"
+                android:background="@drawable/portfolio_background"
+                android:backgroundTint="@color/main_background"
+                android:textAppearance="@style/Text.SemiBold.18"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/learn2investCard"
+                <TextView
+                    android:id="@+id/learn2invest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_horizontal_dev_str"
-                    android:layout_marginTop="@dimen/margin_top_dev_str"
-                    android:background="@drawable/portfolio_background"
-                    android:backgroundTint="@color/main_background"
+                    android:paddingHorizontal="20dp"
+                    android:text="Learn2Invest"
                     android:textAppearance="@style/Text.SemiBold.18"
-                    app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
+
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0">
-
-                    <TextView
-                        android:id="@+id/learn2invest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="20dp"
-                        android:text="Learn2Invest"
-                        android:textAppearance="@style/Text.SemiBold.18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0" />
-                </androidx.cardview.widget.CardView>
+                    app:layout_constraintVertical_bias="0" />
+            </androidx.cardview.widget.CardView>
 
 
-                <LinearLayout
-                    android:id="@+id/contact_us"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/contact_us"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                android:layout_marginTop="@dimen/margin_top_dev_str"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
+
+                app:layout_constraintVertical_bias="0">
+
+                <TextView
+                    android:id="@+id/contact_us_tv"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
-                    android:layout_marginTop="@dimen/margin_top_dev_str"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1.0"
+                    android:text="Написать нам"
+                    android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
+                    app:layout_constraintVertical_bias="0" />
 
-                    app:layout_constraintVertical_bias="0">
-
-                    <TextView
-                        android:id="@+id/contact_us_tv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1.0"
-                        android:text="Написать нам"
-                        android:textAppearance="@style/Text.SemiBold.18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
-                        app:layout_constraintVertical_bias="0" />
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/transparent"
-                        android:src="@drawable/arrow_right_gray" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/code"
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
-                    android:layout_marginTop="@dimen/margin_top_dev_str"
-                    android:orientation="horizontal"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/arrow_right_gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                android:layout_marginTop="@dimen/margin_top_dev_str"
+                android:orientation="horizontal"
+                android:textAppearance="@style/Text.SemiBold.18"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contact_us"
+                app:layout_constraintVertical_bias="0">
+
+                <TextView
+                    android:id="@+id/code_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1.0"
+
+                    android:text="Исходный код"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/contact_us"
-                    app:layout_constraintVertical_bias="0">
+                    app:layout_constraintVertical_bias="0" />
 
-                    <TextView
-                        android:id="@+id/code_tv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1.0"
-
-                        android:text="Исходный код"
-                        android:textAppearance="@style/Text.SemiBold.18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/contact_us"
-                        app:layout_constraintVertical_bias="0" />
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/transparent"
-                        android:src="@drawable/arrow_right_gray" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/version"
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_horizontal_dev_str"
-                    android:layout_marginBottom="@dimen/margin_top_dev_str"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/arrow_right_gray" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_horizontal_dev_str"
+                android:layout_marginBottom="@dimen/margin_top_dev_str"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintVertical_bias="0">
+
+                <TextView
+                    android:id="@+id/version_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Версия:"
+                    android:textAppearance="@style/Text.SemiBold.18" />
+
+                <TextView
+                    android:id="@+id/version_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="version test"
+                    android:textAppearance="@style/Text.SemiBold.18"
+                    app:layout_constraintBottom_toBottomOf="@+id/version_TV"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/version_TV"
+                    app:layout_constraintTop_toTopOf="@+id/version_TV"
+                    app:layout_constraintVertical_bias="0.0" />
+            </LinearLayout>
 
-                    app:layout_constraintVertical_bias="0">
+            <LinearLayout
+                android:id="@+id/figma"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
+                android:layout_marginTop="@dimen/margin_top_dev_str"
+                android:orientation="horizontal"
+                android:textAppearance="@style/Text.SemiBold.18"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/code"
 
-                    <TextView
-                        android:id="@+id/version_TV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Версия:"
-                        android:textAppearance="@style/Text.SemiBold.18" />
+                app:layout_constraintVertical_bias="0.0">
 
-                    <TextView
-                        android:id="@+id/version_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="version test"
-                        android:textAppearance="@style/Text.SemiBold.18"
-                        app:layout_constraintBottom_toBottomOf="@+id/version_TV"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/version_TV"
-                        app:layout_constraintTop_toTopOf="@+id/version_TV"
-                        app:layout_constraintVertical_bias="0.0" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/figma"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/figma_tv"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_horizontal_dev_str"
-                    android:layout_marginTop="@dimen/margin_top_dev_str"
-                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1.0"
+
+                    android:text="Макет в Figma"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -364,37 +382,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/code"
 
-                    app:layout_constraintVertical_bias="0.0">
+                    app:layout_constraintVertical_bias="0.0" />
 
-                    <TextView
-                        android:id="@+id/figma_tv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1.0"
-
-                        android:text="Макет в Figma"
-                        android:textAppearance="@style/Text.SemiBold.18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/code"
-
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/transparent"
-                        android:src="@drawable/arrow_right_gray" />
-                </LinearLayout>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/arrow_right_gray" />
+            </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.navigation.NavigationView>
-    </androidx.drawerlayout.widget.DrawerLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>
