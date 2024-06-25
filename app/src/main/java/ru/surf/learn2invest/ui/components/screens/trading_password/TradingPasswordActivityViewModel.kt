@@ -4,4 +4,6 @@ import androidx.lifecycle.ViewModel
 
 class TradingPasswordActivityViewModel : ViewModel() {
     lateinit var action: TradingPasswordActivityActions
+    lateinit var actionName: String
+    lateinit var mainButtonAction: String
 }

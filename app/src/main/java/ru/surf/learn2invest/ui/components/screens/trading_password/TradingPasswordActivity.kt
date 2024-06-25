@@ -19,7 +19,6 @@ import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
-import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivityViewModel
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
@@ -39,8 +38,7 @@ class TradingPasswordActivity : AppCompatActivity() {
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
                 ContextCompat.getColor(
-                    this,
-                    R.color.white
+                    this, R.color.white
                 )
             )
         )
@@ -52,11 +50,41 @@ class TradingPasswordActivity : AppCompatActivity() {
         ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
         no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
         viewModel.action = when (intent.action.toString()) {
-            TradingPasswordActivityActions.ChangeTradingPassword.action -> TradingPasswordActivityActions.ChangeTradingPassword
+            TradingPasswordActivityActions.CreateTradingPassword.action -> {
+                viewModel.apply {
+                    actionName = ContextCompat.getString(
+                        this@TradingPasswordActivity,
+                        R.string.create_trading_password
+                    )
+                    mainButtonAction =
+                        ContextCompat.getString(this@TradingPasswordActivity, R.string.create)
+                }
+                TradingPasswordActivityActions.CreateTradingPassword
+            }
 
-            TradingPasswordActivityActions.CreateTradingPassword.action -> TradingPasswordActivityActions.CreateTradingPassword
+            TradingPasswordActivityActions.ChangeTradingPassword.action -> {
+                viewModel.apply {
+                    actionName = ContextCompat.getString(
+                        this@TradingPasswordActivity,
+                        R.string.change_trading_password
+                    )
+                    mainButtonAction =
+                        ContextCompat.getString(this@TradingPasswordActivity, R.string.change)
+                }
+                TradingPasswordActivityActions.ChangeTradingPassword
+            }
 
-            TradingPasswordActivityActions.RemoveTradingPassword.action -> TradingPasswordActivityActions.RemoveTradingPassword
+            TradingPasswordActivityActions.RemoveTradingPassword.action -> {
+                viewModel.apply {
+                    actionName = ContextCompat.getString(
+                        this@TradingPasswordActivity,
+                        R.string.remove_trading_password
+                    )
+                    mainButtonAction =
+                        ContextCompat.getString(this@TradingPasswordActivity, R.string.remove)
+                }
+                TradingPasswordActivityActions.RemoveTradingPassword
+            }
 
             else -> {
                 // finish if action is not defined
@@ -71,24 +99,19 @@ class TradingPasswordActivity : AppCompatActivity() {
 
     private fun configureVisibilities() {
         binding.apply {
-            headerTradingPasswordActivity.text = viewModel.action.actionName
-            buttonDoTrading.text = viewModel.action.mainButtonAction
+            headerTradingPasswordActivity.text = viewModel.actionName
+            buttonDoTrading.text = viewModel.mainButtonAction
             rulesTrpass1.text = ContextCompat.getString(
-                this@TradingPasswordActivity,
-                R.string.min_len_trading_password
+                this@TradingPasswordActivity, R.string.min_len_trading_password
             )
             rulesTrpass2.text =
-                ContextCompat
-                    .getString(this@TradingPasswordActivity, R.string.not_more_than_2)
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.not_more_than_2)
             rulesTrpass3.text =
-                ContextCompat
-                    .getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
             rulesTrpass4.text =
-                ContextCompat
-                    .getString(this@TradingPasswordActivity, R.string.pass_match)
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.pass_match)
             rulesTrpass5.text =
-                ContextCompat
-                    .getString(this@TradingPasswordActivity, R.string.old_pas_correct)
+                ContextCompat.getString(this@TradingPasswordActivity, R.string.old_pas_correct)
             when (viewModel.action) {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {
@@ -118,7 +141,6 @@ class TradingPasswordActivity : AppCompatActivity() {
         }
     }
 
-
     private fun checkPassword() {
         binding.apply {
             imageRule1.setImageDrawable(
@@ -135,12 +157,9 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             imageRule4.setImageDrawable(
                 if (viewModel.action != TradingPasswordActivityActions.RemoveTradingPassword) {
-                    if (passwordEdit.text == passwordConfirm.text
-                        && passwordEdit.text?.isNotEmpty() == true
-                    ) ok else no
+                    if (passwordEdit.text == passwordConfirm.text && passwordEdit.text?.isNotEmpty() == true) ok else no
                 } else {
-                    if (passwordEdit.text == passwordConfirm.text
-                        && verifyTradingPassword(
+                    if (passwordEdit.text == passwordConfirm.text && verifyTradingPassword(
                             user = profile, password = passwordEdit.text.toString()
                         )
                     ) ok else no
@@ -149,8 +168,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             imageRule5.setImageDrawable(
                 if (verifyTradingPassword(
-                        user = profile,
-                        password = "${passwordLast.text}"
+                        user = profile, password = "${passwordLast.text}"
                     )
                 ) ok else no
             )
@@ -159,9 +177,7 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             buttonDoTrading.setOnClickListener {
                 profile =
-                    if (viewModel.action == TradingPasswordActivityActions.CreateTradingPassword
-                        || viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword
-                    ) {
+                    if (viewModel.action == TradingPasswordActivityActions.CreateTradingPassword || viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword) {
                         profile.copy(
                             tradingPasswordHash = PasswordHasher(
                                 firstName = profile.firstName, lastName = profile.lastName
@@ -176,7 +192,6 @@ class TradingPasswordActivity : AppCompatActivity() {
 
         }
     }
-
 
     private fun mainButtonIsVisible(): Boolean {
         binding.let {
@@ -195,7 +210,6 @@ class TradingPasswordActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun initListeners() {
         binding.apply {
@@ -235,7 +249,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
             })
 
-            passwordLast.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            passwordLast.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     passwordLast.clearFocus()
                     passwordEdit.requestFocus()
@@ -260,7 +274,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
             })
 
-            passwordEdit.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            passwordEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     passwordEdit.clearFocus()
                     passwordConfirm.requestFocus()
@@ -285,7 +299,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
             })
 
-            passwordConfirm.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            passwordConfirm.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     passwordConfirm.clearFocus()
                     passwordConfirm.hideKeyboard(activity = this@TradingPasswordActivity)
