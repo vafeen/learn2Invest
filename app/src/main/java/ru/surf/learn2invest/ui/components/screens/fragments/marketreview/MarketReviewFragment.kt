@@ -166,14 +166,17 @@ class MarketReviewFragment : Fragment() {
 
         binding.apply {
             filterByMarketcap.setOnClickListener {
+                marketReviewRecyclerview.layoutManager?.scrollToPosition(0)
                 viewModel.filterByMarketcap()
             }
 
             filterByChangePercent24Hr.setOnClickListener {
+                marketReviewRecyclerview.layoutManager?.scrollToPosition(0)
                 viewModel.filterByPercent()
             }
 
             filterByPrice.setOnClickListener {
+                marketReviewRecyclerview.layoutManager?.scrollToPosition(0)
                 viewModel.filterByPrice()
             }
 
