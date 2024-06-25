@@ -4,8 +4,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -101,17 +103,31 @@ class TradingPasswordActivity : AppCompatActivity() {
         binding.apply {
             headerTradingPasswordActivity.text = viewModel.actionName
             buttonDoTrading.text = viewModel.mainButtonAction
-            rulesTrpass1.text = ContextCompat.getString(
-                this@TradingPasswordActivity, R.string.min_len_trading_password
-            )
+            rulesTrpass1.text =
+                ContextCompat.getString(
+                    this@TradingPasswordActivity,
+                    R.string.min_len_trading_password
+                )
             rulesTrpass2.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.not_more_than_2)
+                ContextCompat.getString(
+                    this@TradingPasswordActivity,
+                    R.string.not_more_than_2
+                )
             rulesTrpass3.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.no_seq_more_than_2)
+                ContextCompat.getString(
+                    this@TradingPasswordActivity,
+                    R.string.no_seq_more_than_2
+                )
             rulesTrpass4.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.pass_match)
+                ContextCompat.getString(
+                    this@TradingPasswordActivity,
+                    R.string.pass_match
+                )
             rulesTrpass5.text =
-                ContextCompat.getString(this@TradingPasswordActivity, R.string.old_pas_correct)
+                ContextCompat.getString(
+                    this@TradingPasswordActivity,
+                    R.string.old_pas_correct
+                )
             when (viewModel.action) {
 
                 TradingPasswordActivityActions.CreateTradingPassword -> {
@@ -142,13 +158,18 @@ class TradingPasswordActivity : AppCompatActivity() {
     }
 
     private fun checkPassword() {
+
         binding.apply {
+            Log.d(
+                "passwords",
+                "\\${passwordLast.text}\\, \\${passwordEdit.text}\\, \\${passwordConfirm.text}\\"
+            )
             imageRule1.setImageDrawable(
                 if ((passwordEdit.text?.length ?: 0) >= 6) ok else no
             )
 
             imageRule2.setImageDrawable(
-                if (passwordEdit.text.toString().isThisContains3NumbersOfEmpty()) no else ok
+                if ("${passwordEdit.text}".isThisContains3NumbersOfEmpty()) no else ok
             )
 
             imageRule3.setImageDrawable(
@@ -156,15 +177,32 @@ class TradingPasswordActivity : AppCompatActivity() {
             )
 
             imageRule4.setImageDrawable(
-                if (viewModel.action != TradingPasswordActivityActions.RemoveTradingPassword) {
-                    if (passwordEdit.text == passwordConfirm.text && passwordEdit.text?.isNotEmpty() == true) ok else no
-                } else {
-                    if (passwordEdit.text == passwordConfirm.text && verifyTradingPassword(
-                            user = profile, password = passwordEdit.text.toString()
+                when (viewModel.action) {
+                    TradingPasswordActivityActions.RemoveTradingPassword -> {
+                        if (("${passwordEdit.text}" == "${passwordConfirm.text}") && verifyTradingPassword(
+                                user = profile, password = "${passwordEdit.text}"
+                            )
+                        ) ok else no
+                    }
+
+                    TradingPasswordActivityActions.ChangeTradingPassword -> {
+                        if ("${passwordEdit.text}" == "${passwordConfirm.text}"
+                            && passwordEdit.text?.isNotEmpty() == true
+                        ) ok else no
+                    }
+
+                    TradingPasswordActivityActions.CreateTradingPassword -> {
+                        Log.d(
+                            "pass",
+                            "edit == |${passwordEdit.text}|, confirm == |${passwordConfirm.text}| "
                         )
-                    ) ok else no
+                        if (("${passwordEdit.text}" == "${passwordConfirm.text}")
+                            && passwordEdit.text?.isNotEmpty() == true
+                        ) ok else no
+                    }
                 }
             )
+
 
             imageRule5.setImageDrawable(
                 if (verifyTradingPassword(
@@ -211,6 +249,15 @@ class TradingPasswordActivity : AppCompatActivity() {
         }
     }
 
+    private fun EditText.changeHintVisibility() {
+        apply {
+            hint = if (text?.isEmpty() != true) ContextCompat.getString(
+                this@TradingPasswordActivity,
+                R.string.enter_last_trading_password
+            ) else ""
+        }
+    }
+
     private fun initListeners() {
         binding.apply {
             when (viewModel.action) {
@@ -233,6 +280,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             arrowBackTpactivity.setOnClickListener {
                 this@TradingPasswordActivity.finish()
             }
+
             passwordLast.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?, start: Int, count: Int, after: Int
@@ -242,6 +290,54 @@ class TradingPasswordActivity : AppCompatActivity() {
                 override fun onTextChanged(
                     s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
+                    passwordLast.apply {
+                        hint = if (text?.isEmpty() != true) ContextCompat.getString(
+                            this@TradingPasswordActivity,
+                            R.string.enter_last_trading_password
+                        ) else ""
+                    }
+                    checkPassword()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                }
+            })
+            passwordEdit.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
+                    passwordEdit.apply {
+                        hint = if (text?.isEmpty() != true) ContextCompat.getString(
+                            this@TradingPasswordActivity,
+                            R.string.enter_last_trading_password
+                        ) else ""
+                    }
+                    checkPassword()
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                }
+            })
+            passwordConfirm.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int
+                ) {
+                    passwordConfirm.apply {
+                        hint = if (text?.isEmpty() != true) ContextCompat.getString(
+                            this@TradingPasswordActivity,
+                            R.string.enter_last_trading_password
+                        ) else ""
+                    }
                     checkPassword()
                 }
 
@@ -257,23 +353,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
                 false
             })
-
-            passwordEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int
-                ) {
-                }
-
-                override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int
-                ) {
-                    checkPassword()
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                }
-            })
-
             passwordEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     passwordEdit.clearFocus()
@@ -282,23 +361,6 @@ class TradingPasswordActivity : AppCompatActivity() {
                 }
                 false
             })
-
-            passwordConfirm.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int
-                ) {
-                }
-
-                override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int
-                ) {
-                    checkPassword()
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                }
-            })
-
             passwordConfirm.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     passwordConfirm.clearFocus()
@@ -312,11 +374,20 @@ class TradingPasswordActivity : AppCompatActivity() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     DatabaseRepository.updateProfile(
                         profile.copy(
-                            tradingPasswordHash = PasswordHasher(
-                                firstName = profile.firstName, lastName = profile.lastName
-                            ).passwordToHash(
-                                passwordConfirm.text.toString()
-                            )
+                            tradingPasswordHash = when {
+                                viewModel.action == TradingPasswordActivityActions.CreateTradingPassword ||
+                                        viewModel.action == TradingPasswordActivityActions.ChangeTradingPassword -> {
+                                    PasswordHasher(
+                                        firstName = profile.firstName, lastName = profile.lastName
+                                    ).passwordToHash(
+                                        passwordConfirm.text.toString()
+                                    )
+                                }
+
+                                else -> {
+                                    null
+                                }
+                            }
                         )
                     )
                 }.invokeOnCompletion {
