@@ -15,7 +15,7 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetBalanceHistory
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
-import ru.surf.learn2invest.noui.network_components.ResponseWrapper
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
@@ -114,7 +114,7 @@ class PortfolioViewModel : ViewModel() {
         for (asset in assets) {
             val response = NetworkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
-                currentPrice = response.value.data.priceUsd
+                currentPrice = response.value.priceUsd
                 priceChanges[asset.symbol] = currentPrice
                 totalCurrentValue += currentPrice * asset.amount
 

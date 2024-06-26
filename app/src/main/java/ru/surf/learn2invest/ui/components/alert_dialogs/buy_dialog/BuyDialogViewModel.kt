@@ -11,7 +11,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
-import ru.surf.learn2invest.noui.network_components.ResponseWrapper
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 
 class BuyDialogViewModel : ViewModel() {
@@ -68,7 +68,7 @@ class BuyDialogViewModel : ViewModel() {
             while (true) {
                 when (val result = NetworkRepository.getCoinReview(coin.assetID)) {
                     is ResponseWrapper.Success -> {
-                        onUpdateFields(result.value.data.priceUsd.getWithCurrency())
+                        onUpdateFields(result.value.priceUsd.getWithCurrency())
                     }
 
                     is ResponseWrapper.NetworkError -> {}

@@ -20,4 +20,3 @@ object CoinRetrofitClient {
         )
         .build()
 }
-

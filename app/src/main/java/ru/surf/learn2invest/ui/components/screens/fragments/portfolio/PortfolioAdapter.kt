@@ -55,7 +55,9 @@ class PortfolioAdapter(
             coinSymbol.text = asset.symbol
             coinTopNumericInfo.text = "$priceChange$"
             val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
-            val roundedPercent = BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP).toFloat()
+            val roundedPercent =
+                BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP)
+                    .toFloat()
             val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
             coinBottomNumericInfo.setTextColor(
                 when {

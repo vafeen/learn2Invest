@@ -4,10 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
@@ -37,7 +39,11 @@ class ResetStatsDialog(
                     }
                 }
                 cancel()
-                Toast.makeText(dialogContext, "Стата сброшена", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    dialogContext,
+                    ContextCompat.getString(dialogContext, R.string.stat_reset),
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             no.setOnClickListener {
