@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 object Icons {
     var ok: Drawable? = null
-    var no: Drawable? = null
+    var error: Drawable? = null
 }
 
 

@@ -15,7 +15,7 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
 import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
-import ru.surf.learn2invest.utils.Icons.no
+import ru.surf.learn2invest.utils.Icons.error
 import ru.surf.learn2invest.utils.Icons.ok
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
@@ -44,9 +44,9 @@ class TradingPasswordActivity : AppCompatActivity() {
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
             this.finish()
         setContentView(binding.root)
-        // TODO (Найдите пж норм иконки галочки и крестика
-        ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_plus)
-        no = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.circle_minus)
+
+        ok = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.ok_24dp)
+        error = ContextCompat.getDrawable(this@TradingPasswordActivity, R.drawable.error_24dp)
         configureVisibilities()
         initListeners()
         checkPassword()
@@ -114,15 +114,15 @@ class TradingPasswordActivity : AppCompatActivity() {
 
         binding.apply {
             imageRule1.setImageDrawable(
-                if ((passwordEdit.text?.length ?: 0) >= 6) ok else no
+                if ((passwordEdit.text?.length ?: 0) >= 6) ok else error
             )
 
             imageRule2.setImageDrawable(
-                if ("${passwordEdit.text}".isThisContains3NumbersOfEmpty()) no else ok
+                if ("${passwordEdit.text}".isThisContains3NumbersOfEmpty()) error else ok
             )
 
             imageRule3.setImageDrawable(
-                if (passwordEdit.text.toString().isThisContainsSequenceOrEmpty()) no else ok
+                if (passwordEdit.text.toString().isThisContainsSequenceOrEmpty()) error else ok
             )
 
             imageRule4.setImageDrawable(
@@ -131,19 +131,19 @@ class TradingPasswordActivity : AppCompatActivity() {
                         if (("${passwordEdit.text}" == "${passwordConfirm.text}") && verifyTradingPassword(
                                 user = profile, password = "${passwordEdit.text}"
                             )
-                        ) ok else no
+                        ) ok else error
                     }
 
                     TradingPasswordActivityActions.ChangeTradingPassword -> {
                         if ("${passwordEdit.text}" == "${passwordConfirm.text}"
                             && passwordEdit.text?.isNotEmpty() == true
-                        ) ok else no
+                        ) ok else error
                     }
 
                     TradingPasswordActivityActions.CreateTradingPassword -> {
                         if (("${passwordEdit.text}" == "${passwordConfirm.text}")
                             && passwordEdit.text?.isNotEmpty() == true
-                        ) ok else no
+                        ) ok else error
                     }
                 }
             )
@@ -152,7 +152,7 @@ class TradingPasswordActivity : AppCompatActivity() {
                 if (verifyTradingPassword(
                         user = profile, password = "${passwordLast.text}"
                     )
-                ) ok else no
+                ) ok else error
             )
 
             buttonDoTrading.isVisible = mainButtonIsVisible()
