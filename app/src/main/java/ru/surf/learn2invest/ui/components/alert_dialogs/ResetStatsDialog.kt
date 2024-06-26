@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.components.alert_dialogs
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
 
 class ResetStatsDialog(
     private val dialogContext: Context,

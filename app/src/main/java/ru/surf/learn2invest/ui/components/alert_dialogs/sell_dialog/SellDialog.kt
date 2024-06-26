@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.sell_dialog
+package ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog
 
 import android.content.Context
 import android.text.Editable
@@ -14,12 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.noui.cryptography.isTrueTradingPasswordOrIsNotDefined
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.utils.isTrueTradingPasswordOrIsNotDefined
 
 class SellDialog(
     dialogContext: Context,

@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.buy_dialog
+package ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,12 +15,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.BuyDialogBinding
-import ru.surf.learn2invest.noui.cryptography.isTrueTradingPasswordOrIsNotDefined
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.utils.isTrueTradingPasswordOrIsNotDefined
 
 class BuyDialog(
     context: Context,

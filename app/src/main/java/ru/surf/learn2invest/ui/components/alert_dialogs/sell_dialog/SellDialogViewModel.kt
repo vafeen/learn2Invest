@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.sell_dialog
+package ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,13 +6,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
-import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.noui.network_components.NetworkRepository
+import ru.surf.learn2invest.noui.network_components.ResponseWrapper
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 
 class SellDialogViewModel : ViewModel() {
     lateinit var realTimeUpdateJob: Job

@@ -12,9 +12,9 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
-import ru.surf.learn2invest.network_components.util.Const
-import ru.surf.learn2invest.ui.alert_dialogs.buy_dialog.BuyDialog
-import ru.surf.learn2invest.ui.alert_dialogs.sell_dialog.SellDialog
+import ru.surf.learn2invest.noui.network_components.util.Const
+import ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog.BuyDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 

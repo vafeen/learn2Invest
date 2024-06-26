@@ -8,8 +8,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.surf.learn2invest.network_components.NetworkRepository
-import ru.surf.learn2invest.network_components.ResponseWrapper
+import ru.surf.learn2invest.noui.network_components.NetworkRepository
+import ru.surf.learn2invest.noui.network_components.ResponseWrapper
 import java.text.NumberFormat
 import java.util.Locale
 

@@ -18,13 +18,13 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
-import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
-import ru.surf.learn2invest.noui.cryptography.verifyPIN
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import ru.surf.learn2invest.utils.gotoCenter
+import ru.surf.learn2invest.utils.isBiometricAvailable
 import ru.surf.learn2invest.utils.tapOn
 import ru.surf.learn2invest.utils.updateProfile
+import ru.surf.learn2invest.utils.verifyPIN
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding

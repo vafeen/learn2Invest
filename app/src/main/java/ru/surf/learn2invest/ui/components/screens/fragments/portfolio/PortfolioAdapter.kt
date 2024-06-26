@@ -11,8 +11,8 @@ import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale

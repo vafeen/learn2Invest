@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.network_components.util
+package ru.surf.learn2invest.noui.network_components.util
 
 object Const {
     const val BASE_URL = "https://api.coincap.io/v2/"

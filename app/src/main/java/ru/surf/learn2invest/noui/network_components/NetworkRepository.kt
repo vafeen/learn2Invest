@@ -1,13 +1,13 @@
-package ru.surf.learn2invest.network_components
+package ru.surf.learn2invest.noui.network_components
 
 import android.util.Log
 import retrofit2.HttpException
-import ru.surf.learn2invest.network_components.responses.APIWrapper
-import ru.surf.learn2invest.network_components.responses.AugmentedCoinReviewResponse
-import ru.surf.learn2invest.network_components.responses.CoinPriceDto
-import ru.surf.learn2invest.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.network_components.util.CoinRetrofitClient
-import ru.surf.learn2invest.network_components.util.Const
+import ru.surf.learn2invest.noui.network_components.responses.APIWrapper
+import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinReviewResponse
+import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
+import ru.surf.learn2invest.noui.network_components.util.Const
 
 /**
  * Пример использования (Вариант для запуска из Activity):

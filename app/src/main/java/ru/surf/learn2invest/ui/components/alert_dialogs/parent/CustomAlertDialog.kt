@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.parent
+package ru.surf.learn2invest.ui.components.alert_dialogs.parent
 
 import android.os.Bundle
 import android.view.LayoutInflater

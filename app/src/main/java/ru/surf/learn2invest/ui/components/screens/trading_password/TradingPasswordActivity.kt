@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
-import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.utils.Icons.error
 import ru.surf.learn2invest.utils.Icons.ok
@@ -23,6 +22,7 @@ import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
 import ru.surf.learn2invest.utils.isThisContainsSequenceOrEmpty
 import ru.surf.learn2invest.utils.showKeyboard
 import ru.surf.learn2invest.utils.updateProfile
+import ru.surf.learn2invest.utils.verifyTradingPassword
 
 
 class TradingPasswordActivity : AppCompatActivity() {

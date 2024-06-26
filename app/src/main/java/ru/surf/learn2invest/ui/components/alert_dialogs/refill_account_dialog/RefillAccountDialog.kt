@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.refill_account_dialog
+package ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog
 
 import android.content.Context
 import android.text.Editable
@@ -11,8 +11,8 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
 
 class RefillAccountDialog(
     context: Context, private val lifecycleScope: LifecycleCoroutineScope,

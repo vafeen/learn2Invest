@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.Job
-import ru.surf.learn2invest.chart.LineChartHelper
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
+import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 
 // Вкладка Обзор в Обзоре актива
 class AssetOverviewFragment : Fragment() {

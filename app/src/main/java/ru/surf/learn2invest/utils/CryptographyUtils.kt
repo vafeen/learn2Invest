@@ -1,7 +1,8 @@
-package ru.surf.learn2invest.noui.cryptography
+package ru.surf.learn2invest.utils
 
 import android.content.Context
 import androidx.biometric.BiometricManager
+import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 

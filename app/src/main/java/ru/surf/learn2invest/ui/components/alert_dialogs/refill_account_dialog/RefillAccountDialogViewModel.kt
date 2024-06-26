@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs.refill_account_dialog
+package ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

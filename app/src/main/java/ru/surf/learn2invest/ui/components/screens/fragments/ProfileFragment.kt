@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
-import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfileDialog
-import ru.surf.learn2invest.ui.alert_dialogs.ResetStatsDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.AskToDeleteProfileDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.ResetStatsDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
+import ru.surf.learn2invest.utils.isBiometricAvailable
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
