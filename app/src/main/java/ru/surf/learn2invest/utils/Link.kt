@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
+package ru.surf.learn2invest.utils
 
 object Link {
     val chery: String = "nadyachery@gmail.com"

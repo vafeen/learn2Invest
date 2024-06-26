@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.components.alert_dialogs
+package ru.surf.learn2invest.utils
 
 
 fun Float.getWithCurrency(): String = "$this$"
