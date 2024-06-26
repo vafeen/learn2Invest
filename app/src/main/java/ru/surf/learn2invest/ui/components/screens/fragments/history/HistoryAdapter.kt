@@ -6,11 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
-import coil.request.Disposable
-import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction

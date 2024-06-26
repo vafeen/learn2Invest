@@ -1,45 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Learn2Invest</string>
     <string name="refill">Пополнить</string>
     <string name="buy">Купить</string>
     <string name="sell">Продать</string>
-    <string name="add_price_alert">Добавить</string>
     <string name="exit">Выйти</string>
     <string name="close">Закрыть</string>
     <string name="no">Нет</string>
     <string name="yes_exactly">Да, точно</string>
-    <string name="example_balance">$50,540.00</string>
-    <string name="example_price">$10000</string>
     <string name="price_name">Цена</string>
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
     <string name="changing_price">Изменение цены в %</string>
     <string name="comment">Комментарий</string>
     <string name="no_asset_for_sale">Нет актива для продажи</string>
-    <string name="not_enough_money_for_buy">Недостаточно средств \nдля покупки</string>
+    <string name="not_enough_money_for_buy">Недостаточно средств</string>
     <string name="asking_to_delete_profile">Вы точно хотите удалить\nпрофиль?</string>
     <string name="account">Счет</string>
     <string name="enter_sum">Введите сумму</string>
     <string name="refill_account">Пополнение счета</string>
+    <string name="create_account">Создание аккаунта</string>
     <string name="sell_security_paper">Продажа</string>
     <string name="buy_security_paper">Покупка</string>
-    <string name="price_alert_text">Price alert</string>
     <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
     <string name="account_funds">Средства на счете</string>
     <string name="top_up">Пополнить</string>
     <string name="assets_are_empty">Ваш портфель пуст</string>
-    <string name="create_account">Создание аккаунта</string>
     <string name="signup_btn_text">Войти</string>
     <string name="signup_lastname_hint">Введите фамилию</string>
     <string name="input_is_empty_error">Поле не может быть пустым</string>
     <string name="signup_name_hint">Введите имя</string>
     <string name="price">Цена</string>
     <string name="top_day_percent">24 ч %</string>
-    <string name="top_market_cap">Топ по $</string>
-    <string name="market_review">Обзор рынка</string>
-    <string name="search">Поиск</string>
-    <string name="clear"><u>Очистить</u></string>
     <string name="network_error">Проверьте подключение \n к интернету</string>
     <string name="you_search">Вы искали</string>
     <string name="history_text">История</string>
@@ -48,19 +40,53 @@
     <string name="delete_profile"><u>Удалить \nпрофиль</u></string>
     <string name="drop_statistics">Сброс статистики</string>
     <string name="settings">Настройки</string>
-    <string name="notification">Уведомления</string>
     <string name="biometry">Биометрия</string>
     <string name="confirm_deal">Подтверждение сделок</string>
     <string name="change_PIN">Смена PIN-кода</string>
-    <string name="change_trading_password">Смена Торгового пароля</string>
-    <string name="add_trading_password">Добавление Торгового пароля</string>
+    <string name="change_trading_password">Смена торгового пароля</string>
+    <string name="add_trading_password">Добавление торгового пароля</string>
     <string name="enter_pin_str">Введите PIN-код</string>
     <string name="capitalisation">Капитализация:</string>
     <string name="review_text">Обзор</string>
     <string name="no_interest_error">Вы не интересовались\nданным активом</string>
     <string name="repeat_pin">Повторите PIN-код</string>
     <string name="reset_stats">    Вы точно хотите\nсбросить статистику?</string>
-    <string name="create_trading_pass">Создать торговый пароль</string>
-    <string name="navigation_drawer_open">open\n</string>
-    <string name="navigation_drawer_close">close</string>
+    <string name="create_trading_password">Создать торговый пароль</string>
+    <string name="create_pin">"Придумайте PIN-код"</string>
+    <string name="enter_old_pin">Введите старый PIN-код</string>
+    <string name="min_len_trading_password">Пароль должен состоять минимум из 6 цифр</string>
+    <string name="not_more_than_2">Не более двух одинаковых цифр рядом</string>
+    <string name="no_seq_more_than_2">Нет последовательности более трех цифр</string>
+    <string name="pass_match">Пароли совпадают</string>
+    <string name="old_pas_correct">Старый пароль верен</string>
+    <string name="create_trpas">Создание торгового пароля</string>
+    <string name="create">Создать</string>
+    <string name="change_trpas">Изменение торгового пароля</string>
+    <string name="change">Изменить</string>
+    <string name="remove_trading_password">Удаление торгового пароля</string>
+    <string name="remove">Удалить</string>
+    <string name="top_market_cap">Топ по $</string>
+    <string name="market_review">Обзор рынка</string>
+    <string name="search">Поиск</string>
+    <string name="clear"><u>Очистить</u></string>
+    <string name="sign_in_in_learn2invest">Вход в Learn2Invest</string>
+    <string name="cancel">Отмена</string>
+    <string name="stat_reset">Стата сброшена</string>
+    <string name="final_price">Final</string>
+    <string name="enter_new_pin">Введите новый PIN-код</string>
+    <string name="empty_error">Empty field</string>
+    <string name="contains_spaces">Содержит пробелы в начале или конце</string>
+    <string name="limit_len_exceeded">Превышен предел длины</string>
+    <string name="navigation_drawer_open" translatable="false">open\n</string>
+    <string name="navigation_drawer_close" translatable="false">close</string>
+    <string name="app_name" translatable="false">Learn2Invest</string>
+    <string name="example_balance" translatable="false">$50,540.00</string>
+    <string name="example_price" translatable="false">$10000</string>
+    <string name="example_title" translatable="false">Example title</string>
+    <string name="trading_password">Торговый пароль</string>
+    <string name="itog">Итого:</string>
+    <string name="hello">Здравствуй</string>
+    <string name="repeat_trading_password">Повторите пароль</string>
+    <string name="enter_trading_password">Введите пароль</string>
+    <string name="enter_last_trading_password">Введите старый пароль</string>
 </resources>

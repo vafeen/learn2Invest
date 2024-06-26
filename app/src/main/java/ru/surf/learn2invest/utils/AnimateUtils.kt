@@ -14,11 +14,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+object Icons {
+    var ok: Drawable? = null
+    var error: Drawable? = null
+}
 
-var ok: Drawable? = null
-var no: Drawable? = null
 
-fun ImageView.isOk(): Boolean = this.drawable == ok
+fun ImageView.isOk(): Boolean = this.drawable == Icons.ok
 
 fun TextView.tapOn() {
     val rotating = ValueAnimator.ofFloat(0f, 360f).also {

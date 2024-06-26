@@ -157,8 +157,7 @@ class MarketReviewFragment : Fragment() {
                     if (it) searchEditText.hint = ""
                     if (it.not()) {
                         adapter.data = viewModel.data.value
-                    }
-                    else adapter.data = viewModel.data.value
+                    } else adapter.data = viewModel.data.value
                     adapter.notifyDataSetChanged()
                 }
             }

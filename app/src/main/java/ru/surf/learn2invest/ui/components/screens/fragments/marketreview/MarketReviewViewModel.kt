@@ -4,15 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
@@ -22,7 +18,6 @@ import ru.surf.learn2invest.noui.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_MARKETCAP
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PERCENT
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PRICE
-import java.util.Collections.addAll
 
 class MarketReviewViewModel : ViewModel() {
     private var _data: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(

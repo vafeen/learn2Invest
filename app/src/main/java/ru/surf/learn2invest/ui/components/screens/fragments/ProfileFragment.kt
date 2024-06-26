@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
-import ru.surf.learn2invest.noui.cryptography.isBiometricAvailable
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.alert_dialogs.AskToDeleteProfileDialog
-import ru.surf.learn2invest.ui.alert_dialogs.ResetStatsDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.AskToDeleteProfileDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.ResetStatsDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
+import ru.surf.learn2invest.utils.isBiometricAvailable
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -34,19 +34,37 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         context = requireContext()
-
         activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
-
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+        initListeners()
 
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        initListeners()
+    override fun onStart() {
+        super.onStart()
+        DatabaseRepository.profile.apply {
+            binding.apply {
+                biometryBtnSwitcher.isChecked = biometry
+                confirmDealBtnSwitcher.isChecked = tradingPasswordHash != null
+                changeTradingPasswordBtn.isVisible = tradingPasswordHash != null
+            }
+        }
     }
+
+    private fun intentFoxTradingPasswordActivityByConditions(): Intent =
+        Intent(context, TradingPasswordActivity::class.java).apply {
+            action = when {
+                binding.confirmDealBtnSwitcher.isChecked -> {
+                    TradingPasswordActivityActions.CreateTradingPassword.action
+                }
+
+                else -> {
+                    TradingPasswordActivityActions.RemoveTradingPassword.action
+                }
+            }
+        }
+
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -57,21 +75,15 @@ class ProfileFragment : Fragment() {
     private fun initListeners() {
         DatabaseRepository.profile.let { profile ->
             binding.also { fr ->
-
                 fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
-
-                fr.biometryBtn.isVisible = isBiometricAvailable(context = context)
-
-                fr.biometryBtnSwitcher.isChecked = profile.biometry
-
-                fr.confirmDealBtnSwitcher.isChecked = profile.tradingPasswordHash != null
-
+                binding.biometryBtn.isVisible = isBiometricAvailable(context = context)
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfileDialog(
-                        dialogContext = context, lifecycleScope = lifecycleScope,
+                        dialogContext = context,
+                        lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager
                     ).show()
 
@@ -101,10 +113,9 @@ class ProfileFragment : Fragment() {
                             updateProfile(profile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
-                        }
-                            .setDesignBottomSheet(
-                                title = "Биометрия"
-                            ).auth()
+                        }.setDesignBottomSheet(
+                            title = ContextCompat.getString(context, R.string.biometry)
+                        ).auth()
 
                     }
                 }
@@ -115,41 +126,15 @@ class ProfileFragment : Fragment() {
                     })
                 }
 
-                fr.changeTradingPasswordBtn.isVisible = profile.tradingPasswordHash != null
-
-
-                val intentFoxTradingPasswordActivityByConditions =
-
-                    Intent(context, TradingPasswordActivity::class.java)
-                        .apply {
-                            action = when {
-
-                                !fr.confirmDealBtnSwitcher.isChecked -> {
-                                    TradingPasswordActivityActions.CreateTradingPassword.action
-                                }
-
-                                else -> {
-                                    TradingPasswordActivityActions.RemoveTradingPassword.action
-                                }
-
-                            }
-                        }
-
                 fr.confirmDealBtn.setOnClickListener {
-
                     fr.confirmDealBtnSwitcher.isChecked = !fr.confirmDealBtnSwitcher.isChecked
-
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-
-                    startActivity(intentFoxTradingPasswordActivityByConditions)
+                    startActivity(intentFoxTradingPasswordActivityByConditions())
                 }
 
                 fr.confirmDealBtnSwitcher.setOnClickListener {
-
                     fr.changeTradingPasswordBtn.isVisible = fr.confirmDealBtnSwitcher.isChecked
-
-                    startActivity(intentFoxTradingPasswordActivityByConditions)
-
+                    startActivity(intentFoxTradingPasswordActivityByConditions())
                 }
 
                 fr.changePINBtn.setOnClickListener {
@@ -163,5 +148,4 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
 }

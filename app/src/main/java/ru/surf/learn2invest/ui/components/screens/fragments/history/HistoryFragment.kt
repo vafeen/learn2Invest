@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 

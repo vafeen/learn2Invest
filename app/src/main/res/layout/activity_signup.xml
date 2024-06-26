@@ -25,81 +25,60 @@
         android:background="@drawable/signup_background"
         app:layout_constraintTop_toBottomOf="@id/create_account_text_view" />
 
-    <View
-        android:id="@+id/margin_top_divider"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/signup_background" />
-
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_name"
-        android:layout_width="match_parent"
+        style="@style/L2ITextInputStyle"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/signup_edit_text_background"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/margin_top_divider">
+        android:layout_marginTop="43dp"
+        app:cursorColor="@color/black"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/signup_background">
 
-        <EditText
+        <!-- Здесь наличие глазика контролируется -->
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_name_edit_text"
-            style="@style/Text.Regular.14"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
+            android:background="@drawable/signup_edit_text_background"
             android:hint="@string/signup_name_hint"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/name_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circle_close"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lastname_not_empty"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toTopOf="@id/input_lastname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_name" />
-
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_lastname"
-        android:layout_width="match_parent"
+        style="@style/L2ITextInputStyle"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/signup_edit_text_background"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/lastname_not_empty">
+        android:layout_marginTop="30dp"
+        app:cursorColor="@color/black"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_name">
 
-        <EditText
+        <!-- Здесь наличие глазика контролируется -->
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_lastname_edit_text"
             style="@style/Text.Regular.14"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
+            android:background="@drawable/signup_edit_text_background"
             android:hint="@string/signup_lastname_hint"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/lastname_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circle_close"
-            android:visibility="gone" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/name_error_text_view"

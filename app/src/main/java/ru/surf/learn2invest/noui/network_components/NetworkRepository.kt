@@ -4,9 +4,9 @@ import android.util.Log
 import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinReviewResponse
 import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.noui.network_components.util.Const
-import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 
 object NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(

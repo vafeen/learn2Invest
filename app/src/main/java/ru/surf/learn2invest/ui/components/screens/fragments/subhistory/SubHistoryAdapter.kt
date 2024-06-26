@@ -6,18 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
-import coil.request.Disposable
-import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 
-class SubHistoryAdapter() :
+class SubHistoryAdapter :
     RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
     var data: List<Transaction> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

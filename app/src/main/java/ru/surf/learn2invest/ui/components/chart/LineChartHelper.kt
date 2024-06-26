@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.chart
+package ru.surf.learn2invest.ui.components.chart
 
 import android.content.Context
 import android.graphics.Color

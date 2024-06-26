@@ -10,10 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding

@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.noui.cryptography
 
 import android.app.Activity
-import android.util.Log
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -9,6 +8,8 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.surf.learn2invest.R
+import ru.surf.learn2invest.utils.isBiometricAvailable
 import java.util.concurrent.Executor
 
 /**
@@ -66,7 +67,7 @@ class FingerprintAuthenticator(
 
     fun setDesignBottomSheet(
         title: String,
-        cancelText: String = "ОТМЕНА"
+        cancelText: String = ContextCompat.getString(context, R.string.cancel)
     ): FingerprintAuthenticator {
         titleText = title
         cancelButtonText = cancelText
@@ -88,8 +89,8 @@ class FingerprintAuthenticator(
     private var setCancelCallback: () -> Unit = {}
 
     // design bottom sheet
-    private var titleText: String = "Example title"
-    private var cancelButtonText: String = "CANCEL"
+    private var titleText: String = ContextCompat.getString(context, R.string.example_title)
+    private var cancelButtonText: String = ContextCompat.getString(context, R.string.cancel)
 
     // for authentication
     private lateinit var executor: Executor

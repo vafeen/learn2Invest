@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.alert_dialogs
+package ru.surf.learn2invest.ui.components.alert_dialogs
 
 
 import android.app.Activity
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.AskToDeleteProfileDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
 import ru.surf.learn2invest.ui.main.MainActivity
 
 
@@ -26,16 +26,16 @@ class AskToDeleteProfileDialog(
         AskToDeleteProfileDialogBinding.inflate(LayoutInflater.from(dialogContext))
 
     override fun initListeners() {
-        binding.okDeleteAskToDeleteProfileDialog.setOnClickListener {
+        binding.ok.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                DatabaseRepository.deleteProfile(DatabaseRepository.profile)
+                DatabaseRepository.clearAllTables()
             }
-            (dialogContext as Activity).finish()
             cancel()
+            (dialogContext as Activity).finish()
             dialogContext.startActivity(Intent(dialogContext, MainActivity::class.java))
         }
 
-        binding.noAskToDeleteProfileDialog.setOnClickListener {
+        binding.no.setOnClickListener {
             cancel()
         }
     }
