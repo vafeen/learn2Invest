@@ -2,6 +2,7 @@ package ru.surf.learn2invest.noui.cryptography
 
 import android.content.Context
 import androidx.biometric.BiometricManager
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 
 
@@ -14,7 +15,11 @@ fun verifyPIN(user: Profile, password: String): Boolean {
         lastName = user.lastName
     ).passwordToHash(password = password) == user.hash
 }
-
+fun String.isTrueTradingPasswordOrIsNotDefined(): Boolean {
+    return if (DatabaseRepository.profile.tradingPasswordHash != null) {
+        verifyTradingPassword(user = DatabaseRepository.profile, password = this)
+    } else true
+}
 /**
  * Метод верификации торгового пароля
  */

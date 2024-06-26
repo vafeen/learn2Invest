@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.noui.cryptography.isTrueTradingPasswordOrIsNotDefined
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
@@ -119,7 +120,7 @@ class BuyDialog(
             })
 
             tradingPassword.isVisible =
-                if (DatabaseRepository.profile.tradingPasswordHash != null) {
+                if (DatabaseRepository.profile.tradingPasswordHash != null && DatabaseRepository.profile.fiatBalance != 0f) {
                     tradingPasswordTV.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?, start: Int, count: Int, after: Int
@@ -159,32 +160,35 @@ class BuyDialog(
     private fun updateFields() {
         val willPrice = resultPrice(onFuture = false)
         val fiatBalance = DatabaseRepository.profile.fiatBalance
-        when {
-            binding.enteringNumberOfLots.text.toString()
-                .toIntOrNull().let {
-                    it != null && it > 0
-                } && fiatBalance != 0f && willPrice <= fiatBalance -> {
-                binding.buttonBuy.isVisible = true
-                binding.result.text = buildString {
-                    append(
-                        ContextCompat.getString(
-                            requireContext(),
-                            R.string.itog
+        binding.apply {
+            when {
+                enteringNumberOfLots.text.toString()
+                    .toIntOrNull().let {
+                        it != null && it > 0
+                    } && fiatBalance != 0f && willPrice <= fiatBalance -> {
+                    buttonBuy.isVisible =
+                        tradingPasswordTV.text.toString().isTrueTradingPasswordOrIsNotDefined()
+                    result.text = buildString {
+                        append(
+                            ContextCompat.getString(
+                                requireContext(),
+                                R.string.itog
+                            )
                         )
-                    )
-                    append(willPrice.getWithCurrency())
+                        append(willPrice.getWithCurrency())
+                    }
                 }
-            }
 
-            willPrice > fiatBalance || fiatBalance == 0f -> {
-                binding.buttonBuy.isVisible = false
-                binding.result.text =
-                    ContextCompat.getString(requireContext(), R.string.not_enough_money_for_buy)
-            }
+                willPrice > fiatBalance || fiatBalance == 0f -> {
+                    buttonBuy.isVisible = false
+                    result.text =
+                        ContextCompat.getString(requireContext(), R.string.not_enough_money_for_buy)
+                }
 
-            else -> {
-                binding.buttonBuy.isVisible = false
-                binding.result.text = ""
+                else -> {
+                    buttonBuy.isVisible = false
+                    result.text = ""
+                }
             }
         }
     }

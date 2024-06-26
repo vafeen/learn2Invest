@@ -14,12 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.noui.cryptography.verifyTradingPassword
+import ru.surf.learn2invest.noui.cryptography.isTrueTradingPasswordOrIsNotDefined
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.alert_dialogs.getFloatFromStringWithCurrency
 import ru.surf.learn2invest.ui.alert_dialogs.getWithCurrency
-import ru.surf.learn2invest.ui.alert_dialogs.isTrueTradingPassword
 import ru.surf.learn2invest.ui.alert_dialogs.parent.CustomAlertDialog
 
 class SellDialog(
@@ -40,8 +39,7 @@ class SellDialog(
         viewModel = ViewModelProvider(this)[SellDialogViewModel::class.java]
         viewModel.apply {
             coin = AssetInvest(
-                name = name, symbol = symbol, coinPrice = 0f, amount = 0f,
-                assetID = id
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
             )
         }
         binding.apply {
@@ -112,7 +110,7 @@ class SellDialog(
             })
 
             tradingPassword.isVisible =
-                if (DatabaseRepository.profile.tradingPasswordHash != null) {
+                if (DatabaseRepository.profile.tradingPasswordHash != null && coin.amount > 0) {
                     tradingPasswordTV.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?, start: Int, count: Int, after: Int
@@ -126,7 +124,6 @@ class SellDialog(
 
                         override fun afterTextChanged(s: Editable?) {
                             updateFields()
-                            buttonSell.isVisible = s?.isTrueTradingPassword() ?: false
                         }
                     })
                     true
@@ -152,38 +149,33 @@ class SellDialog(
 
     private fun updateFields() {
         val coin = viewModel.coin
-        when {
-            coin.amount == 0f -> {
-                binding.buttonSell.isVisible = false
-                binding.result.text =
-                    ContextCompat.getString(requireContext(), R.string.no_asset_for_sale)
-            }
+        binding.apply {
+            when {
+                coin.amount == 0f -> {
+                    buttonSell.isVisible = false
+                    result.text =
+                        ContextCompat.getString(requireContext(), R.string.no_asset_for_sale)
+                }
 
-            coin.amount > 0
-                    && binding.enteringNumberOfLots.text.toString()
-                .toFloatOrNull().let {
+                coin.amount > 0 && enteringNumberOfLots.text.toString().toFloatOrNull().let {
                     it != null && it in 1f..coin.amount
-                }
-                    && if (DatabaseRepository.profile.tradingPasswordHash != null) verifyTradingPassword(
-                user = DatabaseRepository.profile,
-                password = binding.tradingPasswordTV.text.toString()
-            ) else true
-            -> {
-                binding.buttonSell.isVisible = true
-                binding.result.text = buildString {
-                    append(
-                        ContextCompat.getString(
-                            requireContext(),
-                            R.string.itog
+                } -> {
+                    buttonSell.isVisible =
+                        tradingPasswordTV.text.toString().isTrueTradingPasswordOrIsNotDefined()
+                    result.text = buildString {
+                        append(
+                            ContextCompat.getString(
+                                requireContext(), R.string.itog
+                            )
                         )
-                    )
-                    append(resultPrice().getWithCurrency())
+                        append(resultPrice().getWithCurrency())
+                    }
                 }
-            }
 
-            else -> {
-                binding.buttonSell.isVisible = false
-                binding.result.text = ""
+                else -> {
+                    buttonSell.isVisible = false
+                    result.text = ""
+                }
             }
         }
     }
