@@ -214,9 +214,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/trading_password"
+            style="@style/L2ITextInputStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:background="@drawable/tabs_in_dialogs_shape"
+            app:cursorColor="@color/black"
+            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/button_exit"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
@@ -226,6 +230,7 @@
                 android:id="@+id/trading_password_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/tabs_in_dialogs_shape"
                 android:hint="@string/trading_password"
                 android:inputType="numberPassword"
                 android:maxLines="1" />
