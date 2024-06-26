@@ -17,11 +17,20 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.BuyDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.components.alert_dialogs.getFloatFromStringWithCurrency
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.utils.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.utils.getWithCurrency
 import ru.surf.learn2invest.utils.isTrueTradingPasswordOrIsNotDefined
 
+/**
+ * Диалог покупки актива
+ * @param context [Контекст открытия диалога]
+ * @param lifecycleScope [Scope для выполнения асинхронных операция]
+ * @param id [ID coin'а]
+ * @param name [Имя (Bitcoin)]
+ * @param symbol [Абревиатура (BTC)]
+ * @param supportFragmentManager [Менеджер открытия диалогов]
+ */
 class BuyDialog(
     context: Context,
     private val lifecycleScope: LifecycleCoroutineScope,

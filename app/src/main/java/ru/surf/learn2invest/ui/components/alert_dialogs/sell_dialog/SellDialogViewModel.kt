@@ -12,7 +12,7 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.utils.getWithCurrency
 
 class SellDialogViewModel : ViewModel() {
     lateinit var realTimeUpdateJob: Job

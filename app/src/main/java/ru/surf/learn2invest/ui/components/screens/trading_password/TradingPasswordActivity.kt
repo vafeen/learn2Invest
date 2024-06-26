@@ -24,7 +24,16 @@ import ru.surf.learn2invest.utils.showKeyboard
 import ru.surf.learn2invest.utils.updateProfile
 import ru.surf.learn2invest.utils.verifyTradingPassword
 
-
+/**
+ * Активити ввода торгового пароля для подтверждения сделок
+ *
+ * Функции:
+ * - Создание торгового пароля
+ * - Смена торгового пароля
+ * - Удаление торгового пароля
+ *
+ * Определение функции с помощью intent.action и [TradingPasswordActivityActions][ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions]
+ */
 class TradingPasswordActivity : AppCompatActivity() {
     private lateinit var binding: TradingPasswordActivityBinding
     private lateinit var viewModel: TradingPasswordActivityViewModel

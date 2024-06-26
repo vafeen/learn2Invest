@@ -13,58 +13,49 @@ import ru.surf.learn2invest.utils.isBiometricAvailable
 import java.util.concurrent.Executor
 
 /**
- * Класс для аутен<чего-то там> пользователя с помощью отпечатка пальца.
- *
- * Пример использования:
- * ```
- * private lateinit var fingerPrintManager: FingerprintAuthenticator
- *
- * onCreate(){
- *
- * fingerPrintManager = FingerprintAuthenticator(context = this).setFailedCallback { // не обязательно
- *
- *         }.setSuccessCallback {// не обязательно
- *             if(intent.action == SignINActivityActions.SignUP.action){
- *                 user = user.copy(biometry = true)
- *
- *                 userDataIsChanged = true
- *             }
- *
- *             onAuthenticationSucceeded()
- *         }.setDesignBottomSheet( // не обязательно
- *             title = "Вход в Learn2Invest"
- *         )
- * }
- *
- *          // момент аутен<...>
- *
- *               fingerPrintManager.auth()
- *
- * ```
+ * Аутентификация пользователя с помощью отпечатка пальца
+ * @param context [контекст аутентификации (Activity)]
+ * @param lifecycleCoroutineScope [scope для выполнения аутентификации]
  */
 class FingerprintAuthenticator(
     private val context: Activity,
     val lifecycleCoroutineScope: LifecycleCoroutineScope
 ) {
-
+    /**
+     * Сеттер для callback в случае успешной аутентифиакции
+     * @param function [callback в случае успешной аутентификации]
+     */
     fun setSuccessCallback(function: () -> Unit): FingerprintAuthenticator {
         this.successCallBack = function
 
         return this
     }
 
+    /**
+     * Сеттер для callback в случае неуспешной аутентифиакции
+     * @param function [callback ]
+     */
     fun setFailedCallback(function: () -> Unit): FingerprintAuthenticator {
         this.failedCallBack = function
 
         return this
     }
 
+    /**
+     * Сеттер для callback в случае отмены пользователем аутентифиакции
+     * @param function [callback ]
+     */
     fun setCancelCallback(function: () -> Unit): FingerprintAuthenticator {
         this.setCancelCallback = function
 
         return this
     }
 
+    /**
+     * Настройка дизайна названия BottomSheet и кнопки отмены действия
+     * @param title [название BottomSheet]
+     * @param cancelText [Текст кнопки отмены]
+     */
     fun setDesignBottomSheet(
         title: String,
         cancelText: String = ContextCompat.getString(context, R.string.cancel)
@@ -74,6 +65,9 @@ class FingerprintAuthenticator(
         return this
     }
 
+    /**
+     * Показ BottomSheet для аутентификации
+     */
     fun auth(): Job {
         return lifecycleCoroutineScope.launch(Dispatchers.Main) {
             if (isBiometricAvailable(context = context)) {

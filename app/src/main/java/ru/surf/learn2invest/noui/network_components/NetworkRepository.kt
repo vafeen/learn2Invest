@@ -8,6 +8,9 @@ import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.noui.network_components.util.Const
 
+/**
+ * Docs?
+ */
 object NetworkRepository {
     private val coinAPIService = CoinRetrofitClient.client.create(
         CoinAPIService::class.java

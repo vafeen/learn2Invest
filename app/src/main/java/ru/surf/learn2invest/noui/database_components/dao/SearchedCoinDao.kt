@@ -16,14 +16,21 @@ interface SearchedCoinDao : DataAccessObject<SearchedCoin>,
     ClearTableImplementation {
 
     /**
-     * Получение списка всех имеющихся объектов этого типа из базы данных
+     * Получение всех сущностей в виде Flow
      */
     @Query("select * from searchedcoin")
     override fun getAllAsFlow(): Flow<List<SearchedCoin>>
 
+    /**
+     * Очистка таблицы
+     */
     @Query("delete from searchedcoin")
     override suspend fun clearTable()
 
+    /**
+     *  @param limit [максимальное количество записей в БД. При потенциальном количестве записей больше этого значения, часть записей будет удалена]
+     *  @param entities [Список объектов, которые нужно положить в бд]
+     */
     override suspend fun insertByLimit(limit: Int, vararg entities: SearchedCoin) {
         super.insertByLimit(limit, *entities)
     }

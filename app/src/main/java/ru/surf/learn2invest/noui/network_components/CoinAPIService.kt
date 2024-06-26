@@ -11,6 +11,9 @@ import ru.surf.learn2invest.noui.network_components.util.Const.API_COIN_REVIEW
 import ru.surf.learn2invest.noui.network_components.util.Const.API_HISTORY
 import ru.surf.learn2invest.noui.network_components.util.Const.API_MARKET_REVIEW
 
+/**
+ * Docs?
+ */
 interface CoinAPIService {
     @GET(API_MARKET_REVIEW)
     suspend fun getMarketReview(): APIWrapper<List<CoinReviewDto>>

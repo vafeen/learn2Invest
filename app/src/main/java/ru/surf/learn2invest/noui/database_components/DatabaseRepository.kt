@@ -19,26 +19,7 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 
 
 /**
- * Доступ к данным осуществляется в coroutineScope{} с помощью
- *
- *  [DatabaseRepository][DatabaseRepository]
- *
- * Посредством обращения через нее к определенным методам разных объектов,
- *
- * например:
- * [DatabaseRepository.getAllAsFlowAssetInvest],
- *
- * Полный пример:
- *```
- * var someList: List<Something>
- *
- * lifecycleScope.launch(Dispatchers.Main) {
- *
- * DatabaseRepository.getAllAsFlowAssetInvest.collect { someList = it } // подписка на изменения
- *
- * someList = DatabaseRepository.getAllAsFlowAssetInvest.first() // разовая акция
- * }
- * ```
+ * Репозиториq локальной базы данных для осуществления операций манипуляции с сущностями
  */
 object DatabaseRepository {
 

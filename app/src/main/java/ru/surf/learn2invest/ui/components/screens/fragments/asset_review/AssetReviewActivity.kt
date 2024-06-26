@@ -18,7 +18,9 @@ import ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 
-// Экран Обзор актива
+/**
+ * Экран обзора актива
+ */
 class AssetReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAssetReviewBinding
     private lateinit var disposable: Disposable
@@ -95,7 +97,7 @@ class AssetReviewActivity : AppCompatActivity() {
 
         binding.sellAssetBtn.setOnClickListener {
             SellDialog(
-               dialogContext = this,
+                context = this,
                 lifecycleScope = lifecycleScope,
                 id = id,
                 name = name,

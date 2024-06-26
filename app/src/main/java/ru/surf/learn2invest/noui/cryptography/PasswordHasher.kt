@@ -3,6 +3,11 @@ package ru.surf.learn2invest.noui.cryptography
 import java.security.MessageDigest
 
 
+/**
+ * Класс для генерации ХЭШ-кода паролей пользователя с использованием соли
+ * @param firstName [Имя пользователя для генерации соли для Хэша]
+ * @param lastName [Фамилия пользователя для генерации соли для ХЭШа]
+ */
 class PasswordHasher(
     private val firstName: String, private val lastName: String
 ) {
@@ -26,6 +31,7 @@ class PasswordHasher(
 
     /**
      * Функция получения hash'а пароля
+     * @param password [Пароль, хэш которого нужно получить]
      */
     fun passwordToHash(password: String): String = password.addSaltToMessage().getSHA256Hash()
 }

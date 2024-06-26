@@ -26,6 +26,16 @@ import ru.surf.learn2invest.utils.tapOn
 import ru.surf.learn2invest.utils.updateProfile
 import ru.surf.learn2invest.utils.verifyPIN
 
+/**
+ * Активити ввода PIN-кода.
+ *
+ * Функции:
+ * - Создание PIN-кода
+ * - Смена PIN-кода
+ * - Аутентификация пользователя по PIN-коду
+ *
+ * Определение функция с помощью intent.action и [SignINActivityActions][ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions]
+ */
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySigninBinding
     private lateinit var viewModel: SignInActivityViewModel

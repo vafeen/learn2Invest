@@ -16,13 +16,22 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.components.alert_dialogs.getFloatFromStringWithCurrency
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.utils.getFloatFromStringWithCurrency
+import ru.surf.learn2invest.utils.getWithCurrency
 import ru.surf.learn2invest.utils.isTrueTradingPasswordOrIsNotDefined
 
+/**
+ * Диалог продажи актива
+ * @param context [Контекст открытия диалога]
+ * @param lifecycleScope [Scope для выполнения асинхронных операция]
+ * @param id [ID coin'а]
+ * @param name [Имя (Bitcoin)]
+ * @param symbol [Абревиатура (BTC)]
+ * @param supportFragmentManager [Менеджер открытия диалогов]
+ */
 class SellDialog(
-    dialogContext: Context,
+    context: Context,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val id: String,
     private val name: String,
@@ -30,7 +39,7 @@ class SellDialog(
     supportFragmentManager: FragmentManager
 ) : CustomAlertDialog(supportFragmentManager) {
     override val dialogTag: String = "sell"
-    private var binding = SellDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
     private lateinit var viewModel: SellDialogViewModel
 
     override fun setCancelable(): Boolean = false

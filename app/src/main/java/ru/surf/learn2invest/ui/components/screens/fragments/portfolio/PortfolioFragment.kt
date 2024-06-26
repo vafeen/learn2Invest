@@ -22,9 +22,12 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.utils.Link
 import java.util.Locale
 
-// Экран портфеля
+/**
+ * Фрагмент портфеля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
 class PortfolioFragment : Fragment() {
 
     private lateinit var binding: FragmentPortfolioBinding
@@ -74,7 +77,7 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccountDialog(requireContext(), lifecycleScope, parentFragmentManager) {
+            RefillAccountDialog(requireContext(), parentFragmentManager) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     viewModel.refreshData()
                 }

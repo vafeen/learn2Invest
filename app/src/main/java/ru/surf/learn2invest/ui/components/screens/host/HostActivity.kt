@@ -9,6 +9,9 @@ import androidx.navigation.ui.setupWithNavController
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityHostBinding
 
+/**
+ * Главный экран приложения с BottomBar
+ */
 class HostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHostBinding
     override fun onCreate(savedInstanceState: Bundle?) {

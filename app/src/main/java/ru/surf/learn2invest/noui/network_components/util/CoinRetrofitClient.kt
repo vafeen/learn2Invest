@@ -6,6 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.surf.learn2invest.noui.network_components.util.Const.BASE_URL
 
+/**
+ * Docs?
+ */
 object CoinRetrofitClient {
     val client: Retrofit = getRetrofitClient()
 

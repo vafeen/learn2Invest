@@ -15,6 +15,9 @@ import ru.surf.learn2invest.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * Docs?
+ */
 class LineChartHelper(private val context: Context) {
     private lateinit var chart: LineChart
 

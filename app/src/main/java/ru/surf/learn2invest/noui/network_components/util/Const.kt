@@ -1,5 +1,8 @@
 package ru.surf.learn2invest.noui.network_components.util
 
+/**
+ * Docs?
+ */
 object Const {
     const val BASE_URL = "https://api.coincap.io/v2/"
     const val API_MARKET_REVIEW = "assets?limit=2000"

@@ -6,6 +6,12 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 
+/**
+ * Объект баланса портфеля
+ * @param id [Первичный ключ в базе данных]
+ * @param assetBalance [Общий баланс портфеля]
+ * @param date [Дата, когда был такой баланс]
+ */
 @Entity
 data class AssetBalanceHistory( // баланс портфеля
 

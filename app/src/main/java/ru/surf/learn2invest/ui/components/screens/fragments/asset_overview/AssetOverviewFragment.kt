@@ -9,7 +9,9 @@ import kotlinx.coroutines.Job
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 
-// Вкладка Обзор в Обзоре актива
+/**
+ * Фрагмент обзора актива в [AssetReviewActivity][ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity]
+ */
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
     private lateinit var chartHelper: LineChartHelper

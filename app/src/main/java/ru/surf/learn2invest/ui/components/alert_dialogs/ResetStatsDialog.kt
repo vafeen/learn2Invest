@@ -14,13 +14,19 @@ import ru.surf.learn2invest.databinding.ResetStatsDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
 
+/**
+ * Диалог подтверждения сброса статистики
+ * @param context [Контекст открытия диалога]
+ * @param lifecycleScope [Scope для выполнения асинхронных операция]
+ * @param supportFragmentManager [Менеджер открытия диалогов]
+ */
 class ResetStatsDialog(
-    private val dialogContext: Context,
+    private val context: Context,
     private val lifecycleScope: LifecycleCoroutineScope,
     supportFragmentManager: FragmentManager,
 ) : CustomAlertDialog(supportFragmentManager) {
     private var binding: ResetStatsDialogBinding =
-        ResetStatsDialogBinding.inflate(LayoutInflater.from(dialogContext))
+        ResetStatsDialogBinding.inflate(LayoutInflater.from(context))
     override val dialogTag: String = "restStats"
 
     override fun initListeners() {
@@ -40,8 +46,8 @@ class ResetStatsDialog(
                 }
                 cancel()
                 Toast.makeText(
-                    dialogContext,
-                    ContextCompat.getString(dialogContext, R.string.stat_reset),
+                    context,
+                    ContextCompat.getString(context, R.string.stat_reset),
                     Toast.LENGTH_LONG
                 ).show()
             }

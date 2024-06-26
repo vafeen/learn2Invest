@@ -20,7 +20,9 @@ import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
-
+/**
+ * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel = MarketReviewViewModel()

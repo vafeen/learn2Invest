@@ -1,5 +1,8 @@
 package ru.surf.learn2invest.noui.network_components.responses
 
+/**
+ * Docs?
+ */
 data class CoinReviewDto(
     val id: String, //ID название
     val rank: Int, //ранг

@@ -26,6 +26,9 @@ import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswo
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
 import ru.surf.learn2invest.utils.isBiometricAvailable
 
+/**
+ * Фрагмент профиля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
 
@@ -82,7 +85,7 @@ class ProfileFragment : Fragment() {
                 fr.deleteProfileTV.setOnClickListener {
 
                     AskToDeleteProfileDialog(
-                        dialogContext = context,
+                        context = context,
                         lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager
                     ).show()
@@ -92,7 +95,7 @@ class ProfileFragment : Fragment() {
                 fr.resetStatsBtn.setOnClickListener {
 
                     ResetStatsDialog(
-                        dialogContext = context,
+                        context = context,
                         lifecycleScope = lifecycleScope,
                         supportFragmentManager = parentFragmentManager
                     ).show()

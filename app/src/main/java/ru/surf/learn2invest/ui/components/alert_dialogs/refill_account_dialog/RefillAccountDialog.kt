@@ -7,15 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.utils.getWithCurrency
 
+/**
+ * Диалог пополнения баланса
+ * @param context [Контекст открытия диалога]
+ * @param supportFragmentManager [Менеджер открытия диалогов]
+ * @param onCloseCallback [Callback по закрытию диалога]
+ */
 class RefillAccountDialog(
-    context: Context, private val lifecycleScope: LifecycleCoroutineScope,
+    context: Context,
     supportFragmentManager: FragmentManager,
     private val onCloseCallback: () -> Unit
 ) : CustomAlertDialog(supportFragmentManager) {

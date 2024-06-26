@@ -16,6 +16,10 @@ fun verifyPIN(user: Profile, password: String): Boolean {
         lastName = user.lastName
     ).passwordToHash(password = password) == user.hash
 }
+
+/**
+ * Метод проверки, задан ли торговый пароль и его верификации
+ */
 fun String.isTrueTradingPasswordOrIsNotDefined(): Boolean {
     return if (DatabaseRepository.profile.tradingPasswordHash != null) {
         verifyTradingPassword(user = DatabaseRepository.profile, password = this)

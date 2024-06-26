@@ -8,9 +8,13 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import ru.surf.learn2invest.R
 
+/**
+ * Docs?
+ */
 class CustomMarkerView(context: Context, layoutResource: Int) :
     MarkerView(context, layoutResource) {
     private var tvContent: TextView = findViewById(R.id.tvContent)
+
     // Вызывается каждый раз при перерисовке MarkerView, можно использовать для обновления контента (пользовательского интерфейса)
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         tvContent.text = e?.y?.toBigDecimal()?.toPlainString() ?: ""

@@ -25,18 +25,21 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
         Transaction::class,
     ], version = 1
 )
-
+/**
+ * Локальная база данных для осуществления операций манипуляции с сущностями
+ */
 @TypeConverters(Converters::class)
 abstract class L2IDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "learn2investDatabase.db"
+
         /**
          * создание объекта базы данных
          */
         fun buildDatabase(context: Context): L2IDatabase {
             return Room.databaseBuilder(
-                    context = context, klass = L2IDatabase::class.java, name = NAME
-                ).build()
+                context = context, klass = L2IDatabase::class.java, name = NAME
+            ).build()
         }
     }
 

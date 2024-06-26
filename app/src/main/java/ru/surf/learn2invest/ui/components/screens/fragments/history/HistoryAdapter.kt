@@ -19,12 +19,13 @@ class HistoryAdapter(
     RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
     var data: List<Transaction> = listOf()
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
-        val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
-        val coinBottomTextInfo = itemView.findViewById<TextView>(R.id.coin_symbol)
-        val coinTopNumericInfo = itemView.findViewById<TextView>(R.id.coin_top_numeric_info)
-        val coinBottomNumericInfo = itemView.findViewById<TextView>(R.id.coin_bottom_numeric_info)
+        val coinIcon: ImageView = itemView.findViewById(R.id.coin_icon)
+        val coinTopTextInfo: TextView = itemView.findViewById(R.id.coin_name)
+        val coinBottomTextInfo: TextView = itemView.findViewById(R.id.coin_symbol)
+        val coinTopNumericInfo: TextView = itemView.findViewById(R.id.coin_top_numeric_info)
+        val coinBottomNumericInfo: TextView = itemView.findViewById(R.id.coin_bottom_numeric_info)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,9 +46,7 @@ class HistoryAdapter(
             if (data[position].transactionType == TransactionsType.Sell) {
                 coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
-            } else {
-                coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
-            }
+            } else coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
             coinBottomNumericInfo.text = "${data[position].dealPrice}$"
 
             coinIcon.load(

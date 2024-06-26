@@ -5,12 +5,13 @@ import androidx.room.PrimaryKey
 
 /**
  * Coin'ы из поисковых запросов
+ * @param id [Первичный ключ в базе данных]
+ * @param coinID [Имя coin'а (Bitcoin)]
  */
-
 @Entity
 data class SearchedCoin(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    val coinID: String //Имя коина (Bitcoin)
+    val coinID: String
 )
 
 

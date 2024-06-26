@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity() {
         skipSplash()
     }
 
-    // Функция проверки, есть ли у нас зарегистрированный пользователь
+    /**
+     * Функция показа анимированного splash-скрина и проверки, есть ли у нас зарегистрированный пользователь
+     */
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
             val intent =
@@ -61,6 +63,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Функция показа анимации приветствия пользователя
+     */
     private fun runAnimatedText() {
         (ContextCompat.getString(
             this,
