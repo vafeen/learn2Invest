@@ -19,12 +19,13 @@ import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
+import java.util.Date
 
 class PortfolioViewModel : ViewModel() {
-
     private val _chartData = MutableStateFlow<List<Entry>>(emptyList())
     val chartData: StateFlow<List<Entry>> = _chartData
-    val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
+
+    private val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
                 DatabaseRepository.profile.assetBalance
@@ -48,6 +49,7 @@ class PortfolioViewModel : ViewModel() {
         combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
             assetBalance + fiatBalance
         }
+
     val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest()
         .flowOn(Dispatchers.IO)
         .onEach { assets ->
@@ -63,7 +65,10 @@ class PortfolioViewModel : ViewModel() {
     suspend fun refreshData() {
         checkAndUpdateBalanceHistory()
         loadPriceChanges(DatabaseRepository.getAllAsFlowAssetInvest().first())
-        refreshChartData()
+    }
+
+    suspend fun getAssetBalanceHistoryDates(): List<Date> {
+        return DatabaseRepository.getAllAssetBalanceHistory().first().map { it.date }
     }
 
     private suspend fun refreshChartData() {
@@ -104,6 +109,7 @@ class PortfolioViewModel : ViewModel() {
                 7, AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }
+        refreshChartData()
     }
 
     private suspend fun loadPriceChanges(assets: List<AssetInvest>) {

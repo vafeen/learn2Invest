@@ -19,7 +19,9 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
+import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.util.Locale
@@ -43,13 +45,12 @@ class PortfolioFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
-        chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
-                binding.balanceText.text = "${balance}$"
+                binding.balanceText.text = balance.getWithCurrency()
                 val isBalanceNonZero = balance != 0f
                 binding.chart.isVisible = isBalanceNonZero
                 binding.percent.isVisible = isBalanceNonZero
@@ -58,16 +59,17 @@ class PortfolioFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.fiatBalance.collect { balance ->
-                binding.accountFunds.text = "${balance}$"
+                binding.accountFunds.text = balance.getWithCurrency()
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             viewModel.refreshData()
-        }
+            val dates = viewModel.getAssetBalanceHistoryDates()
+            val dateFormatterStrategy = AssetBalanceHistoryFormatter(dates)
+            chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
+            chartHelper.setupChart(binding.chart)
 
-        chartHelper.setupChart(binding.chart)
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.chartData.collect { data ->
                 chartHelper.updateData(data)
             }
