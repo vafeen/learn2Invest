@@ -2,7 +2,6 @@ package ru.surf.learn2invest.ui.components.chart
 
 import android.content.Context
 import android.graphics.Color
-import android.icu.util.Calendar
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -12,15 +11,12 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import ru.surf.learn2invest.R
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class LineChartHelper(private val context: Context) {
+class LineChartHelper(
+    private val context: Context,
+    private val dateFormatterStrategy: DateValueFormatterStrategy
+) {
     private lateinit var chart: LineChart
-
-    companion object {
-        private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
-    }
 
     fun setupChart(lineChart: LineChart) {
         this.chart = lineChart
@@ -41,7 +37,11 @@ class LineChartHelper(private val context: Context) {
                 textSize = 10f
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
-                valueFormatter = DateValueFormatter()
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return dateFormatterStrategy.getFormattedValue(value, chart)
+                    }
+                }
                 typeface = ResourcesCompat.getFont(context, R.font.montserrat_medium)
             }
             setTouchEnabled(true)
@@ -75,7 +75,7 @@ class LineChartHelper(private val context: Context) {
                 xAxis.axisMaximum = 0.5f
                 val singleValue = data.firstOrNull()?.y ?: 0f
                 axisLeft.axisMinimum = 0f
-                axisLeft.axisMaximum = singleValue + (0.1f * singleValue) // Небольшой отступ сверху
+                axisLeft.axisMaximum = singleValue + (0.1f * singleValue)
             }
 
             this.data = lineData
@@ -95,19 +95,5 @@ class LineChartHelper(private val context: Context) {
         mode = LineDataSet.Mode.CUBIC_BEZIER
         setDrawFilled(true)
         fillDrawable = ContextCompat.getDrawable(context, R.drawable.line_chart_style)
-    }
-
-    private inner class DateValueFormatter : ValueFormatter() {
-        override fun getFormattedValue(value: Float): String {
-            val daysAgo = chart.data?.xMax?.toInt()?.let { maxIndex ->
-                maxIndex - value.toInt()
-            } ?: 0
-
-            val calendar = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -daysAgo)
-            }
-
-            return dateFormatter.format(calendar.time)
-        }
     }
 }
