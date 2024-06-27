@@ -14,7 +14,7 @@ import ru.surf.learn2invest.R
 
 class LineChartHelper(
     private val context: Context,
-    private val dateFormatterStrategy: DateValueFormatterStrategy
+    private val dateFormatterStrategy: CustomDateValueFormatter
 ) {
     private lateinit var chart: LineChart
 
