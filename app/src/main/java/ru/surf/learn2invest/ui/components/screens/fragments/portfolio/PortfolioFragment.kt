@@ -84,7 +84,6 @@ class PortfolioFragment : Fragment() {
                 adapter.assets = assets
                 binding.assets.isVisible = assets.isNotEmpty()
                 binding.assetsAreEmpty.isVisible = assets.isEmpty()
-                Log.d("NOTIFY", "DataSet")
                 adapter.notifyDataSetChanged()
 
             }
@@ -93,7 +92,6 @@ class PortfolioFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.priceChanges.collect { priceChanges ->
                 adapter.priceChanges = priceChanges
-                Log.d("NOTIFY", "RANGE")
                 adapter.notifyItemRangeChanged(
                     (binding.assets.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                     (binding.assets.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
