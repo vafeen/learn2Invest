@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     id("kotlin-parcelize")
+    id("com.google.dagger.hilt.android")
 }
 
 
@@ -16,6 +17,11 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {
@@ -72,4 +78,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     // for graphics
     implementation(libs.mpandroidchart)
+    // DI
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 }

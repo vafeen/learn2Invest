@@ -1,13 +1,12 @@
 [versions]
 activityVersion = "1.9.0"
 accompanistPermissions = "0.31.1-alpha"
-agp = "8.4.1"
+agp = "8.4.2"
 biometric = "1.1.0"
+hiltAndroid = "2.46.1"
+hiltAndroidCompiler = "2.46.1"
 kotlin = "1.9.23"
 coreKtx = "1.13.1"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.0"
@@ -25,7 +24,7 @@ loggingInterceptor = "5.0.0-alpha.14"
 navigationFragment = "2.7.7"
 navigationUiKtx = "2.7.7"
 navigationFragmentKtx = "2.7.7"
-lifecycleProcess = "2.8.1"
+lifecycleProcess = "2.8.2"
 glide = "5.0.0-rc01"
 coilSvg = "2.6.0"
 coil = "2.6.0"
@@ -38,9 +37,8 @@ androidx-activity-v160alpha05 = { module = "androidx.activity:activity", version
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 biometric = { module = "androidx.biometric:biometric" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
