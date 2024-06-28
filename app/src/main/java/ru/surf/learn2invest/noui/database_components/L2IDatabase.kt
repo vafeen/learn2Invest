@@ -31,7 +31,7 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 @TypeConverters(Converters::class)
 abstract class L2IDatabase : RoomDatabase() {
     companion object {
-        private const val NAME = "learn2investDatabase.db"
+        const val NAME = "learn2investDatabase.db"
 
         /**
          * создание объекта базы данных

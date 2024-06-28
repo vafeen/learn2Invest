@@ -1,4 +1,4 @@
-package ru.surf.learn2invest.ui.components.screens
+package ru.surf.learn2invest.ui.components.screens.sign_up
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -15,21 +16,22 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySignupBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
 /** Активити регистрации пользователя
  */
+
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private var name: String = ""
-    private var lastname: String = ""
-    private val lengthLimit = 24
+
+    private val viewModel: SignUpActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,7 +84,7 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                name = s.toString()
+                viewModel.name = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -98,7 +100,7 @@ class SignUpActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                lastname = s.toString()
+                viewModel.lastname = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -119,18 +121,18 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun validateName(): Boolean {
         return when {
-            name.isEmpty() -> {
+            viewModel.name.isEmpty() -> {
                 false
             }
 
-            name.trim() != name -> {
+            viewModel.name.trim() != viewModel.name -> {
                 binding.nameErrorTextView.text =
                     ContextCompat.getString(this, R.string.contains_spaces)
                 binding.nameErrorTextView.isVisible = true
                 false
             }
 
-            name.length > lengthLimit -> {
+            viewModel.name.length > viewModel.lengthLimit -> {
                 binding.nameErrorTextView.text =
                     ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.nameErrorTextView.isVisible = true
@@ -146,18 +148,18 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun validateLastname(): Boolean {
         return when {
-            lastname.isEmpty() -> {
+            viewModel.lastname.isEmpty() -> {
                 false
             }
 
-            lastname.trim() != lastname -> {
+            viewModel.lastname.trim() != viewModel.lastname -> {
                 binding.lastnameErrorTextView.text =
                     ContextCompat.getString(this, R.string.contains_spaces)
                 binding.lastnameErrorTextView.isVisible = true
                 false
             }
 
-            lastname.length > lengthLimit -> {
+            viewModel.lastname.length > viewModel.lengthLimit -> {
                 binding.lastnameErrorTextView.text =
                     ContextCompat.getString(this, R.string.limit_len_exceeded)
                 binding.lastnameErrorTextView.isVisible = true
@@ -172,7 +174,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun onNextClicked(): Boolean {
-        if (name.isEmpty()) {
+        if (viewModel.name.isEmpty()) {
             binding.nameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
             binding.nameErrorTextView.isVisible = true
             return true
@@ -182,7 +184,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun onDoneClicked(): Boolean {
-        if (lastname.isEmpty()) {
+        if (viewModel.lastname.isEmpty()) {
             binding.lastnameErrorTextView.text = ContextCompat.getString(this, R.string.empty_error)
             binding.lastnameErrorTextView.isVisible = true
             return true
@@ -195,14 +197,17 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUpButtonClick() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val prof = DatabaseRepository.profile.copy(firstName = name, lastName = lastname)
-            DatabaseRepository
-                .updateProfile(prof)
+            viewModel.databaseRepository.apply {
+                updateProfile(
+                    profile.copy(
+                        firstName = viewModel.name,
+                        lastName = viewModel.lastname
+                    )
+                )
+            }
         }.invokeOnCompletion {
-            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).let {
-                it.action = SignINActivityActions.SignUP.action
-
-                it
+            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).apply {
+                action = SignINActivityActions.SignUP.action
             })
             this@SignUpActivity.finish()
         }

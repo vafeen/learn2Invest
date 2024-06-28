@@ -1,36 +1,38 @@
 package ru.surf.learn2invest.ui.main
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityMainBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
-import ru.surf.learn2invest.ui.components.screens.SignUpActivity
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.ui.components.screens.sign_up.SignUpActivity
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var context: Context
+
+    //    private lateinit var context: Context
+    private val viewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context = this
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.IO) {
             val intent =
-                if (profile.lastName != "undefined" && profile.firstName != "undefined") {
+                if (viewModel.databaseRepository.profile.lastName != "undefined" && viewModel.databaseRepository.profile.firstName != "undefined") {
                     withContext(Dispatchers.Main) {
                         runAnimatedText()
                         delay(2000)
@@ -70,7 +72,9 @@ class MainActivity : AppCompatActivity() {
         (ContextCompat.getString(
             this,
             R.string.hello
-        ) + ", ${profile.firstName}!").let { binding.splashTextView.text = it }
+        ) + ", ${viewModel.databaseRepository.profile.firstName}!").let {
+            binding.splashTextView.text = it
+        }
         binding.splashTextView.alpha = 0f
         val animator = ObjectAnimator.ofFloat(binding.splashTextView, "alpha", 0f, 1f)
         animator.duration = 2000 // Длительность анимации в миллисекундах

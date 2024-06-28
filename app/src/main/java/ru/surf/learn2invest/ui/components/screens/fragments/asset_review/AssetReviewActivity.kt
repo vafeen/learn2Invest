@@ -10,6 +10,7 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
 import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
@@ -21,6 +22,7 @@ import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistor
 /**
  * Экран обзора актива
  */
+@AndroidEntryPoint
 class AssetReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAssetReviewBinding
     private lateinit var disposable: Disposable

@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityHostBinding
 
 /**
  * Главный экран приложения с BottomBar
  */
+@AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHostBinding
     override fun onCreate(savedInstanceState: Bundle?) {
