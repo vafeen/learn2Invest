@@ -19,7 +19,7 @@ abstract class CustomAlertDialog(private val supportFragmentManager: FragmentMan
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         initListeners()
-        this.isCancelable = setCancelable()
+        isCancelable = setCancelable()
         return getDialogView()
     }
 
@@ -39,10 +39,10 @@ abstract class CustomAlertDialog(private val supportFragmentManager: FragmentMan
     protected abstract fun getDialogView(): View
 
     open fun show() {
-        this.show(supportFragmentManager, dialogTag)
+        show(supportFragmentManager, dialogTag)
     }
 
     open fun cancel() {
-        this.dismiss()
+        dismiss()
     }
 }
