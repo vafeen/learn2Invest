@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import androidx.lifecycle.ViewModel
 import com.github.mikephil.charting.data.Entry
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,25 +20,28 @@ import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
+import javax.inject.Inject
 
-class PortfolioViewModel : ViewModel() {
+@HiltViewModel
+class PortfolioFragmentViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
 
     private val _chartData = MutableStateFlow<List<Entry>>(emptyList())
     val chartData: StateFlow<List<Entry>> = _chartData
-    val assetBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
+    val assetBalance: Flow<Float> = databaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                DatabaseRepository.profile.assetBalance
+                databaseRepository.profile.assetBalance
             } else {
                 0f
             }
         }
         .flowOn(Dispatchers.IO)
 
-    val fiatBalance: Flow<Float> = DatabaseRepository.getAllAsFlowProfile()
+    val fiatBalance: Flow<Float> = databaseRepository.getAllAsFlowProfile()
         .map { profiles ->
             if (profiles.isNotEmpty()) {
-                DatabaseRepository.profile.fiatBalance
+                databaseRepository.profile.fiatBalance
             } else {
                 0f
             }
@@ -48,7 +52,7 @@ class PortfolioViewModel : ViewModel() {
         combine(assetBalance, fiatBalance) { assetBalance, fiatBalance ->
             assetBalance + fiatBalance
         }
-    val assetsFlow: Flow<List<AssetInvest>> = DatabaseRepository.getAllAsFlowAssetInvest()
+    val assetsFlow: Flow<List<AssetInvest>> = databaseRepository.getAllAsFlowAssetInvest()
         .flowOn(Dispatchers.IO)
         .onEach { assets ->
             loadPriceChanges(assets)
@@ -62,12 +66,12 @@ class PortfolioViewModel : ViewModel() {
 
     suspend fun refreshData() {
         checkAndUpdateBalanceHistory()
-        loadPriceChanges(DatabaseRepository.getAllAsFlowAssetInvest().first())
+        loadPriceChanges(databaseRepository.getAllAsFlowAssetInvest().first())
         refreshChartData()
     }
 
     private suspend fun refreshChartData() {
-        _chartData.value = DatabaseRepository.getAllAssetBalanceHistory().first()
+        _chartData.value = databaseRepository.getAllAssetBalanceHistory().first()
             .mapIndexed { index, assetBalanceHistory ->
                 Entry(index.toFloat(), assetBalanceHistory.assetBalance)
             }
@@ -82,7 +86,7 @@ class PortfolioViewModel : ViewModel() {
 
         val todayDate = today.time
 
-        val todayBalanceHistory = DatabaseRepository.getAllAssetBalanceHistory().first().find {
+        val todayBalanceHistory = databaseRepository.getAllAssetBalanceHistory().first().find {
             val historyDate = Calendar.getInstance()
             historyDate.time = it.date
             historyDate.set(Calendar.HOUR_OF_DAY, 0)
@@ -96,11 +100,11 @@ class PortfolioViewModel : ViewModel() {
         val totalBalance = assetBalance.first() + fiatBalance.first()
 
         if (todayBalanceHistory != null) {
-            DatabaseRepository.updateAssetBalanceHistory(
+            databaseRepository.updateAssetBalanceHistory(
                 todayBalanceHistory.copy(assetBalance = totalBalance)
             )
         } else {
-            DatabaseRepository.insertByLimitAssetBalanceHistory(
+            databaseRepository.insertByLimitAssetBalanceHistory(
                 7, AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }
@@ -118,16 +122,16 @@ class PortfolioViewModel : ViewModel() {
                 priceChanges[asset.symbol] = currentPrice
                 totalCurrentValue += currentPrice * asset.amount
 
-                val investAsset = DatabaseRepository.getBySymbolAssetInvest(asset.symbol)
+                val investAsset = databaseRepository.getBySymbolAssetInvest(asset.symbol)
                 if (investAsset != null) {
                     initialInvestment += investAsset.coinPrice * asset.amount
                 }
             }
         }
 
-        DatabaseRepository.profile.also {
+        databaseRepository.profile.also {
 
-            DatabaseRepository.updateProfile(
+            databaseRepository.updateProfile(
                 it.copy(
                     assetBalance = totalCurrentValue
                 )

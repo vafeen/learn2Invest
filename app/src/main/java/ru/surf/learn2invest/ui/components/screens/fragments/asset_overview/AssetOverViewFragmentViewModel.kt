@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.asset_overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -13,9 +14,10 @@ import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.utils.getWithCurrency
 import java.text.NumberFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class AssetViewModel(
-) : ViewModel() {
+@HiltViewModel
+class AssetOverViewFragmentViewModel @Inject constructor() : ViewModel() {
     private var marketCap = 0.0
     private var price = 0.0
     private var data = mutableListOf<Entry>()

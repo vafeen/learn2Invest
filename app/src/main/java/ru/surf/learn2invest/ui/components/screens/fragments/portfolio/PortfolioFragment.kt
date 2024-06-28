@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
@@ -28,11 +30,13 @@ import java.util.Locale
 /**
  * Фрагмент портфеля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
  */
+
+@AndroidEntryPoint
 class PortfolioFragment : Fragment() {
 
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
-    private lateinit var viewModel: PortfolioViewModel
+    private val viewModel: PortfolioFragmentViewModel by viewModels()
     private val adapter = PortfolioAdapter { asset ->
         startAssetReviewIntent(asset)
     }
@@ -43,13 +47,11 @@ class PortfolioFragment : Fragment() {
 
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
-
-        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
-
+        Log.d("db", "database repository porrtfolio= ${viewModel.databaseRepository}")
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"

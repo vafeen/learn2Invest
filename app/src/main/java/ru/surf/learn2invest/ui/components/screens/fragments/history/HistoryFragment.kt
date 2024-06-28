@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,12 +23,14 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 /**
  * Фрагмент истории сделок в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
  */
+@AndroidEntryPoint
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private val viewModel = HistoryViewModel()
+    private val viewModel: HistoryFragmentViewModel by viewModels()
     private val adapter = HistoryAdapter { transaction ->
         startAssetReviewIntent(transaction)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

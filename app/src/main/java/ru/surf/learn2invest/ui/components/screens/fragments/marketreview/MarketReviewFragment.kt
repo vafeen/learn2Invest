@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
@@ -23,9 +25,10 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 /**
  * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
  */
+@AndroidEntryPoint
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private val viewModel = MarketReviewViewModel()
+    private val viewModel: MarketReviewFragmentViewModel by viewModels()
     private val adapter = MarketReviewAdapter() { coin ->
         startAssetReviewIntent(coin)
     }

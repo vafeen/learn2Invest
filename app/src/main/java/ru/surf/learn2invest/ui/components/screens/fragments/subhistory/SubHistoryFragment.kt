@@ -6,18 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
 
 /**
  * Фрагмент истории сделок с одним активом в [AssetReviewActivity][ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity]
  */
+@AndroidEntryPoint
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding
-    private lateinit var viewModel: SubHistoryViewModel
+    private val viewModel: SubHistoryFragmentViewModel by viewModels()
     private val adapter = SubHistoryAdapter()
 
     override fun onCreateView(
@@ -26,9 +30,11 @@ class SubHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
-        val symbol =
-            requireArguments().getString("symbol") ?: ""
-        viewModel = SubHistoryViewModel(symbol)
+        viewModel.apply {
+            symbol = requireArguments().getString("symbol") ?: ""
+            data = databaseRepository.getFilteredBySymbolTransaction(symbol)
+                .map { it.reversed() }
+        }
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
         return binding.root

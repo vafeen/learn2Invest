@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +19,11 @@ import ru.surf.learn2invest.noui.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_MARKETCAP
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PERCENT
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PRICE
+import javax.inject.Inject
 
-class MarketReviewViewModel : ViewModel() {
+@HiltViewModel
+class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
     private var _data: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(
         mutableListOf()
     )
@@ -118,11 +122,11 @@ class MarketReviewViewModel : ViewModel() {
         if (state) {
             viewModelScope.launch(Dispatchers.IO) {
                 if (searchRequest.isBlank().not()) {
-                    DatabaseRepository.insertAllSearchedCoin(
+                    databaseRepository.insertAllSearchedCoin(
                         SearchedCoin(coinID = searchRequest)
                     )
                 }
-                DatabaseRepository.getAllAsFlowSearchedCoin()
+                databaseRepository.getAllAsFlowSearchedCoin()
                     .first().map { tempSearch.add(it.coinID) }
                 _searchedData.update {
                     _data.value.filter { element -> tempSearch.contains(element.name) }
@@ -171,7 +175,7 @@ class MarketReviewViewModel : ViewModel() {
 
     fun clearSearchData() {
         viewModelScope.launch(Dispatchers.IO) {
-            DatabaseRepository.deleteAllSearchedCoin()
+            databaseRepository.deleteAllSearchedCoin()
             _searchedData.update {
                 mutableListOf()
             }
