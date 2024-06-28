@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.delay
@@ -23,7 +24,7 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private val viewModel = MarketReviewViewModel()
+    private lateinit var viewModel: MarketReviewViewModel
     private val adapter = MarketReviewAdapter() { coin ->
         startAssetReviewIntent(coin)
     }
@@ -36,7 +37,7 @@ class MarketReviewFragment : Fragment() {
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
-
+        viewModel = ViewModelProvider(this)[MarketReviewViewModel::class.java]
         lifecycleScope.launch {
             viewModel.filterOrder.collect {
                 binding.apply {
@@ -202,7 +203,7 @@ class MarketReviewFragment : Fragment() {
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
         while (true) {
-            delay(10000)
+            delay(5000)
             val firstElement =
                 (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val lastElement =

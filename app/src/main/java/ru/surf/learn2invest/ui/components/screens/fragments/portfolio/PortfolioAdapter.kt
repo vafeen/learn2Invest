@@ -8,9 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.load
 import coil.request.Disposable
 import coil.request.ImageRequest
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 import java.math.BigDecimal
@@ -48,7 +50,6 @@ class PortfolioAdapter(
             itemView.findViewById(R.id.coin_top_numeric_info)
         private val coinBottomNumericInfo: TextView =
             itemView.findViewById(R.id.coin_bottom_numeric_info)
-        lateinit var disposable: Disposable
 
         fun bind(asset: AssetInvest, priceChange: Float) {
             coinName.text = asset.name
@@ -78,31 +79,17 @@ class PortfolioAdapter(
                 }
             )
 
-            val imageLoader = ImageLoader.Builder(coinIcon.context)
-                .components {
-                    add(SvgDecoder.Factory())
-                }
-                .build()
-            val request = ImageRequest.Builder(coinIcon.context)
-                .data("$API_ICON${asset.symbol.lowercase()}.svg")
-                .target(onSuccess = {
-                    coinIcon.setImageDrawable(it)
-                },
-                    onError = {
-                        coinIcon.setImageResource(R.drawable.coin_placeholder)
-                    },
-                    onStart = {
-                        coinIcon.setImageResource(R.drawable.placeholder)
-                    })
-                .build()
-            disposable = imageLoader.enqueue(request)
+            coinIcon.load(
+                data = "$API_ICON${asset.symbol.lowercase()}.svg",
+                imageLoader = App.imageLoader
+            )
+            {
+                placeholder(R.drawable.placeholder)
+                error(R.drawable.coin_placeholder)
+            }
         }
     }
 
-    override fun onViewRecycled(holder: PortfolioViewHolder) {
-        super.onViewRecycled(holder)
-        holder.disposable.dispose()
-    }
 
     fun interface AssetClickListener {
         fun onCoinClick(coin: AssetInvest)
