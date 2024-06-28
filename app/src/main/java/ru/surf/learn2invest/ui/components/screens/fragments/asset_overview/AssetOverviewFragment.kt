@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.Job
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
+import ru.surf.learn2invest.ui.components.chart.Last7DaysFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 
 // Вкладка Обзор в Обзоре актива
@@ -16,13 +17,15 @@ class AssetOverviewFragment : Fragment() {
     private lateinit var viewModel: AssetViewModel
     private lateinit var id: String
     private lateinit var realTimeUpdateJob: Job
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
-        chartHelper = LineChartHelper(requireContext())
+        val dateFormatterStrategy = Last7DaysFormatter()
+        chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
 
         id = requireArguments().getString("id") ?: ""
 

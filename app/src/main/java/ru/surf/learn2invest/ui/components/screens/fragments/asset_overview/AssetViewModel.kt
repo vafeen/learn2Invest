@@ -21,6 +21,7 @@ class AssetViewModel(
     private var data = mutableListOf<Entry>()
     private lateinit var formattedMarketCap: String
     private lateinit var formattedPrice: String
+
     fun loadChartData(id: String, onDataLoaded: (List<Entry>, String, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = NetworkRepository.getCoinHistory(id)) {
@@ -74,5 +75,4 @@ class AssetViewModel(
                 }
             }
         }
-
 }

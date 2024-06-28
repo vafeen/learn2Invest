@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,9 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
+import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import java.lang.Thread.sleep
@@ -45,13 +46,12 @@ class PortfolioFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
-        chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
-                binding.balanceText.text = "${balance}$"
+                binding.balanceText.text = balance.getWithCurrency()
                 val isBalanceNonZero = balance != 0f
                 binding.chart.isVisible = isBalanceNonZero
                 binding.percent.isVisible = isBalanceNonZero
@@ -60,12 +60,15 @@ class PortfolioFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.fiatBalance.collect { balance ->
-                binding.accountFunds.text = "${balance}$"
+                binding.accountFunds.text = balance.getWithCurrency()
             }
         }
 
-        chartHelper.setupChart(binding.chart)
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            val dates = viewModel.getAssetBalanceHistoryDates()
+            val dateFormatterStrategy = AssetBalanceHistoryFormatter(dates)
+            chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
+            chartHelper.setupChart(binding.chart)
             viewModel.chartData.collect { data ->
                 chartHelper.updateData(data)
             }
@@ -127,7 +130,6 @@ class PortfolioFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             while (true) {
-                Log.d("Portfolio", "Updated")
                 viewModel.refreshData()
                 sleep(5000)
             }
@@ -144,7 +146,6 @@ class PortfolioFragment : Fragment() {
             false
         }
 
-        //  startRealTimeUpdate()
         return binding.root
     }
 
@@ -228,12 +229,4 @@ class PortfolioFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
 
-    private fun startRealTimeUpdate() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                sleep(5000)
-                viewModel.refreshData()
-            }
-        }
-    }
 }
