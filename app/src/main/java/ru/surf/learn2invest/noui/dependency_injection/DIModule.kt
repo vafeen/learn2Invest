@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.L2IDatabase
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
@@ -49,19 +48,4 @@ class DIModule {
     @Provides
     @Singleton
     fun transactionDao(db: L2IDatabase): TransactionDao = db.transactionDao()
-
-    @Provides
-    @Singleton
-    fun databaseRepository(
-        db: L2IDatabase,
-        assetBalanceHistoryDao: AssetBalanceHistoryDao,
-        assetInvestDao: AssetInvestDao,
-        profileDao: ProfileDao,
-        searchedCoinDao: SearchedCoinDao,
-        transactionDao: TransactionDao,
-    ): DatabaseRepository = DatabaseRepository(
-        db = db, assetBalanceHistoryDao = assetBalanceHistoryDao,
-        assetInvestDao = assetInvestDao,
-        profileDao = profileDao, searchedCoinDao = searchedCoinDao, transactionDao = transactionDao
-    )
 }
