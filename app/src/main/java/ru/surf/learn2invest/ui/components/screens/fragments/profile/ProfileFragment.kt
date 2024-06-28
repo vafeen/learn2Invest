@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -18,12 +19,12 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.components.alert_dialogs.ask_to_delete_profile.AskToDeleteProfileDialog
-import ru.surf.learn2invest.ui.components.alert_dialogs.reset_stats.ResetStatsDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.SimpleDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
+import ru.surf.learn2invest.ui.main.MainActivity
 import ru.surf.learn2invest.utils.isBiometricAvailable
 
 /**
@@ -83,21 +84,58 @@ class ProfileFragment : Fragment() {
                 }
                 binding.biometryBtn.isVisible = isBiometricAvailable(context = requireContext())
                 fr.deleteProfileTV.setOnClickListener {
-
-                    AskToDeleteProfileDialog(
+                    SimpleDialog(
                         context = requireContext(),
-                        lifecycleScope = lifecycleScope,
-                        supportFragmentManager = parentFragmentManager
+                        messageRes = R.string.asking_to_delete_profile,
+                        positiveButtonTitleRes = R.string.yes_exactly,
+                        negativeButtonTitleRes = R.string.no,
+                        isCancelable = true,
+                        onPositiveButtonClick = {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                viewModel.databaseRepository.clearAllTables()
+                            }
+                            (context as Activity).finish()
+                            (context as Activity).startActivity(
+                                Intent(
+                                    context,
+                                    MainActivity::class.java
+                                )
+                            )
+                        },
+                        onNegativeButtonClick = {}
                     ).show()
-
                 }
 
                 fr.resetStatsBtn.setOnClickListener {
-
-                    ResetStatsDialog(
+                    SimpleDialog(
                         context = requireContext(),
-                        lifecycleScope = lifecycleScope,
-                        supportFragmentManager = parentFragmentManager
+                        messageRes = R.string.reset_stats,
+                        positiveButtonTitleRes = R.string.yes_exactly,
+                        negativeButtonTitleRes = R.string.no,
+                        isCancelable = true,
+                        onPositiveButtonClick = {
+                            val savedProfile = viewModel.databaseRepository.profile.copy(
+                                fiatBalance = 0f,
+                                assetBalance = 0f
+                            )
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                viewModel.databaseRepository.apply {
+                                    clearAllTables()
+                                    insertAllProfile(savedProfile)
+                                }
+                            }
+                            Toast.makeText(
+                                context,
+                                context?.let { it1 ->
+                                    ContextCompat.getString(
+                                        it1,
+                                        R.string.stat_reset
+                                    )
+                                },
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        onNegativeButtonClick = {}
                     ).show()
                 }
 
