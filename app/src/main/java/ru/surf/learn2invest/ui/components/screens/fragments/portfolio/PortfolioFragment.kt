@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import java.lang.Thread.sleep
 import java.util.Locale
 
 // Экран портфеля
@@ -62,10 +64,6 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.refreshData()
-        }
-
         chartHelper.setupChart(binding.chart)
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.chartData.collect { data ->
@@ -84,16 +82,22 @@ class PortfolioFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->
                 adapter.assets = assets
-                adapter.notifyDataSetChanged()
                 binding.assets.isVisible = assets.isNotEmpty()
                 binding.assetsAreEmpty.isVisible = assets.isEmpty()
+                Log.d("NOTIFY", "DataSet")
+                adapter.notifyDataSetChanged()
+
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.priceChanges.collect { priceChanges ->
                 adapter.priceChanges = priceChanges
-                adapter.notifyDataSetChanged()
+                Log.d("NOTIFY", "RANGE")
+                adapter.notifyItemRangeChanged(
+                    (binding.assets.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
+                    (binding.assets.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                )
             }
         }
 
@@ -123,6 +127,14 @@ class PortfolioFragment : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                Log.d("Portfolio", "Updated")
+                viewModel.refreshData()
+                sleep(5000)
+            }
+        }
+
         initDrawerListeners()
 
         binding.imageButton.setOnClickListener {
@@ -134,6 +146,7 @@ class PortfolioFragment : Fragment() {
             false
         }
 
+        //  startRealTimeUpdate()
         return binding.root
     }
 
@@ -217,4 +230,12 @@ class PortfolioFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
 
+    private fun startRealTimeUpdate() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                sleep(5000)
+                viewModel.refreshData()
+            }
+        }
+    }
 }
