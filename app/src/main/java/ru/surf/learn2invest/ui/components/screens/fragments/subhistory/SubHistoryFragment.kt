@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,10 @@ class SubHistoryFragment : Fragment() {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
         val symbol =
             requireArguments().getString("symbol") ?: ""
-        viewModel = SubHistoryViewModel(symbol)
+        viewModel = ViewModelProvider(
+            this,
+            SubHistoryViewModelFactory(symbol)
+        )[SubHistoryViewModel::class.java]
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
         return binding.root
