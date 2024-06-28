@@ -202,7 +202,7 @@ class MarketReviewFragment : Fragment() {
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
         while (true) {
-            delay(10000)
+            delay(5000)
             val firstElement =
                 (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val lastElement =
