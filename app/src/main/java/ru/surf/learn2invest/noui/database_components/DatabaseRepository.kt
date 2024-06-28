@@ -12,6 +12,7 @@ import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
@@ -19,18 +20,18 @@ import javax.inject.Inject
  */
 
 
+@Singleton
 class DatabaseRepository @Inject constructor(
-    private var db: L2IDatabase,
-    private var assetBalanceHistoryDao: AssetBalanceHistoryDao,
-    private var assetInvestDao: AssetInvestDao,
-    private var profileDao: ProfileDao,
-    private var searchedCoinDao: SearchedCoinDao,
-    private var transactionDao: TransactionDao,
+    private val db: L2IDatabase,
+    private val assetBalanceHistoryDao: AssetBalanceHistoryDao,
+    private val assetInvestDao: AssetInvestDao,
+    private val profileDao: ProfileDao,
+    private val searchedCoinDao: SearchedCoinDao,
+    private val transactionDao: TransactionDao,
 ) {
     var idOfProfile = 0
         private set
     lateinit var profile: Profile
-
 
     // assetBalanceHistory
     fun getAllAssetBalanceHistory(): Flow<List<AssetBalanceHistory>> =
