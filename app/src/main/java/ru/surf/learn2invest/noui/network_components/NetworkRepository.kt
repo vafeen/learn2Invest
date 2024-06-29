@@ -1,18 +1,22 @@
 package ru.surf.learn2invest.noui.network_components
 
 import android.util.Log
+import retrofit2.Retrofit
 import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinReviewResponse
 import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
 import ru.surf.learn2invest.noui.network_components.util.Const
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Docs?
  */
-object NetworkRepository {
-    private val coinAPIService = CoinRetrofitClient.client.create(
+
+@Singleton
+class NetworkRepository @Inject constructor(retrofit: Retrofit) {
+    private val coinAPIService = retrofit.create(
         CoinAPIService::class.java
     )
 

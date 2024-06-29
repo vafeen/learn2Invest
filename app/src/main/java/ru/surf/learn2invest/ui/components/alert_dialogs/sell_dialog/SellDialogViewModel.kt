@@ -18,7 +18,10 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SellDialogViewModel @Inject constructor(val databaseRepository: DatabaseRepository) :
+class SellDialogViewModel @Inject constructor(
+    val databaseRepository: DatabaseRepository,
+    var networkRepository: NetworkRepository
+) :
     ViewModel() {
     lateinit var realTimeUpdateJob: Job
     lateinit var coin: AssetInvest
@@ -60,7 +63,7 @@ class SellDialogViewModel @Inject constructor(val databaseRepository: DatabaseRe
     fun startRealTimeUpdate(onUpdateFields: (result: String) -> Unit): Job =
         viewModelScope.launch(Dispatchers.IO) {
             while (true) {
-                when (val result = NetworkRepository.getCoinReview(coin.assetID)) {
+                when (val result = networkRepository.getCoinReview(coin.assetID)) {
                     is ResponseWrapper.Success -> {
                         onUpdateFields(result.value.priceUsd.getWithCurrency())
                     }

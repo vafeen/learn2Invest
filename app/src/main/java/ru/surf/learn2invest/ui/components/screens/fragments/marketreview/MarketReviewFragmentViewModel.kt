@@ -22,8 +22,9 @@ import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketR
 import javax.inject.Inject
 
 @HiltViewModel
-class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
-    ViewModel() {
+class MarketReviewFragmentViewModel @Inject constructor(
+    var databaseRepository: DatabaseRepository, var networkRepository: NetworkRepository
+) : ViewModel() {
     private var _data: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(
         mutableListOf()
     )
@@ -59,7 +60,7 @@ class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result: ResponseWrapper<List<CoinReviewDto>> =
-                NetworkRepository.getMarketReview()) {
+                networkRepository.getMarketReview()) {
                 is ResponseWrapper.Success -> {
                     _isLoading.value = false
                     val temp = result.value.toMutableList()
@@ -107,10 +108,9 @@ class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: 
             }
         } else firstTimePriceFilter = false
         _data.update {
-            if (filterOrder.value)
-                it.sortedByDescending { element -> element.priceUsd }.toMutableList()
-            else
-                it.sortedBy { element -> element.priceUsd }.toMutableList()
+            if (filterOrder.value) it.sortedByDescending { element -> element.priceUsd }
+                .toMutableList()
+            else it.sortedBy { element -> element.priceUsd }.toMutableList()
         }
     }
 
@@ -126,11 +126,10 @@ class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: 
                         SearchedCoin(coinID = searchRequest)
                     )
                 }
-                databaseRepository.getAllAsFlowSearchedCoin()
-                    .first().map { tempSearch.add(it.coinID) }
+                databaseRepository.getAllAsFlowSearchedCoin().first()
+                    .map { tempSearch.add(it.coinID) }
                 _searchedData.update {
-                    _data.value.filter { element -> tempSearch.contains(element.name) }
-                        .reversed()
+                    _data.value.filter { element -> tempSearch.contains(element.name) }.reversed()
                         .toMutableList()
                 }
             }
@@ -141,17 +140,15 @@ class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: 
     fun updateData(firstElement: Int, lastElement: Int) {
         val tempUpdate = mutableListOf<CoinReviewDto>()
         isRealtimeUpdate = true
-        val updateDestinationLink = if (_isSearch.value)
-            _searchedData
-        else
-            _data
+        val updateDestinationLink = if (_isSearch.value) _searchedData
+        else _data
         if (updateDestinationLink.value.isNotEmpty() && firstElement != NO_POSITION) {
             firstUpdateElement = firstElement
             amountUpdateElement = lastElement - firstElement + 1
             viewModelScope.launch(Dispatchers.IO) {
                 for (index in firstElement..lastElement) {
                     when (val result =
-                        NetworkRepository.getCoinReview(updateDestinationLink.value[index].id)) {
+                        networkRepository.getCoinReview(updateDestinationLink.value[index].id)) {
                         is ResponseWrapper.Success -> {
                             tempUpdate.add(result.value.toCoinReviewDto())
                         }
@@ -162,10 +159,9 @@ class MarketReviewFragmentViewModel @Inject constructor(var databaseRepository: 
                 val tempUpdateId = tempUpdate.map { it.id }
                 updateDestinationLink.update {
                     it.map { element ->
-                        if (tempUpdateId.contains(element.id))
-                            tempUpdate.find { updateElement ->
-                                updateElement.id == element.id
-                            }
+                        if (tempUpdateId.contains(element.id)) tempUpdate.find { updateElement ->
+                            updateElement.id == element.id
+                        }
                         else element
                     } as MutableList<CoinReviewDto>
                 }

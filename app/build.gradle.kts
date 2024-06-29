@@ -30,6 +30,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
         create("debug1") {
             isDebuggable = true

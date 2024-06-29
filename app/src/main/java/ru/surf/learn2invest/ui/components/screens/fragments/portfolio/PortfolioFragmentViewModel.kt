@@ -23,7 +23,10 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class PortfolioFragmentViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+class PortfolioFragmentViewModel @Inject constructor(
+    var databaseRepository: DatabaseRepository,
+    var networkRepository: NetworkRepository
+) :
     ViewModel() {
 
     private val _chartData = MutableStateFlow<List<Entry>>(emptyList())
@@ -116,7 +119,7 @@ class PortfolioFragmentViewModel @Inject constructor(var databaseRepository: Dat
         var initialInvestment = 0f
         var currentPrice: Float
         for (asset in assets) {
-            val response = NetworkRepository.getCoinReview(asset.assetID)
+            val response = networkRepository.getCoinReview(asset.assetID)
             if (response is ResponseWrapper.Success) {
                 currentPrice = response.value.priceUsd
                 priceChanges[asset.symbol] = currentPrice

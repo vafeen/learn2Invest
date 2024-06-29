@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DIModule {
+class DatabaseDIModule {
     private val NAME = "learn2investDatabase.db"
 
     @Provides

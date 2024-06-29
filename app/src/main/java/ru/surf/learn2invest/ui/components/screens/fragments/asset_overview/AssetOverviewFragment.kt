@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
@@ -17,7 +18,7 @@ import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
     private lateinit var chartHelper: LineChartHelper
-    private lateinit var viewModel: AssetOverViewFragmentViewModel
+    private val viewModel: AssetOverViewFragmentViewModel by viewModels()
     private lateinit var id: String
     private lateinit var realTimeUpdateJob: Job
     override fun onCreateView(
@@ -30,7 +31,6 @@ class AssetOverviewFragment : Fragment() {
 
         id = requireArguments().getString("id") ?: ""
 
-        viewModel = AssetOverViewFragmentViewModel()
         chartHelper.setupChart(binding.chart)
 
         viewModel.loadChartData(id) { data, marketCap, price ->
