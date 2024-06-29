@@ -19,8 +19,8 @@
     <string name="enter_sum">Enter amount</string>
     <string name="refill_account">Refill account</string>
     <string name="create_account">Account creation</string>
-    <string name="sell_security_paper">Buying</string>
-    <string name="buy_security_paper">Selling</string>
+    <string name="sell_security_paper">Selling</string>
+    <string name="buy_security_paper">Buying</string>
     <string name="portfolio">Portfolio</string>
     <string name="balance">Balance</string>
     <string name="account_funds">Account founds</string>
