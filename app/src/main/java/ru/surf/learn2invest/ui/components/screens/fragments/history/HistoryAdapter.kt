@@ -11,7 +11,7 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
-import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
+import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 
 class HistoryAdapter(
     private val clickListener: HistoryClickListener

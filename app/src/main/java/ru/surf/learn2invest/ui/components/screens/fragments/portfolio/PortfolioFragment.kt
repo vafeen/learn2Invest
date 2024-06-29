@@ -24,7 +24,7 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
-import ru.surf.learn2invest.utils.Link
+import ru.surf.learn2invest.utils.DevStrLink
 import java.util.Locale
 
 /**
@@ -194,18 +194,18 @@ class PortfolioFragment : Fragment() {
             contactUs.setOnClickListener {
                 // написать нам
                 startActivity(Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto: ${Link.chery}")
+                    data = Uri.parse("mailto: ${DevStrLink.CHERY}")
                 })
             }
 
             code.setOnClickListener {
                 // исходный код
-                openLink(Link.code)
+                openLink(DevStrLink.CODE)
             }
 
             figma.setOnClickListener {
                 // фигма
-                openLink(Link.figma)
+                openLink(DevStrLink.FIGMA)
             }
 
             versionCode.text = getVersionName()

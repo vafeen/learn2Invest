@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.surf.learn2invest.noui.network_components.util.Const
+import ru.surf.learn2invest.utils.RetrofitLinks
 import javax.inject.Singleton
 
 
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 class NetworkDIModule {
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit = Retrofit.Builder().baseUrl(Const.BASE_URL)
+    fun provideRetrofit(): Retrofit = Retrofit.Builder().baseUrl(RetrofitLinks.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create()).client(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))

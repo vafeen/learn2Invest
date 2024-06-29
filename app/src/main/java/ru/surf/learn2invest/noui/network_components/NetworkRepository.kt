@@ -6,7 +6,7 @@ import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinRevie
 import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.noui.network_components.util.Const
+import ru.surf.learn2invest.utils.RetrofitLinks
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,8 +39,8 @@ class NetworkRepository @Inject constructor(retrofit: Retrofit) {
         try {
             val response = coinAPIService.getCoinHistory(
                 id = id.lowercase(),
-                interval = Const.INTERVAL,
-                start = System.currentTimeMillis() - Const.WEEK,
+                interval = RetrofitLinks.INTERVAL,
+                start = System.currentTimeMillis() - RetrofitLinks.WEEK,
                 end = System.currentTimeMillis()
             )
             Log.d("RETROFIT", response.toString())
