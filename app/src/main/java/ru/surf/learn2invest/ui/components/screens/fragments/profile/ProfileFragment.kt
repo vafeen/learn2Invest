@@ -94,8 +94,8 @@ class ProfileFragment : Fragment() {
                             lifecycleScope.launch(Dispatchers.IO) {
                                 viewModel.databaseRepository.clearAllTables()
                             }
-                            (context as Activity).finish()
-                            (context as Activity).startActivity(
+                            activity?.finish()
+                            activity?.startActivity(
                                 Intent(
                                     context,
                                     MainActivity::class.java

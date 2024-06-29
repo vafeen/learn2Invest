@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -13,17 +14,21 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.utils.getWithCurrency
+import javax.inject.Inject
 
-class BuyDialogViewModel : ViewModel() {
+
+@HiltViewModel
+class BuyDialogViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
     lateinit var realTimeUpdateJob: Job
     var haveAssetsOrNot = false
     lateinit var coin: AssetInvest
 
     fun buy(price: Float, amountCurrent: Float) {
-        val balance = DatabaseRepository.profile.fiatBalance
+        val balance = databaseRepository.profile.fiatBalance
         if (balance > price * amountCurrent) {
             viewModelScope.launch(Dispatchers.IO) {
-                DatabaseRepository.apply {
+                databaseRepository.apply {
                     // обновление баланса
                     updateProfile(profile.copy(fiatBalance = balance - price * amountCurrent))
                     coin.apply {

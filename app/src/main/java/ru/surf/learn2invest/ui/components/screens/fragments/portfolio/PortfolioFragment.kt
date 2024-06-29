@@ -79,12 +79,16 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccountDialog(context = requireContext()) {
+            RefillAccountDialog(dialogContext = requireContext()) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     viewModel.refreshData()
                 }
-            }.also { it.show(parentFragmentManager, it.tag) }
+            }.also {
+                it.show(parentFragmentManager, it.dialogTag)
+            }
+
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->

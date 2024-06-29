@@ -7,65 +7,57 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.SellDialogBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomAlertDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomBottomSheetDialog
 import ru.surf.learn2invest.utils.getFloatFromStringWithCurrency
 import ru.surf.learn2invest.utils.getWithCurrency
 import ru.surf.learn2invest.utils.isTrueTradingPasswordOrIsNotDefined
 
 /**
  * Диалог продажи актива
- * @param context [Контекст открытия диалога]
+ * @param dialogContext [Контекст открытия диалога]
  * @param lifecycleScope [Scope для выполнения асинхронных операция]
  * @param id [ID coin'а]
  * @param name [Имя (Bitcoin)]
  * @param symbol [Абревиатура (BTC)]
- * @param supportFragmentManager [Менеджер открытия диалогов]
  */
+@AndroidEntryPoint
 class SellDialog(
-    context: Context,
+    val dialogContext: Context,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val id: String,
     private val name: String,
     private val symbol: String,
-    supportFragmentManager: FragmentManager
-) : CustomAlertDialog(supportFragmentManager) {
+) : CustomBottomSheetDialog() {
     override val dialogTag: String = "sell"
-    private var binding = SellDialogBinding.inflate(LayoutInflater.from(context))
-    private lateinit var viewModel: SellDialogViewModel
-
-    override fun setCancelable(): Boolean = false
+    private var binding = SellDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private val viewModel: SellDialogViewModel by viewModels()
 
     override fun initListeners() {
-        viewModel = ViewModelProvider(this)[SellDialogViewModel::class.java]
         viewModel.apply {
             coin = AssetInvest(
                 name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
             )
         }
         binding.apply {
-            balanceNum.text = DatabaseRepository.profile.fiatBalance.getWithCurrency()
+            balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
             viewModel.realTimeUpdateJob = viewModel.startRealTimeUpdate {
                 lifecycleScope.launch(Dispatchers.Main) {
                     binding.priceNumber.text = it
                     updateFields()
                 }
             }
-            buttonExit.setOnClickListener {
-                cancel()
-            }
             buttonSell.isVisible = false
             buttonSell.setOnClickListener {
                 sell()
-                cancel()
+                dismiss()
             }
             val coin = viewModel.coin
             imageButtonPlus.isVisible = coin.amount != 0f
@@ -119,7 +111,7 @@ class SellDialog(
             })
 
             tradingPassword.isVisible =
-                if (DatabaseRepository.profile.tradingPasswordHash != null && coin.amount > 0) {
+                if (viewModel.databaseRepository.profile.tradingPasswordHash != null && coin.amount > 0) {
                     tradingPasswordTV.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?, start: Int, count: Int, after: Int
@@ -140,8 +132,8 @@ class SellDialog(
         }
     }
 
-    override fun cancel() {
-        super.cancel()
+    override fun dismiss() {
+        super.dismiss()
         viewModel.realTimeUpdateJob.cancel()
     }
 
@@ -163,18 +155,19 @@ class SellDialog(
                 coin.amount == 0f -> {
                     buttonSell.isVisible = false
                     result.text =
-                        ContextCompat.getString(requireContext(), R.string.no_asset_for_sale)
+                        ContextCompat.getString(dialogContext, R.string.no_asset_for_sale)
                 }
 
                 coin.amount > 0 && enteringNumberOfLots.text.toString().toFloatOrNull().let {
                     it != null && it in 1f..coin.amount
                 } -> {
                     buttonSell.isVisible =
-                        tradingPasswordTV.text.toString().isTrueTradingPasswordOrIsNotDefined()
+                        tradingPasswordTV.text.toString()
+                            .isTrueTradingPasswordOrIsNotDefined(profile = viewModel.databaseRepository.profile)
                     result.text = buildString {
                         append(
                             ContextCompat.getString(
-                                requireContext(), R.string.itog
+                                dialogContext, R.string.itog
                             )
                         )
                         append(resultPrice().getWithCurrency())
@@ -197,10 +190,10 @@ class SellDialog(
         }
     }
 
-    override fun show() {
-        super.show()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         lifecycleScope.launch(Dispatchers.IO) {
-            DatabaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
+            viewModel.databaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
                 viewModel.coin = it
             }
         }
