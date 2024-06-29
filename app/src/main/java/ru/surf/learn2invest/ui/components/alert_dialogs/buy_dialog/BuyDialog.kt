@@ -1,10 +1,8 @@
 package ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog
 
 import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -14,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.BuyDialogBinding
@@ -39,17 +36,13 @@ class BuyDialog(
     private val name: String,
     private val symbol: String,
 ) : CustomBottomSheetDialog() {
-    private lateinit var contextt: Context
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        contextt = context
-        Log.d("co", "contextt = $contextt")
         viewModel.apply {
             viewModelScope.launch(Dispatchers.IO) {
-                delay(5000)
                 databaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
                     haveAssetsOrNot = true
                     coin = it
@@ -58,13 +51,7 @@ class BuyDialog(
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("co", "contextt = $contextt")
-        super.onCreate(savedInstanceState)
-
-    }
     override fun initListeners() {
-        Log.d("co", "contextt = $contextt")
         viewModel.apply {
             coin = AssetInvest(
                 name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
@@ -175,14 +162,11 @@ class BuyDialog(
         viewModel.buy(amountCurrent = amountCurrent, price = price)
     }
 
-
     override fun getDialogView(): View {
-        Log.d("co", "contextt = $contextt")
         return binding.root
     }
 
     private fun updateFields() {
-        Log.d("co", "contextt = $contextt")
         val willPrice = resultPrice(onFuture = false)
         val fiatBalance = viewModel.databaseRepository.profile.fiatBalance
         binding.apply {
@@ -195,8 +179,7 @@ class BuyDialog(
                             profile = viewModel.databaseRepository.profile
                         )
                     result.text = buildString {
-//                        append(ContextCompat.getString(dialogContext, R.string.itog))
-                        append(ContextCompat.getString(contextt, R.string.itog))
+                        append(ContextCompat.getString(dialogContext, R.string.itog))
 
                         append(willPrice.getWithCurrency())
                     }
@@ -206,7 +189,7 @@ class BuyDialog(
                     buttonBuy.isVisible = false
                     result.text = ContextCompat.getString(
 //                        dialogContext,
-                        contextt,
+                        dialogContext,
                         R.string.not_enough_money_for_buy
                     )
                 }
@@ -223,7 +206,6 @@ class BuyDialog(
     private fun resultPrice(
         onFuture: Boolean
     ): Float {
-        Log.d("co", "contextt = $contextt")
         binding.apply {
             val priceText = priceNumber.text.toString()
             val price = priceText.getFloatFromStringWithCurrency()

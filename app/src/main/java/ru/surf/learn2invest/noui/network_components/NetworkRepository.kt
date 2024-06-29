@@ -46,7 +46,6 @@ class NetworkRepository @Inject constructor(retrofit: Retrofit) {
             Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
-            Log.d("RETROFIT", "Error: ${e.message}")
             ResponseWrapper.NetworkError
         }
 
@@ -56,10 +55,8 @@ class NetworkRepository @Inject constructor(retrofit: Retrofit) {
             val response = coinAPIService.getCoinReview(
                 id = id.lowercase()
             )
-            Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
-            Log.d("RETROFIT", "Error: ${e.message}")
             ResponseWrapper.NetworkError
         }
 

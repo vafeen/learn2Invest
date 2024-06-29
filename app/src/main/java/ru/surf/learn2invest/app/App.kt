@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.app
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
@@ -31,7 +30,6 @@ class App : Application() {
             .build()
         with(ProcessLifecycleOwner.get()) {
             lifecycleScope.launch(Dispatchers.IO) {
-                Log.d("db", "database repository App= $databaseRepository")
                 databaseRepository.getAllAsFlowProfile().collect { profList ->
                     if (profList.isNotEmpty()) {
                         databaseRepository.profile = profList[databaseRepository.idOfProfile]

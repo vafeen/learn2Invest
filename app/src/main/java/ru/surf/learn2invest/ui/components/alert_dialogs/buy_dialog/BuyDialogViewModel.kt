@@ -21,8 +21,7 @@ import javax.inject.Inject
 class BuyDialogViewModel @Inject constructor(
     var databaseRepository: DatabaseRepository,
     var networkRepository: NetworkRepository
-) :
-    ViewModel() {
+) : ViewModel() {
     lateinit var realTimeUpdateJob: Job
     var haveAssetsOrNot = false
     lateinit var coin: AssetInvest

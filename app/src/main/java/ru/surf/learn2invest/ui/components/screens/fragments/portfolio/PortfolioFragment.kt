@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,6 @@ class PortfolioFragment : Fragment() {
         chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
-        Log.d("db", "database repository porrtfolio= ${viewModel.databaseRepository}")
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = "${balance}$"
