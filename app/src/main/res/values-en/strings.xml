@@ -74,7 +74,7 @@
     <string name="stat_reset">Stat reset</string>
     <string name="final_price">Final</string>
     <string name="enter_new_pin">Enter new PIN-code</string>
-    <string name="empty_error">Empty field</string>
+    <string name="empty_error">Field cannot be empty</string>
     <string name="contains_spaces">Contains spaces at the beginning or end</string>
     <string name="limit_len_exceeded">Length limit exceeded</string>
     <string name="trading_password">Trading password</string>
@@ -83,4 +83,8 @@
     <string name="repeat_trading_password">Repeat password</string>
     <string name="enter_trading_password">Enter password</string>
     <string name="enter_last_trading_password">Enter last password</string>
+    <string name="write_to_us">Write to us</string>
+    <string name="source">Source</string>
+    <string name="layout_in_figma">Layout in Figma</string>
+    <string name="version_name">Version: </string>
 </resources>

@@ -74,7 +74,7 @@
     <string name="stat_reset">Стата сброшена</string>
     <string name="final_price">Final</string>
     <string name="enter_new_pin">Введите новый PIN-код</string>
-    <string name="empty_error">Empty field</string>
+    <string name="empty_error">Поле не может быть пустым</string>
     <string name="contains_spaces">Содержит пробелы в начале или конце</string>
     <string name="limit_len_exceeded">Превышен предел длины</string>
     <string name="navigation_drawer_open" translatable="false">open\n</string>
@@ -89,4 +89,8 @@
     <string name="repeat_trading_password">Повторите пароль</string>
     <string name="enter_trading_password">Введите пароль</string>
     <string name="enter_last_trading_password">Введите старый пароль</string>
+    <string name="write_to_us">Написать нам</string>
+    <string name="source">Исходный код</string>
+    <string name="layout_in_figma">Макет в Figma</string>
+    <string name="version_name">Версия: </string>
 </resources>
