@@ -25,15 +25,13 @@ class SubHistoryFragment : Fragment() {
     private val adapter = SubHistoryAdapter()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
+
         viewModel.apply {
             symbol = requireArguments().getString("symbol") ?: ""
-            data = databaseRepository.getFilteredBySymbolTransaction(symbol)
-                .map { it.reversed() }
+            data = databaseRepository.getFilteredBySymbolTransaction(symbol).map { it.reversed() }
         }
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter

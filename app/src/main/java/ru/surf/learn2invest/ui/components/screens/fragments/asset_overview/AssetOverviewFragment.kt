@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
+import ru.surf.learn2invest.ui.components.chart.Last7DaysFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 
 /**
@@ -21,13 +22,15 @@ class AssetOverviewFragment : Fragment() {
     private val viewModel: AssetOverViewFragmentViewModel by viewModels()
     private lateinit var id: String
     private lateinit var realTimeUpdateJob: Job
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
-        chartHelper = LineChartHelper(requireContext())
+        val dateFormatterStrategy = Last7DaysFormatter()
+        chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
 
         id = requireArguments().getString("id") ?: ""
 

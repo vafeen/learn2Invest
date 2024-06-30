@@ -23,7 +23,7 @@
     <string name="buy_security_paper">Buying</string>
     <string name="portfolio">Portfolio</string>
     <string name="balance">Balance</string>
-    <string name="account_funds">Account founds</string>
+    <string name="account_funds">Account\nfounds</string>
     <string name="top_up">Refill</string>
     <string name="assets_are_empty">Your briefcase is empty</string>
     <string name="signup_btn_text">Sign IN</string>

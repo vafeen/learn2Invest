@@ -40,7 +40,6 @@ class MarketReviewFragment : Fragment() {
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
-
         lifecycleScope.launch {
             viewModel.filterOrder.collect {
                 binding.apply {
@@ -205,7 +204,7 @@ class MarketReviewFragment : Fragment() {
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
         while (true) {
-            delay(10000)
+            delay(5000)
             val firstElement =
                 (binding.marketReviewRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val lastElement =

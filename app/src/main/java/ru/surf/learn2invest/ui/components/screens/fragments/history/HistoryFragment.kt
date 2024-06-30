@@ -36,7 +36,6 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
 

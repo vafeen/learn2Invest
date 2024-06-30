@@ -25,6 +25,7 @@ class AssetOverViewFragmentViewModel @Inject constructor(
     private var data = mutableListOf<Entry>()
     private lateinit var formattedMarketCap: String
     private lateinit var formattedPrice: String
+
     fun loadChartData(id: String, onDataLoaded: (List<Entry>, String, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = networkRepository.getCoinHistory(id)) {
@@ -78,5 +79,4 @@ class AssetOverViewFragmentViewModel @Inject constructor(
                 }
             }
         }
-
 }

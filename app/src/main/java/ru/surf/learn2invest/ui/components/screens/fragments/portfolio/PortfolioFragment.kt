@@ -21,9 +21,12 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
+import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.DevStrLink
+import ru.surf.learn2invest.utils.getWithCurrency
+import java.lang.Thread.sleep
 import java.util.Locale
 
 /**
@@ -47,12 +50,11 @@ class PortfolioFragment : Fragment() {
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
-        chartHelper = LineChartHelper(requireContext())
 
         setupAssetsRecyclerView()
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
-                binding.balanceText.text = "${balance}$"
+                binding.balanceText.text = balance.getWithCurrency()
                 val isBalanceNonZero = balance != 0f
                 binding.chart.isVisible = isBalanceNonZero
                 binding.percent.isVisible = isBalanceNonZero
@@ -61,16 +63,14 @@ class PortfolioFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.fiatBalance.collect { balance ->
-                binding.accountFunds.text = "${balance}$"
+                binding.accountFunds.text = balance.getWithCurrency()
             }
         }
-
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.refreshData()
-        }
-
-        chartHelper.setupChart(binding.chart)
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            val dates = viewModel.getAssetBalanceHistoryDates()
+            val dateFormatterStrategy = AssetBalanceHistoryFormatter(dates)
+            chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
+            chartHelper.setupChart(binding.chart)
             viewModel.chartData.collect { data ->
                 chartHelper.updateData(data)
             }
@@ -91,16 +91,20 @@ class PortfolioFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->
                 adapter.assets = assets
-                adapter.notifyDataSetChanged()
                 binding.assets.isVisible = assets.isNotEmpty()
                 binding.assetsAreEmpty.isVisible = assets.isEmpty()
+                adapter.notifyDataSetChanged()
+
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.priceChanges.collect { priceChanges ->
                 adapter.priceChanges = priceChanges
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemRangeChanged(
+                    (binding.assets.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
+                    (binding.assets.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                )
             }
         }
 
@@ -127,6 +131,13 @@ class PortfolioFragment : Fragment() {
                         )
                     }
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                viewModel.refreshData()
+                sleep(5000)
             }
         }
 

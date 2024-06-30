@@ -38,7 +38,6 @@
             android:layout_marginTop="23dp"
             android:text="@string/buy_security_paper"
             android:textAppearance="@style/Text.Regular.16"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

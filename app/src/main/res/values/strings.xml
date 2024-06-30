@@ -23,7 +23,7 @@
     <string name="buy_security_paper">Покупка</string>
     <string name="portfolio">Портфель</string>
     <string name="balance">Баланс</string>
-    <string name="account_funds">Средства на счете</string>
+    <string name="account_funds">Средства \n на счете</string>
     <string name="top_up">Пополнить</string>
     <string name="assets_are_empty">Ваш портфель пуст</string>
     <string name="signup_btn_text">Войти</string>

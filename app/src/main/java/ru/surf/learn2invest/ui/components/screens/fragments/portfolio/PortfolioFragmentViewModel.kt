@@ -20,6 +20,7 @@ import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +71,10 @@ class PortfolioFragmentViewModel @Inject constructor(
     suspend fun refreshData() {
         checkAndUpdateBalanceHistory()
         loadPriceChanges(databaseRepository.getAllAsFlowAssetInvest().first())
-        refreshChartData()
+    }
+
+    suspend fun getAssetBalanceHistoryDates(): List<Date> {
+        return databaseRepository.getAllAssetBalanceHistory().first().map { it.date }
     }
 
     private suspend fun refreshChartData() {
@@ -111,6 +115,7 @@ class PortfolioFragmentViewModel @Inject constructor(
                 7, AssetBalanceHistory(assetBalance = totalBalance, date = todayDate)
             )
         }
+        refreshChartData()
     }
 
     private suspend fun loadPriceChanges(assets: List<AssetInvest>) {
