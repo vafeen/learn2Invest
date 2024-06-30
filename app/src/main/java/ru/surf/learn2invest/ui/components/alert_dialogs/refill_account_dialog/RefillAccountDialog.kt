@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
+import ru.surf.learn2invest.databinding.DialogRefillAccountBinding
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomBottomSheetDialog
 import ru.surf.learn2invest.utils.getWithCurrency
 import ru.surf.learn2invest.utils.tapOn
@@ -28,7 +28,7 @@ class RefillAccountDialog(
     val dialogContext: Context, private val onCloseCallback: () -> Unit,
 ) : CustomBottomSheetDialog() {
 
-    private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private var binding = DialogRefillAccountBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "refillAccount"
     private val viewModel: RefillAccountDialogViewModel by viewModels()
 

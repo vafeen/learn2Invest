@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
+import ru.surf.learn2invest.databinding.ActivityTradingPasswordBinding
 import ru.surf.learn2invest.utils.Icons.error
 import ru.surf.learn2invest.utils.Icons.ok
 import ru.surf.learn2invest.utils.hideKeyboard
@@ -34,7 +34,7 @@ import ru.surf.learn2invest.utils.verifyTradingPassword
  */
 @AndroidEntryPoint
 class TradingPasswordActivity : AppCompatActivity() {
-    private lateinit var binding: TradingPasswordActivityBinding
+    private lateinit var binding: ActivityTradingPasswordBinding
     private val viewModel: TradingPasswordActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class TradingPasswordActivity : AppCompatActivity() {
             )
         )
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
-        binding = TradingPasswordActivityBinding.inflate(layoutInflater)
+        binding = ActivityTradingPasswordBinding.inflate(layoutInflater)
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
             this.finish()
         setContentView(binding.root)

@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.databinding.DialogBuyBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomBottomSheetDialog
 import ru.surf.learn2invest.utils.getFloatFromStringWithCurrency
@@ -36,7 +36,7 @@ class BuyDialog(
     private val name: String,
     private val symbol: String,
 ) : CustomBottomSheetDialog() {
-    private var binding = BuyDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private var binding = DialogBuyBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
     override fun onAttach(context: Context) {
