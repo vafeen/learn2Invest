@@ -248,10 +248,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/learn2investCard"
-
                 app:layout_constraintVertical_bias="0">
 
                 <TextView
@@ -260,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.0"
-                    android:text="Написать нам"
+                    android:text="@string/write_to_us"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -297,8 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.0"
-
-                    android:text="Исходный код"
+                    android:text="@string/source"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -333,7 +330,7 @@
                     android:id="@+id/version_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Версия:"
+                    android:text="@string/version_name"
                     android:textAppearance="@style/Text.SemiBold.18" />
 
                 <TextView
@@ -373,8 +370,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.0"
-
-                    android:text="Макет в Figma"
+                    android:text="@string/layout_in_figma"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -6,14 +6,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository.profile
 import ru.surf.learn2invest.utils.Icons.error
 import ru.surf.learn2invest.utils.Icons.ok
 import ru.surf.learn2invest.utils.hideKeyboard
@@ -21,13 +20,22 @@ import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
 import ru.surf.learn2invest.utils.isThisContainsSequenceOrEmpty
 import ru.surf.learn2invest.utils.showKeyboard
-import ru.surf.learn2invest.utils.updateProfile
 import ru.surf.learn2invest.utils.verifyTradingPassword
 
-
+/**
+ * Активити ввода торгового пароля для подтверждения сделок
+ *
+ * Функции:
+ * - Создание торгового пароля
+ * - Смена торгового пароля
+ * - Удаление торгового пароля
+ *
+ * Определение функции с помощью intent.action и [TradingPasswordActivityActions][ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions]
+ */
+@AndroidEntryPoint
 class TradingPasswordActivity : AppCompatActivity() {
     private lateinit var binding: TradingPasswordActivityBinding
-    private lateinit var viewModel: TradingPasswordActivityViewModel
+    private val viewModel: TradingPasswordActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.white)
@@ -40,7 +48,6 @@ class TradingPasswordActivity : AppCompatActivity() {
         )
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         binding = TradingPasswordActivityBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[TradingPasswordActivityViewModel::class.java]
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
             this.finish()
         setContentView(binding.root)
@@ -129,7 +136,8 @@ class TradingPasswordActivity : AppCompatActivity() {
                 when (viewModel.action) {
                     TradingPasswordActivityActions.RemoveTradingPassword -> {
                         if (("${passwordEdit.text}" == "${passwordConfirm.text}") && verifyTradingPassword(
-                                user = profile, password = "${passwordEdit.text}"
+                                user = viewModel.databaseRepository.profile,
+                                password = "${passwordEdit.text}"
                             )
                         ) ok else error
                     }
@@ -150,7 +158,8 @@ class TradingPasswordActivity : AppCompatActivity() {
 
             imageRule5.setImageDrawable(
                 if (verifyTradingPassword(
-                        user = profile, password = "${passwordLast.text}"
+                        user = viewModel.databaseRepository.profile,
+                        password = "${passwordLast.text}"
                     )
                 ) ok else error
             )
@@ -290,8 +299,10 @@ class TradingPasswordActivity : AppCompatActivity() {
             })
 
             buttonDoTrading.setOnClickListener {
-                viewModel.saveTradingPassword(password = "${passwordConfirm.text}")
-                updateProfile(lifecycleCoroutineScope = lifecycleScope)
+                viewModel.apply {
+                    saveTradingPassword(password = "${passwordConfirm.text}")
+                    updateProfile()
+                }
                 this@TradingPasswordActivity.finish()
             }
         }

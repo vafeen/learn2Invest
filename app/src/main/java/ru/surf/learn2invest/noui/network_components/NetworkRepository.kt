@@ -1,15 +1,22 @@
 package ru.surf.learn2invest.noui.network_components
 
 import android.util.Log
+import retrofit2.Retrofit
 import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinReviewResponse
 import ru.surf.learn2invest.noui.network_components.responses.CoinPriceDto
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.noui.network_components.util.CoinRetrofitClient
-import ru.surf.learn2invest.noui.network_components.util.Const
+import ru.surf.learn2invest.utils.RetrofitLinks
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object NetworkRepository {
-    private val coinAPIService = CoinRetrofitClient.client.create(
+/**
+ * Docs?
+ */
+
+@Singleton
+class NetworkRepository @Inject constructor(retrofit: Retrofit) {
+    private val coinAPIService = retrofit.create(
         CoinAPIService::class.java
     )
 
@@ -32,14 +39,13 @@ object NetworkRepository {
         try {
             val response = coinAPIService.getCoinHistory(
                 id = id.lowercase(),
-                interval = Const.INTERVAL,
-                start = System.currentTimeMillis() - Const.WEEK,
+                interval = RetrofitLinks.INTERVAL,
+                start = System.currentTimeMillis() - RetrofitLinks.WEEK,
                 end = System.currentTimeMillis()
             )
             Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
-            Log.d("RETROFIT", "Error: ${e.message}")
             ResponseWrapper.NetworkError
         }
 
@@ -49,10 +55,8 @@ object NetworkRepository {
             val response = coinAPIService.getCoinReview(
                 id = id.lowercase()
             )
-            Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
-            Log.d("RETROFIT", "Error: ${e.message}")
             ResponseWrapper.NetworkError
         }
 

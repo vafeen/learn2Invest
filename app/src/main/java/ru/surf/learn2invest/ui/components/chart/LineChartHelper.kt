@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import ru.surf.learn2invest.R
 
+
 class LineChartHelper(
     private val context: Context,
     private val dateFormatterStrategy: CustomDateValueFormatter

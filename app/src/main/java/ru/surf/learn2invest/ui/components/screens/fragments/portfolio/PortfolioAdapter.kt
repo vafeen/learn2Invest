@@ -6,15 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
-import coil.request.Disposable
-import coil.request.ImageRequest
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
+import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale

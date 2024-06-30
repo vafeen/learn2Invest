@@ -1,15 +1,28 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
+import android.app.Activity
+import android.content.Intent
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
+import ru.surf.learn2invest.noui.database_components.DatabaseRepository
+import ru.surf.learn2invest.ui.components.screens.host.HostActivity
+import javax.inject.Inject
 
-class SignInActivityViewModel : ViewModel() {
+@HiltViewModel
+class SignInActivityViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
     var pinCode: String = ""
-    var firstPin: String = "" // Apps для сравнения во время регистрации
+    var firstPin: String = ""
     var isVerified = false
     var userDataIsChanged = false
     lateinit var fingerPrintManager: FingerprintAuthenticator
     var keyBoardIsWork = true
+
 
     fun blockKeyBoard() {
         keyBoardIsWork = false
@@ -19,4 +32,20 @@ class SignInActivityViewModel : ViewModel() {
         keyBoardIsWork = true
     }
 
+    fun onAuthenticationSucceeded(
+        action: String,
+        context: Activity,
+        lifecycleCoroutineScope: LifecycleCoroutineScope
+    ) {
+        if (action != SignINActivityActions.ChangingPIN.action)
+            context.startActivity(Intent(context, HostActivity::class.java))
+        pinCode = ""
+        if (userDataIsChanged) updateProfile()
+        context.finish()
+    }
+
+    fun updateProfile() =
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.updateProfile(databaseRepository.profile)
+        }
 }

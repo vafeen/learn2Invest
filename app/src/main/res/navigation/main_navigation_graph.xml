@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.surf.learn2invest.ui.components.screens.fragments.ProfileFragment"
+        android:name="ru.surf.learn2invest.ui.components.screens.fragments.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

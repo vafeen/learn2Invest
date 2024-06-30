@@ -1,5 +1,8 @@
 package ru.surf.learn2invest.noui.network_components.responses
 
+/**
+ * Docs?
+ */
 data class AugmentedCoinReviewResponse(
     val id: String, //название (типа id)
     val rank: Int, //Ранг
@@ -13,18 +16,4 @@ data class AugmentedCoinReviewResponse(
     val changePercent24Hr: Float, //Процент изменения цены за 24 часа
     val vwap24Hr: Float,
     val explorer: String
-)
-
-fun AugmentedCoinReviewResponse.toCoinReviewDto() = CoinReviewDto(
-    id = this.id,
-    rank = this.rank,
-    symbol = this.symbol,
-    name = this.name,
-    supply = this.supply,
-    maxSupply = this.maxSupply,
-    marketCapUsd = this.marketCapUsd,
-    volumeUsd24Hr = this.volumeUsd24Hr,
-    priceUsd = this.priceUsd,
-    changePercent24Hr = this.changePercent24Hr,
-    vwap24Hr = this.vwap24Hr
 )

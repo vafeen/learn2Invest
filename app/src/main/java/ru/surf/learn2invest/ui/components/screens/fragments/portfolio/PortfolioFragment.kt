@@ -11,28 +11,34 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
 import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.utils.DevStrLink
+import ru.surf.learn2invest.utils.getWithCurrency
 import java.lang.Thread.sleep
 import java.util.Locale
 
-// Экран портфеля
+/**
+ * Фрагмент портфеля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
+
+@AndroidEntryPoint
 class PortfolioFragment : Fragment() {
 
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
-    private lateinit var viewModel: PortfolioViewModel
+    private val viewModel: PortfolioFragmentViewModel by viewModels()
     private val adapter = PortfolioAdapter { asset ->
         startAssetReviewIntent(asset)
     }
@@ -43,12 +49,9 @@ class PortfolioFragment : Fragment() {
 
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
-
-        viewModel = ViewModelProvider(this)[PortfolioViewModel::class.java]
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
 
         setupAssetsRecyclerView()
-
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.totalBalance.collect { balance ->
                 binding.balanceText.text = balance.getWithCurrency()
@@ -63,7 +66,6 @@ class PortfolioFragment : Fragment() {
                 binding.accountFunds.text = balance.getWithCurrency()
             }
         }
-
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             val dates = viewModel.getAssetBalanceHistoryDates()
             val dateFormatterStrategy = AssetBalanceHistoryFormatter(dates)
@@ -75,12 +77,16 @@ class PortfolioFragment : Fragment() {
         }
 
         binding.topUpBtn.setOnClickListener {
-            RefillAccountDialog(requireContext(), lifecycleScope, parentFragmentManager) {
+            RefillAccountDialog(dialogContext = requireContext()) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     viewModel.refreshData()
                 }
-            }.show()
+            }.also {
+                it.show(parentFragmentManager, it.dialogTag)
+            }
+
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->
@@ -197,18 +203,18 @@ class PortfolioFragment : Fragment() {
             contactUs.setOnClickListener {
                 // написать нам
                 startActivity(Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto: ${Link.chery}")
+                    data = Uri.parse("mailto: ${DevStrLink.CHERY}")
                 })
             }
 
             code.setOnClickListener {
                 // исходный код
-                openLink(Link.code)
+                openLink(DevStrLink.CODE)
             }
 
             figma.setOnClickListener {
                 // фигма
-                openLink(Link.figma)
+                openLink(DevStrLink.FIGMA)
             }
 
             versionCode.text = getVersionName()

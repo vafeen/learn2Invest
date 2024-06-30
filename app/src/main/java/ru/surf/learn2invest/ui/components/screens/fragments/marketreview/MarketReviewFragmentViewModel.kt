@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,12 +15,16 @@ import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.noui.network_components.responses.toCoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_MARKETCAP
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PERCENT
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PRICE
+import ru.surf.learn2invest.utils.toCoinReviewDto
+import javax.inject.Inject
 
-class MarketReviewViewModel : ViewModel() {
+@HiltViewModel
+class MarketReviewFragmentViewModel @Inject constructor(
+    var databaseRepository: DatabaseRepository, var networkRepository: NetworkRepository
+) : ViewModel() {
     private var _data: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(
         mutableListOf()
     )
@@ -55,7 +60,7 @@ class MarketReviewViewModel : ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result: ResponseWrapper<List<CoinReviewDto>> =
-                NetworkRepository.getMarketReview()) {
+                networkRepository.getMarketReview()) {
                 is ResponseWrapper.Success -> {
                     _isLoading.value = false
                     val temp = result.value.toMutableList()
@@ -103,10 +108,9 @@ class MarketReviewViewModel : ViewModel() {
             }
         } else firstTimePriceFilter = false
         _data.update {
-            if (filterOrder.value)
-                it.sortedByDescending { element -> element.priceUsd }.toMutableList()
-            else
-                it.sortedBy { element -> element.priceUsd }.toMutableList()
+            if (filterOrder.value) it.sortedByDescending { element -> element.priceUsd }
+                .toMutableList()
+            else it.sortedBy { element -> element.priceUsd }.toMutableList()
         }
     }
 
@@ -118,15 +122,14 @@ class MarketReviewViewModel : ViewModel() {
         if (state) {
             viewModelScope.launch(Dispatchers.IO) {
                 if (searchRequest.isBlank().not()) {
-                    DatabaseRepository.insertAllSearchedCoin(
+                    databaseRepository.insertAllSearchedCoin(
                         SearchedCoin(coinID = searchRequest)
                     )
                 }
-                DatabaseRepository.getAllAsFlowSearchedCoin()
-                    .first().map { tempSearch.add(it.coinID) }
+                databaseRepository.getAllAsFlowSearchedCoin().first()
+                    .map { tempSearch.add(it.coinID) }
                 _searchedData.update {
-                    _data.value.filter { element -> tempSearch.contains(element.name) }
-                        .reversed()
+                    _data.value.filter { element -> tempSearch.contains(element.name) }.reversed()
                         .toMutableList()
                 }
             }
@@ -137,17 +140,15 @@ class MarketReviewViewModel : ViewModel() {
     fun updateData(firstElement: Int, lastElement: Int) {
         val tempUpdate = mutableListOf<CoinReviewDto>()
         isRealtimeUpdate = true
-        val updateDestinationLink = if (_isSearch.value)
-            _searchedData
-        else
-            _data
+        val updateDestinationLink = if (_isSearch.value) _searchedData
+        else _data
         if (updateDestinationLink.value.isNotEmpty() && firstElement != NO_POSITION) {
             firstUpdateElement = firstElement
             amountUpdateElement = lastElement - firstElement + 1
             viewModelScope.launch(Dispatchers.IO) {
                 for (index in firstElement..lastElement) {
                     when (val result =
-                        NetworkRepository.getCoinReview(updateDestinationLink.value[index].id)) {
+                        networkRepository.getCoinReview(updateDestinationLink.value[index].id)) {
                         is ResponseWrapper.Success -> {
                             tempUpdate.add(result.value.toCoinReviewDto())
                         }
@@ -158,10 +159,9 @@ class MarketReviewViewModel : ViewModel() {
                 val tempUpdateId = tempUpdate.map { it.id }
                 updateDestinationLink.update {
                     it.map { element ->
-                        if (tempUpdateId.contains(element.id))
-                            tempUpdate.find { updateElement ->
-                                updateElement.id == element.id
-                            }
+                        if (tempUpdateId.contains(element.id)) tempUpdate.find { updateElement ->
+                            updateElement.id == element.id
+                        }
                         else element
                     } as MutableList<CoinReviewDto>
                 }
@@ -171,7 +171,7 @@ class MarketReviewViewModel : ViewModel() {
 
     fun clearSearchData() {
         viewModelScope.launch(Dispatchers.IO) {
-            DatabaseRepository.deleteAllSearchedCoin()
+            databaseRepository.deleteAllSearchedCoin()
             _searchedData.update {
                 mutableListOf()
             }

@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,18 +20,22 @@ import ru.surf.learn2invest.databinding.FragmentHistoryBinding
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
+/**
+ * Фрагмент истории сделок в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
+@AndroidEntryPoint
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var viewModel: HistoryViewModel
+    private val viewModel: HistoryFragmentViewModel by viewModels()
     private val adapter = HistoryAdapter { transaction ->
         startAssetReviewIntent(transaction)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
         activity?.window?.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.main_background)
 

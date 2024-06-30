@@ -14,11 +14,16 @@ import androidx.room.Update
 interface DataAccessObject<T> {
 
     /**
-     * Вставка в базу данных одного или нескольких объектов
+     * Вставка && Обновление в базе данных одного или нескольких объектов
+     * @param entities [Список объектов, которые нуно положить в бд]
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)// insert && update
     suspend fun insertAll(vararg entities: T)
 
+    /**
+     * Обновление в базе данных одного или нескольких объектов
+     * @param entities [Список объектов, которые нуно положить в бд]
+     */
     @Update
     suspend fun update(vararg entities: T)
 

@@ -10,15 +10,19 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.Disposable
 import coil.request.ImageRequest
+import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
-import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
 import ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog.BuyDialog
 import ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
+import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 
-// Экран Обзор актива
+/**
+ * Экран обзора актива
+ */
+@AndroidEntryPoint
 class AssetReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAssetReviewBinding
     private lateinit var disposable: Disposable
@@ -84,24 +88,25 @@ class AssetReviewActivity : AppCompatActivity() {
 
         binding.buyAssetBtn.setOnClickListener {
             BuyDialog(
-                context = this,
-                lifecycleScope = lifecycleScope,
+                dialogContext = this,
                 id = id,
                 name = name,
-                symbol = symbol,
-                supportFragmentManager = supportFragmentManager
-            ).show()
+                symbol = symbol
+            ).also {
+                it.show(supportFragmentManager, it.tag)
+            }
         }
 
         binding.sellAssetBtn.setOnClickListener {
             SellDialog(
-               dialogContext = this,
+                dialogContext = this,
                 lifecycleScope = lifecycleScope,
                 id = id,
                 name = name,
-                symbol = symbol,
-                supportFragmentManager = supportFragmentManager
-            ).show()
+                symbol = symbol
+            ).also {
+                it.show(supportFragmentManager, it.dialogTag)
+            }
         }
     }
 

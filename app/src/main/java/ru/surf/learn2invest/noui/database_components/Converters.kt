@@ -3,6 +3,9 @@ package ru.surf.learn2invest.noui.database_components
 import androidx.room.TypeConverter
 import java.util.Date
 
+/**
+ * Docs?
+ */
 object Converters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {

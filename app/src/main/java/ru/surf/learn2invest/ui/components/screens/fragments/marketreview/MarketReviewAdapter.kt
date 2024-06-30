@@ -10,7 +10,7 @@ import coil.load
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.noui.network_components.util.Const.API_ICON
+import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import java.text.NumberFormat
 import java.util.Locale
 

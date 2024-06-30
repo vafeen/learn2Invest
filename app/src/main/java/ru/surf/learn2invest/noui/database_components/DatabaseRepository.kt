@@ -1,11 +1,6 @@
 package ru.surf.learn2invest.noui.database_components
 
-import android.content.Context
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
@@ -16,75 +11,27 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
- * Доступ к данным осуществляется в coroutineScope{} с помощью
- *
- *  [DatabaseRepository][DatabaseRepository]
- *
- * Посредством обращения через нее к определенным методам разных объектов,
- *
- * например:
- * [DatabaseRepository.getAllAsFlowAssetInvest],
- *
- * Полный пример:
- *```
- * var someList: List<Something>
- *
- * lifecycleScope.launch(Dispatchers.Main) {
- *
- * DatabaseRepository.getAllAsFlowAssetInvest.collect { someList = it } // подписка на изменения
- *
- * someList = DatabaseRepository.getAllAsFlowAssetInvest.first() // разовая акция
- * }
- * ```
+ * Репозиториq локальной базы данных для осуществления операций манипуляции с сущностями
  */
-object DatabaseRepository {
 
-    private var idOfProfile = 0
+
+@Singleton
+class DatabaseRepository @Inject constructor(
+    private val db: L2IDatabase,
+    private val assetBalanceHistoryDao: AssetBalanceHistoryDao,
+    private val assetInvestDao: AssetInvestDao,
+    private val profileDao: ProfileDao,
+    private val searchedCoinDao: SearchedCoinDao,
+    private val transactionDao: TransactionDao,
+) {
+    var idOfProfile = 0
+        private set
     lateinit var profile: Profile
-    private lateinit var mainDB: L2IDatabase
-    private lateinit var assetBalanceHistoryDao: AssetBalanceHistoryDao
-    private lateinit var assetInvestDao: AssetInvestDao
-    private lateinit var profileDao: ProfileDao
-    private lateinit var searchedCoinDao: SearchedCoinDao
-    private lateinit var transactionDao: TransactionDao
-
-
-    fun initDatabase(context: Context) {
-        mainDB = L2IDatabase.buildDatabase(context = context)
-        initDAOs()
-        val profileFlow: Flow<List<Profile>> = profileDao.getAllAsFlow()
-        with(ProcessLifecycleOwner.get()) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                profileFlow.collect { profList ->
-                    if (profList.isNotEmpty()) {
-                        profile = profList[idOfProfile]
-                    } else {
-                        profile = Profile(
-                            id = 0,
-                            firstName = "undefined",
-                            lastName = "undefined",
-                            biometry = false,
-                            fiatBalance = 0f,
-                            assetBalance = 0f
-                        )
-                        insertAllProfile(profile)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun initDAOs() {
-        assetBalanceHistoryDao = mainDB.assetBalanceHistoryDao()
-        assetInvestDao = mainDB.assetInvestDao()
-        profileDao = mainDB.profileDao()
-        searchedCoinDao = mainDB.searchedCoinDao()
-        transactionDao = mainDB.transactionDao()
-    }
-
 
     // assetBalanceHistory
     fun getAllAssetBalanceHistory(): Flow<List<AssetBalanceHistory>> =
@@ -166,5 +113,5 @@ object DatabaseRepository {
         transactionDao.getFilteredBySymbol(filterSymbol = filterSymbol)
 
     // ALL
-    fun clearAllTables() = mainDB.clearAllTables()
+    fun clearAllTables() = db.clearAllTables()
 }

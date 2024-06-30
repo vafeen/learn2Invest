@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,10 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
@@ -21,10 +21,13 @@ import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
-
+/**
+ * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
+@AndroidEntryPoint
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
-    private lateinit var viewModel: MarketReviewViewModel
+    private val viewModel: MarketReviewFragmentViewModel by viewModels()
     private val adapter = MarketReviewAdapter() { coin ->
         startAssetReviewIntent(coin)
     }
@@ -37,7 +40,6 @@ class MarketReviewFragment : Fragment() {
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
-        viewModel = ViewModelProvider(this)[MarketReviewViewModel::class.java]
         lifecycleScope.launch {
             viewModel.filterOrder.collect {
                 binding.apply {
@@ -106,7 +108,6 @@ class MarketReviewFragment : Fragment() {
                                 android.R.layout.simple_expandable_list_item_1,
                                 it.map { element -> element.name })
                         )
-                        Log.d("data.collect", "startRealtimeUpdate")
                         startRealtimeUpdate()
                     }
                 }

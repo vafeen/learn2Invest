@@ -36,7 +36,7 @@
 
         <activity android:name=".ui.components.screens.sign_in.SignInActivity" />
 
-        <activity android:name=".ui.components.screens.SignUpActivity" />
+        <activity android:name=".ui.components.screens.sign_up.SignUpActivity" />
 
         <activity android:name=".ui.components.screens.trading_password.TradingPasswordActivity" />
 

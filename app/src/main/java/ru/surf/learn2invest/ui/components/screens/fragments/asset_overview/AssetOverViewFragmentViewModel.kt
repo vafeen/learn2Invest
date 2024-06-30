@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.asset_overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -10,11 +11,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
-import ru.surf.learn2invest.ui.components.alert_dialogs.getWithCurrency
+import ru.surf.learn2invest.utils.getWithCurrency
 import java.text.NumberFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class AssetViewModel(
+@HiltViewModel
+class AssetOverViewFragmentViewModel @Inject constructor(
+    var networkRepository: NetworkRepository
 ) : ViewModel() {
     private var marketCap = 0.0
     private var price = 0.0
@@ -24,12 +28,12 @@ class AssetViewModel(
 
     fun loadChartData(id: String, onDataLoaded: (List<Entry>, String, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val response = NetworkRepository.getCoinHistory(id)) {
+            when (val response = networkRepository.getCoinHistory(id)) {
                 is ResponseWrapper.Success -> {
                     data = response.value.mapIndexed { index, coinPriceResponse ->
                         Entry(index.toFloat(), coinPriceResponse.priceUsd)
                     }.toMutableList()
-                    when (val coinResponse = NetworkRepository.getCoinReview(id)) {
+                    when (val coinResponse = networkRepository.getCoinReview(id)) {
                         is ResponseWrapper.Success -> {
                             data.add(Entry(data.size.toFloat(), coinResponse.value.priceUsd))
                             marketCap = coinResponse.value.marketCapUsd.toDouble()
@@ -55,7 +59,7 @@ class AssetViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             while (true) {
                 delay(5000)
-                when (val result = NetworkRepository.getCoinReview(id)) {
+                when (val result = networkRepository.getCoinReview(id)) {
                     is ResponseWrapper.Success -> {
                         if (data.size != 0) {
                             data.removeLast()

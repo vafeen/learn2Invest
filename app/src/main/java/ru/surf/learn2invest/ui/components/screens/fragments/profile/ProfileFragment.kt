@@ -1,40 +1,44 @@
-package ru.surf.learn2invest.ui.components.screens.fragments
+package ru.surf.learn2invest.ui.components.screens.fragments.profile
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
-import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.Profile
-import ru.surf.learn2invest.ui.components.alert_dialogs.AskToDeleteProfileDialog
-import ru.surf.learn2invest.ui.components.alert_dialogs.ResetStatsDialog
+import ru.surf.learn2invest.ui.components.alert_dialogs.parent.SimpleDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivity
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
+import ru.surf.learn2invest.ui.main.MainActivity
 import ru.surf.learn2invest.utils.isBiometricAvailable
 
+/**
+ * Фрагмент профиля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
+ */
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+    val viewModel: ProfileFragmentViewModel by viewModels()
 
-    private lateinit var context: Context
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        context = requireContext()
-        activity?.window?.statusBarColor = ContextCompat.getColor(context, R.color.white)
+        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         initListeners()
 
@@ -43,7 +47,7 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        DatabaseRepository.profile.apply {
+        viewModel.databaseRepository.profile.apply {
             binding.apply {
                 biometryBtnSwitcher.isChecked = biometry
                 confirmDealBtnSwitcher.isChecked = tradingPasswordHash != null
@@ -53,7 +57,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun intentFoxTradingPasswordActivityByConditions(): Intent =
-        Intent(context, TradingPasswordActivity::class.java).apply {
+        Intent(requireContext(), TradingPasswordActivity::class.java).apply {
             action = when {
                 binding.confirmDealBtnSwitcher.isChecked -> {
                     TradingPasswordActivityActions.CreateTradingPassword.action
@@ -68,33 +72,70 @@ class ProfileFragment : Fragment() {
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {
-            DatabaseRepository.insertAllProfile(profile)
+            viewModel.databaseRepository.insertAllProfile(profile)
         }
     }
 
     private fun initListeners() {
-        DatabaseRepository.profile.let { profile ->
+        viewModel.databaseRepository.profile.let { profile ->
             binding.also { fr ->
                 fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
-                binding.biometryBtn.isVisible = isBiometricAvailable(context = context)
+                binding.biometryBtn.isVisible = isBiometricAvailable(context = requireContext())
                 fr.deleteProfileTV.setOnClickListener {
-
-                    AskToDeleteProfileDialog(
-                        dialogContext = context,
-                        lifecycleScope = lifecycleScope,
-                        supportFragmentManager = parentFragmentManager
+                    SimpleDialog(
+                        context = requireContext(),
+                        messageRes = R.string.asking_to_delete_profile,
+                        positiveButtonTitleRes = R.string.yes_exactly,
+                        negativeButtonTitleRes = R.string.no,
+                        isCancelable = true,
+                        onPositiveButtonClick = {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                viewModel.databaseRepository.clearAllTables()
+                            }
+                            activity?.finish()
+                            activity?.startActivity(
+                                Intent(
+                                    context,
+                                    MainActivity::class.java
+                                )
+                            )
+                        },
+                        onNegativeButtonClick = {}
                     ).show()
-
                 }
 
                 fr.resetStatsBtn.setOnClickListener {
-
-                    ResetStatsDialog(
-                        dialogContext = context,
-                        lifecycleScope = lifecycleScope,
-                        supportFragmentManager = parentFragmentManager
+                    SimpleDialog(
+                        context = requireContext(),
+                        messageRes = R.string.reset_stats,
+                        positiveButtonTitleRes = R.string.yes_exactly,
+                        negativeButtonTitleRes = R.string.no,
+                        isCancelable = true,
+                        onPositiveButtonClick = {
+                            val savedProfile = viewModel.databaseRepository.profile.copy(
+                                fiatBalance = 0f,
+                                assetBalance = 0f
+                            )
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                viewModel.databaseRepository.apply {
+                                    clearAllTables()
+                                    insertAllProfile(savedProfile)
+                                }
+                            }
+                            Toast.makeText(
+                                context,
+                                context?.let { it1 ->
+                                    ContextCompat.getString(
+                                        it1,
+                                        R.string.stat_reset
+                                    )
+                                },
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        onNegativeButtonClick = {}
                     ).show()
                 }
 
@@ -105,7 +146,6 @@ class ProfileFragment : Fragment() {
 
                         fr.biometryBtnSwitcher.isChecked = false
                     } else {
-
                         FingerprintAuthenticator(
                             context = requireContext() as Activity,
                             lifecycleCoroutineScope = lifecycleScope
@@ -114,16 +154,20 @@ class ProfileFragment : Fragment() {
 
                             fr.biometryBtnSwitcher.isChecked = true
                         }.setDesignBottomSheet(
-                            title = ContextCompat.getString(context, R.string.biometry)
+                            title = ContextCompat.getString(requireContext(), R.string.biometry)
                         ).auth()
 
                     }
                 }
 
                 fr.changeTradingPasswordBtn.setOnClickListener {
-                    startActivity(Intent(context, TradingPasswordActivity::class.java).apply {
-                        action = TradingPasswordActivityActions.ChangeTradingPassword.action
-                    })
+                    startActivity(
+                        Intent(
+                            requireContext(),
+                            TradingPasswordActivity::class.java
+                        ).apply {
+                            action = TradingPasswordActivityActions.ChangeTradingPassword.action
+                        })
                 }
 
                 fr.confirmDealBtn.setOnClickListener {
@@ -138,7 +182,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 fr.changePINBtn.setOnClickListener {
-                    startActivity(Intent(context, SignInActivity::class.java).let {
+                    startActivity(Intent(requireContext(), SignInActivity::class.java).let {
                         it.action = SignINActivityActions.ChangingPIN.action
 
                         it

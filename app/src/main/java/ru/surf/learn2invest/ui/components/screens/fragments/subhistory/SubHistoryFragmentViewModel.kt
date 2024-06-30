@@ -1,12 +1,16 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.subhistory
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
+import javax.inject.Inject
 
-class SubHistoryViewModel(val symbol: String) : ViewModel() {
-    val data: Flow<List<Transaction>> =
-        DatabaseRepository.getFilteredBySymbolTransaction(symbol).map { it.reversed() }
+@HiltViewModel
+class SubHistoryFragmentViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
+
+    lateinit var symbol: String
+    lateinit var data: Flow<List<Transaction>>
 }
