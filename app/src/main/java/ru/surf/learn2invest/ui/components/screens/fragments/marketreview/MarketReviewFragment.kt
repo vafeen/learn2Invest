@@ -150,8 +150,9 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.isSearch.collect {
                 binding.apply {
-                    textView2.isVisible = it
+                    youSearch.isVisible = it
                     clearTv.isVisible = it
+                    cancelTV.isVisible = it
                     filterByPrice.isVisible = it.not()
                     filterByMarketcap.isVisible = it.not()
                     filterByChangePercent24Hr.isVisible = it.not()
@@ -182,8 +183,7 @@ class MarketReviewFragment : Fragment() {
             }
 
             textInputLayout.setEndIconOnClickListener {
-                viewModel.setSearchState(false)
-                searchEditText.clearFocus()
+                searchEditText.text.clear()
             }
 
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
@@ -198,6 +198,10 @@ class MarketReviewFragment : Fragment() {
                 viewModel.clearSearchData()
             }
 
+            cancelTV.setOnClickListener {
+                viewModel.setSearchState(false)
+                hideKeyboardFrom(requireContext(), searchEditText)
+            }
         }
         return binding.root
     }

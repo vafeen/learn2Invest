@@ -19,20 +19,20 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/edit_text_style"
         android:paddingStart="16dp"
         android:paddingEnd="0dp"
-        android:background="@drawable/edit_text_style"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:endIconDrawable="@drawable/circle_close"
         app:endIconMode="clear_text"
         app:hintEnabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancelTV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -41,12 +41,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawableStart="@drawable/magnifying_glass"
-            android:imeOptions="actionSearch"
-            android:hint="@string/search"
-            android:textColorHint="@color/hint"
-            android:singleLine="true"
             android:drawablePadding="16dp"
-            android:textAppearance="@style/Text.Regular.14" />
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textAppearance="@style/Text.Regular.14"
+            android:textColorHint="@color/hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -118,7 +118,7 @@
         tools:listitem="@layout/coin_item" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/youSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -177,4 +177,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_by_change_percent_24Hr" />
+
+    <TextView
+        android:id="@+id/cancelTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="25dp"
+        android:textAppearance="@style/Text.Bold.16"
+        android:textColor="@color/active_switch"
+        android:text="@string/cancel"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
