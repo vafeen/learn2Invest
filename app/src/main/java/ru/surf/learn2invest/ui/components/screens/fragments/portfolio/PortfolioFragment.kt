@@ -65,7 +65,7 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.refreshData()
         }
 

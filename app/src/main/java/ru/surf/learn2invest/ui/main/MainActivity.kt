@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -45,13 +44,10 @@ class MainActivity : AppCompatActivity() {
      * Функция показа анимированного splash-скрина и проверки, есть ли у нас зарегистрированный пользователь
      */
     private fun skipSplash() {
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             val intent =
                 if (viewModel.databaseRepository.profile.lastName != "undefined" && viewModel.databaseRepository.profile.firstName != "undefined") {
-                    withContext(Dispatchers.Main) {
-                        runAnimatedText()
-                        delay(2000)
-                    }
+                    runAnimatedText()
 
                     Intent(this@MainActivity, SignInActivity::class.java).also {
                         it.action = SignINActivityActions.SignIN.action
@@ -59,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Intent(this@MainActivity, SignUpActivity::class.java)
                 }
-            delay(1000)
+            delay(2000)
             startActivity(intent)
             this@MainActivity.finish()
         }
@@ -70,8 +66,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun runAnimatedText() {
         (ContextCompat.getString(
-            this,
-            R.string.hello
+            this, R.string.hello
         ) + ", ${viewModel.databaseRepository.profile.firstName}!").let {
             binding.splashTextView.text = it
         }
