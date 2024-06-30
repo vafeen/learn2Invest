@@ -108,9 +108,9 @@ class MarketReviewFragmentViewModel @Inject constructor(
             }
         } else firstTimePriceFilter = false
         _data.update {
-            if (filterOrder.value) it.sortedByDescending { element -> element.priceUsd }
+            if (filterOrder.value) it.sortedBy { element -> element.priceUsd }
                 .toMutableList()
-            else it.sortedBy { element -> element.priceUsd }.toMutableList()
+            else it.sortedByDescending { element -> element.priceUsd }.toMutableList()
         }
     }
 
