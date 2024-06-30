@@ -82,9 +82,9 @@
         <View
             android:id="@+id/icon_of_balance_view"
             android:layout_width="35dp"
-            android:layout_height="25dp"
+            android:layout_height="35dp"
             android:layout_margin="@dimen/margin_dialogs_card_content_start"
-            android:background="@drawable/briefcase"
+            android:background="@drawable/dollar_cash"
             app:layout_constraintBottom_toBottomOf="@+id/balance_card"
             app:layout_constraintStart_toStartOf="@+id/balance_card"
             app:layout_constraintTop_toTopOf="@+id/balance_card" />
@@ -142,6 +142,7 @@
             android:id="@+id/balance_num"
             android:layout_width="131dp"
             android:layout_height="24dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
@@ -154,7 +155,7 @@
             android:layout_width="131dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/balance"
+            android:text="@string/account"
             android:textAppearance="@style/Text.Medium.14"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/balance_num"
