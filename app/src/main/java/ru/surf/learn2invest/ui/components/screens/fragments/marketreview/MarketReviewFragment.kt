@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,7 +99,6 @@ class MarketReviewFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.data.collect {
-                Log.d("DEBUG", "${viewModel.isRealtimeUpdate}")
                 if (it.isNotEmpty()) {
                     adapter.data = it
                     if (viewModel.isRealtimeUpdate) {

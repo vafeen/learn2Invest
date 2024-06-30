@@ -58,11 +58,16 @@ class MarketReviewFragmentViewModel @Inject constructor(
         private set
 
     init {
+        initData()
+    }
+
+    private fun initData() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result: ResponseWrapper<List<CoinReviewDto>> =
                 networkRepository.getMarketReview()) {
                 is ResponseWrapper.Success -> {
                     _isLoading.value = false
+                    _isError.value = false
                     val temp = result.value.toMutableList()
                     temp.removeIf {
                         it.marketCapUsd == 0.0f
@@ -170,6 +175,7 @@ class MarketReviewFragmentViewModel @Inject constructor(
                 }
             }
         }
+        else initData()
     }
 
     fun clearSearchData() {

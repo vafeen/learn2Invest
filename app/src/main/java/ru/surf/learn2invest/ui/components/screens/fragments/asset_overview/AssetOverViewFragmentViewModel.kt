@@ -39,7 +39,7 @@ class AssetOverViewFragmentViewModel @Inject constructor(
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            formattedPrice = coinResponse.value.priceUsd.getWithCurrency()
+                            formattedPrice = String.format(Locale.US, "%.8f", coinResponse.value.priceUsd) + " $"
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
@@ -67,7 +67,7 @@ class AssetOverViewFragmentViewModel @Inject constructor(
                             formattedMarketCap = NumberFormat.getInstance(Locale.US).apply {
                                 maximumFractionDigits = 0
                             }.format(marketCap) + " $"
-                            formattedPrice = result.value.priceUsd.getWithCurrency()
+                            formattedPrice = String.format(Locale.US, "%.8f", result.value.priceUsd) + " $"
                             withContext(Dispatchers.Main) {
                                 onDataLoaded(data, formattedMarketCap, formattedPrice)
                             }
