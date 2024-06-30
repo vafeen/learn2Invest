@@ -141,8 +141,9 @@
             android:id="@+id/balance_textview"
             android:layout_width="131dp"
             android:layout_height="24dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/balance"
+            android:text="@string/account"
             android:textAppearance="@style/Text.Medium.14"
             app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
             app:layout_constraintTop_toTopOf="@+id/balance_card" />

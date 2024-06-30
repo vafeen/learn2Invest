@@ -1,12 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.profile
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentProfileBinding
-import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.SimpleDialog
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -82,7 +81,8 @@ class ProfileFragment : Fragment() {
                 fr.firstNameLastNameTV.text = profile.let { pr ->
                     "${pr.firstName}\n${pr.lastName}"
                 }
-                binding.biometryBtn.isVisible = isBiometricAvailable(context = requireContext())
+                binding.biometryBtn.isVisible =
+                    isBiometricAvailable(activity = activity as AppCompatActivity)
                 fr.deleteProfileTV.setOnClickListener {
                     SimpleDialog(
                         context = requireContext(),
@@ -146,16 +146,23 @@ class ProfileFragment : Fragment() {
 
                         fr.biometryBtnSwitcher.isChecked = false
                     } else {
-                        FingerprintAuthenticator(
-                            context = requireContext() as Activity,
-                            lifecycleCoroutineScope = lifecycleScope
-                        ).setSuccessCallback {
+                        viewModel.fingerprintAuthenticator.setSuccessCallback {
                             updateProfile(profile.copy(biometry = true))
 
                             fr.biometryBtnSwitcher.isChecked = true
                         }.setDesignBottomSheet(
-                            title = ContextCompat.getString(requireContext(), R.string.biometry)
-                        ).auth()
+                            title = ContextCompat.getString(
+                                requireContext(),
+                                R.string.biometry
+                            ),
+                            cancelText = ContextCompat.getString(
+                                requireContext(),
+                                R.string.cancel
+                            ),
+                        ).auth(
+                            lifecycleCoroutineScope = lifecycleScope,
+                            activity = activity as AppCompatActivity
+                        )
 
                     }
                 }

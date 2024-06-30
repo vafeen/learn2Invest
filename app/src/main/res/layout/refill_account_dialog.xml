@@ -21,7 +21,6 @@
             android:background="@drawable/pindotstyle"
             android:backgroundTint="@color/transparent"
             android:foreground="@drawable/backspace"
-            android:foregroundTint="@color/white"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:text="delete"
@@ -207,7 +206,6 @@
             android:paddingVertical="10dp"
             android:text="."
             android:textAppearance="@style/Text.Bold.30"
-
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/button_0"
             app:layout_constraintEnd_toEndOf="parent"
