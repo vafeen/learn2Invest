@@ -370,8 +370,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.0"
-
-                    android:text="Макет в Figma"
+                    android:text="@string/layout_in_figma"
                     android:textAppearance="@style/Text.SemiBold.18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
