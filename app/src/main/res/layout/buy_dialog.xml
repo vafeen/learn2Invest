@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="500dp">
+    android:layout_height="500dp"
+    android:background="@drawable/bottom_sheet_style">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:background="@drawable/bottom_sheet_back"
         tools:ignore="MissingConstraints">
 
         <View
@@ -186,7 +186,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:textAppearance="@style/Text.Regular.16"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintTop_toBottomOf="@+id/trading_password"

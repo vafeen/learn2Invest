@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="500dp"
-    android:background="@color/dialog_background">
+    android:background="@drawable/bottom_sheet_style">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:background="@drawable/bottom_sheet_back"
         tools:ignore="MissingConstraints">
 
         <View
@@ -164,7 +163,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_sell"
-            android:text="@string/sell"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_marginTop="30dp"
@@ -172,6 +170,7 @@
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            android:text="@string/sell"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.SemiBold.14"
             android:textColor="#000000"
@@ -187,7 +186,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:textAppearance="@style/Text.Regular.16"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintTop_toBottomOf="@+id/trading_password"

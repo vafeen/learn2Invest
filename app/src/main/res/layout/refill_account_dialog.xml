@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="591dp">
+    android:layout_height="591dp"
+    android:background="@drawable/bottom_sheet_style">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="591dp"
-        android:background="@drawable/bottom_sheet_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
@@ -43,7 +43,6 @@
             android:paddingVertical="10dp"
             android:text="0"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
             android:paddingVertical="10dp"
             android:text="4"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintBottom_toBottomOf="@+id/button_5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.25"
@@ -77,7 +76,7 @@
             android:paddingVertical="10dp"
             android:text="5"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_2" />
@@ -93,7 +92,7 @@
             android:paddingVertical="10dp"
             android:text="8"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_5" />
@@ -108,7 +107,7 @@
             android:paddingVertical="10dp"
             android:text="3"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintBottom_toBottomOf="@+id/button_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
@@ -125,7 +124,7 @@
             android:paddingVertical="10dp"
             android:text="6"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintBottom_toBottomOf="@+id/button_5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
@@ -142,7 +141,7 @@
             android:paddingVertical="10dp"
             android:text="9"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintBottom_toBottomOf="@+id/button_8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
@@ -160,7 +159,6 @@
             android:text="1"
             android:textAppearance="@style/Text.Bold.30"
 
-            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/button_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.25"
@@ -178,7 +176,7 @@
             android:paddingVertical="10dp"
             android:text="2"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entering_balance_card" />
@@ -193,7 +191,6 @@
             android:paddingVertical="10dp"
             android:text="7"
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/button_8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.25"
@@ -210,7 +207,7 @@
             android:paddingVertical="10dp"
             android:text="."
             android:textAppearance="@style/Text.Bold.30"
-            android:textColor="@color/white"
+
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/button_0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -236,7 +233,6 @@
             android:layout_marginTop="23dp"
             android:text="@string/refill_account"
             android:textAppearance="@style/Text.Regular.16"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
