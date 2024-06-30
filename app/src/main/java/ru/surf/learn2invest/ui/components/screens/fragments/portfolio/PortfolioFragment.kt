@@ -16,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
@@ -26,7 +28,6 @@ import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.DevStrLink
 import ru.surf.learn2invest.utils.getWithCurrency
-import java.lang.Thread.sleep
 import java.util.Locale
 
 /**
@@ -38,6 +39,7 @@ class PortfolioFragment : Fragment() {
 
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
+    private lateinit var realTimeUpdateJob: Job
     private val viewModel: PortfolioFragmentViewModel by viewModels()
     private val adapter = PortfolioAdapter { asset ->
         startAssetReviewIntent(asset)
@@ -134,13 +136,6 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                viewModel.refreshData()
-                sleep(5000)
-            }
-        }
-
         initDrawerListeners()
 
         binding.imageButton.setOnClickListener {
@@ -151,9 +146,27 @@ class PortfolioFragment : Fragment() {
             closeDrawer()
             false
         }
-
         return binding.root
     }
+
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = startRealtimeUpdate()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        realTimeUpdateJob.cancel()
+        closeDrawer()
+    }
+
+    private fun startRealtimeUpdate() = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+        while (true) {
+            viewModel.refreshData()
+            delay(5000)
+        }
+    }
+
 
     private fun startAssetReviewIntent(asset: AssetInvest) {
         startActivity(Intent(requireContext(), AssetReviewActivity::class.java).apply {
@@ -169,12 +182,6 @@ class PortfolioFragment : Fragment() {
         binding.assets.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.assets.adapter = adapter
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        closeDrawer()
     }
 
     private fun openDrawer() {
