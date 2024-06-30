@@ -5,6 +5,9 @@ import com.github.mikephil.charting.charts.LineChart
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * Docs?
+ */
 class Last7DaysFormatter : CustomDateValueFormatter {
     private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
 

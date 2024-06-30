@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Docs?
+ */
 class AssetBalanceHistoryFormatter(private val dates: List<Date>) : CustomDateValueFormatter {
     private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
 
