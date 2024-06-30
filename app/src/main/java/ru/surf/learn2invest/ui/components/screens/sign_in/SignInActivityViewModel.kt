@@ -14,7 +14,8 @@ import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInActivityViewModel @Inject constructor() : ViewModel() {
+class SignInActivityViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
     var pinCode: String = ""
     var firstPin: String = ""
     var isVerified = false
@@ -22,8 +23,6 @@ class SignInActivityViewModel @Inject constructor() : ViewModel() {
     lateinit var fingerPrintManager: FingerprintAuthenticator
     var keyBoardIsWork = true
 
-    @Inject
-    lateinit var databaseRepository: DatabaseRepository
 
     fun blockKeyBoard() {
         keyBoardIsWork = false

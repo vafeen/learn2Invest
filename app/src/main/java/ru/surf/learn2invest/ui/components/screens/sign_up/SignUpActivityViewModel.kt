@@ -6,9 +6,8 @@ import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpActivityViewModel @Inject constructor() : ViewModel() {
-    @Inject
-    lateinit var databaseRepository: DatabaseRepository
+class SignUpActivityViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+    ViewModel() {
     var name: String = ""
     var lastname: String = ""
     val lengthLimit = 24

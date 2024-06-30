@@ -8,9 +8,9 @@ import ru.surf.learn2invest.noui.database_components.entity.transaction.Transact
 import javax.inject.Inject
 
 @HiltViewModel
-class SubHistoryFragmentViewModel @Inject constructor() : ViewModel() {
-    @Inject
-    lateinit var databaseRepository: DatabaseRepository
+class SubHistoryFragmentViewModel @Inject constructor(@Inject var databaseRepository: DatabaseRepository) :
+    ViewModel() {
+
     lateinit var symbol: String
     lateinit var data: Flow<List<Transaction>>
 }
