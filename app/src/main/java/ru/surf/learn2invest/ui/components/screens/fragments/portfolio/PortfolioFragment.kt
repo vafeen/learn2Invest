@@ -48,7 +48,7 @@ class PortfolioFragment : Fragment() {
     ): View {
 
         activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.main_background)
+            ContextCompat.getColor(requireContext(), R.color.accent_background)
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
 
         setupAssetsRecyclerView()

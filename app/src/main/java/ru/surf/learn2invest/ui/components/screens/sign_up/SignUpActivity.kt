@@ -35,7 +35,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.accent_background)
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
                 ContextCompat.getColor(
@@ -111,7 +111,7 @@ class SignUpActivity : AppCompatActivity() {
         if (validateName() && validateLastname()) {
             binding.signupBtn.isEnabled = true
             binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.main_background)
+                ContextCompat.getColorStateList(this, R.color.accent_background)
         } else {
             binding.signupBtn.isEnabled = false
             binding.signupBtn.backgroundTintList =

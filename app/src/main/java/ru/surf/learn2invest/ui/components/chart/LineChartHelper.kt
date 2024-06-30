@@ -85,7 +85,7 @@ class LineChartHelper(
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = ContextCompat.getColor(context, R.color.main_background)
+        color = ContextCompat.getColor(context, R.color.accent_background)
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true

@@ -121,7 +121,7 @@ class MarketReviewFragment : Fragment() {
                         ColorStateList.valueOf(
                             resources.getColor(
                                 if (it[FILTER_BY_MARKETCAP] == true)
-                                    R.color.main_background
+                                    R.color.accent_background
                                 else
                                     R.color.view_background
                             )
@@ -130,7 +130,7 @@ class MarketReviewFragment : Fragment() {
                         ColorStateList.valueOf(
                             resources.getColor(
                                 if (it[FILTER_BY_PERCENT] == true)
-                                    R.color.main_background
+                                    R.color.accent_background
                                 else R.color.view_background
                             )
                         )
@@ -138,7 +138,7 @@ class MarketReviewFragment : Fragment() {
                         ColorStateList.valueOf(
                             resources.getColor(
                                 if (it[FILTER_BY_PRICE] == true)
-                                    R.color.main_background
+                                    R.color.accent_background
                                 else
                                     R.color.view_background
                             )

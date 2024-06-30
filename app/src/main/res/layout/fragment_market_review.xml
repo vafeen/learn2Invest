@@ -64,7 +64,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/filter_by_change_percent_24Hr"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        tools:backgroundTint="@color/main_background" />
+        tools:backgroundTint="@color/accent_background" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/filter_by_change_percent_24Hr"

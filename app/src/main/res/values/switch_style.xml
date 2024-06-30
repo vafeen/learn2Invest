@@ -3,6 +3,6 @@
     <style name="switch_style" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/active_switch</item>
         <item name="colorSwitchThumbNormal">@color/inactive_switch</item>
-        <item name="trackTint">@color/main_background</item>
+        <item name="trackTint">@color/accent_background</item>
     </style>
 </resources>

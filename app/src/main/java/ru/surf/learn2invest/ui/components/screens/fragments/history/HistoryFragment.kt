@@ -37,7 +37,7 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.main_background)
+            ContextCompat.getColor(requireContext(), R.color.accent_background)
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())

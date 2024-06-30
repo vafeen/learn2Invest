@@ -41,17 +41,17 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.accent_background)
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
                 ContextCompat.getColor(
                     this,
-                    R.color.main_background
+                    R.color.accent_background
                 )
             )
         )
         window.navigationBarColor =
-            ContextCompat.getColor(this, R.color.main_background)
+            ContextCompat.getColor(this, R.color.accent_background)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.databaseRepository.apply {

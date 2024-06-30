@@ -23,11 +23,11 @@ class HostActivity : AppCompatActivity() {
             ColorDrawable(
                 ContextCompat.getColor(
                     this,
-                    R.color.main_background
+                    R.color.accent_background
                 )
             )
         )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.main_background)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.accent_background)
 
         binding = ActivityHostBinding.inflate(layoutInflater)
         setContentView(binding.root)

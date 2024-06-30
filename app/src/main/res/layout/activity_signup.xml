@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background">
+    android:background="?attr/colorAccent">
 
     <TextView
         android:id="@+id/create_account_text_view"
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:text="@string/create_account"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,12 +114,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="64dp"
         android:layout_marginTop="50dp"
-        android:backgroundTint="@color/btn_asset"
+        android:backgroundTint="?attr/colorControlActivated"
         android:enabled="false"
         android:paddingVertical="20dp"
         android:text="@string/signup_btn_text"
         android:textAllCaps="true"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
