@@ -21,7 +21,6 @@ class AssetOverViewFragmentViewModel @Inject constructor(
     var networkRepository: NetworkRepository
 ) : ViewModel() {
     private var marketCap = 0.0
-    private var price = 0.0
     private var data = mutableListOf<Entry>()
     private lateinit var formattedMarketCap: String
     private lateinit var formattedPrice: String
