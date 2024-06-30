@@ -142,7 +142,10 @@ class MarketReviewFragmentViewModel @Inject constructor(
         isRealtimeUpdate = true
         val updateDestinationLink = if (_isSearch.value) _searchedData
         else _data
-        if (updateDestinationLink.value.isNotEmpty() && firstElement != NO_POSITION) {
+        if (updateDestinationLink.value.isNotEmpty()
+            && firstElement != NO_POSITION
+            && updateDestinationLink.value.size > lastElement
+        ) {
             firstUpdateElement = firstElement
             amountUpdateElement = lastElement - firstElement + 1
             viewModelScope.launch(Dispatchers.IO) {
