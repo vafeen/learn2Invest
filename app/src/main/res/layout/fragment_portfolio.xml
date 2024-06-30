@@ -13,7 +13,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Your main content goes here -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,7 +23,6 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="23dp"
-            android:background="@color/transparent"
             android:src="@drawable/material_list"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/view"
@@ -32,8 +30,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@+id/view"
             app:layout_constraintTop_toTopOf="@+id/view"
-            app:layout_constraintVertical_bias="0"
-            app:tint="@color/black" />
+            app:layout_constraintVertical_bias="0" />
 
         <View
             android:id="@+id/view"
@@ -49,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
             android:text="@string/portfolio"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +59,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:text="@string/balance"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/portfolio_text" />
 
@@ -71,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="6dp"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/balance"
             tools:text="$50,540.00" />
@@ -111,6 +111,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
             android:text="@string/account_funds"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chart" />
 
@@ -121,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="6dp"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/account_funds_text"
             tools:text="0$" />
@@ -136,7 +138,7 @@
             android:text="@string/top_up"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.Medium.14"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="@+id/account_funds"
             app:layout_constraintEnd_toEndOf="parent"
@@ -159,6 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="45dp"
             android:text="@string/assets_are_empty"
+            android:textColor="?attr/colorOnBackground"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +175,7 @@
             android:text="@string/network_error"
             android:textAlignment="center"
             android:textAppearance="@style/Text.SemiBold.17"
+            android:textColor="?attr/colorOnBackground"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -196,7 +200,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/white"
+        android:background="?attr/colorSecondary"
         android:clickable="false"
         app:layout_constraintHeight_default="spread">
 
@@ -211,8 +215,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_horizontal_dev_str"
                 android:layout_marginTop="@dimen/margin_top_dev_str"
-                android:background="@drawable/portfolio_background"
-                android:backgroundTint="@color/accent_background"
+                android:backgroundTint="?attr/colorAccent"
                 android:textAppearance="@style/Text.SemiBold.18"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -229,6 +232,7 @@
                     android:paddingHorizontal="20dp"
                     android:text="Learn2Invest"
                     android:textAppearance="@style/Text.SemiBold.18"
+                    android:textColor="?attr/colorOnBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -260,6 +264,7 @@
                     android:layout_weight="1.0"
                     android:text="@string/write_to_us"
                     android:textAppearance="@style/Text.SemiBold.18"
+                    android:textColor="?attr/colorOnBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -297,6 +302,7 @@
                     android:layout_weight="1.0"
                     android:text="@string/source"
                     android:textAppearance="@style/Text.SemiBold.18"
+                    android:textColor="?attr/colorOnBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -331,7 +337,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/version_name"
-                    android:textAppearance="@style/Text.SemiBold.18" />
+                    android:textAppearance="@style/Text.SemiBold.18"
+                    android:textColor="?attr/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/version_code"
@@ -372,6 +379,7 @@
                     android:layout_weight="1.0"
                     android:text="@string/layout_in_figma"
                     android:textAppearance="@style/Text.SemiBold.18"
+                    android:textColor="?attr/colorOnBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?attr/colorSecondary">
 
     <TextView
         android:id="@+id/textView"
@@ -13,6 +14,7 @@
         android:layout_marginTop="23dp"
         android:text="@string/market_review"
         android:textAppearance="@style/Text.Bold.20"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,9 +26,9 @@
         android:layout_marginStart="35dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="35dp"
+        android:background="@drawable/edit_text_style"
         android:paddingStart="16dp"
         android:paddingEnd="0dp"
-        android:background="@drawable/edit_text_style"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:endIconDrawable="@drawable/circle_close"
@@ -41,12 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawableStart="@drawable/magnifying_glass"
-            android:imeOptions="actionSearch"
-            android:hint="@string/search"
-            android:textColorHint="@color/hint"
-            android:singleLine="true"
             android:drawablePadding="16dp"
-            android:textAppearance="@style/Text.Regular.14" />
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textAppearance="@style/Text.Regular.14"
+            android:textColorHint="@color/hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -60,11 +62,11 @@
         android:paddingVertical="12dp"
         android:text="@string/top_market_cap"
         android:textAppearance="@style/Text.Medium.16"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/filter_by_change_percent_24Hr"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        tools:backgroundTint="@color/accent_background" />
+        tools:backgroundTint="?attr/colorAccent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/filter_by_change_percent_24Hr"
@@ -75,12 +77,12 @@
         android:paddingVertical="12dp"
         android:text="@string/top_day_percent"
         android:textAppearance="@style/Text.Medium.16"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        tools:backgroundTint="@color/view_background" />
+        tools:backgroundTint="?attr/colorPrimaryVariant" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/filter_by_price"
@@ -92,7 +94,7 @@
         android:paddingVertical="12dp"
         android:text="@string/price"
         android:textAppearance="@style/Text.Medium.16"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:visibility="visible"
         app:icon="@drawable/arrow_top_green"
         app:iconGravity="end"
@@ -101,7 +103,7 @@
         app:iconTint="@color/label"
         app:layout_constraintStart_toEndOf="@+id/filter_by_change_percent_24Hr"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        tools:backgroundTint="@color/view_background" />
+        tools:backgroundTint="?attr/colorPrimaryVariant" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/market_review_recyclerview"
@@ -125,6 +127,7 @@
         android:layout_marginTop="23dp"
         android:text="@string/you_search"
         android:textAppearance="@style/Text.SemiBold.16"
+        android:textColor="?attr/colorOnBackground"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
@@ -150,6 +153,7 @@
         android:text="@string/network_error"
         android:textAlignment="center"
         android:textAppearance="@style/Text.SemiBold.17"
+        android:textColor="?attr/colorOnBackground"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

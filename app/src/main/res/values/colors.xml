@@ -21,7 +21,7 @@
     <color name="dialog_background">#80000000</color>
 
     <color name="accent_background_dark">#FF534D98</color>
-    <color name="main_background">#FF17161D</color>
+    <color name="main_background_dark">#FF17161D</color>
     <color name="sheet_background_dark">#FF373737</color>
     <color name="view_background_dark">#FF535353</color>
     <color name="accent_button_dark">#FF7D7D7D</color>
