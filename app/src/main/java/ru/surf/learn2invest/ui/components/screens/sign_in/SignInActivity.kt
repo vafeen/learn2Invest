@@ -16,7 +16,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySigninBinding
-import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.utils.gotoCenter
 import ru.surf.learn2invest.utils.isBiometricAvailable
@@ -65,7 +64,12 @@ class SignInActivity : AppCompatActivity() {
         paintDots()
         when (intent.action) {
             SignINActivityActions.SignIN.action -> {
-                if (viewModel.databaseRepository.profile.biometry) viewModel.fingerPrintManager.auth()
+                if (viewModel.databaseRepository.profile.biometry) {
+                    viewModel.fingerprintAuthenticator.auth(
+                        lifecycleCoroutineScope = lifecycleScope,
+                        activity = this@SignInActivity
+                    )
+                }
             }
 
             SignINActivityActions.SignUP.action -> {
@@ -231,8 +235,8 @@ class SignInActivity : AppCompatActivity() {
                                         )
                                     userDataIsChanged = true
                                     animatePINCode(truth = true).invokeOnCompletion {
-                                        if (isBiometricAvailable(context = this@SignInActivity)) {
-                                            fingerPrintManager.setSuccessCallback {
+                                        if (isBiometricAvailable(activity = this@SignInActivity)) {
+                                            viewModel.fingerprintAuthenticator.setSuccessCallback {
                                                 databaseRepository.profile =
                                                     databaseRepository.profile.copy(
                                                         biometry = true
@@ -249,7 +253,10 @@ class SignInActivity : AppCompatActivity() {
                                                     context = this@SignInActivity,
                                                     lifecycleCoroutineScope = lifecycleScope
                                                 )
-                                            }.auth()
+                                            }.auth(
+                                                lifecycleCoroutineScope = lifecycleScope,
+                                                activity = this@SignInActivity
+                                            )
                                         } else {
                                             onAuthenticationSucceeded(
                                                 action = intent.action ?: "",
@@ -343,9 +350,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun initListeners() {
         viewModel.apply {
-            fingerPrintManager = FingerprintAuthenticator(
-                context = this@SignInActivity, lifecycleCoroutineScope = lifecycleScope
-            ).setSuccessCallback {
+            fingerprintAuthenticator.setSuccessCallback {
                 if (intent.action == SignINActivityActions.SignUP.action) {
                     databaseRepository.profile = databaseRepository.profile.copy(biometry = true)
                     userDataIsChanged = true
@@ -361,7 +366,8 @@ class SignInActivity : AppCompatActivity() {
                 title = ContextCompat.getString(
                     this@SignInActivity,
                     R.string.sign_in_in_learn2invest
-                )
+                ),
+                cancelText = ContextCompat.getString(this@SignInActivity, R.string.cancel)
             )
 
             binding.apply {
@@ -394,9 +400,12 @@ class SignInActivity : AppCompatActivity() {
                 }
 
                 fingerprint.isVisible =
-                    if (isBiometricAvailable(context = this@SignInActivity)) {
+                    if (isBiometricAvailable(activity = this@SignInActivity) && databaseRepository.profile.biometry) {
                         fingerprint.setOnClickListener {
-                            fingerPrintManager.auth()
+                            viewModel.fingerprintAuthenticator.auth(
+                                lifecycleCoroutineScope = lifecycleScope,
+                                activity = this@SignInActivity
+                            )
                         }
                         true
                     } else false

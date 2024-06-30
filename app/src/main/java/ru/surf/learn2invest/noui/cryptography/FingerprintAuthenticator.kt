@@ -1,26 +1,22 @@
 package ru.surf.learn2invest.noui.cryptography
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.surf.learn2invest.R
 import ru.surf.learn2invest.utils.isBiometricAvailable
 import java.util.concurrent.Executor
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Аутентификация пользователя с помощью отпечатка пальца
- * @param context [контекст аутентификации (Activity)]
- * @param lifecycleCoroutineScope [scope для выполнения аутентификации]
  */
-class FingerprintAuthenticator(
-    private val context: Activity,
-    val lifecycleCoroutineScope: LifecycleCoroutineScope
-) {
+@Singleton
+class FingerprintAuthenticator @Inject constructor() {
     /**
      * Сеттер для callback в случае успешной аутентифиакции
      * @param function [callback в случае успешной аутентификации]
@@ -58,7 +54,7 @@ class FingerprintAuthenticator(
      */
     fun setDesignBottomSheet(
         title: String,
-        cancelText: String = ContextCompat.getString(context, R.string.cancel)
+        cancelText: String
     ): FingerprintAuthenticator {
         titleText = title
         cancelButtonText = cancelText
@@ -68,10 +64,10 @@ class FingerprintAuthenticator(
     /**
      * Показ BottomSheet для аутентификации
      */
-    fun auth(): Job {
+    fun auth(lifecycleCoroutineScope: LifecycleCoroutineScope, activity: AppCompatActivity): Job {
         return lifecycleCoroutineScope.launch(Dispatchers.Main) {
-            if (isBiometricAvailable(context = context)) {
-                initFingerPrintAuth()
+            if (isBiometricAvailable(activity = activity)) {
+                initFingerPrintAuth(activity = activity)
                 checkAuthenticationFingerprint()
             }
         }
@@ -83,8 +79,8 @@ class FingerprintAuthenticator(
     private var setCancelCallback: () -> Unit = {}
 
     // design bottom sheet
-    private var titleText: String = ContextCompat.getString(context, R.string.example_title)
-    private var cancelButtonText: String = ContextCompat.getString(context, R.string.cancel)
+    private lateinit var titleText: String
+    private lateinit var cancelButtonText: String
 
     // for authentication
     private lateinit var executor: Executor
@@ -96,11 +92,11 @@ class FingerprintAuthenticator(
         biometricPrompt.authenticate(promptInfo)
     }
 
-    private fun initFingerPrintAuth(): FingerprintAuthenticator {
-        executor = ContextCompat.getMainExecutor(context)
+    private fun initFingerPrintAuth(activity: AppCompatActivity): FingerprintAuthenticator {
+        executor = ContextCompat.getMainExecutor(activity)
         biometricPrompt =
             BiometricPrompt(
-                context as FragmentActivity,
+                activity,
                 executor,
                 object : BiometricPrompt.AuthenticationCallback() {
 

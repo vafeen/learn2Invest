@@ -14,13 +14,15 @@ import ru.surf.learn2invest.ui.components.screens.host.HostActivity
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInActivityViewModel @Inject constructor(var databaseRepository: DatabaseRepository) :
+class SignInActivityViewModel @Inject constructor(
+    var databaseRepository: DatabaseRepository,
+    var fingerprintAuthenticator: FingerprintAuthenticator
+) :
     ViewModel() {
     var pinCode: String = ""
     var firstPin: String = ""
     var isVerified = false
     var userDataIsChanged = false
-    lateinit var fingerPrintManager: FingerprintAuthenticator
     var keyBoardIsWork = true
 
 
