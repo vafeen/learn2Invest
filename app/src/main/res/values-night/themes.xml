@@ -12,5 +12,8 @@
 
         <item name="colorSecondary">@color/main_background_dark</item>
         <item name="colorSecondaryVariant">@color/sheet_background_dark</item>
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="navigationIconTint">@color/white</item>
     </style>
 </resources>

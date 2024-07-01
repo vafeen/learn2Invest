@@ -37,16 +37,26 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.accent_background)
+        val color =
+            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.main_background_dark
+            } else {
+                R.color.white
+            }
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
-                ContextCompat.getColor(
-                    this,
-                    R.color.white
-                )
+                ContextCompat.getColor(this, color)
             )
         )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+        window.navigationBarColor = ContextCompat.getColor(this, color)
+        window.statusBarColor = ContextCompat.getColor(
+            this,
+            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.accent_background_dark
+            } else {
+                R.color.accent_background
+            }
+        )
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)

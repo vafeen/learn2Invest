@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -41,19 +42,24 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.accent_background)
+
+        val color =
+            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.accent_background_dark
+            } else {
+                R.color.accent_background
+            }
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
-                ContextCompat.getColor(
-                    this,
-                    R.color.accent_background
-                )
+                ContextCompat.getColor(this, color)
             )
         )
-        window.navigationBarColor =
-            ContextCompat.getColor(this, R.color.accent_background)
+        window.navigationBarColor = ContextCompat.getColor(this, color)
+        window.statusBarColor = ContextCompat.getColor(this, color)
+
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         viewModel.databaseRepository.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 getAllAsFlowProfile().collect {

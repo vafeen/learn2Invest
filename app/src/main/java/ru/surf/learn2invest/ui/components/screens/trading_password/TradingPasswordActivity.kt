@@ -1,5 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
+import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
@@ -38,15 +39,21 @@ class TradingPasswordActivity : AppCompatActivity() {
     private val viewModel: TradingPasswordActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+
+        val color =
+            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.main_background_dark
+            } else {
+                R.color.white
+            }
         supportActionBar?.setBackgroundDrawable(
             ColorDrawable(
-                ContextCompat.getColor(
-                    this, R.color.white
-                )
+                ContextCompat.getColor(this, color)
             )
         )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+        window.navigationBarColor = ContextCompat.getColor(this, color)
+        window.statusBarColor = ContextCompat.getColor(this, color)
+
         binding = ActivityTradingPasswordBinding.inflate(layoutInflater)
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
             this.finish()

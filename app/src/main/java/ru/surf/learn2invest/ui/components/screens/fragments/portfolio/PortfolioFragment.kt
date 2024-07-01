@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -46,9 +47,16 @@ class PortfolioFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.accent_background)
+            ContextCompat.getColor(
+                requireContext(),
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    R.color.accent_background_dark
+                } else {
+                    R.color.accent_background
+                }
+            )
+
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
 
         setupAssetsRecyclerView()
@@ -66,6 +74,7 @@ class PortfolioFragment : Fragment() {
                 binding.accountFunds.text = balance.getWithCurrency()
             }
         }
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             val dates = viewModel.getAssetBalanceHistoryDates()
             val dateFormatterStrategy = AssetBalanceHistoryFormatter(dates)
@@ -86,7 +95,6 @@ class PortfolioFragment : Fragment() {
             }
 
         }
-
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.assetsFlow.collect { assets ->
@@ -221,7 +229,6 @@ class PortfolioFragment : Fragment() {
         }
     }
 
-
     private fun getVersionName(): String {
         val packageManager = requireContext().packageManager
         val packageName = requireContext().packageName
@@ -234,5 +241,4 @@ class PortfolioFragment : Fragment() {
     private fun openLink(link: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     }
-
 }
