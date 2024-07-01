@@ -1,14 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -27,6 +25,7 @@ import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.utils.DevStrLink
 import ru.surf.learn2invest.utils.getWithCurrency
+import ru.surf.learn2invest.utils.setStatusBarColor
 import java.util.Locale
 import javax.inject.Inject
 
@@ -47,15 +46,14 @@ class PortfolioFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor =
-            ContextCompat.getColor(
-                requireContext(),
-                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                    R.color.accent_background_dark
-                } else {
-                    R.color.accent_background
-                }
+        activity?.apply {
+            setStatusBarColor(
+                window,
+                this,
+                R.color.accent_background,
+                R.color.accent_background_dark
             )
+        }
 
         binding = FragmentPortfolioBinding.inflate(inflater, container, false)
 

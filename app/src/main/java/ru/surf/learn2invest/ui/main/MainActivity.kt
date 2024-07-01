@@ -16,6 +16,7 @@ import ru.surf.learn2invest.databinding.ActivityMainBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 import ru.surf.learn2invest.ui.components.screens.sign_up.SignUpActivity
+import ru.surf.learn2invest.utils.setNavigationBarColor
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+        setNavigationBarColor(window, this, R.color.black, R.color.black)
 
         skipSplash()
     }

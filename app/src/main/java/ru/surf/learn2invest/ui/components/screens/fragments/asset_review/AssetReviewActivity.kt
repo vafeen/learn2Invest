@@ -20,6 +20,8 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.Asset
 import ru.surf.learn2invest.ui.components.screens.fragments.portfolio.AssetConstants
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 
 /**
  * Экран обзора актива
@@ -33,14 +35,8 @@ class AssetReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val color =
-            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                R.color.main_background_dark
-            } else {
-                R.color.white
-            }
-        window.navigationBarColor = ContextCompat.getColor(this, color)
-        window.statusBarColor = ContextCompat.getColor(this, color)
+        setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
 
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.profile
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +25,7 @@ import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswo
 import ru.surf.learn2invest.ui.components.screens.trading_password.TradingPasswordActivityActions
 import ru.surf.learn2invest.ui.main.MainActivity
 import ru.surf.learn2invest.utils.isBiometricAvailable
+import ru.surf.learn2invest.utils.setStatusBarColor
 
 /**
  * Фрагмент профиля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -38,15 +38,9 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor =
-            ContextCompat.getColor(
-                requireContext(),
-                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                    R.color.main_background_dark
-                } else {
-                    R.color.white
-                }
-            )
+        activity?.apply {
+            setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        }
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         initListeners()

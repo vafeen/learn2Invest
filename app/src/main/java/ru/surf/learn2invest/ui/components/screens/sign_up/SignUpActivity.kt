@@ -21,6 +21,8 @@ import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySignUpBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 
 /** Активити регистрации пользователя
  */
@@ -33,22 +35,8 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.navigationBarColor = ContextCompat.getColor(
-            this,
-            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                R.color.main_background_dark
-            } else {
-                R.color.white
-            }
-        )
-        window.statusBarColor = ContextCompat.getColor(
-            this,
-            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                R.color.accent_background_dark
-            } else {
-                R.color.accent_background
-            }
-        )
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setStatusBarColor(window, this, R.color.accent_background, R.color.accent_background_dark)
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +18,8 @@ import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
 import ru.surf.learn2invest.utils.isThisContainsSequenceOrEmpty
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 import ru.surf.learn2invest.utils.showKeyboard
 import ru.surf.learn2invest.utils.verifyTradingPassword
 
@@ -39,14 +40,8 @@ class TradingPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val color =
-            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                R.color.main_background_dark
-            } else {
-                R.color.white
-            }
-        window.navigationBarColor = ContextCompat.getColor(this, color)
-        window.statusBarColor = ContextCompat.getColor(this, color)
+        setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
 
         binding = ActivityTradingPasswordBinding.inflate(layoutInflater)
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))

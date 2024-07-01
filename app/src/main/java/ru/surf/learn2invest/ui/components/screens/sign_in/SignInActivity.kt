@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
-import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +19,8 @@ import ru.surf.learn2invest.databinding.ActivitySignInBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.utils.gotoCenter
 import ru.surf.learn2invest.utils.isBiometricAvailable
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 import ru.surf.learn2invest.utils.tapOn
 import ru.surf.learn2invest.utils.verifyPIN
 
@@ -42,14 +43,13 @@ class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val color =
-            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                R.color.accent_background_dark
-            } else {
-                R.color.accent_background
-            }
-        window.navigationBarColor = ContextCompat.getColor(this, color)
-        window.statusBarColor = ContextCompat.getColor(this, color)
+        setStatusBarColor(window, this, R.color.accent_background, R.color.accent_background_dark)
+        setNavigationBarColor(
+            window,
+            this,
+            R.color.accent_background,
+            R.color.accent_background_dark
+        )
 
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
