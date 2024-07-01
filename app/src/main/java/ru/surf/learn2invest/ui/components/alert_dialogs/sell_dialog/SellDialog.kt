@@ -184,13 +184,13 @@ class SellDialog(
         super.onAttach(context)
         var asset: AssetInvest? = null
         viewModel.apply {
+            coin = AssetInvest(
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
+            )
             lifecycleScope.launch(Dispatchers.IO) {
                 asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
             }.invokeOnCompletion {
-                coin = if (asset != null) asset as AssetInvest
-                else AssetInvest(
-                    name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
-                )
+                if (asset != null) coin = asset as AssetInvest
                 updateFields()
                 realTimeUpdateJob = startRealTimeUpdate {
                     lifecycleScope.launch(Dispatchers.Main) {
