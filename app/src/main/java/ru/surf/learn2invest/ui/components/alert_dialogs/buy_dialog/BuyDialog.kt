@@ -43,19 +43,7 @@ class BuyDialog(
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("ls", "onAttach")
-        viewModel.apply {
-            viewModelScope.launch(Dispatchers.IO) {
-                databaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
-                    haveAssetsOrNot = true
-                    coin = it
-                    Log.d("ls", "view have ")
-                }
-            }
-        }
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,17 +70,6 @@ class BuyDialog(
     }
 
     override fun initListeners() {
-        viewModel.apply {
-            coin = AssetInvest(
-                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
-            )
-            realTimeUpdateJob = startRealTimeUpdate {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.priceNumber.text = it
-                    updateFields()
-                }
-            }
-        }
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
@@ -187,7 +164,7 @@ class BuyDialog(
     }
 
     private fun buy() {
-        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency()
+        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency() ?: 0f
         val amountCurrent = binding.enteringNumberOfLots.text.toString().toInt().toFloat()
         viewModel.buy(amountCurrent = amountCurrent, price = price)
     }
@@ -238,9 +215,32 @@ class BuyDialog(
     ): Float {
         binding.apply {
             val priceText = priceNumber.text.toString()
-            val price = priceText.getFloatFromStringWithCurrency()
+            val price = priceText.getFloatFromStringWithCurrency() ?: 0f
             val number = enteringNumberOfLots.text.toString().toIntOrNull() ?: 0
             return price * (number + if (onFuture) 1 else 0)
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d("ls", "onAttach")
+        var asset: AssetInvest? = null
+        viewModel.apply {
+            lifecycleScope.launch(Dispatchers.IO) {
+                asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
+            }.invokeOnCompletion {
+                coin = if (asset != null) asset as AssetInvest
+                else AssetInvest(
+                    name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
+                )
+                updateFields()
+                realTimeUpdateJob = startRealTimeUpdate {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        binding.priceNumber.text = it
+                        updateFields()
+                    }
+                }
+            }
         }
     }
 }
