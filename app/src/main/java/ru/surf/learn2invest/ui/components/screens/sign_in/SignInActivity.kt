@@ -18,8 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySignInBinding
-import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
-import ru.surf.learn2invest.databinding.ActivitySigninBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.utils.gotoCenter
 import ru.surf.learn2invest.utils.isBiometricAvailable
@@ -89,7 +87,6 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-
     private fun animatePINCode(truth: Boolean, needReturn: Boolean = false): Job {
         return lifecycleScope.launch(Dispatchers.Main) {
             delay(100)
@@ -114,7 +111,6 @@ class SignInActivity : AppCompatActivity() {
             delay(800)
         }
     }
-
 
     private fun changeColorOfFourDots(
         color1: Int,
@@ -187,7 +183,6 @@ class SignInActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun updatePin(num: String) {
         viewModel.apply {
