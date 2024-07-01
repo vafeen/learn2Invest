@@ -17,10 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.ActivitySignUpBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
@@ -224,21 +221,16 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUpButtonClick() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.databaseRepository.apply {
-                updateProfile(
-                    profile.copy(
-                        firstName = viewModel.name,
-                        lastName = viewModel.lastname
-                    )
-                )
-            }
-        }.invokeOnCompletion {
-            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).apply {
-                action = SignINActivityActions.SignUP.action
-            })
-            this@SignUpActivity.finish()
+        viewModel.databaseRepository.apply {
+            profile = profile.copy(
+                firstName = viewModel.name,
+                lastName = viewModel.lastname
+            )
         }
+        startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).apply {
+            action = SignINActivityActions.SignUP.action
+        })
+        this@SignUpActivity.finish()
     }
 
     private fun View.hideKeyboard() {

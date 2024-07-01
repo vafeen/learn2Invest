@@ -17,18 +17,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
-import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog.RefillAccountDialog
 import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.DevStrLink
 import ru.surf.learn2invest.utils.getWithCurrency
-import java.lang.Thread.sleep
 import java.util.Locale
+import javax.inject.Inject
 
 /**
  * Фрагмент портфеля в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -36,13 +36,13 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class PortfolioFragment : Fragment() {
-
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
+    private lateinit var realTimeUpdateJob: Job
     private val viewModel: PortfolioFragmentViewModel by viewModels()
-    private val adapter = PortfolioAdapter { asset ->
-        startAssetReviewIntent(asset)
-    }
+
+    @Inject
+    lateinit var adapter: PortfolioAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -87,7 +87,7 @@ class PortfolioFragment : Fragment() {
 
         binding.topUpBtn.setOnClickListener {
             RefillAccountDialog(dialogContext = requireContext()) {
-                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                     viewModel.refreshData()
                 }
             }.also {
@@ -124,28 +124,18 @@ class PortfolioFragment : Fragment() {
 
                     background = when {
                         percentage > 0 -> AppCompatResources.getDrawable(
-                            requireContext(),
-                            R.drawable.percent_increase_background
+                            requireContext(), R.drawable.percent_increase_background
                         )
 
                         percentage < 0 -> AppCompatResources.getDrawable(
-                            requireContext(),
-                            R.drawable.percent_recession_background
+                            requireContext(), R.drawable.percent_recession_background
                         )
 
                         else -> AppCompatResources.getDrawable(
-                            requireContext(),
-                            R.drawable.percent_zero_background
+                            requireContext(), R.drawable.percent_zero_background
                         )
                     }
                 }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                viewModel.refreshData()
-                sleep(5000)
             }
         }
 
@@ -163,26 +153,28 @@ class PortfolioFragment : Fragment() {
         return binding.root
     }
 
-    private fun startAssetReviewIntent(asset: AssetInvest) {
-        startActivity(Intent(requireContext(), AssetReviewActivity::class.java).apply {
-            putExtras(Bundle().apply {
-                putString(AssetConstants.ID.key, asset.assetID)
-                putString(AssetConstants.NAME.key, asset.name)
-                putString(AssetConstants.SYMBOL.key, asset.symbol)
-            })
-        })
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = startRealtimeUpdate()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        realTimeUpdateJob.cancel()
+        closeDrawer()
+    }
+
+    private fun startRealtimeUpdate() = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+        while (true) {
+            viewModel.refreshData()
+            delay(5000)
+        }
     }
 
     private fun setupAssetsRecyclerView() {
         binding.assets.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.assets.adapter = adapter
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        closeDrawer()
     }
 
     private fun openDrawer() {
