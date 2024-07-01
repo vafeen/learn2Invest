@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,7 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel: MarketReviewFragmentViewModel by viewModels()
-    private val adapter = MarketReviewAdapter() { coin ->
+    private val adapter = MarketReviewAdapter { coin ->
         startAssetReviewIntent(coin)
     }
 
@@ -36,7 +37,7 @@ class MarketReviewFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
@@ -117,30 +118,55 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.filterState.collect {
                 binding.apply {
+                    val isDarkTheme =
+                        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
                     filterByMarketcap.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_MARKETCAP] == true)
-                                    R.color.accent_background
-                                else
-                                    R.color.view_background
+                                if (it[FILTER_BY_MARKETCAP] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                     filterByChangePercent24Hr.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_PERCENT] == true)
-                                    R.color.accent_background
-                                else R.color.view_background
+                                if (it[FILTER_BY_PERCENT] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                     filterByPrice.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_PRICE] == true)
-                                    R.color.accent_background
-                                else
-                                    R.color.view_background
+                                if (it[FILTER_BY_PRICE] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                 }
