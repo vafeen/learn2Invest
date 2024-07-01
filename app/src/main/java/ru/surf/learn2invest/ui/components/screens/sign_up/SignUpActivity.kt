@@ -112,11 +112,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (validateName() && validateLastname()) {
-            binding.signupBtn.isEnabled = true
-        } else {
-            binding.signupBtn.isEnabled = false
-        }
+        binding.signupBtn.isEnabled = validateName() && validateLastname()
         applyThemeColors()
     }
 

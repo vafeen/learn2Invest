@@ -11,5 +11,6 @@
         <item name="colorControlActivated">@color/accent_button_dark</item>
 
         <item name="colorSecondary">@color/main_background_dark</item>
+        <item name="colorSecondaryVariant">@color/sheet_background_dark</item>
     </style>
 </resources>

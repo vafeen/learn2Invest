@@ -11,6 +11,7 @@
         <item name="colorControlActivated">@color/btn_asset</item>
 
         <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
 
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
