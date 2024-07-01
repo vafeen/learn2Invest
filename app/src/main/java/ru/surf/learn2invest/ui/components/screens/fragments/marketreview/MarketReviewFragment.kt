@@ -38,9 +38,19 @@ class MarketReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(
+                requireContext(),
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    R.color.main_background_dark
+                } else {
+                    R.color.white
+                }
+            )
+
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
+
         lifecycleScope.launch {
             viewModel.filterOrder.collect {
                 binding.apply {

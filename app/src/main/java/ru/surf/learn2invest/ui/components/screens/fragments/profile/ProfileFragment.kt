@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.profile
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,16 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(
+                requireContext(),
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    R.color.main_background_dark
+                } else {
+                    R.color.white
+                }
+            )
+
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         initListeners()
 
@@ -68,7 +78,6 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-
 
     private fun updateProfile(profile: Profile) {
         lifecycleScope.launch(Dispatchers.IO) {

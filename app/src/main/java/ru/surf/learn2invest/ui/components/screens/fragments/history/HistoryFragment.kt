@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.history
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,14 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.accent_background)
+            ContextCompat.getColor(
+                requireContext(),
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    R.color.accent_background_dark
+                } else {
+                    R.color.accent_background
+                }
+            )
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
