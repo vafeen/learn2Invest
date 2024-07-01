@@ -50,9 +50,6 @@ class SellDialog(
                 dismiss()
             }
             val coin = viewModel.coin
-            imageButtonPlus.isVisible = coin.amount != 0f
-            imageButtonMinus.isVisible = coin.amount != 0f
-            enteringNumberOfLots.isEnabled = coin.amount != 0f
             imageButtonPlus.setOnClickListener {
                 enteringNumberOfLots.setText(enteringNumberOfLots.text.let { text ->
                     val newNumberOfLots = if (text.isNotEmpty()) {
@@ -169,6 +166,11 @@ class SellDialog(
                     result.text = ""
                 }
             }
+            viewModel.apply {
+                imageButtonPlus.isVisible = coin.amount != 0f
+                imageButtonMinus.isVisible = coin.amount != 0f
+                enteringNumberOfLots.isEnabled = coin.amount != 0f
+            }
         }
     }
 
@@ -190,7 +192,10 @@ class SellDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
             }.invokeOnCompletion {
-                if (asset != null) coin = asset as AssetInvest
+                if (asset != null) {
+                    coin = asset as AssetInvest
+                    Log.d("coin", "есть продать")
+                }
                 updateFields()
                 realTimeUpdateJob = startRealTimeUpdate {
                     lifecycleScope.launch(Dispatchers.Main) {

@@ -74,17 +74,10 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
             }
-
-
             buttonBuy.isVisible = false
             buttonBuy.setOnClickListener {
                 buy()
                 dismiss()
-            }
-            viewModel.apply {
-                imageButtonPlus.isVisible = databaseRepository.profile.fiatBalance != 0f
-                imageButtonMinus.isVisible = databaseRepository.profile.fiatBalance != 0f
-                enteringNumberOfLots.isEnabled = databaseRepository.profile.fiatBalance != 0f
             }
             imageButtonPlus.setOnClickListener {
                 enteringNumberOfLots.setText(enteringNumberOfLots.text.let { numOfLotsText ->
@@ -176,6 +169,7 @@ class BuyDialog(
     private fun updateFields() {
         val willPrice = resultPrice(onFuture = false)
         val fiatBalance = viewModel.databaseRepository.profile.fiatBalance
+
         binding.apply {
             when {
                 enteringNumberOfLots.text.toString().toIntOrNull().let {
@@ -206,6 +200,11 @@ class BuyDialog(
                     result.text = ""
                 }
             }
+            viewModel.apply {
+                imageButtonPlus.isVisible = databaseRepository.profile.fiatBalance != 0f
+                imageButtonMinus.isVisible = databaseRepository.profile.fiatBalance != 0f
+                enteringNumberOfLots.isEnabled = databaseRepository.profile.fiatBalance != 0f
+            }
         }
     }
 
@@ -233,7 +232,10 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
             }.invokeOnCompletion {
-                if (asset != null) coin = asset as AssetInvest
+                if (asset != null) {
+                    coin = asset as AssetInvest
+                    Log.d("coin", "есть купить")
+                }
                 updateFields()
                 realTimeUpdateJob = startRealTimeUpdate {
                     lifecycleScope.launch(Dispatchers.Main) {
