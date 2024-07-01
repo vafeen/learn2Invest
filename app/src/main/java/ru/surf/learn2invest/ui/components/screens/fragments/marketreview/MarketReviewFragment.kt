@@ -32,6 +32,7 @@ import javax.inject.Inject
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel: MarketReviewFragmentViewModel by viewModels()
+
     @Inject
     lateinit var adapter: MarketReviewAdapter
     private lateinit var realTimeUpdateJob: Job
@@ -41,15 +42,15 @@ class MarketReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor =
-            ContextCompat.getColor(
-                requireContext(),
-                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                    R.color.main_background_dark
-                } else {
-                    R.color.white
-                }
-            )
+
+        activity?.window?.statusBarColor = ContextCompat.getColor(
+            requireContext(),
+            if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.main_background_dark
+            } else {
+                R.color.white
+            }
+        )
 
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
@@ -271,6 +272,7 @@ class MarketReviewFragment : Fragment() {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
         view.clearFocus()
     }
+
     companion object {
         const val FILTER_BY_MARKETCAP = 0
         const val FILTER_BY_PERCENT = 1

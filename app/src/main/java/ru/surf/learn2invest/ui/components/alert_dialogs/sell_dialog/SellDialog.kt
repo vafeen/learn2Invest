@@ -1,6 +1,9 @@
 package ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog
 
+import android.app.Dialog
 import android.content.Context
+import android.content.res.Configuration
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -9,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleCoroutineScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -143,9 +147,26 @@ class SellDialog(
         viewModel.sell(price, amountCurrent)
     }
 
-
     override fun getDialogView(): View {
         return binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val window = dialog.window
+            if (window != null) {
+                window.navigationBarColor = ContextCompat.getColor(
+                    dialogContext,
+                    if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                        R.color.sheet_background_dark
+                    } else {
+                        R.color.white
+                    }
+                )
+            }
+        }
+        return dialog
     }
 
     private fun updateFields() {
@@ -198,6 +219,4 @@ class SellDialog(
             }
         }
     }
-
-
 }
