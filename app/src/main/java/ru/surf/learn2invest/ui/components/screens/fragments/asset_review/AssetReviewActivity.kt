@@ -2,7 +2,6 @@ package ru.surf.learn2invest.ui.components.screens.fragments.asset_review
 
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -40,11 +39,6 @@ class AssetReviewActivity : AppCompatActivity() {
             } else {
                 R.color.white
             }
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(this, color)
-            )
-        )
         window.navigationBarColor = ContextCompat.getColor(this, color)
         window.statusBarColor = ContextCompat.getColor(this, color)
 

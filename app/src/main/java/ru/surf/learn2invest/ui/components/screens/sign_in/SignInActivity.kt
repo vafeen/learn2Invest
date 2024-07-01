@@ -2,7 +2,6 @@ package ru.surf.learn2invest.ui.components.screens.sign_in
 
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -49,11 +48,6 @@ class SignInActivity : AppCompatActivity() {
             } else {
                 R.color.accent_background
             }
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(this, color)
-            )
-        )
         window.navigationBarColor = ContextCompat.getColor(this, color)
         window.statusBarColor = ContextCompat.getColor(this, color)
 

@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
 import android.content.res.Configuration
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -46,11 +45,6 @@ class TradingPasswordActivity : AppCompatActivity() {
             } else {
                 R.color.white
             }
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(this, color)
-            )
-        )
         window.navigationBarColor = ContextCompat.getColor(this, color)
         window.statusBarColor = ContextCompat.getColor(this, color)
 

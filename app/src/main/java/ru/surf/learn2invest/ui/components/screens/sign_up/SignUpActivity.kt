@@ -3,7 +3,6 @@ package ru.surf.learn2invest.ui.components.screens.sign_up
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,18 +33,14 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val color =
+        window.navigationBarColor = ContextCompat.getColor(
+            this,
             if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
                 R.color.main_background_dark
             } else {
                 R.color.white
             }
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(this, color)
-            )
         )
-        window.navigationBarColor = ContextCompat.getColor(this, color)
         window.statusBarColor = ContextCompat.getColor(
             this,
             if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {

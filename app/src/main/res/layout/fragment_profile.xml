@@ -134,7 +134,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:clickable="false"
-            android:theme="@style/switch_style" />
+            app:thumbTint="?attr/colorAccent"
+            app:trackTint="?attr/colorControlActivated" />
     </LinearLayout>
 
     <LinearLayout
@@ -166,7 +167,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:clickable="false"
-            android:theme="@style/switch_style" />
+            app:thumbTint="?attr/colorAccent"
+            app:trackTint="?attr/colorControlActivated" />
     </LinearLayout>
 
     <LinearLayout
