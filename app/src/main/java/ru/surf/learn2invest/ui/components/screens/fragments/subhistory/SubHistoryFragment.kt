@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
+import javax.inject.Inject
 
 /**
  * Фрагмент истории сделок с одним активом в [AssetReviewActivity][ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity]
@@ -22,7 +23,9 @@ import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding
     private val viewModel: SubHistoryFragmentViewModel by viewModels()
-    private val adapter = SubHistoryAdapter()
+
+    @Inject
+    lateinit var adapter: SubHistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

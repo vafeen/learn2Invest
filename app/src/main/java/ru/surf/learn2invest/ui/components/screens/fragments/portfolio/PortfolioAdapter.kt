@@ -1,27 +1,34 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
+import dagger.hilt.android.qualifiers.ActivityContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale
+import javax.inject.Inject
 
-class PortfolioAdapter(
-    private val clickListener: AssetClickListener
+
+class PortfolioAdapter @Inject constructor(
+    private val imageLoader: ImageLoader,
+    @ActivityContext var context: Context
 ) : RecyclerView.Adapter<PortfolioAdapter.PortfolioViewHolder>() {
 
     var assets: List<AssetInvest> = emptyList()
     var priceChanges: Map<String, Float> = emptyMap()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PortfolioViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.coin_item, parent, false)
         return PortfolioViewHolder(view)
@@ -31,13 +38,19 @@ class PortfolioAdapter(
         val asset = assets[position]
         holder.bind(asset, priceChanges[asset.symbol] ?: 0f)
         holder.itemView.setOnClickListener {
-            clickListener.onCoinClick(asset)
+            context.startActivity(Intent(context, AssetReviewActivity::class.java).apply {
+                putExtras(Bundle().apply {
+                    putString(AssetConstants.ID.key, asset.assetID)
+                    putString(AssetConstants.NAME.key, asset.name)
+                    putString(AssetConstants.SYMBOL.key, asset.symbol)
+                })
+            })
         }
     }
 
     override fun getItemCount(): Int = assets.size
 
-    class PortfolioViewHolder(itemView: View) :
+    inner class PortfolioViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val coinIcon: ImageView = itemView.findViewById(R.id.coin_icon)
         private val coinName: TextView = itemView.findViewById(R.id.coin_name)
@@ -77,17 +90,12 @@ class PortfolioAdapter(
 
             coinIcon.load(
                 data = "$API_ICON${asset.symbol.lowercase()}.svg",
-                imageLoader = App.imageLoader
+                imageLoader = imageLoader
             )
             {
                 placeholder(R.drawable.placeholder)
                 error(R.drawable.coin_placeholder)
             }
         }
-    }
-
-
-    fun interface AssetClickListener {
-        fun onCoinClick(coin: AssetInvest)
     }
 }

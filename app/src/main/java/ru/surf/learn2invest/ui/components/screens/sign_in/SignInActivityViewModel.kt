@@ -2,7 +2,6 @@ package ru.surf.learn2invest.ui.components.screens.sign_in
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,8 +35,7 @@ class SignInActivityViewModel @Inject constructor(
 
     fun onAuthenticationSucceeded(
         action: String,
-        context: Activity,
-        lifecycleCoroutineScope: LifecycleCoroutineScope
+        context: Activity
     ) {
         if (action != SignINActivityActions.ChangingPIN.action)
             context.startActivity(Intent(context, HostActivity::class.java))
@@ -46,7 +44,7 @@ class SignInActivityViewModel @Inject constructor(
         context.finish()
     }
 
-    fun updateProfile() =
+    private fun updateProfile() =
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepository.updateProfile(databaseRepository.profile)
         }

@@ -1,5 +1,8 @@
-package ru.surf.learn2invest.ui.components.screens.fragments.subhistory
+package ru.surf.learn2invest.ui.components.screens.fragments.history
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +11,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
+import dagger.hilt.android.qualifiers.ActivityContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.ui.components.screens.fragments.portfolio.AssetConstants
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import javax.inject.Inject
 
-class SubHistoryAdapter @Inject constructor(
-    val loader: ImageLoader
-) : RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
+class HistoryFragmentAdapter @Inject constructor(
+    private val imageLoader: ImageLoader, @ActivityContext var context: Context
+) : RecyclerView.Adapter<HistoryFragmentAdapter.ViewHolder>() {
+
     var data: List<Transaction> = listOf()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,24 +43,31 @@ class SubHistoryAdapter @Inject constructor(
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val coin = data[position]
         holder.apply {
-            coinTopTextInfo.text =
-                if (data[position].name.length > 12) "${data[position].name.substring(0..12)}..."
-                else data[position].name
-            coinBottomTextInfo.text = data[position].amount.toString()
-            if (data[position].transactionType == TransactionsType.Sell) {
-                coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
+            coinTopTextInfo.text = if (coin.name.length > 12) "${coin.name.substring(0..12)}..."
+            else coin.name
+            coinBottomTextInfo.text = coin.symbol
+            if (coin.transactionType == TransactionsType.Sell) {
+                coinTopNumericInfo.text = "+ ${coin.coinPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
-            } else {
-                coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
-            }
-            coinBottomNumericInfo.text = "${data[position].dealPrice}$"
+            } else coinTopNumericInfo.text = "- ${coin.coinPrice}$"
+            coinBottomNumericInfo.text = "${coin.dealPrice}$"
 
             coinIcon.load(
-                data = "${API_ICON}${data[position].symbol.lowercase()}.svg",
-                imageLoader = loader
+                data = "${API_ICON}${coin.symbol.lowercase()}.svg", imageLoader = imageLoader
             )
+            itemView.setOnClickListener {
+                context.startActivity(Intent(context, AssetReviewActivity::class.java).apply {
+                    putExtras(Bundle().apply {
+                        putString(AssetConstants.ID.key, coin.coinID)
+                        putString(AssetConstants.NAME.key, coin.name)
+                        putString(AssetConstants.SYMBOL.key, coin.symbol)
+                    })
+                })
+            }
         }
     }
+
 
 }
