@@ -160,8 +160,8 @@ class MarketReviewFragment : Fragment() {
                     filterByChangePercent24Hr.isVisible = it.not()
                     searchEditText.text.clear()
                     if (it) searchEditText.hint = ""
-                    if (it.not()) {
-                        adapter.data = viewModel.data.value
+                    if (it) {
+                        adapter.data = viewModel.searchedData.value
                     } else adapter.data = viewModel.data.value
                     adapter.notifyDataSetChanged()
                 }
