@@ -20,7 +20,6 @@ import ru.surf.learn2invest.utils.tapOn
 /**
  * Диалог пополнения баланса
  * @param dialogContext [Контекст открытия диалога]
- * @param supportFragmentManager [Менеджер открытия диалогов]
  * @param onCloseCallback [Callback по закрытию диалога]
  */
 @AndroidEntryPoint

@@ -44,41 +44,18 @@ class BuyDialog(
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("ls", "onViewCreated")
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d("ls", "onCreateView")
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        Log.d("ls", "onCreateDialog")
-        return super.onCreateDialog(savedInstanceState)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("ls", "onCreate")
-    }
-
     override fun initListeners() {
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
             }
             buttonBuy.isVisible = false
+
             buttonBuy.setOnClickListener {
                 buy()
                 dismiss()
             }
+
             imageButtonPlus.setOnClickListener {
                 enteringNumberOfLots.setText(enteringNumberOfLots.text.let { numOfLotsText ->
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
@@ -181,7 +158,6 @@ class BuyDialog(
                         )
                     result.text = buildString {
                         append(ContextCompat.getString(dialogContext, R.string.itog))
-
                         append(willPrice.getWithCurrency())
                     }
                 }
@@ -222,8 +198,6 @@ class BuyDialog(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d("ls", "onAttach")
-
         var asset: AssetInvest? = null
         viewModel.apply {
             coin = AssetInvest(
@@ -232,10 +206,7 @@ class BuyDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
             }.invokeOnCompletion {
-                if (asset != null) {
-                    coin = asset as AssetInvest
-                    Log.d("coin", "есть купить")
-                }
+                if (asset != null) coin = asset as AssetInvest
                 updateFields()
                 realTimeUpdateJob = startRealTimeUpdate {
                     lifecycleScope.launch(Dispatchers.Main) {

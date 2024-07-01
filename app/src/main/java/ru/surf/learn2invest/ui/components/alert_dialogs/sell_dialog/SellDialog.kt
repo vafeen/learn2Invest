@@ -192,10 +192,7 @@ class SellDialog(
             lifecycleScope.launch(Dispatchers.IO) {
                 asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
             }.invokeOnCompletion {
-                if (asset != null) {
-                    coin = asset as AssetInvest
-                    Log.d("coin", "есть продать")
-                }
+                if (asset != null) coin = asset as AssetInvest
                 updateFields()
                 realTimeUpdateJob = startRealTimeUpdate {
                     lifecycleScope.launch(Dispatchers.Main) {
