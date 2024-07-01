@@ -1,7 +1,8 @@
 package ru.surf.learn2invest.utils
 
-import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.noui.database_components.entity.Profile
 
@@ -39,11 +40,11 @@ fun verifyTradingPassword(user: Profile, password: String): Boolean {
 /**
  * Проверка наличия биометрического аппаратного обеспечения
  */
-fun isBiometricAvailable(context: Context): Boolean {
-    val biometricManager = BiometricManager.from(context)
-    return when (biometricManager.canAuthenticate()) {
-        BiometricManager.BIOMETRIC_SUCCESS -> true
-        else -> false
-    }
+fun isBiometricAvailable(activity: AppCompatActivity): Boolean {
+    return BiometricManager.from(activity)
+        .canAuthenticate(
+            Authenticators.BIOMETRIC_STRONG or
+                    Authenticators.DEVICE_CREDENTIAL
+        ) == BiometricManager.BIOMETRIC_SUCCESS
 }
 
