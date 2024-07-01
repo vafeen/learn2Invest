@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -41,28 +42,14 @@ class SellDialog(
     private val viewModel: SellDialogViewModel by viewModels()
 
     override fun initListeners() {
-        viewModel.apply {
-            coin = AssetInvest(
-                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
-            )
-        }
         binding.apply {
             balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
-            viewModel.realTimeUpdateJob = viewModel.startRealTimeUpdate {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.priceNumber.text = it
-                    updateFields()
-                }
-            }
             buttonSell.isVisible = false
             buttonSell.setOnClickListener {
                 sell()
                 dismiss()
             }
             val coin = viewModel.coin
-            imageButtonPlus.isVisible = coin.amount != 0f
-            imageButtonMinus.isVisible = coin.amount != 0f
-            enteringNumberOfLots.isEnabled = coin.amount != 0f
             imageButtonPlus.setOnClickListener {
                 enteringNumberOfLots.setText(enteringNumberOfLots.text.let { text ->
                     val newNumberOfLots = if (text.isNotEmpty()) {
@@ -138,7 +125,7 @@ class SellDialog(
     }
 
     private fun sell() {
-        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency()
+        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency() ?: 0f
         val amountCurrent = binding.enteringNumberOfLots.text.toString().toInt().toFloat()
         viewModel.sell(price, amountCurrent)
     }
@@ -149,18 +136,18 @@ class SellDialog(
     }
 
     private fun updateFields() {
-        val coin = viewModel.coin
         binding.apply {
             when {
-                coin.amount == 0f -> {
+                viewModel.coin.amount == 0f -> {
                     buttonSell.isVisible = false
                     result.text =
                         ContextCompat.getString(dialogContext, R.string.no_asset_for_sale)
                 }
 
-                coin.amount > 0 && enteringNumberOfLots.text.toString().toFloatOrNull().let {
-                    it != null && it in 1f..coin.amount
-                } -> {
+                viewModel.coin.amount > 0f && enteringNumberOfLots.text.toString().toFloatOrNull()
+                    .let {
+                        it != null && it in 1f..viewModel.coin.amount
+                    } -> {
                     buttonSell.isVisible =
                         tradingPasswordTV.text.toString()
                             .isTrueTradingPasswordOrIsNotDefined(profile = viewModel.databaseRepository.profile)
@@ -179,12 +166,17 @@ class SellDialog(
                     result.text = ""
                 }
             }
+            viewModel.apply {
+                imageButtonPlus.isVisible = coin.amount != 0f
+                imageButtonMinus.isVisible = coin.amount != 0f
+                enteringNumberOfLots.isEnabled = coin.amount != 0f
+            }
         }
     }
 
     private fun resultPrice(): Float {
         binding.apply {
-            val price = priceNumber.text.toString().getFloatFromStringWithCurrency()
+            val price = priceNumber.text.toString().getFloatFromStringWithCurrency() ?: 0f
             val number = enteringNumberOfLots.text.toString().toIntOrNull() ?: 0
             return price * number
         }
@@ -192,9 +184,22 @@ class SellDialog(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.databaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
-                viewModel.coin = it
+        var asset: AssetInvest? = null
+        viewModel.apply {
+            coin = AssetInvest(
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
+            )
+            lifecycleScope.launch(Dispatchers.IO) {
+                asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
+            }.invokeOnCompletion {
+                if (asset != null) coin = asset as AssetInvest
+                updateFields()
+                realTimeUpdateJob = startRealTimeUpdate {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        binding.priceNumber.text = it
+                        updateFields()
+                    }
+                }
             }
         }
     }

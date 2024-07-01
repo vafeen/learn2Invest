@@ -43,72 +43,19 @@ class BuyDialog(
     private var binding = BuyDialogBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("ls", "onAttach")
-        viewModel.apply {
-            viewModelScope.launch(Dispatchers.IO) {
-                databaseRepository.getBySymbolAssetInvest(symbol = symbol)?.let {
-                    haveAssetsOrNot = true
-                    coin = it
-                    Log.d("ls", "view have ")
-                }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("ls", "onViewCreated")
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d("ls", "onCreateView")
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        Log.d("ls", "onCreateDialog")
-        return super.onCreateDialog(savedInstanceState)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("ls", "onCreate")
-    }
 
     override fun initListeners() {
-        viewModel.apply {
-            coin = AssetInvest(
-                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
-            )
-            realTimeUpdateJob = startRealTimeUpdate {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.priceNumber.text = it
-                    updateFields()
-                }
-            }
-        }
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
             }
-
-
             buttonBuy.isVisible = false
+
             buttonBuy.setOnClickListener {
                 buy()
                 dismiss()
             }
-            viewModel.apply {
-                imageButtonPlus.isVisible = databaseRepository.profile.fiatBalance != 0f
-                imageButtonMinus.isVisible = databaseRepository.profile.fiatBalance != 0f
-                enteringNumberOfLots.isEnabled = databaseRepository.profile.fiatBalance != 0f
-            }
+
             imageButtonPlus.setOnClickListener {
                 enteringNumberOfLots.setText(enteringNumberOfLots.text.let { numOfLotsText ->
                     (numOfLotsText.toString().toIntOrNull() ?: 0).let {
@@ -187,7 +134,7 @@ class BuyDialog(
     }
 
     private fun buy() {
-        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency()
+        val price = binding.priceNumber.text.toString().getFloatFromStringWithCurrency() ?: 0f
         val amountCurrent = binding.enteringNumberOfLots.text.toString().toInt().toFloat()
         viewModel.buy(amountCurrent = amountCurrent, price = price)
     }
@@ -199,6 +146,7 @@ class BuyDialog(
     private fun updateFields() {
         val willPrice = resultPrice(onFuture = false)
         val fiatBalance = viewModel.databaseRepository.profile.fiatBalance
+
         binding.apply {
             when {
                 enteringNumberOfLots.text.toString().toIntOrNull().let {
@@ -210,7 +158,6 @@ class BuyDialog(
                         )
                     result.text = buildString {
                         append(ContextCompat.getString(dialogContext, R.string.itog))
-
                         append(willPrice.getWithCurrency())
                     }
                 }
@@ -229,6 +176,11 @@ class BuyDialog(
                     result.text = ""
                 }
             }
+            viewModel.apply {
+                imageButtonPlus.isVisible = databaseRepository.profile.fiatBalance != 0f
+                imageButtonMinus.isVisible = databaseRepository.profile.fiatBalance != 0f
+                enteringNumberOfLots.isEnabled = databaseRepository.profile.fiatBalance != 0f
+            }
         }
     }
 
@@ -238,9 +190,31 @@ class BuyDialog(
     ): Float {
         binding.apply {
             val priceText = priceNumber.text.toString()
-            val price = priceText.getFloatFromStringWithCurrency()
+            val price = priceText.getFloatFromStringWithCurrency() ?: 0f
             val number = enteringNumberOfLots.text.toString().toIntOrNull() ?: 0
             return price * (number + if (onFuture) 1 else 0)
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        var asset: AssetInvest? = null
+        viewModel.apply {
+            coin = AssetInvest(
+                name = name, symbol = symbol, coinPrice = 0f, amount = 0f, assetID = id
+            )
+            lifecycleScope.launch(Dispatchers.IO) {
+                asset = databaseRepository.getBySymbolAssetInvest(symbol = symbol)
+            }.invokeOnCompletion {
+                if (asset != null) coin = asset as AssetInvest
+                updateFields()
+                realTimeUpdateJob = startRealTimeUpdate {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        binding.priceNumber.text = it
+                        updateFields()
+                    }
+                }
+            }
         }
     }
 }
