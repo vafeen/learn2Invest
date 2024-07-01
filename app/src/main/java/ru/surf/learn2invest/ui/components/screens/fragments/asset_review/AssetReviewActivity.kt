@@ -16,6 +16,7 @@ import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
 import ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog.BuyDialog
 import ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
+import ru.surf.learn2invest.ui.components.screens.fragments.portfolio.AssetConstants
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 
@@ -44,9 +45,9 @@ class AssetReviewActivity : AppCompatActivity() {
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id = intent.getStringExtra("id") ?: ""
-        val name = intent.getStringExtra("name") ?: ""
-        val symbol = intent.getStringExtra("symbol") ?: ""
+        val id = intent.getStringExtra(AssetConstants.ID.key) ?: ""
+        val name = intent.getStringExtra(AssetConstants.NAME.key) ?: ""
+        val symbol = intent.getStringExtra(AssetConstants.SYMBOL.key) ?: ""
 
         binding.goBack.setOnClickListener {
             finish()

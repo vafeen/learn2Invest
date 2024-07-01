@@ -3,6 +3,7 @@ package ru.surf.learn2invest.ui.components.screens.sign_in
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -53,13 +54,6 @@ class SignInActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.main_background)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.databaseRepository.apply {
-            lifecycleScope.launch(Dispatchers.Main) {
-                getAllAsFlowProfile().collect {
-                    profile = it[idOfProfile]
-                }
-            }
-        }
         initListeners()
         paintDots()
         when (intent.action) {
@@ -206,7 +200,6 @@ class SignInActivity : AppCompatActivity() {
                                 if (isAuthSucceeded) onAuthenticationSucceeded(
                                     action = intent.action ?: "",
                                     context = this@SignInActivity,
-                                    lifecycleCoroutineScope = lifecycleScope
                                 )
                                 else pinCode = ""
                             }
@@ -245,13 +238,11 @@ class SignInActivity : AppCompatActivity() {
                                                 onAuthenticationSucceeded(
                                                     action = intent.action ?: "",
                                                     context = this@SignInActivity,
-                                                    lifecycleCoroutineScope = lifecycleScope
                                                 )
                                             }.setCancelCallback {
                                                 onAuthenticationSucceeded(
                                                     action = intent.action ?: "",
                                                     context = this@SignInActivity,
-                                                    lifecycleCoroutineScope = lifecycleScope
                                                 )
                                             }.auth(
                                                 lifecycleCoroutineScope = lifecycleScope,
@@ -261,7 +252,6 @@ class SignInActivity : AppCompatActivity() {
                                             onAuthenticationSucceeded(
                                                 action = intent.action ?: "",
                                                 context = this@SignInActivity,
-                                                lifecycleCoroutineScope = lifecycleScope
                                             )
                                         }
                                     }
@@ -327,6 +317,10 @@ class SignInActivity : AppCompatActivity() {
                                                     lastName = databaseRepository.profile.lastName
                                                 ).passwordToHash(viewModel.pinCode)
                                             )
+                                        Log.d(
+                                            "profile",
+                                            "sign 328 = profile = ${databaseRepository.profile}"
+                                        )
                                     }
 
                                     animatePINCode(
@@ -336,7 +330,6 @@ class SignInActivity : AppCompatActivity() {
                                         if (truth) onAuthenticationSucceeded(
                                             action = intent.action ?: "",
                                             context = this@SignInActivity,
-                                            lifecycleCoroutineScope = lifecycleScope
                                         )
                                     }
                                 }
@@ -359,7 +352,6 @@ class SignInActivity : AppCompatActivity() {
                     onAuthenticationSucceeded(
                         action = intent.action ?: "",
                         context = this@SignInActivity,
-                        lifecycleCoroutineScope = lifecycleScope
                     )
                 }
             }.setDesignBottomSheet(
