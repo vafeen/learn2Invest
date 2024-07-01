@@ -1,10 +1,13 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.app.Activity
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -13,11 +16,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
 import javax.inject.Inject
+
 
 /**
  * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -26,9 +31,9 @@ import javax.inject.Inject
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel: MarketReviewFragmentViewModel by viewModels()
-
     @Inject
     lateinit var adapter: MarketReviewAdapter
+    private lateinit var realTimeUpdateJob: Job
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,13 +106,12 @@ class MarketReviewFragment : Fragment() {
                         )
                     } else {
                         adapter.notifyDataSetChanged()
-                        binding.searchEditText.setAdapter(
-                            ArrayAdapter(this@MarketReviewFragment.requireContext(),
-                                android.R.layout.simple_expandable_list_item_1,
-                                it.map { element -> element.name })
-                        )
-                        startRealtimeUpdate()
                     }
+                    binding.searchEditText.setAdapter(
+                        ArrayAdapter(this@MarketReviewFragment.requireContext(),
+                            android.R.layout.simple_expandable_list_item_1,
+                            it.map { element -> element.name })
+                    )
                 }
             }
         }
@@ -148,8 +152,9 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.isSearch.collect {
                 binding.apply {
-                    textView2.isVisible = it
+                    youSearch.isVisible = it
                     clearTv.isVisible = it
+                    cancelTV.isVisible = it
                     filterByPrice.isVisible = it.not()
                     filterByMarketcap.isVisible = it.not()
                     filterByChangePercent24Hr.isVisible = it.not()
@@ -180,8 +185,7 @@ class MarketReviewFragment : Fragment() {
             }
 
             textInputLayout.setEndIconOnClickListener {
-                viewModel.setSearchState(false)
-                searchEditText.clearFocus()
+                searchEditText.text.clear()
             }
 
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
@@ -196,8 +200,22 @@ class MarketReviewFragment : Fragment() {
                 viewModel.clearSearchData()
             }
 
+            cancelTV.setOnClickListener {
+                viewModel.setSearchState(false)
+                hideKeyboardFrom(requireContext(), searchEditText)
+            }
         }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = startRealtimeUpdate()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        realTimeUpdateJob.cancel()
     }
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
@@ -212,6 +230,11 @@ class MarketReviewFragment : Fragment() {
     }
 
 
+    private fun hideKeyboardFrom(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
+    }
     companion object {
         const val FILTER_BY_MARKETCAP = 0
         const val FILTER_BY_PERCENT = 1

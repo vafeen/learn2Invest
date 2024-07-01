@@ -16,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentPortfolioBinding
@@ -24,7 +26,6 @@ import ru.surf.learn2invest.ui.components.chart.AssetBalanceHistoryFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.utils.DevStrLink
 import ru.surf.learn2invest.utils.getWithCurrency
-import java.lang.Thread.sleep
 import java.util.Locale
 import javax.inject.Inject
 
@@ -36,6 +37,7 @@ import javax.inject.Inject
 class PortfolioFragment : Fragment() {
     private lateinit var binding: FragmentPortfolioBinding
     private lateinit var chartHelper: LineChartHelper
+    private lateinit var realTimeUpdateJob: Job
     private val viewModel: PortfolioFragmentViewModel by viewModels()
 
     @Inject
@@ -129,13 +131,6 @@ class PortfolioFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            while (true) {
-                viewModel.refreshData()
-                sleep(5000)
-            }
-        }
-
         initDrawerListeners()
 
         binding.imageButton.setOnClickListener {
@@ -150,16 +145,28 @@ class PortfolioFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupAssetsRecyclerView() {
-        binding.assets.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.assets.adapter = adapter
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = startRealtimeUpdate()
     }
 
     override fun onStop() {
         super.onStop()
-
+        realTimeUpdateJob.cancel()
         closeDrawer()
+    }
+
+    private fun startRealtimeUpdate() = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+        while (true) {
+            viewModel.refreshData()
+            delay(5000)
+        }
+    }
+
+    private fun setupAssetsRecyclerView() {
+        binding.assets.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.assets.adapter = adapter
     }
 
     private fun openDrawer() {
