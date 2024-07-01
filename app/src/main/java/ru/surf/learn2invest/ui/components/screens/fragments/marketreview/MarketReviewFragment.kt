@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import javax.inject.Inject
 
 /**
  * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -28,9 +26,9 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel: MarketReviewFragmentViewModel by viewModels()
-    private val adapter = MarketReviewAdapter() { coin ->
-        startAssetReviewIntent(coin)
-    }
+
+    @Inject
+    lateinit var adapter: MarketReviewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -213,15 +211,6 @@ class MarketReviewFragment : Fragment() {
         }
     }
 
-    private fun startAssetReviewIntent(coin: CoinReviewDto) {
-        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("id", coin.id)
-        bundle.putString("name", coin.name)
-        bundle.putString("symbol", coin.symbol)
-        intent.putExtras(bundle)
-        startActivity(intent)
-    }
 
     companion object {
         const val FILTER_BY_MARKETCAP = 0

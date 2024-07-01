@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.history
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
-import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import javax.inject.Inject
 
 /**
  * Фрагмент истории сделок в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -27,9 +25,9 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
     private val viewModel: HistoryFragmentViewModel by viewModels()
-    private val adapter = HistoryAdapter { transaction ->
-        startAssetReviewIntent(transaction)
-    }
+
+    @Inject
+    lateinit var adapter: HistoryFragmentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,15 +60,5 @@ class HistoryFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun startAssetReviewIntent(coin: Transaction) {
-        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("id", coin.coinID)
-        bundle.putString("name", coin.name)
-        bundle.putString("symbol", coin.symbol)
-        intent.putExtras(bundle)
-        startActivity(intent)
     }
 }
