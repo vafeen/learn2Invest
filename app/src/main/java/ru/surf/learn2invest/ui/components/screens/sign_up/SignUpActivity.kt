@@ -1,6 +1,8 @@
 package ru.surf.learn2invest.ui.components.screens.sign_up
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
@@ -20,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.ActivitySignupBinding
+import ru.surf.learn2invest.databinding.ActivitySignUpBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
@@ -29,7 +31,7 @@ import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+    private lateinit var binding: ActivitySignUpBinding
 
     private val viewModel: SignUpActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +48,7 @@ class SignUpActivity : AppCompatActivity() {
         )
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
-        binding = ActivitySignupBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupNameEditText()
@@ -77,6 +79,8 @@ class SignUpActivity : AppCompatActivity() {
             }
             false
         }
+
+        applyThemeColors()
     }
 
     private fun setupNameEditText() {
@@ -110,13 +114,31 @@ class SignUpActivity : AppCompatActivity() {
     private fun validateFields() {
         if (validateName() && validateLastname()) {
             binding.signupBtn.isEnabled = true
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.accent_background)
         } else {
             binding.signupBtn.isEnabled = false
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.btn_asset)
         }
+        applyThemeColors()
+    }
+
+    private fun applyThemeColors() {
+        val isDarkTheme =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        binding.signupBtn.backgroundTintList = ColorStateList.valueOf(
+            resources.getColor(
+                if (binding.signupBtn.isEnabled) {
+                    if (isDarkTheme)
+                        R.color.accent_background_dark
+                    else
+                        R.color.accent_background
+                } else {
+                    if (isDarkTheme)
+                        R.color.accent_button_dark
+                    else
+                        R.color.btn_asset
+                }
+            )
+        )
     }
 
     private fun validateName(): Boolean {

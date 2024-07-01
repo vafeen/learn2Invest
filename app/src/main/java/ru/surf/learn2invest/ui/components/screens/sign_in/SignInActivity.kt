@@ -15,7 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.ActivitySigninBinding
+import ru.surf.learn2invest.databinding.ActivitySignInBinding
 import ru.surf.learn2invest.noui.cryptography.FingerprintAuthenticator
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.utils.gotoCenter
@@ -36,7 +36,7 @@ import ru.surf.learn2invest.utils.verifyPIN
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySigninBinding
+    private lateinit var binding: ActivitySignInBinding
     private val viewModel: SignInActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class SignInActivity : AppCompatActivity() {
         )
         window.navigationBarColor =
             ContextCompat.getColor(this, R.color.accent_background)
-        binding = ActivitySigninBinding.inflate(layoutInflater)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.databaseRepository.apply {
             lifecycleScope.launch(Dispatchers.Main) {
