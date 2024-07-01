@@ -26,6 +26,7 @@ import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.DevStrLink
 import ru.surf.learn2invest.utils.getWithCurrency
+import java.lang.Thread.sleep
 import java.util.Locale
 
 /**
@@ -77,7 +78,7 @@ class PortfolioFragment : Fragment() {
 
         binding.topUpBtn.setOnClickListener {
             RefillAccountDialog(dialogContext = requireContext()) {
-                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                     viewModel.refreshData()
                 }
             }.also {
@@ -134,10 +135,10 @@ class PortfolioFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-//            while (true) {
+            while (true) {
                 viewModel.refreshData()
-//                sleep(5000)
-//            }
+                sleep(5000)
+            }
         }
 
         initDrawerListeners()

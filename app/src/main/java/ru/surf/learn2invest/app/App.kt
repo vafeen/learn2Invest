@@ -6,11 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
-import ru.surf.learn2invest.noui.database_components.entity.Profile
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -24,29 +20,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        imageLoader = ImageLoader.Builder(this)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
+        imageLoader = ImageLoader.Builder(this).components {
+            add(SvgDecoder.Factory())
+        }.build()
         with(ProcessLifecycleOwner.get()) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val profList = databaseRepository.getAllAsFlowProfile().first()
-
-                if (profList.isNotEmpty()) {
-                    databaseRepository.profile = profList[databaseRepository.idOfProfile]
-                } else {
-                    databaseRepository.profile = Profile(
-                        id = 0,
-                        firstName = "undefined",
-                        lastName = "undefined",
-                        biometry = false,
-                        fiatBalance = 0f,
-                        assetBalance = 0f
-                    )
-                    databaseRepository.insertAllProfile(databaseRepository.profile)
-                }
-            }
+            databaseRepository.enableProfileFlow(lifecycleCoroutineScope = lifecycleScope)
         }
     }
 }
