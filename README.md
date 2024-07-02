@@ -37,6 +37,7 @@ Learn2Invest это биржевой симмулятор для трениро�
 * Настройки приложения
 * Локализация (ru/en)
 * Обновление данных в реальном времени
+* Темная тема
 
 ## Технологии 
 * Retrofit
@@ -95,14 +96,15 @@ HistoryFragment, HistoryFragmentViewModel, HistoryAdapter
 ProfileFragmentViewModel, ProfileFragment
 
 ## Флоу
+https://github.com/vafeen/learn2Invest/assets/67644124/7639e883-1c0b-4ded-ad49-91c798b0c878
 
 ## Экраны 
 ### Splash screen 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/1c703ee5-a52c-4f1e-8fa5-176525d22c26) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/8286d67d-1099-411a-a880-2ef89818dc3f)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/266d9c22-32ce-429c-8eaf-6d6c84ad46ab) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/d3c5999b-0032-4e28-8f58-77dbf59715d9)
 
 ### Регистрация
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/382a3e6c-21ed-4848-a594-6184bee5910a) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/0b9f64af-1292-4a46-b102-97eebd91cfa7)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/0dbb0e48-48eb-40d1-b2fb-7e721a38e154)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/a2231dda-ee04-4f6b-b9c0-6f866735d21b) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/f62095f4-c89a-4d5f-8286-3da9ba101c83)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/feea49cf-4ab8-40a5-b4f5-e8645181c36c)
  
 ### PIN 
 ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/7beb25cd-c7e3-44dc-bb41-bef1ee9c1158) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/51e21825-28d5-4c84-b619-e845b39a1c0a)
@@ -110,26 +112,29 @@ ProfileFragmentViewModel, ProfileFragment
 ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/0318aefc-865a-4f24-a73c-0c217af5e050)
 
 ### Портфель 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/3c1d2a71-f5bb-4afb-b1f3-b39d7336aed3) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/e034f1ff-e798-4bd6-916d-305acc5a9982)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/619aabbf-7405-46d4-8414-0ad47e3baea2) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/ceb2d292-0785-4a8c-8a62-2e705826f90d)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/d214be75-ea8a-4758-91fb-ad6f42aa3ae5) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/2f89fe56-0d16-4e69-85de-86c0c12e1e16)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/13ae0038-727f-4ece-9b41-e0fa1f3b854d) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/5fa76421-f74b-4e6b-819c-a53743ee537d)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/c079e9bb-c60e-4bc2-8fd9-66a647c91048) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/07ec934c-33f8-4752-a5a9-b9a6355713be)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/3412c347-13b8-4ad9-9b9d-3d977ca95c98) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/c3a248fa-f8a7-42a9-b05b-2097cfb29a3e)
 
 
 ### Обзор рынка 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/dd335e78-a446-4cc4-b4f3-84c3084bf21c) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/e7cedad7-a257-4b04-b58d-76770a976c9e)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/077aea76-8a4b-4aed-ac94-30088a4e613b) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/fd7a8437-cf43-4010-b2f0-0d7217ccc436)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/4516375e-1b2f-4cb4-83ef-24a4f62d0449) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/f8aa83a1-44ed-42f4-acc2-6c8b7b219bf6)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/781684dc-6f39-4139-a35b-ac1419b5e0f9) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/8807be34-1fea-41ba-a461-38eee33803bb)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/bcc5e46f-86ed-41e7-bc66-cfb93c1f5e5f) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/25331746-957e-4f8c-ac1f-fdf9f0886f8c)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/32138a33-8e41-4c1a-9428-d3c8522b8b3b) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/d5d089c0-feff-4c6f-bb0d-8fe14368d612)
+
 
 ### Обзор актива 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/af6fc14c-67c8-4295-aa09-540499671618) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/fb1e0f8a-0d99-4792-a829-d118f150ae35)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/4eb58fba-775f-4e9e-85c4-c9bc3fb95238) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/b34e801e-08d5-4a14-a7d5-775307e774d2)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/7442f586-138a-4a63-8072-a7331a194ab4) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/88dd3a17-9b8a-4b88-990b-bd2e51e36c7b)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/21198a3d-7d33-4aaf-b57f-b773375c152f) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/a35bb0c9-c80e-43ce-998c-b5a50c740161)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/c09205b3-4286-4709-9719-81d40bf274a5)
 
 ### История 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/4b41a24a-3a97-4566-b665-3f425a6c111b) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/32252402-e5a5-4e88-aeb9-5013a4b624b3)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/4b41a24a-3a97-4566-b665-3f425a6c111b) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/a32bb428-4aad-4117-9a23-9bc00da7ecfb)
 
 ### Настройки 
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/d4d2f408-46e3-4ecf-9a99-410222f90c73) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/350754fe-09be-464a-ba4b-63286b5df191)
-![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/c7522358-25b7-4051-a854-70779a106521)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/a7ab6a8a-99cf-459c-9a58-23c38bbc4243) ![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/9614395e-a854-4dcc-932c-703f733c5f73)
+![изображение](https://github.com/vafeen/learn2Invest/assets/67644124/7d21243f-c22a-4002-9fac-7cb71008fa67)
+
 
 
 
