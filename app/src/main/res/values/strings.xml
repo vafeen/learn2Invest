@@ -7,7 +7,7 @@
     <string name="close">Закрыть</string>
     <string name="no">Нет</string>
     <string name="yes_exactly">Да, точно</string>
-    <string name="price_name">Цена</string>
+    <string name="price_name">Цена:</string>
     <string name="number">Количество</string>
     <string name="number_lots">0 лотов</string>
     <string name="changing_price">Изменение цены в %</string>

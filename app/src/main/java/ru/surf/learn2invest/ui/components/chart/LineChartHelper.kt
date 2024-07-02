@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.chart
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -36,6 +37,14 @@ class LineChartHelper(
                 isGranularityEnabled = true
                 granularity = 1f
                 textSize = 10f
+                textColor = ContextCompat.getColor(
+                    context,
+                    if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                        R.color.white
+                    } else {
+                        R.color.black
+                    }
+                )
                 setDrawGridLines(false)
                 position = XAxis.XAxisPosition.BOTTOM
                 valueFormatter = object : ValueFormatter() {
@@ -85,7 +94,14 @@ class LineChartHelper(
     }
 
     private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
-        color = ContextCompat.getColor(context, R.color.main_background)
+        color = ContextCompat.getColor(
+            context,
+            if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                R.color.accent_background_dark
+            } else {
+                R.color.accent_background
+            }
+        )
         valueTextColor = Color.BLACK
         lineWidth = 2f
         isHighlightEnabled = true

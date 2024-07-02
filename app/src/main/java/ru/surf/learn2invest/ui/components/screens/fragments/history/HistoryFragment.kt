@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
+import ru.surf.learn2invest.utils.setStatusBarColor
 import javax.inject.Inject
 
 /**
@@ -34,8 +34,14 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.main_background)
+        activity?.apply {
+            setStatusBarColor(
+                window,
+                this,
+                R.color.accent_background,
+                R.color.accent_background_dark
+            )
+        }
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())

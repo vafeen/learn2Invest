@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="?attr/colorSecondary">
 
     <ImageButton
         android:id="@+id/go_back"
@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Text.SemiBold.17"
+            android:textColor="?attr/colorOnBackground"
             tools:text="Bitcoin" />
 
         <TextView
@@ -60,9 +61,9 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/view_background"
+        android:backgroundTint="?attr/colorPrimaryVariant"
         android:text="@string/review_text"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toStartOf="@id/button_divider"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -83,9 +84,9 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/view_background"
+        android:backgroundTint="?attr/colorPrimaryVariant"
         android:text="@string/history_text"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_divider"
@@ -119,9 +120,10 @@
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/btn_asset"
+            android:backgroundTint="?attr/colorControlActivated"
             android:text="@string/buy"
             android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="5dp" />
 
         <View
@@ -135,9 +137,10 @@
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/btn_asset"
+            android:backgroundTint="?attr/colorControlActivated"
             android:text="@string/sell"
             android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="5dp" />
     </LinearLayout>
 

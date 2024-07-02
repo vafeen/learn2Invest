@@ -1,7 +1,6 @@
 package ru.surf.learn2invest.ui.components.screens.sign_in
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -16,10 +15,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.ActivitySigninBinding
+import ru.surf.learn2invest.databinding.ActivitySignInBinding
 import ru.surf.learn2invest.noui.cryptography.PasswordHasher
 import ru.surf.learn2invest.utils.gotoCenter
 import ru.surf.learn2invest.utils.isBiometricAvailable
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 import ru.surf.learn2invest.utils.tapOn
 import ru.surf.learn2invest.utils.verifyPIN
 
@@ -36,23 +37,21 @@ import ru.surf.learn2invest.utils.verifyPIN
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySigninBinding
+    private lateinit var binding: ActivitySignInBinding
     private val viewModel: SignInActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(
-                    this,
-                    R.color.main_background
-                )
-            )
+
+        setStatusBarColor(window, this, R.color.accent_background, R.color.accent_background_dark)
+        setNavigationBarColor(
+            window,
+            this,
+            R.color.accent_background,
+            R.color.accent_background_dark
         )
-        window.navigationBarColor =
-            ContextCompat.getColor(this, R.color.main_background)
-        binding = ActivitySigninBinding.inflate(layoutInflater)
+
+        binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initListeners()
         paintDots()
@@ -82,7 +81,6 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-
     private fun animatePINCode(truth: Boolean, needReturn: Boolean = false): Job {
         return lifecycleScope.launch(Dispatchers.Main) {
             delay(100)
@@ -107,7 +105,6 @@ class SignInActivity : AppCompatActivity() {
             delay(800)
         }
     }
-
 
     private fun changeColorOfFourDots(
         color1: Int,
@@ -180,7 +177,6 @@ class SignInActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun updatePin(num: String) {
         viewModel.apply {

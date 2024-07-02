@@ -19,11 +19,11 @@
             android:background="@drawable/tabs_in_dialogs_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_od_dialog" />
+            app:layout_constraintTop_toBottomOf="@+id/name_of_dialog" />
 
         <View
             android:id="@+id/price_card"
-            android:layout_width="238dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
@@ -32,12 +32,13 @@
             app:layout_constraintTop_toBottomOf="@+id/balance_card" />
 
         <TextView
-            android:id="@+id/name_od_dialog"
+            android:id="@+id/name_of_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
-            android:text="@string/sell_security_paper"
+            android:text="@string/buy_security_paper"
             android:textAppearance="@style/Text.Regular.16"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,9 +51,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/tabs_in_dialogs_shape"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/price_card"
+            app:layout_constraintStart_toStartOf="@+id/price_card"
             app:layout_constraintTop_toBottomOf="@+id/price_card" />
 
         <TextView
@@ -63,6 +63,7 @@
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
             android:text="@string/number"
             android:textAppearance="@style/Text.Medium.14"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card" />
 
@@ -82,13 +83,51 @@
         <View
             android:id="@+id/icon_of_balance_view"
             android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_height="25dp"
             android:layout_margin="@dimen/margin_dialogs_card_content_start"
-            android:background="@drawable/dollar_cash"
+            android:background="@drawable/briefcase"
             app:layout_constraintBottom_toBottomOf="@+id/balance_card"
             app:layout_constraintStart_toStartOf="@+id/balance_card"
             app:layout_constraintTop_toTopOf="@+id/balance_card" />
 
+
+        <TextView
+            android:id="@+id/price_textview"
+            android:layout_width="131dp"
+            android:layout_height="24dp"
+            android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
+            android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
+            android:text="@string/price_name"
+            android:textAppearance="@style/Text.Medium.14"
+            android:textColor="?attr/colorOnBackground"
+            app:layout_constraintStart_toStartOf="@+id/price_card"
+            app:layout_constraintTop_toTopOf="@+id/price_card" />
+
+        <ImageButton
+            android:id="@+id/imageButton_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/circle_minus"
+            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintHeight="28dp"
+            app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots"
+            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintWidth="28dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/circle_plus"
+            app:layout_constraintBottom_toBottomOf="@+id/imageButton_minus"
+            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
+            app:layout_constraintHeight="28dp"
+            app:layout_constraintStart_toEndOf="@+id/imageButton_minus"
+            app:layout_constraintTop_toTopOf="@+id/imageButton_minus"
+            app:layout_constraintWidth="28dp" />
 
         <TextView
             android:id="@+id/price_number"
@@ -101,84 +140,49 @@
             app:layout_constraintTop_toTopOf="@+id/price_card"
             tools:text="@string/example_price" />
 
-        <ImageButton
-            android:id="@+id/imageButtonMinus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/view_background"
-            android:src="@drawable/circle_minus"
-            app:layout_constraintBottom_toBottomOf="@+id/entering_sum_of_balance_card"
-            app:layout_constraintHeight="28dp"
-            app:layout_constraintStart_toEndOf="@+id/entering_number_of_lots"
-            app:layout_constraintTop_toTopOf="@+id/entering_sum_of_balance_card"
-            app:layout_constraintWidth="28dp" />
-
-        <ImageButton
-            android:id="@+id/imageButtonPlus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/view_background"
-            android:src="@drawable/circle_plus"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButtonMinus"
-            app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
-            app:layout_constraintHeight="28dp"
-            app:layout_constraintStart_toEndOf="@+id/imageButtonMinus"
-            app:layout_constraintTop_toTopOf="@+id/imageButtonMinus"
-            app:layout_constraintWidth="28dp" />
-
         <TextView
-            android:id="@+id/price_textview"
+            android:id="@+id/balance_textview"
             android:layout_width="131dp"
             android:layout_height="24dp"
-            android:layout_marginHorizontal="@dimen/margin_dialogs_card_content_start"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/price_name"
+            android:text="@string/account"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toStartOf="@+id/price_card"
-            app:layout_constraintTop_toTopOf="@+id/price_card" />
+            android:textColor="?attr/colorOnBackground"
+            app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
+            app:layout_constraintTop_toTopOf="@+id/balance_card" />
+
 
         <TextView
             android:id="@+id/balance_num"
             android:layout_width="131dp"
             android:layout_height="24dp"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_nizhnego"
             android:textAppearance="@style/Text.Medium.14"
-            app:layout_constraintStart_toEndOf="@+id/icon_of_balance_view"
+            android:textColor="?attr/colorOnBackground"
+            app:layout_constraintStart_toStartOf="@+id/balance_textview"
             app:layout_constraintTop_toTopOf="@+id/balance_card"
             tools:text="@string/example_balance" />
 
-
-        <TextView
-            android:id="@+id/balance_textview"
-            android:layout_width="131dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="@dimen/margin_dialogs_card_content_top_u_verhnego"
-            android:text="@string/account"
-            android:textAppearance="@style/Text.Medium.14"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@+id/balance_num"
-            app:layout_constraintTop_toTopOf="@+id/balance_card" />
+        <!--       TODO: Надь, поправь тут пожалуйста шрифт, как выберешь нужный) -->
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_sell"
-            android:layout_width="wrap_content"
+            android:id="@+id/button_buy"
+            android:layout_width="110dp"
             android:layout_height="42dp"
             android:layout_marginTop="30dp"
-            android:backgroundTint="@color/view_background"
+            android:backgroundTint="?attr/colorControlActivated"
             android:gravity="center"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="@string/sell"
+            android:text="@string/buy"
             android:textAllCaps="true"
             android:textAppearance="@style/Text.SemiBold.14"
-            android:textColor="#000000"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/result" />
-
 
         <TextView
             android:id="@+id/result"
@@ -186,6 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:textAppearance="@style/Text.Regular.16"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintEnd_toEndOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintStart_toStartOf="@+id/entering_sum_of_balance_card"
             app:layout_constraintTop_toBottomOf="@+id/trading_password"
@@ -204,6 +209,7 @@
             app:layout_constraintTop_toBottomOf="@+id/entering_sum_of_balance_card"
             app:passwordToggleEnabled="true">
 
+            <!-- Здесь наличие глазика контролируется -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/trading_password_TV"
                 android:layout_width="match_parent"
@@ -214,7 +220,7 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
