@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -84,7 +85,11 @@ class PortfolioAdapter @Inject constructor(
 
                     else -> {
                         coinBottomNumericInfo.text = formattedChange
-                        itemView.context.getColor(R.color.black)
+                        itemView.context.getColor(if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                            R.color.white
+                        } else {
+                            R.color.black
+                        })
                     }
                 }
             )
