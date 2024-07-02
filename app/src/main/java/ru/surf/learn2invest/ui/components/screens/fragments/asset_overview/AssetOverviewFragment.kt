@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import ru.surf.learn2invest.databinding.FragmentAssetOverviewBinding
 import ru.surf.learn2invest.ui.components.chart.Last7DaysFormatter
 import ru.surf.learn2invest.ui.components.chart.LineChartHelper
+import ru.surf.learn2invest.utils.AssetConstants
+import ru.surf.learn2invest.utils.viewModelCreator
+import javax.inject.Inject
 
 /**
  * Фрагмент обзора актива в [AssetReviewActivity][ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity]
@@ -18,10 +20,15 @@ import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 @AndroidEntryPoint
 class AssetOverviewFragment : Fragment() {
     private lateinit var binding: FragmentAssetOverviewBinding
-    private lateinit var chartHelper: LineChartHelper
-    private val viewModel: AssetOverViewFragmentViewModel by viewModels()
-    private lateinit var id: String
-    private lateinit var realTimeUpdateJob: Job
+
+    @Inject
+    lateinit var factory: AssetOverViewFragmentViewModel.Factory
+
+    private val viewModel: AssetOverViewFragmentViewModel by viewModelCreator {
+        factory.createAssetOverViewFragmentViewModel(
+            id = requireArguments().getString(AssetConstants.ID.key) ?: ""
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,14 +37,11 @@ class AssetOverviewFragment : Fragment() {
     ): View {
         binding = FragmentAssetOverviewBinding.inflate(inflater, container, false)
         val dateFormatterStrategy = Last7DaysFormatter()
-        chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
+        viewModel.chartHelper = LineChartHelper(requireContext(), dateFormatterStrategy)
+        viewModel.chartHelper.setupChart(binding.chart)
 
-        id = requireArguments().getString("id") ?: ""
-
-        chartHelper.setupChart(binding.chart)
-
-        viewModel.loadChartData(id) { data, marketCap, price ->
-            chartHelper.updateData(data)
+        viewModel.loadChartData(viewModel.id) { data, marketCap, price ->
+            viewModel.chartHelper.updateData(data)
             binding.capitalisation.text = marketCap
             binding.price.text = price
         }
@@ -47,23 +51,24 @@ class AssetOverviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        realTimeUpdateJob = viewModel.startRealTimeUpdate(id) { data, marketCap, price ->
-            chartHelper.updateData(data)
-            binding.capitalisation.text = marketCap
-            binding.price.text = price
-        }
+        viewModel.realTimeUpdateJob =
+            viewModel.startRealTimeUpdate(viewModel.id) { data, marketCap, price ->
+                viewModel.chartHelper.updateData(data)
+                binding.capitalisation.text = marketCap
+                binding.price.text = price
+            }
     }
 
     override fun onStop() {
         super.onStop()
-        realTimeUpdateJob.cancel()
+        viewModel.realTimeUpdateJob.cancel()
     }
 
     companion object {
         fun newInstance(id: String): AssetOverviewFragment {
             val fragment = AssetOverviewFragment()
             val args = Bundle()
-            args.putString("id", id)
+            args.putString(AssetConstants.ID.key, id)
             fragment.arguments = args
             return fragment
         }

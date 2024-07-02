@@ -1,8 +1,12 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.asset_overview
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,20 +15,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
+import ru.surf.learn2invest.ui.components.chart.LineChartHelper
 import ru.surf.learn2invest.utils.getWithCurrency
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject
 
-@HiltViewModel
-class AssetOverViewFragmentViewModel @Inject constructor(
-    var networkRepository: NetworkRepository
+class AssetOverViewFragmentViewModel @AssistedInject constructor(
+    var networkRepository: NetworkRepository,
+    @Assisted var id: String
 ) : ViewModel() {
     private var marketCap = 0.0
     private var data = mutableListOf<Entry>()
     private lateinit var formattedMarketCap: String
     private lateinit var formattedPrice: String
-
+    lateinit var chartHelper: LineChartHelper
+    lateinit var realTimeUpdateJob: Job
     fun loadChartData(id: String, onDataLoaded: (List<Entry>, String, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = networkRepository.getCoinHistory(id)) {
@@ -78,4 +84,9 @@ class AssetOverViewFragmentViewModel @Inject constructor(
                 }
             }
         }
+
+    @AssistedFactory
+    interface Factory {
+        fun createAssetOverViewFragmentViewModel(id: String): AssetOverViewFragmentViewModel
+    }
 }
