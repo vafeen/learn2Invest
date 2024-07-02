@@ -1,5 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.subhistory
 
+import android.content.Context
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
+import dagger.hilt.android.qualifiers.ActivityContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
@@ -15,7 +18,8 @@ import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import javax.inject.Inject
 
 class SubHistoryAdapter @Inject constructor(
-    val loader: ImageLoader
+    val loader: ImageLoader,
+    @ActivityContext var context: Context
 ) : RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
     var data: List<Transaction> = listOf()
 
@@ -46,7 +50,15 @@ class SubHistoryAdapter @Inject constructor(
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else {
                 coinTopNumericInfo.text = "- ${data[position].dealPrice}$"
-                coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.black))
+                coinTopNumericInfo.setTextColor(
+                    coinBottomNumericInfo.context.getColor(
+                        if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                            R.color.white
+                        } else {
+                            R.color.black
+                        }
+                    )
+                )
             }
             coinBottomNumericInfo.text = "${data[position].coinPrice}$"
 
