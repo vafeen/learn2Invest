@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
- * Docs?
+ * Класс для отображения дат для графика за последние 7 дней
  */
 class Last7DaysFormatter : CustomDateValueFormatter {
     private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())

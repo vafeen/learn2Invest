@@ -9,7 +9,7 @@ import com.github.mikephil.charting.utils.MPPointF
 import ru.surf.learn2invest.R
 
 /**
- * Docs?
+ * Класс для кастомного указателя цены на графике при клике
  */
 class CustomMarkerView(context: Context, layoutResource: Int) :
     MarkerView(context, layoutResource) {

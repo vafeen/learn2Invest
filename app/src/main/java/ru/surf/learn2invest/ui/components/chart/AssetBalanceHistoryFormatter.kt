@@ -6,7 +6,7 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Docs?
+ * Класс для отображения дат для графика в зависимости от количества точек
  */
 class AssetBalanceHistoryFormatter(private val dates: List<Date>) : CustomDateValueFormatter {
     private val dateFormatter = SimpleDateFormat("dd MMM", Locale.getDefault())
