@@ -13,6 +13,7 @@ import coil.ImageLoader
 import coil.load
 import dagger.hilt.android.qualifiers.ActivityContext
 import ru.surf.learn2invest.R
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.AssetConstants
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
@@ -80,9 +81,4 @@ class MarketReviewAdapter @Inject constructor(
             }
         }
     }
-
-    fun interface CoinClickListener {
-        fun onCoinClick(coin: CoinReviewResponse)
-    }
-
 }
