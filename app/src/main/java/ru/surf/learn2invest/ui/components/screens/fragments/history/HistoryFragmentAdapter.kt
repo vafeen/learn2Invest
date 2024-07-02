@@ -49,10 +49,13 @@ class HistoryFragmentAdapter @Inject constructor(
             else coin.name
             coinBottomTextInfo.text = coin.symbol
             if (coin.transactionType == TransactionsType.Sell) {
-                coinTopNumericInfo.text = "+ ${coin.coinPrice}$"
+                coinTopNumericInfo.text = "+ ${coin.dealPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
-            } else coinTopNumericInfo.text = "- ${coin.coinPrice}$"
-            coinBottomNumericInfo.text = "${coin.dealPrice}$"
+            } else {
+                coinTopNumericInfo.text = "- ${coin.dealPrice}$"
+                coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.black))
+            }
+            coinBottomNumericInfo.text = "${coin.coinPrice}$"
 
             coinIcon.load(
                 data = "${API_ICON}${coin.symbol.lowercase()}.svg", imageLoader = imageLoader

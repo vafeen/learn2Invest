@@ -42,12 +42,13 @@ class SubHistoryAdapter @Inject constructor(
                 else data[position].name
             coinBottomTextInfo.text = data[position].amount.toString()
             if (data[position].transactionType == TransactionsType.Sell) {
-                coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
+                coinTopNumericInfo.text = "+ ${data[position].dealPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else {
-                coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
+                coinTopNumericInfo.text = "- ${data[position].dealPrice}$"
+                coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.black))
             }
-            coinBottomNumericInfo.text = "${data[position].dealPrice}$"
+            coinBottomNumericInfo.text = "${data[position].coinPrice}$"
 
             coinIcon.load(
                 data = "${API_ICON}${data[position].symbol.lowercase()}.svg",
