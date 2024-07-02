@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <com.github.mikephil.charting.charts.LineChart
@@ -24,6 +23,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
         android:text="@string/capitalisation"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toStartOf="@id/capitalisation"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/capitalisation_text"
         app:layout_constraintTop_toBottomOf="@id/chart"
@@ -48,6 +49,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
         android:text="@string/price_name"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toStartOf="@id/price"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/price_text"
         app:layout_constraintTop_toBottomOf="@id/capitalisation_text"
@@ -83,7 +86,8 @@
             android:layout_height="wrap_content"
             android:text="@string/network_error"
             android:textAlignment="center"
-            android:textAppearance="@style/Text.SemiBold.17" />
+            android:textAppearance="@style/Text.SemiBold.17"
+            android:textColor="?attr/colorOnBackground" />
 
         <ImageView
             android:id="@+id/network_error_iv"

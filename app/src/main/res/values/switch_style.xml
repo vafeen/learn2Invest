@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="switch_style" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/active_switch</item>
-        <item name="colorSwitchThumbNormal">@color/inactive_switch</item>
-        <item name="trackTint">@color/main_background</item>
-    </style>
-</resources>

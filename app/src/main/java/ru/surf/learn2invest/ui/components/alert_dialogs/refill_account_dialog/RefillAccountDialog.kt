@@ -1,7 +1,10 @@
 package ru.surf.learn2invest.ui.components.alert_dialogs.refill_account_dialog
 
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.res.Configuration
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -10,9 +13,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.RefillAccountDialogBinding
+import ru.surf.learn2invest.databinding.DialogRefillAccountBinding
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomBottomSheetDialog
 import ru.surf.learn2invest.utils.getWithCurrency
 import ru.surf.learn2invest.utils.tapOn
@@ -27,7 +31,7 @@ class RefillAccountDialog(
     val dialogContext: Context, private val onCloseCallback: () -> Unit,
 ) : CustomBottomSheetDialog() {
 
-    private var binding = RefillAccountDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private var binding = DialogRefillAccountBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "refillAccount"
     private val viewModel: RefillAccountDialogViewModel by viewModels()
 
@@ -120,7 +124,6 @@ class RefillAccountDialog(
     }
 
     private fun updateVisibilityMainItems() {
-
         binding.apply {
             val isThisTemplate = TVEnteringSumOfBalance.text.toString() == ContextCompat.getString(
                 requireContext(), R.string.enter_sum
@@ -136,6 +139,24 @@ class RefillAccountDialog(
             button0.visibility =
                 if (TVEnteringSumOfBalance.text.toString() != "0") View.VISIBLE else View.INVISIBLE // здесь так нужно, иначе верстка сломается
         }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val window = dialog.window
+            if (window != null) {
+                window.navigationBarColor = ContextCompat.getColor(
+                    dialogContext,
+                    if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                        R.color.sheet_background_dark
+                    } else {
+                        R.color.white
+                    }
+                )
+            }
+        }
+        return dialog
     }
 
     override fun getDialogView(): View {

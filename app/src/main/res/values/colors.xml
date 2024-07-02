@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_background">#FFCFCBFF</color>
+    <color name="accent_background">#FFCFCBFF</color>
     <color name="label">#FF42C13F</color>
     <color name="recession">#FFE34446</color>
     <color name="increase">#FF32B153</color>
@@ -18,5 +18,9 @@
     <color name="inactive_switch">#FFEEEEEE</color>
     <color name="cancel">#54E06060</color>
     <color name="transparent">#00000000</color>
-    <color name="dialog_background">#80000000</color>
+    <color name="accent_background_dark">#FF534D98</color>
+    <color name="main_background_dark">#FF17161D</color>
+    <color name="sheet_background_dark">#FF373737</color>
+    <color name="view_background_dark">#FF535353</color>
+    <color name="accent_button_dark">#FF7D7D7D</color>
 </resources>

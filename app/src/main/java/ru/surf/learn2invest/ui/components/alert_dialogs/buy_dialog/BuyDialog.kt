@@ -2,23 +2,22 @@ package ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.BuyDialogBinding
+import ru.surf.learn2invest.databinding.DialogBuyBinding
 import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.alert_dialogs.parent.CustomBottomSheetDialog
 import ru.surf.learn2invest.utils.getFloatFromStringWithCurrency
@@ -40,15 +39,38 @@ class BuyDialog(
     private val name: String,
     private val symbol: String,
 ) : CustomBottomSheetDialog() {
-    private var binding = BuyDialogBinding.inflate(LayoutInflater.from(dialogContext))
+    private var binding = DialogBuyBinding.inflate(LayoutInflater.from(dialogContext))
     override val dialogTag: String = "buy"
     private val viewModel: BuyDialogViewModel by viewModels()
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            updateNavigationBarColor(dialog)
+        }
+        return dialog
+    }
+
+    private fun updateNavigationBarColor(dialog: BottomSheetDialog) {
+        val window = dialog.window
+        if (window != null) {
+            window.navigationBarColor = ContextCompat.getColor(
+                dialogContext,
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                    R.color.sheet_background_dark
+                } else {
+                    R.color.white
+                }
+            )
+        }
+    }
 
     override fun initListeners() {
         binding.apply {
             lifecycleScope.launch(Dispatchers.Main) {
                 balanceNum.text = viewModel.databaseRepository.profile.fiatBalance.getWithCurrency()
             }
+
             buttonBuy.isVisible = false
 
             buttonBuy.setOnClickListener {

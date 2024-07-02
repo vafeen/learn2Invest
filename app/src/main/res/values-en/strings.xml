@@ -7,7 +7,7 @@
     <string name="close">Close</string>
     <string name="no">No</string>
     <string name="yes_exactly">Yes, exactly</string>
-    <string name="price_name">Price</string>
+    <string name="price_name">Price:</string>
     <string name="number">Quantity</string>
     <string name="number_lots">0 lots</string>
     <string name="changing_price">Price change in %</string>
