@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.portfolio
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
