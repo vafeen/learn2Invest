@@ -17,6 +17,8 @@ import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.AssetConstants
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
+import ru.surf.learn2invest.utils.getWithCurrency
+import ru.surf.learn2invest.utils.round
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -54,14 +56,11 @@ class MarketReviewAdapter @Inject constructor(
             coinTopNumericInfo.text =
                 NumberFormat.getInstance(Locale.US).apply {
                     maximumFractionDigits = 4
-                }.format(coin.priceUsd) + " $"
+                }.format(coin.priceUsd).getWithCurrency()
             if (coin.changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
-            coinBottomNumericInfo.text =
-                NumberFormat.getInstance(Locale.US).apply {
-                    maximumFractionDigits = 2
-                }.format(coin.changePercent24Hr) + " %"
+            coinBottomNumericInfo.text ="${coin.changePercent24Hr.round()}%"
             coinIcon.load(
                 data = "$API_ICON${coin.symbol.lowercase()}.svg",
                 imageLoader = imageLoader
