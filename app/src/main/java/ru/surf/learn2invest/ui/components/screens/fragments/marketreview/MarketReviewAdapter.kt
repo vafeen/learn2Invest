@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import java.text.NumberFormat
 import java.util.Locale
@@ -18,7 +18,7 @@ class MarketReviewAdapter(
     private val clickListener: CoinClickListener
 ) :
     RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
-    var data: List<CoinReviewDto> = listOf()
+    var data: List<CoinReviewResponse> = listOf()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
@@ -68,7 +68,7 @@ class MarketReviewAdapter(
     }
 
     fun interface CoinClickListener {
-        fun onCoinClick(coin: CoinReviewDto)
+        fun onCoinClick(coin: CoinReviewResponse)
     }
 
 }

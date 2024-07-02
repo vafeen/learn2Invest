@@ -1,7 +1,7 @@
 package ru.surf.learn2invest.noui.network_components.responses
 
 /**
- * Docs?
+ * Обертка для описания состояния полученных данных
  */
 sealed class ResponseWrapper<out T> {
     data class Success<out T>(val value: T) : ResponseWrapper<T>()

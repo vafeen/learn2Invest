@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.database_components.DatabaseRepository
 import ru.surf.learn2invest.noui.database_components.entity.SearchedCoin
 import ru.surf.learn2invest.noui.network_components.NetworkRepository
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.noui.network_components.responses.ResponseWrapper
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_MARKETCAP
 import ru.surf.learn2invest.ui.components.screens.fragments.marketreview.MarketReviewFragment.Companion.FILTER_BY_PERCENT
@@ -25,10 +25,10 @@ import javax.inject.Inject
 class MarketReviewFragmentViewModel @Inject constructor(
     var databaseRepository: DatabaseRepository, var networkRepository: NetworkRepository
 ) : ViewModel() {
-    private var _data: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(
+    private var _data: MutableStateFlow<MutableList<CoinReviewResponse>> = MutableStateFlow(
         mutableListOf()
     )
-    val data: StateFlow<List<CoinReviewDto>> get() = _data
+    val data: StateFlow<List<CoinReviewResponse>> get() = _data
     private var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> get() = _isLoading
     private var _isError: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -46,10 +46,10 @@ class MarketReviewFragmentViewModel @Inject constructor(
     private var firstTimePriceFilter = true
     private val _isSearch: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isSearch: StateFlow<Boolean> get() = _isSearch
-    private var _searchedData: MutableStateFlow<MutableList<CoinReviewDto>> = MutableStateFlow(
+    private var _searchedData: MutableStateFlow<MutableList<CoinReviewResponse>> = MutableStateFlow(
         mutableListOf()
     )
-    val searchedData: StateFlow<List<CoinReviewDto>> get() = _searchedData
+    val searchedData: StateFlow<List<CoinReviewResponse>> get() = _searchedData
     var firstUpdateElement = 0
         private set
     var amountUpdateElement = 0
@@ -59,7 +59,7 @@ class MarketReviewFragmentViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result: ResponseWrapper<List<CoinReviewDto>> =
+            when (val result: ResponseWrapper<List<CoinReviewResponse>> =
                 networkRepository.getMarketReview()) {
                 is ResponseWrapper.Success -> {
                     _isLoading.value = false
@@ -138,7 +138,7 @@ class MarketReviewFragmentViewModel @Inject constructor(
 
 
     fun updateData(firstElement: Int, lastElement: Int) {
-        val tempUpdate = mutableListOf<CoinReviewDto>()
+        val tempUpdate = mutableListOf<CoinReviewResponse>()
         isRealtimeUpdate = true
         val updateDestinationLink = if (_isSearch.value) _searchedData
         else _data
@@ -163,7 +163,7 @@ class MarketReviewFragmentViewModel @Inject constructor(
                             updateElement.id == element.id
                         }
                         else element
-                    } as MutableList<CoinReviewDto>
+                    } as MutableList<CoinReviewResponse>
                 }
             }
         }

@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 
 /**
@@ -213,7 +213,7 @@ class MarketReviewFragment : Fragment() {
         }
     }
 
-    private fun startAssetReviewIntent(coin: CoinReviewDto) {
+    private fun startAssetReviewIntent(coin: CoinReviewResponse) {
         val intent = Intent(requireContext(), AssetReviewActivity::class.java)
         val bundle = Bundle()
         bundle.putString("id", coin.id)
