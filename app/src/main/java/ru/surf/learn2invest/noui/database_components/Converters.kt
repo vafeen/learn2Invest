@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 import java.util.Date
 
 /**
- * Docs?
+ * Функции для конвертации даты в БД и наоборот
  */
 object Converters {
     @TypeConverter
