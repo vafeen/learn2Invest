@@ -57,7 +57,7 @@ Learn2Invest это биржевой симмулятор для трениро�
 * API: https://docs.coincap.io/
 * Иконки: https://cryptofonts.com/img/icons/{{symbol}}.svg
 * Макеты экранов и карта переходов: https://www.figma.com/design/GvomF07D4aJtrFuc3uj4W9/Learn2Inves
-* ТЗ: 
+* ТЗ: https://necessary-spot-b65.notion.site/Learn2Invest-16e7a0523381411486c2a22513fcae03
 
 Иконки для коинов загружаются с отдельного API, используя данные из поля "symbol" в JSONах основного API. 
 
