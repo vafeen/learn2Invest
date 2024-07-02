@@ -58,11 +58,16 @@ class MarketReviewFragmentViewModel @Inject constructor(
         private set
 
     init {
+        initData()
+    }
+
+    private fun initData() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result: ResponseWrapper<List<CoinReviewResponse>> =
                 networkRepository.getMarketReview()) {
                 is ResponseWrapper.Success -> {
                     _isLoading.value = false
+                    _isError.value = false
                     val temp = result.value.toMutableList()
                     temp.removeIf {
                         it.marketCapUsd == 0.0f
@@ -108,9 +113,9 @@ class MarketReviewFragmentViewModel @Inject constructor(
             }
         } else firstTimePriceFilter = false
         _data.update {
-            if (filterOrder.value) it.sortedByDescending { element -> element.priceUsd }
+            if (filterOrder.value) it.sortedBy { element -> element.priceUsd }
                 .toMutableList()
-            else it.sortedBy { element -> element.priceUsd }.toMutableList()
+            else it.sortedByDescending { element -> element.priceUsd }.toMutableList()
         }
     }
 
@@ -142,7 +147,10 @@ class MarketReviewFragmentViewModel @Inject constructor(
         isRealtimeUpdate = true
         val updateDestinationLink = if (_isSearch.value) _searchedData
         else _data
-        if (updateDestinationLink.value.isNotEmpty() && firstElement != NO_POSITION) {
+        if (updateDestinationLink.value.isNotEmpty()
+            && firstElement != NO_POSITION
+            && updateDestinationLink.value.size > lastElement
+        ) {
             firstUpdateElement = firstElement
             amountUpdateElement = lastElement - firstElement + 1
             viewModelScope.launch(Dispatchers.IO) {
@@ -167,6 +175,7 @@ class MarketReviewFragmentViewModel @Inject constructor(
                 }
             }
         }
+        else initData()
     }
 
     fun clearSearchData() {

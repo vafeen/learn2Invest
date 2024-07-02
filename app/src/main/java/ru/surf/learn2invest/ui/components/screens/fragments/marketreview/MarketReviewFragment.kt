@@ -1,25 +1,29 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
-import android.content.Intent
+import android.app.Activity
+import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentMarketReviewBinding
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.utils.setStatusBarColor
+import javax.inject.Inject
+
 
 /**
  * Фрагмент обзора рынка в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -28,18 +32,23 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 class MarketReviewFragment : Fragment() {
     private val binding by lazy { FragmentMarketReviewBinding.inflate(layoutInflater) }
     private val viewModel: MarketReviewFragmentViewModel by viewModels()
-    private val adapter = MarketReviewAdapter() { coin ->
-        startAssetReviewIntent(coin)
-    }
+
+    @Inject
+    lateinit var adapter: MarketReviewAdapter
+    private lateinit var realTimeUpdateJob: Job
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        activity?.window?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+    ): View {
+        activity?.apply {
+            setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        }
+
         binding.marketReviewRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
         binding.marketReviewRecyclerview.adapter = adapter
+
         lifecycleScope.launch {
             viewModel.filterOrder.collect {
                 binding.apply {
@@ -103,13 +112,12 @@ class MarketReviewFragment : Fragment() {
                         )
                     } else {
                         adapter.notifyDataSetChanged()
-                        binding.searchEditText.setAdapter(
-                            ArrayAdapter(this@MarketReviewFragment.requireContext(),
-                                android.R.layout.simple_expandable_list_item_1,
-                                it.map { element -> element.name })
-                        )
-                        startRealtimeUpdate()
                     }
+                    binding.searchEditText.setAdapter(
+                        ArrayAdapter(this@MarketReviewFragment.requireContext(),
+                            android.R.layout.simple_expandable_list_item_1,
+                            it.map { element -> element.name })
+                    )
                 }
             }
         }
@@ -117,30 +125,55 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.filterState.collect {
                 binding.apply {
+                    val isDarkTheme =
+                        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
                     filterByMarketcap.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_MARKETCAP] == true)
-                                    R.color.main_background
-                                else
-                                    R.color.view_background
+                                if (it[FILTER_BY_MARKETCAP] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                     filterByChangePercent24Hr.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_PERCENT] == true)
-                                    R.color.main_background
-                                else R.color.view_background
+                                if (it[FILTER_BY_PERCENT] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                     filterByPrice.backgroundTintList =
                         ColorStateList.valueOf(
                             resources.getColor(
-                                if (it[FILTER_BY_PRICE] == true)
-                                    R.color.main_background
-                                else
-                                    R.color.view_background
+                                if (it[FILTER_BY_PRICE] == true) {
+                                    if (isDarkTheme)
+                                        R.color.accent_background_dark
+                                    else
+                                        R.color.accent_background
+                                } else {
+                                    if (isDarkTheme)
+                                        R.color.accent_button_dark
+                                    else
+                                        R.color.view_background
+                                }
                             )
                         )
                 }
@@ -150,15 +183,16 @@ class MarketReviewFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.isSearch.collect {
                 binding.apply {
-                    textView2.isVisible = it
+                    youSearch.isVisible = it
                     clearTv.isVisible = it
+                    cancelTV.isVisible = it
                     filterByPrice.isVisible = it.not()
                     filterByMarketcap.isVisible = it.not()
                     filterByChangePercent24Hr.isVisible = it.not()
                     searchEditText.text.clear()
                     if (it) searchEditText.hint = ""
-                    if (it.not()) {
-                        adapter.data = viewModel.data.value
+                    if (it) {
+                        adapter.data = viewModel.searchedData.value
                     } else adapter.data = viewModel.data.value
                     adapter.notifyDataSetChanged()
                 }
@@ -182,8 +216,7 @@ class MarketReviewFragment : Fragment() {
             }
 
             textInputLayout.setEndIconOnClickListener {
-                viewModel.setSearchState(false)
-                searchEditText.clearFocus()
+                searchEditText.text.clear()
             }
 
             searchEditText.setOnFocusChangeListener { v, hasFocus ->
@@ -198,8 +231,22 @@ class MarketReviewFragment : Fragment() {
                 viewModel.clearSearchData()
             }
 
+            cancelTV.setOnClickListener {
+                viewModel.setSearchState(false)
+                hideKeyboardFrom(requireContext(), searchEditText)
+            }
         }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        realTimeUpdateJob = startRealtimeUpdate()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        realTimeUpdateJob.cancel()
     }
 
     private fun startRealtimeUpdate() = lifecycleScope.launch {
@@ -213,14 +260,11 @@ class MarketReviewFragment : Fragment() {
         }
     }
 
-    private fun startAssetReviewIntent(coin: CoinReviewResponse) {
-        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("id", coin.id)
-        bundle.putString("name", coin.name)
-        bundle.putString("symbol", coin.symbol)
-        intent.putExtras(bundle)
-        startActivity(intent)
+
+    private fun hideKeyboardFrom(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
     }
 
     companion object {

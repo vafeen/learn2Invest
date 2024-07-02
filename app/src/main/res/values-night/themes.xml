@@ -1,7 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Surf" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/main_background_dark</item>
+        <item name="colorPrimaryVariant">@color/accent_button_dark</item>
+        <item name="colorAccent">@color/accent_background_dark</item>
+        <item name="colorOnBackground">@color/white</item>
+
+        <item name="colorSurfaceContainer">@color/view_background_dark</item>
+        <item name="colorControlActivated">@color/accent_button_dark</item>
+
+        <item name="colorSecondary">@color/main_background_dark</item>
+        <item name="colorSecondaryVariant">@color/sheet_background_dark</item>
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="navigationIconTint">@color/white</item>
     </style>
 </resources>

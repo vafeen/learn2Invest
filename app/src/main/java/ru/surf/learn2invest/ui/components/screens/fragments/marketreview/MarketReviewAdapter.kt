@@ -1,24 +1,31 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.marketreview
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
+import dagger.hilt.android.qualifiers.ActivityContext
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
+import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.utils.AssetConstants
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 import java.text.NumberFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class MarketReviewAdapter(
-    private val clickListener: CoinClickListener
-) :
-    RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
+class MarketReviewAdapter @Inject constructor(
+    private val imageLoader: ImageLoader,
+    @ActivityContext var context: Context
+) : RecyclerView.Adapter<MarketReviewAdapter.ViewHolder>() {
     var data: List<CoinReviewResponse> = listOf()
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coinIcon = itemView.findViewById<ImageView>(R.id.coin_icon)
         val coinTopTextInfo = itemView.findViewById<TextView>(R.id.coin_name)
@@ -36,33 +43,40 @@ class MarketReviewAdapter(
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val coin = data[position]
         holder.apply {
-            coinTopTextInfo.text = if (data[position].name.length > 10)
-                StringBuilder(data[position].name).insert(10, '\n')
+            coinTopTextInfo.text = if (coin.name.length > 10)
+                StringBuilder(coin.name).insert(10, '\n')
             else
-                data[position].name
-            coinBottomTextInfo.text = data[position].symbol
+                coin.name
+            coinBottomTextInfo.text = coin.symbol
             coinTopNumericInfo.text =
                 NumberFormat.getInstance(Locale.US).apply {
                     maximumFractionDigits = 4
-                }.format(data[position].priceUsd) + " $"
-            if (data[position].changePercent24Hr >= 0) {
+                }.format(coin.priceUsd) + " $"
+            if (coin.changePercent24Hr >= 0) {
                 coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else coinBottomNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.recession))
             coinBottomNumericInfo.text =
                 NumberFormat.getInstance(Locale.US).apply {
                     maximumFractionDigits = 2
-                }.format(data[position].changePercent24Hr) + " %"
+                }.format(coin.changePercent24Hr) + " %"
             coinIcon.load(
-                data = "$API_ICON${data[position].symbol.lowercase()}.svg",
-                imageLoader = App.imageLoader
+                data = "$API_ICON${coin.symbol.lowercase()}.svg",
+                imageLoader = imageLoader
             )
             {
                 placeholder(R.drawable.placeholder)
                 error(R.drawable.coin_placeholder)
             }
             itemView.setOnClickListener {
-                clickListener.onCoinClick(data[position])
+                context.startActivity(Intent(context, AssetReviewActivity::class.java).apply {
+                    putExtras(Bundle().apply {
+                        putString(AssetConstants.ID.key, coin.id)
+                        putString(AssetConstants.NAME.key, coin.name)
+                        putString(AssetConstants.SYMBOL.key, coin.symbol)
+                    })
+                })
             }
         }
     }

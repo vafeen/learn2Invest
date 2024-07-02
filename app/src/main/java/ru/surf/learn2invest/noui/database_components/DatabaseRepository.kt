@@ -1,6 +1,9 @@
 package ru.surf.learn2invest.noui.database_components
 
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import ru.surf.learn2invest.noui.database_components.dao.AssetBalanceHistoryDao
 import ru.surf.learn2invest.noui.database_components.dao.AssetInvestDao
 import ru.surf.learn2invest.noui.database_components.dao.ProfileDao
@@ -27,9 +30,28 @@ class DatabaseRepository @Inject constructor(
     private val searchedCoinDao: SearchedCoinDao,
     private val transactionDao: TransactionDao,
 ) {
-    var idOfProfile = 0
-        private set
+    private var idOfProfile = 0
     lateinit var profile: Profile
+
+    fun enableProfileFlow(lifecycleCoroutineScope: LifecycleCoroutineScope) {
+        lifecycleCoroutineScope.launch(Dispatchers.IO) {
+            getAllAsFlowProfile().collect { profList ->
+                if (profList.isNotEmpty()) {
+                    profile = profList[idOfProfile]
+                } else {
+                    profile = Profile(
+                        id = 0,
+                        firstName = "undefined",
+                        lastName = "undefined",
+                        biometry = false,
+                        fiatBalance = 0f,
+                        assetBalance = 0f
+                    )
+                    insertAllProfile(profile)
+                }
+            }
+        }
+    }
 
     // assetBalanceHistory
     fun getAllAssetBalanceHistory(): Flow<List<AssetBalanceHistory>> =

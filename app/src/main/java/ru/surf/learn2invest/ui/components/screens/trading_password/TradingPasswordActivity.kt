@@ -1,6 +1,5 @@
 package ru.surf.learn2invest.ui.components.screens.trading_password
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,13 +11,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.TradingPasswordActivityBinding
+import ru.surf.learn2invest.databinding.ActivityTradingPasswordBinding
 import ru.surf.learn2invest.utils.Icons.error
 import ru.surf.learn2invest.utils.Icons.ok
 import ru.surf.learn2invest.utils.hideKeyboard
 import ru.surf.learn2invest.utils.isOk
 import ru.surf.learn2invest.utils.isThisContains3NumbersOfEmpty
 import ru.surf.learn2invest.utils.isThisContainsSequenceOrEmpty
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 import ru.surf.learn2invest.utils.showKeyboard
 import ru.surf.learn2invest.utils.verifyTradingPassword
 
@@ -34,20 +35,15 @@ import ru.surf.learn2invest.utils.verifyTradingPassword
  */
 @AndroidEntryPoint
 class TradingPasswordActivity : AppCompatActivity() {
-    private lateinit var binding: TradingPasswordActivityBinding
+    private lateinit var binding: ActivityTradingPasswordBinding
     private val viewModel: TradingPasswordActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(
-                    this, R.color.white
-                )
-            )
-        )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
-        binding = TradingPasswordActivityBinding.inflate(layoutInflater)
+
+        setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
+
+        binding = ActivityTradingPasswordBinding.inflate(layoutInflater)
         if (!viewModel.initAction(intentAction = intent.action.toString(), context = this))
             this.finish()
         setContentView(binding.root)

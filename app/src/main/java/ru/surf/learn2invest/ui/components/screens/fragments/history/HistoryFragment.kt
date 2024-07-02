@@ -1,11 +1,9 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.history
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,8 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.surf.learn2invest.R
 import ru.surf.learn2invest.databinding.FragmentHistoryBinding
-import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
-import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
+import ru.surf.learn2invest.utils.setStatusBarColor
+import javax.inject.Inject
 
 /**
  * Фрагмент истории сделок в [HostActivity][ru.surf.learn2invest.ui.components.screens.host.HostActivity]
@@ -27,17 +25,23 @@ import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetRe
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
     private val viewModel: HistoryFragmentViewModel by viewModels()
-    private val adapter = HistoryAdapter { transaction ->
-        startAssetReviewIntent(transaction)
-    }
+
+    @Inject
+    lateinit var adapter: HistoryFragmentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.window?.statusBarColor =
-            ContextCompat.getColor(requireContext(), R.color.main_background)
+        activity?.apply {
+            setStatusBarColor(
+                window,
+                this,
+                R.color.accent_background,
+                R.color.accent_background_dark
+            )
+        }
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         binding.historyRecyclerview.layoutManager = LinearLayoutManager(this.requireContext())
@@ -62,15 +66,5 @@ class HistoryFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun startAssetReviewIntent(coin: Transaction) {
-        val intent = Intent(requireContext(), AssetReviewActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("id", coin.coinID)
-        bundle.putString("name", coin.name)
-        bundle.putString("symbol", coin.symbol)
-        intent.putExtras(bundle)
-        startActivity(intent)
     }
 }

@@ -1,6 +1,7 @@
 package ru.surf.learn2invest.ui.components.screens.fragments.asset_review
 
-import android.graphics.drawable.ColorDrawable
+import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,8 +17,11 @@ import ru.surf.learn2invest.databinding.ActivityAssetReviewBinding
 import ru.surf.learn2invest.ui.components.alert_dialogs.buy_dialog.BuyDialog
 import ru.surf.learn2invest.ui.components.alert_dialogs.sell_dialog.SellDialog
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_overview.AssetOverviewFragment
+import ru.surf.learn2invest.utils.AssetConstants
 import ru.surf.learn2invest.ui.components.screens.fragments.subhistory.SubHistoryFragment
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 
 /**
  * Экран обзора актива
@@ -26,42 +30,41 @@ import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
 class AssetReviewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAssetReviewBinding
     private lateinit var disposable: Disposable
+    private var isOverviewSelected = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(
-                    this,
-                    R.color.white
-                )
-            )
-        )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+        setStatusBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
 
         binding = ActivityAssetReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id = intent.getStringExtra("id") ?: ""
-        val name = intent.getStringExtra("name") ?: ""
-        val symbol = intent.getStringExtra("symbol") ?: ""
+        val id = intent.getStringExtra(AssetConstants.ID.key) ?: ""
+        val name = intent.getStringExtra(AssetConstants.NAME.key) ?: ""
+        val symbol = intent.getStringExtra(AssetConstants.SYMBOL.key) ?: ""
 
         binding.goBack.setOnClickListener {
             finish()
         }
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, AssetOverviewFragment.newInstance(id ?: ""))
+            .replace(R.id.fragment_container, AssetOverviewFragment.newInstance(id))
             .commit()
 
+        updateButtonColors()
+
         binding.assetReviewBtn.setOnClickListener {
-            goToFragment(AssetOverviewFragment.newInstance(id ?: ""))
+            isOverviewSelected = true
+            updateButtonColors()
+            goToFragment(AssetOverviewFragment.newInstance(id))
         }
 
         binding.assetHistoryBtn.setOnClickListener {
-            goToFragment(SubHistoryFragment.newInstance(symbol ?: ""))
+            isOverviewSelected = false
+            updateButtonColors()
+            goToFragment(SubHistoryFragment.newInstance(symbol))
         }
 
         binding.coinName.text = name
@@ -108,6 +111,28 @@ class AssetReviewActivity : AppCompatActivity() {
                 it.show(supportFragmentManager, it.dialogTag)
             }
         }
+    }
+
+    private fun updateButtonColors() {
+        val isDarkTheme =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        val accentColor = ContextCompat.getColor(
+            this,
+            if (isDarkTheme) R.color.accent_background_dark else R.color.accent_background
+        )
+        val defaultColor = ContextCompat.getColor(
+            this,
+            if (isDarkTheme) R.color.accent_button_dark else R.color.view_background
+        )
+
+        binding.assetReviewBtn.backgroundTintList = ColorStateList.valueOf(
+            if (isOverviewSelected) accentColor else defaultColor
+        )
+
+        binding.assetHistoryBtn.backgroundTintList = ColorStateList.valueOf(
+            if (isOverviewSelected) defaultColor else accentColor
+        )
     }
 
     override fun onDestroy() {

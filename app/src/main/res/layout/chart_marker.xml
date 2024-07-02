@@ -11,7 +11,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_medium"
         android:singleLine="true"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="12dp" />
 
 </RelativeLayout>

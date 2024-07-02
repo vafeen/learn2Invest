@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
+import ru.surf.learn2invest.utils.AssetConstants
+import ru.surf.learn2invest.utils.viewModelCreator
+import javax.inject.Inject
 
 /**
  * Фрагмент истории сделок с одним активом в [AssetReviewActivity][ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity]
@@ -21,18 +22,24 @@ import ru.surf.learn2invest.databinding.FragmentAssetHistoryBinding
 @AndroidEntryPoint
 class SubHistoryFragment : Fragment() {
     private lateinit var binding: FragmentAssetHistoryBinding
-    private val viewModel: SubHistoryFragmentViewModel by viewModels()
-    private val adapter = SubHistoryAdapter()
+
+    @Inject
+    lateinit var factory: SubHistoryFragmentViewModel.Factory
+
+    private val viewModel: SubHistoryFragmentViewModel by viewModelCreator {
+        factory.createSubHistoryAssetViewModel(
+            symbol = requireArguments().getString(AssetConstants.SYMBOL.key) ?: ""
+        )
+    }
+
+    @Inject
+    lateinit var adapter: SubHistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssetHistoryBinding.inflate(inflater, container, false)
 
-        viewModel.apply {
-            symbol = requireArguments().getString("symbol") ?: ""
-            data = databaseRepository.getFilteredBySymbolTransaction(symbol).map { it.reversed() }
-        }
         binding.assetHistory.layoutManager = LinearLayoutManager(this.requireContext())
         binding.assetHistory.adapter = adapter
         return binding.root
@@ -57,7 +64,7 @@ class SubHistoryFragment : Fragment() {
         fun newInstance(symbol: String): SubHistoryFragment {
             val fragment = SubHistoryFragment()
             val args = Bundle()
-            args.putString("symbol", symbol)
+            args.putString(AssetConstants.SYMBOL.key, symbol)
             fragment.arguments = args
             return fragment
         }

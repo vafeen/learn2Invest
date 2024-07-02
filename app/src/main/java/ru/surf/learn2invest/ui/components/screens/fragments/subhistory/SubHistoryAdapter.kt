@@ -6,14 +6,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.app.App
 import ru.surf.learn2invest.noui.database_components.entity.transaction.Transaction
 import ru.surf.learn2invest.noui.database_components.entity.transaction.TransactionsType
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
+import javax.inject.Inject
 
-class SubHistoryAdapter : RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
+class SubHistoryAdapter @Inject constructor(
+    val loader: ImageLoader
+) : RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
     var data: List<Transaction> = listOf()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,17 +42,18 @@ class SubHistoryAdapter : RecyclerView.Adapter<SubHistoryAdapter.ViewHolder>() {
                 else data[position].name
             coinBottomTextInfo.text = data[position].amount.toString()
             if (data[position].transactionType == TransactionsType.Sell) {
-                coinTopNumericInfo.text = "+ ${data[position].coinPrice}$"
+                coinTopNumericInfo.text = "+ ${data[position].dealPrice}$"
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else {
-                coinTopNumericInfo.text = "- ${data[position].coinPrice}$"
+                coinTopNumericInfo.text = "- ${data[position].dealPrice}$"
+                coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.black))
             }
-            coinBottomNumericInfo.text = "${data[position].dealPrice}$"
+            coinBottomNumericInfo.text = "${data[position].coinPrice}$"
+
             coinIcon.load(
                 data = "${API_ICON}${data[position].symbol.lowercase()}.svg",
-                imageLoader = App.imageLoader
+                imageLoader = loader
             )
-
         }
     }
 

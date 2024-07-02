@@ -26,7 +26,6 @@ class NetworkRepository @Inject constructor(retrofit: Retrofit) {
     suspend fun getMarketReview(): ResponseWrapper<List<CoinReviewResponse>> =
         try {
             val response = coinAPIService.getMarketReview()
-            Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
             ResponseWrapper.NetworkError
@@ -46,7 +45,6 @@ class NetworkRepository @Inject constructor(retrofit: Retrofit) {
                 start = System.currentTimeMillis() - RetrofitLinks.WEEK,
                 end = System.currentTimeMillis()
             )
-            Log.d("RETROFIT", response.toString())
             ResponseWrapper.Success(response.data)
         } catch (e: Exception) {
             ResponseWrapper.NetworkError

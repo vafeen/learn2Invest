@@ -1,7 +1,8 @@
 package ru.surf.learn2invest.ui.components.screens.sign_up
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
+import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,38 +16,29 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.surf.learn2invest.R
-import ru.surf.learn2invest.databinding.ActivitySignupBinding
+import ru.surf.learn2invest.databinding.ActivitySignUpBinding
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignINActivityActions
 import ru.surf.learn2invest.ui.components.screens.sign_in.SignInActivity
+import ru.surf.learn2invest.utils.setNavigationBarColor
+import ru.surf.learn2invest.utils.setStatusBarColor
 
 /** Активити регистрации пользователя
  */
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+    private lateinit var binding: ActivitySignUpBinding
 
     private val viewModel: SignUpActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.main_background)
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(
-                    this,
-                    R.color.white
-                )
-            )
-        )
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+        setNavigationBarColor(window, this, R.color.white, R.color.main_background_dark)
+        setStatusBarColor(window, this, R.color.accent_background, R.color.accent_background_dark)
 
-        binding = ActivitySignupBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupNameEditText()
@@ -77,6 +69,8 @@ class SignUpActivity : AppCompatActivity() {
             }
             false
         }
+
+        applyThemeColors()
     }
 
     private fun setupNameEditText() {
@@ -108,15 +102,29 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validateFields() {
-        if (validateName() && validateLastname()) {
-            binding.signupBtn.isEnabled = true
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.main_background)
-        } else {
-            binding.signupBtn.isEnabled = false
-            binding.signupBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.btn_asset)
-        }
+        binding.signupBtn.isEnabled = validateName() && validateLastname()
+        applyThemeColors()
+    }
+
+    private fun applyThemeColors() {
+        val isDarkTheme =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        binding.signupBtn.backgroundTintList = ColorStateList.valueOf(
+            resources.getColor(
+                if (binding.signupBtn.isEnabled) {
+                    if (isDarkTheme)
+                        R.color.accent_background_dark
+                    else
+                        R.color.accent_background
+                } else {
+                    if (isDarkTheme)
+                        R.color.accent_button_dark
+                    else
+                        R.color.btn_asset
+                }
+            )
+        )
     }
 
     private fun validateName(): Boolean {
@@ -196,21 +204,16 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUpButtonClick() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.databaseRepository.apply {
-                updateProfile(
-                    profile.copy(
-                        firstName = viewModel.name,
-                        lastName = viewModel.lastname
-                    )
-                )
-            }
-        }.invokeOnCompletion {
-            startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).apply {
-                action = SignINActivityActions.SignUP.action
-            })
-            this@SignUpActivity.finish()
+        viewModel.databaseRepository.apply {
+            profile = profile.copy(
+                firstName = viewModel.name,
+                lastName = viewModel.lastname
+            )
         }
+        startActivity(Intent(this@SignUpActivity, SignInActivity::class.java).apply {
+            action = SignINActivityActions.SignUP.action
+        })
+        this@SignUpActivity.finish()
     }
 
     private fun View.hideKeyboard() {
