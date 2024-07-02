@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Surf" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/main_background_dark</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/accent_button_dark</item>
         <item name="colorAccent">@color/accent_background_dark</item>
         <item name="colorOnBackground">@color/white</item>
