@@ -2,6 +2,7 @@ package ru.surf.learn2invest.ui.components.screens.fragments.history
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +54,15 @@ class HistoryFragmentAdapter @Inject constructor(
                 coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.increase))
             } else {
                 coinTopNumericInfo.text = "- ${coin.dealPrice}$"
-                coinTopNumericInfo.setTextColor(coinBottomNumericInfo.context.getColor(R.color.black))
+                coinTopNumericInfo.setTextColor(
+                    coinBottomNumericInfo.context.getColor(
+                        if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
+                            R.color.white
+                        } else {
+                            R.color.black
+                        }
+                    )
+                )
             }
             coinBottomNumericInfo.text = "${coin.coinPrice}$"
 
