@@ -21,8 +21,6 @@ import javax.inject.Singleton
 /**
  * Репозиториq локальной базы данных для осуществления операций манипуляции с сущностями
  */
-
-
 @Singleton
 class DatabaseRepository @Inject constructor(
     private val db: L2IDatabase,

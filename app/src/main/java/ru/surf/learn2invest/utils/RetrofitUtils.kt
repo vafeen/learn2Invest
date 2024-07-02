@@ -1,10 +1,10 @@
 package ru.surf.learn2invest.utils
 
 import ru.surf.learn2invest.noui.network_components.responses.AugmentedCoinReviewResponse
-import ru.surf.learn2invest.noui.network_components.responses.CoinReviewDto
+import ru.surf.learn2invest.noui.network_components.responses.CoinReviewResponse
 
 /**
- * Docs?
+ * Константы для репозитория сетевого взаимодействия
  */
 object RetrofitLinks {
     const val BASE_URL = "https://api.coincap.io/v2/"
@@ -17,7 +17,7 @@ object RetrofitLinks {
         "d1" // интервал выборки данных. Доступные форматы m1, m5, m15, m30, h1, h2, h6, h12, d1
 }
 
-fun AugmentedCoinReviewResponse.toCoinReviewDto() = CoinReviewDto(
+fun AugmentedCoinReviewResponse.toCoinReviewDto() = CoinReviewResponse(
     id = this.id,
     rank = this.rank,
     symbol = this.symbol,

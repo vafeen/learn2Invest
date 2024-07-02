@@ -18,10 +18,13 @@ import ru.surf.learn2invest.noui.database_components.entity.AssetInvest
 import ru.surf.learn2invest.ui.components.screens.fragments.asset_review.AssetReviewActivity
 import ru.surf.learn2invest.utils.AssetConstants
 import ru.surf.learn2invest.utils.RetrofitLinks.API_ICON
+import ru.surf.learn2invest.utils.getWithCurrency
+import ru.surf.learn2invest.utils.round
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.round
 
 
 class PortfolioAdapter @Inject constructor(
@@ -65,31 +68,24 @@ class PortfolioAdapter @Inject constructor(
         fun bind(asset: AssetInvest, priceChange: Float) {
             coinName.text = asset.name
             coinSymbol.text = asset.symbol
-            coinTopNumericInfo.text = "$priceChange$"
+            coinTopNumericInfo.text = priceChange.getWithCurrency()
             val priceChangePercent = ((priceChange - asset.coinPrice) / asset.coinPrice) * 100
-            val roundedPercent =
-                BigDecimal(priceChangePercent.toString()).setScale(2, RoundingMode.HALF_UP)
-                    .toFloat()
-            val formattedChange = String.format(Locale.getDefault(), "%.2f%%", priceChangePercent)
+            val roundedPercent = priceChangePercent.round()
             coinBottomNumericInfo.setTextColor(
                 when {
                     roundedPercent > 0 -> {
-                        coinBottomNumericInfo.text = "+$formattedChange"
+                        coinBottomNumericInfo.text = "+$roundedPercent%"
                         itemView.context.getColor(R.color.increase)
                     }
 
                     roundedPercent < 0 -> {
-                        coinBottomNumericInfo.text = formattedChange
+                        coinBottomNumericInfo.text = "$roundedPercent%"
                         itemView.context.getColor(R.color.recession)
                     }
 
                     else -> {
-                        coinBottomNumericInfo.text = formattedChange
-                        itemView.context.getColor(if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                            R.color.white
-                        } else {
-                            R.color.black
-                        })
+                        coinBottomNumericInfo.text = "$roundedPercent%"
+                        itemView.context.getColor(R.color.black)
                     }
                 }
             )
