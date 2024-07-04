@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     private fun skipSplash() {
         lifecycleScope.launch(Dispatchers.Main) {
             val intent =
-                if (viewModel.databaseRepository.profile.lastName != "undefined" && viewModel.databaseRepository.profile.firstName != "undefined") {
+                if (viewModel.databaseRepository.profile.let {
+                        it.firstName != "undefined" && it.lastName != "undefined" && it.hash != null
+                    }) {
                     runAnimatedText()
 
                     Intent(this@MainActivity, SignInActivity::class.java).also {
